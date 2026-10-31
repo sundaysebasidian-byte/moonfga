@@ -1,0 +1,8 @@
+import {
+  "moonbit-community/yaml",
+  "moonbitlang/x/fs",
+  "sundaysebasidian-byte/moonfga/fga",
+  "sundaysebasidian-byte/moonfga/model",
+  "sundaysebasidian-byte/moonfga/store",
+  "sundaysebasidian-byte/moonfga/engine",
+}

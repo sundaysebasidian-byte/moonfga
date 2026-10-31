@@ -1,0 +1,83 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "sundaysebasidian-byte/moonfga/storetest"
+
+import {
+  "sundaysebasidian-byte/moonfga/fga",
+}
+
+// Values
+pub fn format_store_test_report(StoreTestReport) -> String
+
+pub fn load_store_test(String, String) -> StoreTestSuite raise @fga.FgaError
+
+pub fn load_store_test_file(String) -> StoreTestSuite raise @fga.FgaError
+
+pub fn run_store_test(StoreTestSuite) -> StoreTestReport
+
+pub fn run_store_test_file(String) -> StoreTestReport raise @fga.FgaError
+
+// Errors
+
+// Types and methods
+pub(all) struct CheckCase {
+  user : String
+  object : String
+  context : Map[String, Json]
+  contextual : Array[@fga.Tuple]
+  assertions : Array[(String, Json)]
+}
+
+pub(all) struct ListObjectsCase {
+  user : String
+  object_type : String
+  context : Map[String, Json]
+  contextual : Array[@fga.Tuple]
+  assertions : Array[(String, Json)]
+}
+
+pub(all) struct ListUsersCase {
+  object : String
+  filters : Array[String]
+  context : Map[String, Json]
+  contextual : Array[@fga.Tuple]
+  assertions : Array[(String, Json)]
+}
+
+pub(all) struct StoreTest {
+  name : String
+  tuples : Array[@fga.Tuple]
+  checks : Array[CheckCase]
+  list_objects : Array[ListObjectsCase]
+  list_users : Array[ListUsersCase]
+}
+
+pub(all) struct StoreTestFailure {
+  test_name : String
+  section : String
+  request : String
+  expected : String
+  actual : String
+  message : String
+}
+
+pub(all) struct StoreTestReport {
+  name : String
+  tests_total : Int32
+  tests_passed : Int32
+  tests_failed : Int32
+  assertions_total : Int32
+  assertions_passed : Int32
+  assertions_failed : Int32
+  failures : Array[StoreTestFailure]
+}
+
+pub(all) struct StoreTestSuite {
+  name : String
+  model : @fga.AuthModel
+  tuples : Array[@fga.Tuple]
+  tests : Array[StoreTest]
+}
+
+// Type aliases
+
+// Traits
