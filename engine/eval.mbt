@@ -329,7 +329,17 @@ fn Engine::resolve(
   if is_userset_user(subject) && subject == key {
     return OTrue
   }
-  let rewrite = self.model.relation(@fga.object_type(object), relation)
+  // Relations referenced through computed usersets or tuple-to-userset may be
+  // absent on one of several parent types; OpenFGA treats that branch as false
+  // instead of failing the whole request.
+  let rewrite = match self.model.find_type(@fga.object_type(object)) {
+    None => return OFalse
+    Some(td) =>
+      match td.relation_rewrite(relation) {
+        None => return OFalse
+        Some(rewrite) => rewrite
+      }
+  }
   path.push(key)
   let result = self.resolve_rewrite(
     object, relation, rewrite, subject, context, depth, path,
@@ -436,30 +446,56 @@ fn Engine::resolve_direct(
       TupleBindingSpec::Invalid => continue
       _ => ()
     }
-    let holds = self.condition_holds(tuple, binding, context) catch {
-      err => {
-        if pending_error is None {
-          pending_error = Some(err)
-        }
-        false
-      }
-    }
-    if !holds {
-      continue
-    }
+    // The condition of a concrete tuple is only evaluated when the tuple user
+    // matches the subject. OpenFGA does not surface a condition error for a
+    // tuple that cannot contribute to this request.
     if tuple.user == subject {
-      return OTrue
+      let holds = self.condition_holds(tuple, binding, context) catch {
+        err => {
+          if pending_error is None {
+            pending_error = Some(err)
+          }
+          false
+        }
+      }
+      if holds {
+        return OTrue
+      }
+      continue
     }
     match @fga.parse_user_ref(tuple.user) {
       Some(rref) =>
         if is_wildcard_user(tuple.user) {
           if self.match_wildcard_users &&
             subject_matches_wildcard(subject, rref) {
-            return OTrue
+            let holds = self.condition_holds(tuple, binding, context) catch {
+              err => {
+                if pending_error is None {
+                  pending_error = Some(err)
+                }
+                false
+              }
+            }
+            if holds {
+              return OTrue
+            }
           }
         } else {
           match rref.relation {
             Some(userset_relation) => {
+              // A userset edge condition gates traversal regardless of the
+              // concrete subject inside the referenced userset.
+              let holds = self.condition_holds(tuple, binding, context) catch {
+                err => {
+                  if pending_error is None {
+                    pending_error = Some(err)
+                  }
+                  false
+                }
+              }
+              if !holds {
+                continue
+              }
               let target = rref.type_name + ":" + rref.id
               let child = self.resolve(
                 target,

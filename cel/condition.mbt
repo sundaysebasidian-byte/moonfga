@@ -3,9 +3,11 @@
 ///|
 /// Evaluates a condition expression against a request context.
 ///
-/// Every declared parameter must be present in the merged context; unknown
-/// context keys are rejected. Both errors use the validation code 2000, which
-/// is what OpenFGA returns for an unsatisfiable condition evaluation.
+/// Every declared parameter must be present in the merged context. Extra
+/// context keys are ignored: a request context is shared by all conditions in
+/// a model, so a condition only reads the parameters it declares. Missing
+/// parameters use the validation code 2000, which is what OpenFGA returns for
+/// an unsatisfiable condition evaluation.
 pub fn eval_condition(
   condition : @fga.Condition,
   context : Map[String, Json],
@@ -27,24 +29,6 @@ pub fn eval_condition(
         )
     }
     env[param.name] = value
-  }
-  let mut unknown : String? = None
-  context.each(fn(key, _) {
-    if !known.contains(key) && unknown == None {
-      unknown = Some(key)
-    }
-  })
-  match unknown {
-    Some(key) =>
-      raise @fga.fail(
-        @fga.ERR_VALIDATION,
-        "unexpected context parameter '" +
-        key +
-        "' for condition '" +
-        condition.name +
-        "'",
-      )
-    None => ()
   }
   let expression = compile(condition.expression)
   match eval_expr(expression, env) {

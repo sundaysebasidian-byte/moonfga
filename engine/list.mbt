@@ -28,6 +28,53 @@ fn sorted(values : Array[String]) -> Array[String] {
 }
 
 ///|
+fn concrete_users(
+  reader : &@fga.TupleReader,
+  type_name : String,
+) -> Array[String] {
+  let out : Array[String] = []
+  let seen : Map[String, Unit] = Map([])
+  for user in reader.all_users() {
+    match @fga.parse_user_ref(user) {
+      Some(r) =>
+        if r.type_name == type_name && r.relation == None && r.id != "*" {
+          add_unique(out, seen, user)
+        }
+      None => ()
+    }
+  }
+  out
+}
+
+///|
+/// List APIs report a contextual tuple whose condition does not bind to any
+/// type restriction facet as a validation error (2000), while Check uses the
+/// tuple error code (2027). Structural problems keep the tuple code.
+fn validate_contextual_for_list(
+  model : @fga.AuthModel,
+  tuples : Array[@fga.Tuple],
+) -> Unit raise @fga.FgaError {
+  for tuple in tuples {
+    validate_contextual_tuple(model, tuple) catch {
+      @fga.FgaError(..) as err => {
+        let conditional = match tuple.condition {
+          Some(_) => true
+          None => false
+        }
+        if conditional &&
+          @fga.error_message(err).contains(
+            "does not match the type restrictions",
+          ) {
+          raise @fga.fail(@fga.ERR_VALIDATION, @fga.error_message(err))
+        } else {
+          raise err
+        }
+      }
+    }
+  }
+}
+
+///|
 /// Lists object IDs of `type_name` for which `user` has `relation`.
 pub fn Engine::list_objects(
   self : Engine,
@@ -39,7 +86,7 @@ pub fn Engine::list_objects(
 ) -> Array[String] raise @fga.FgaError {
   validate_object_type_relation(self.model, type_name, relation)
   validate_request_user(self.model, user)
-  validate_contextual(self.model, contextual_tuples)
+  validate_contextual_for_list(self.model, contextual_tuples)
   let reader = self.reader_with(contextual_tuples)
   let engine = Engine::{
     model: self.model,
@@ -60,9 +107,9 @@ pub fn Engine::list_objects(
 /// Lists subjects that satisfy `object#relation` for each requested filter.
 ///
 /// A filter is either a concrete type (`user`) or a userset filter
-/// (`group#member`). For concrete filters the result contains explicit users
-/// plus `type:*` when a wildcard applies; wildcard coverage is never expanded
-/// into every possible user.
+/// (`group#member`). For concrete filters the result contains explicitly
+/// related users plus `type:*` when the wildcard itself satisfies the relation;
+/// wildcard coverage is never expanded into every possible user.
 pub fn Engine::list_users(
   self : Engine,
   object : String,
@@ -72,69 +119,79 @@ pub fn Engine::list_users(
   contextual_tuples : Array[@fga.Tuple],
 ) -> Array[String] raise @fga.FgaError {
   validate_list_users_object(self.model, object, relation)
-  validate_contextual(self.model, contextual_tuples)
+  validate_contextual_for_list(self.model, contextual_tuples)
   let parsed_filters : Array[@fga.UserRef] = []
   for filter in filters {
     parsed_filters.push(parse_user_filter(self.model, filter))
   }
   let reader = self.reader_with(contextual_tuples)
-  let engine = Engine::{
+  let full = Engine::{ model: self.model, reader, match_wildcard_users: true, }
+  let explicit = Engine::{
     model: self.model,
     reader,
     match_wildcard_users: false,
   }
-  let candidates : Array[String] = []
-  let seen : Map[String, Unit] = Map([])
-  let all_users = reader.all_users()
+  let results : Array[String] = []
+  let seen_results : Map[String, Unit] = Map([])
   for filter in parsed_filters {
     match filter.relation {
       None => {
         let wildcard = filter.type_name + ":*"
-        add_unique(candidates, seen, wildcard)
-        for user in all_users {
-          match @fga.parse_user_ref(user) {
-            Some(r) =>
-              if r.type_name == filter.type_name &&
-                r.relation == None &&
-                r.id != "*" {
-                add_unique(candidates, seen, user)
-              }
-            None => ()
+        let wildcard_allowed = full.check_resolved(
+          object, relation, wildcard, context,
+        )
+        if wildcard_allowed {
+          add_unique(results, seen_results, wildcard)
+        }
+        // When a wildcard satisfies the relation, only users reachable through
+        // explicit (non-wildcard) grants are enumerated; everyone else is
+        // represented by the `type:*` marker. Without a surviving wildcard the
+        // full resolver decides which concrete users are allowed.
+        let evaluator = if wildcard_allowed { explicit } else { full }
+        for candidate in concrete_users(reader, filter.type_name) {
+          if evaluator.check_resolved(object, relation, candidate, context) {
+            add_unique(results, seen_results, candidate)
           }
         }
       }
       Some(filter_relation) => {
+        let candidates : Array[String] = []
+        let seen_candidates : Map[String, Unit] = Map([])
         for candidate_object in reader.all_objects(filter.type_name) {
-          add_unique(candidates, seen, candidate_object + "#" + filter_relation)
+          add_unique(
+            candidates,
+            seen_candidates,
+            candidate_object + "#" + filter_relation,
+          )
         }
-        for user in all_users {
+        for user in reader.all_users() {
           match @fga.parse_user_ref(user) {
             Some(r) =>
-              if r.type_name != filter.type_name {
-                ()
-              } else {
+              if r.type_name == filter.type_name {
                 match r.relation {
-                  Some(rel) =>
-                    if rel == filter_relation {
-                      add_unique(candidates, seen, user)
+                  Some(user_relation) =>
+                    if user_relation == filter_relation {
+                      add_unique(candidates, seen_candidates, user)
                     }
                   None =>
                     if r.id != "*" {
-                      add_unique(candidates, seen, user + "#" + filter_relation)
+                      add_unique(
+                        candidates,
+                        seen_candidates,
+                        user + "#" + filter_relation,
+                      )
                     }
                 }
               }
             None => ()
           }
         }
+        for candidate in candidates {
+          if full.check_resolved(object, relation, candidate, context) {
+            add_unique(results, seen_results, candidate)
+          }
+        }
       }
-    }
-  }
-  let results : Array[String] = []
-  for candidate in candidates {
-    let allowed = engine.check_resolved(object, relation, candidate, context)
-    if allowed {
-      results.push(candidate)
     }
   }
   sorted(results)

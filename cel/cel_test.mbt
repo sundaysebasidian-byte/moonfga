@@ -130,7 +130,8 @@ test "condition errors" {
     @fga.FgaError(..) => "error"
   }
   inspect(missing, content="error")
-  let unknown = try {
+  // Extra context keys are shared by other conditions and must be ignored.
+  let extra = try {
     let context = context_value()
     context["extra"] = Json::string("x")
     let _ = @cel.eval_condition(condition, context)
@@ -138,7 +139,7 @@ test "condition errors" {
   } catch {
     @fga.FgaError(..) => "error"
   }
-  inspect(unknown, content="error")
+  inspect(extra, content="no error")
   let bad_type = try {
     let _ = @cel.eval_condition(
       condition,
