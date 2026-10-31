@@ -176,6 +176,68 @@ pub(all) struct ConformanceReport {
 }
 
 ///|
+fn category_to_json(report : CategoryReport) -> Json {
+  let fields : Map[String, Json] = Map([])
+  fields["kind"] = Json::string(report.kind)
+  fields["total"] = Json::number(report.total.to_double())
+  fields["passed"] = Json::number(report.passed.to_double())
+  fields["failed"] = Json::number(report.failed.to_double())
+  fields["skipped"] = Json::number(report.skipped.to_double())
+  let failures : Array[Json] = []
+  for failure in report.failures {
+    failures.push(Json::string(failure))
+  }
+  fields["failures"] = Json::array(failures)
+  let categories : Array[Json] = []
+  for pair in report.categories {
+    categories.push(
+      Json::object(
+        Map([
+          ("category", Json::string(pair.0)),
+          ("count", Json::number(pair.1.to_double())),
+        ]),
+      ),
+    )
+  }
+  fields["categories"] = Json::array(categories)
+  Json::object(fields)
+}
+
+///|
+pub fn report_to_json(report : ConformanceReport) -> Json {
+  let fields : Map[String, Json] = Map([])
+  fields["label"] = Json::string(report.label)
+  fields["tests"] = Json::number(report.test_count.to_double())
+  fields["check"] = category_to_json(report.check)
+  fields["list_objects"] = category_to_json(report.list_objects)
+  fields["list_users"] = category_to_json(report.list_users)
+  let results : Array[Json] = []
+  for item in report.results {
+    results.push(
+      Json::object(
+        Map([
+          ("kind", Json::string(item.kind)),
+          ("test", Json::string(item.test_name)),
+          ("stage", Json::number(item.stage.to_double())),
+          ("status", Json::string(item.status)),
+          ("category", Json::string(item.category)),
+          ("detail", Json::string(item.detail)),
+        ]),
+      ),
+    )
+  }
+  fields["results"] = Json::array(results)
+  Json::object(fields)
+}
+
+///|
+pub fn format_report_json(report : ConformanceReport) -> String {
+  report_to_json(report).stringify(indent=2)
+}
+
+///|
+
+///|
 fn percentage(passed : Int32, total : Int32) -> String {
   if total == 0 {
     "n/a"

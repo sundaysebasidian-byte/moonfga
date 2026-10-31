@@ -8,6 +8,10 @@ import {
 // Values
 pub fn format_report(ConformanceReport) -> String
 
+pub fn format_report_json(ConformanceReport) -> String
+
+pub fn report_to_json(ConformanceReport) -> Json
+
 pub fn run_conformance_file(String) -> ConformanceReport raise @fga.FgaError
 
 pub fn run_conformance_source(String, String) -> ConformanceReport raise @fga.FgaError
