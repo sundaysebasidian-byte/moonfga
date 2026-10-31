@@ -8,13 +8,9 @@ import {
 // Values
 pub fn format_store_test_report(StoreTestReport) -> String
 
-pub fn load_store_test(String, String) -> StoreTestSuite raise @fga.FgaError
-
-pub fn load_store_test_file(String) -> StoreTestSuite raise @fga.FgaError
+pub fn load_store_test(String, String, read_file? : (String) -> String raise @fga.FgaError) -> StoreTestSuite raise @fga.FgaError
 
 pub fn run_store_test(StoreTestSuite) -> StoreTestReport
-
-pub fn run_store_test_file(String) -> StoreTestReport raise @fga.FgaError
 
 // Errors
 

@@ -165,3 +165,26 @@ test "store test needs a model" {
   }
   inspect(rejected, content="true")
 }
+
+///|
+test "model_file goes through the caller's reader" {
+  let source = "model_file: sub/m.fga\ntests: []\n"
+  let mut asked = ""
+  let suite = @storetest.load_store_test(source, "base/", read_file=fn(path) {
+    asked = path
+    "model\n  schema 1.1\ntype user\n"
+  }) catch {
+    @fga.FgaError(..) as err => abort(@fga.error_message(err))
+  }
+  inspect(asked, content="base/sub/m.fga")
+  inspect(suite.model.types.length(), content="1")
+  let rejected = try {
+    let _ = @storetest.load_store_test(source, "base/") catch {
+      @fga.FgaError(..) as err => raise err
+    }
+    false
+  } catch {
+    @fga.FgaError(..) => true
+  }
+  inspect(rejected, content="true")
+}

@@ -200,7 +200,12 @@ fn command_expand(args : CliArgs) -> Int32 raise @fga.FgaError {
 ///|
 fn command_test(args : CliArgs) -> Int32 raise @fga.FgaError {
   let path = positional(args, 1, "store test file")
-  let report = @storetest.run_store_test_file(path)
+  let suite = @storetest.load_store_test(
+    read_text(path),
+    dirname(path),
+    read_file=read_text,
+  )
+  let report = @storetest.run_store_test(suite)
   println(@storetest.format_store_test_report(report))
   if report.failures.length() == 0 {
     0

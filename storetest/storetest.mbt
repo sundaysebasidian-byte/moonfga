@@ -140,22 +140,6 @@ fn default_filters(model : @fga.AuthModel) -> Array[String] {
 }
 
 ///|
-fn dirname(path : String) -> String {
-  let mut last = -1
-  for i in 0..<path.length() {
-    match path.get_char(i) {
-      Some('/') | Some('\\') => last = i
-      _ => ()
-    }
-  }
-  if last < 0 {
-    ""
-  } else {
-    path[:last + 1].to_owned()
-  }
-}
-
-///|
 fn join_path(base : String, relative : String) -> String {
   if relative.has_prefix("/") {
     return relative
@@ -164,13 +148,6 @@ fn join_path(base : String, relative : String) -> String {
     base + relative
   } else {
     base + "/" + relative
-  }
-}
-
-///|
-fn read_text(path : String) -> String raise @fga.FgaError {
-  @fs.read_file_to_string(path) catch {
-    _ => raise store_test_error("cannot read file: " + path)
   }
 }
 
@@ -319,10 +296,13 @@ fn parse_tests(
 }
 
 ///|
-/// Loads a `.fga.yaml` suite. `base_dir` is used to resolve `model_file`.
+/// Loads a `.fga.yaml` suite. `model_file` is resolved against `base_dir` and
+/// read through `read_file`; without a reader only inline `model:` works, which
+/// keeps this package free of file-system access.
 pub fn load_store_test(
   source : String,
   base_dir : String,
+  read_file? : (String) -> String raise @fga.FgaError,
 ) -> StoreTestSuite raise @fga.FgaError {
   let documents = @yaml.Yaml::load_from_string(source) catch {
     _ => raise store_test_error("invalid YAML in store test")
@@ -336,7 +316,14 @@ pub fn load_store_test(
     Some(_) => raise store_test_error("model must be a string")
     None =>
       match optional_string_field(root, "model_file") {
-        Some(file) => read_text(join_path(base_dir, file))
+        Some(file) =>
+          match read_file {
+            Some(read) => read(join_path(base_dir, file))
+            None =>
+              raise store_test_error(
+                "model_file needs a file reader; use an inline model",
+              )
+          }
         None =>
           raise store_test_error("store test requires model or model_file")
       }
@@ -356,14 +343,6 @@ pub fn load_store_test(
     tuples: tuples_of(root, "tuples"),
     tests,
   }
-}
-
-///|
-pub fn load_store_test_file(
-  path : String,
-) -> StoreTestSuite raise @fga.FgaError {
-  let source = read_text(path)
-  load_store_test(source, dirname(path))
 }
 
 ///|
@@ -866,14 +845,6 @@ pub fn run_store_test(suite : StoreTestSuite) -> StoreTestReport {
     assertions_failed,
     failures,
   }
-}
-
-///|
-pub fn run_store_test_file(
-  path : String,
-) -> StoreTestReport raise @fga.FgaError {
-  let suite = load_store_test_file(path)
-  run_store_test(suite)
 }
 
 ///|

@@ -139,3 +139,19 @@ fn parse_filters(args : CliArgs, model : @fga.AuthModel) -> Array[String] {
     }
   }
 }
+
+///|
+fn dirname(path : String) -> String {
+  let mut last = -1
+  for i in 0..<path.length() {
+    match path.get_char(i) {
+      Some('/') | Some('\\') => last = i
+      _ => ()
+    }
+  }
+  if last < 0 {
+    ""
+  } else {
+    path[:last + 1].to_owned()
+  }
+}
