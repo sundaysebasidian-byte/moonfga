@@ -48,7 +48,9 @@ fn demo_json() -> String {
   "        \"parent\": {\"directly_related_user_types\": [{\"type\": \"document\"}]},\n" +
   "        \"editor\": {\"directly_related_user_types\": [{\"type\": \"user\"}, {\"type\": \"user\", \"wildcard\": {}}, {\"type\": \"group\", \"relation\": \"member\"}]},\n" +
   "        \"viewer\": {\"directly_related_user_types\": [{\"type\": \"user\", \"condition\": \"cond\"}]},\n" +
-  "        \"banned\": {\"directly_related_user_types\": [{\"type\": \"user\"}]}\n" +
+  "        \"banned\": {\"directly_related_user_types\": [{\"type\": \"user\"}]},\n" +
+  "        \"can_view\": {\"directly_related_user_types\": []},\n" +
+  "        \"viewer_from_parent\": {\"directly_related_user_types\": []}\n" +
   "      }}\n" +
   "    }\n" +
   "  ],\n" +

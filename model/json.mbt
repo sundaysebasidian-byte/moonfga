@@ -454,17 +454,15 @@ fn type_to_json(td : @fga.TypeDefinition) -> Json {
   let metadata_relations = Map([])
   for name in td.relation_order {
     let restrictions = td.restrictions(name)
-    if restrictions.length() > 0 {
-      let items : Array[Json] = []
-      for r in restrictions {
-        items.push(restriction_to_json(r))
-      }
-      metadata_relations[name] = Json::object(
-        Map([("directly_related_user_types", Json::array(items))]),
-      )
+    let items : Array[Json] = []
+    for r in restrictions {
+      items.push(restriction_to_json(r))
     }
+    metadata_relations[name] = Json::object(
+      Map([("directly_related_user_types", Json::array(items))]),
+    )
   }
-  let metadata = if metadata_relations.length() == 0 {
+  let metadata = if td.relation_order.length() == 0 {
     Json::null()
   } else {
     Json::object(Map([("relations", Json::object(metadata_relations))]))
@@ -524,8 +522,10 @@ pub fn model_to_json(model : @fga.AuthModel) -> Json raise @fga.FgaError {
   }
   let fields : Array[(String, Json)] = [
     ("schema_version", Json::string(model.schema_version)),
-    ("type_definitions", Json::array(type_definitions)),
   ]
+  if type_definitions.length() > 0 {
+    fields.push(("type_definitions", Json::array(type_definitions)))
+  }
   if model.condition_order.length() > 0 {
     let conditions = Map([])
     for name in model.condition_order {
