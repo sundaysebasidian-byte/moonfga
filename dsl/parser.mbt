@@ -90,23 +90,12 @@ fn Parser::expect_word_text(
 }
 
 ///|
-fn same_restriction(a : @fga.TypeRestriction, b : @fga.TypeRestriction) -> Bool {
-  a.type_name == b.type_name &&
-  a.relation == b.relation &&
-  a.wildcard == b.wildcard &&
-  a.condition == b.condition
-}
-
-///|
 fn add_restriction(
   restrictions : Array[@fga.TypeRestriction],
   r : @fga.TypeRestriction,
 ) -> Unit {
-  for existing in restrictions {
-    if same_restriction(existing, r) {
-      return
-    }
-  }
+  // Duplicates are preserved so semantic validation can report them with a
+  // position instead of silently accepting the model.
   restrictions.push(r)
 }
 

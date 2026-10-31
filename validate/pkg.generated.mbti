@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "sundaysebasidian-byte/moonfga/validate"
+
+import {
+  "sundaysebasidian-byte/moonfga/fga",
+}
+
+// Values
+pub fn format_issue(ValidationIssue) -> String
+
+pub fn validate_model(@fga.AuthModel) -> Array[ValidationIssue]
+
+pub fn validate_or_fail(@fga.AuthModel) -> Unit raise @fga.FgaError
+
+// Errors
+
+// Types and methods
+pub(all) struct ValidationIssue {
+  code : Int32
+  message : String
+  line : Int32
+  column : Int32
+  symbol : String
+}
+
+// Type aliases
+
+// Traits
