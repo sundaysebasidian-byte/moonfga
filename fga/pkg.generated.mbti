@@ -28,6 +28,8 @@ pub fn cel_value_to_json(CelValue) -> Json
 
 pub fn cel_value_type_name(CelValue) -> String
 
+pub fn context_from_json(Json?) -> Map[String, CelValue] raise FgaError
+
 pub fn error_code(FgaError) -> Int32
 
 pub fn error_message(FgaError) -> String
@@ -68,7 +70,15 @@ pub fn render_user_ref(UserRef) -> String
 
 pub fn restrictions_allow(Array[TypeRestriction], String) -> Bool
 
+pub fn tuple_from_json(Json) -> Tuple raise FgaError
+
+pub fn tuple_from_string(String) -> Tuple raise FgaError
+
 pub fn tuple_user_matches(UserRef, String) -> Bool
+
+pub fn tuples_from_json(Json?) -> Array[Tuple] raise FgaError
+
+pub fn tuples_from_text(String) -> Array[Tuple] raise FgaError
 
 pub fn user_type_name(String) -> String
 
