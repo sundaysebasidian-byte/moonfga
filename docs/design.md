@@ -127,9 +127,9 @@ enum Userset {
 
 `engine/eval.mbt` 的核心是 `resolve(object, relation, user, depth)`：
 
-- 深度上限 25，超限返回 `E2002`；
+- 元组遍历深度上限 25，超限返回 `E2002`；纯 computed alias 迭代折叠，不计入元组深度；
 - 每个 `(object, relation, user)` 维护访问集合以检测循环；
-- `This` 读取直接元组；`Computed` 递归到同对象的其他关系；
+- `This` 读取直接元组；`Computed` 在同对象上迭代解析其他关系，防止长 alias 链栈溢出；
 - `TupleToUserset` 先读取 tupleset 关系，再对每个目标对象递归；
 - `Union` 任一为真即短路；`Intersection` 任一为假即短路；`Difference` 先求 base，
   再求 subtract 并取反；
@@ -144,29 +144,24 @@ enum Userset {
 
 ## ListObjects / ListUsers
 
-`ListObjects`：
+ListObjects 将模型重写和可见元组编译成反向依赖边，从请求用户用工作队列传播证明。
+先反向标记能到达目标 type#relation 的依赖，避免无关分支引发条件错误。
+直接/union 证明不再经过逐对象 Check；intersection/difference 标记为候选，做残余成员求值。
+工作队列最多首次到达与候选升级两次处理每个节点，循环不会无限入队。
+当前每次请求构造索引，空间/构造成本随可见图增长，没有跨请求缓存。
 
-- 从 `by_user` 与对象索引收集候选对象；
-- 对每个候选调用与 Check 相同的求值逻辑，但允许在条件不满足时跳过；
-- 结果排序后返回。
-
-`ListUsers` 需要同时处理“显式用户”和通配符：
-
-1. 先用完整通配符语义判断 `type:*` 是否满足关系；满足时在结果中加入 `type:*` 标记。
-2. 如果通配符成立，则枚举显式连接的用户，并以“禁用通配符匹配”的引擎求值，避免把所有
-   用户都列入。
-3. 如果通配符不成立，则用完整语义求值显式候选。
-4. userset 过滤器收集同类型对象、已有 userset 用户与显式用户，并转换为 `type#relation`
-   形式求值。
-
-这个混合算法覆盖了上游 `exclusion_under_wildcard_*`、`relation_with_wildcard_involving_intersection`
-等用例；上下文元组在 List 接口中走同一覆盖层。
+ListUsers 从对象关系展开完整用户集合，带正/负成员及排除标记；union/intersection/difference
+按集合规则处理 wildcard，不把 wildcard 展开为所有出现过的用户。所有相关分支保留条件错误。
+relation 入口按 depth>=25 报 E2002；循环使用当前路径检测，subtract 分支有独立的 cycle 规则。
+Check、ListObjects、ListUsers 的深度语义不同，固定反例及官方源码依据见 conformance.md。
 
 ## Expand 与 Explain
 
-`Expand` 返回关系重写树和直接叶子用户（JSON），便于调试模型。`ExplainResult` 同时返回
-允许/拒绝结果与解析路径；CLI 的 `--explain` 打印路径，便于定位是直接元组、userset 边
-还是 TTU 贡献了结果。
+Expand 保持关系重写树接口。Explain 的 witness 在同一次 Check 成功路径上记录，
+不再另走一次可能触发无关条件错误的遍历。普通 Check 不分配 witness 索引。
+ExplainResult 包含 allowed、paths、complete、可选 explain_error；不完整解释不改变授权决策。
+CLI 与 JS 共用 to_json，paths 都是步骤数组；CLI 文本模式仍打印可读路径。
+旧 CLI JSON 的字符串路径数组调用方需同步采用步骤数组；web/ 展示与旧 smoke 留给前端负责人。
 
 ## CEL 子集
 
@@ -220,7 +215,7 @@ CLI 打印 `error <code>: <message>` 并以 1 退出；参数/文件错误以 2 
 - CEL 是受控子集：覆盖 OpenFGA ABAC 测试所需类型与方法，但不宣称完整 CEL 标准。
 - 跳过模块语法：单文件 schema 1.1 已覆盖全部上游模型用例。
 - ListUsers 的通配符语义是复现上游行为中最复杂的部分，采用“标记 + 显式枚举”算法；
-  相关边界继续由上游用例回归。
+  相关边界由上游矩阵和独立审查回归覆盖。
 
 ## 第 3a 阶段：查询路径与公开 API
 
@@ -240,5 +235,6 @@ native、wasm-gc、js 使用同一核心 API；这些后端的库测试通过不
 contextual tuple 仅作用于当前请求。Check 按 object/relation/user 遮蔽持久化绑定；
 List API 合并两路元组，保留同一三元组的不同条件上下文，并报告直接求值中的条件错误。
 ContextualStore::new 的 shadow 参数默认 true，List 查询显式传 false，与官方读取方式对应。
-ListUsers 的显式用户枚举在 intersection 中使用完整成员资格作门槛、任一分支的显式结果作证据；
-差集的 subtract 始终使用完整成员资格，包含 wildcard。官方源码依据及固定反例见 conformance.md。
+ListUsers 已改为关系集合展开；ListObjects 使用反向证明工作队列，只有非单调候选需要残余求值。
+CEL timestamp 在必要时采用 VTimestampPrecise 保存 epoch 毫秒、纳秒余数及数值时区；
+timestamp_parts/offset 与 RFC3339 转换供 CEL 和条件 JSON 桥共用。旧 VTimestamp 和毫秒 parser 保留。

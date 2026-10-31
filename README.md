@@ -39,8 +39,8 @@ Playground 就是同一个引擎编译成 JS 在浏览器里跑。
 唯一跳过的断言来自上游用例 `simple_computeduserset_indirect_ref`：它的 `expectation: nil` 嵌在
 request 里面，没有顶层期望值或 `errorCode`，所以按 `skip/no_expectation` 如实记录，不算通过。
 
-除了固定用例，还和官方 v1.22.1 二进制做了随机差分：两个 seed 各 1002 组，共 6012 次比较，
-0 不一致。差分中发现的 9 个 ListUsers 反例已固化为回归测试，见
+除了固定用例，还和官方 v1.22.1 二进制做了随机差分：两个 seed 各 1066 组（1000 随机＋66 定向），共 6396 次比较，
+0 不一致。随机生成覆盖 CEL 逻辑错误、Unicode、timestamp 与深链；审查反例已固化为三后端测试，见
 [差分报告](docs/conformance.md#第-3a-阶段官方服务随机差分返工复验2026-10-31)。性能实测与复现命令见
 [performance.md](docs/performance.md)。
 
@@ -52,9 +52,9 @@ request 里面，没有顶层期望值或 `errorCode`，所以按 `skip/no_expec
 | AuthorizationModel JSON | 支持 | 导入、导出；`schema_version`、`type_definitions`、`relations`、`metadata.relations`、`conditions` |
 | 模型校验 | 支持 | 未知类型/关系、元组限制、禁止的循环、重复定义、条件参数类型；错误带行列位置 |
 | 元组存储 | 支持 | 内存索引（按 `object#relation`、按 user）、写入/删除、上下文元组覆盖层、`TupleReader` trait |
-| Check | 支持 | 深度 25、循环检测、通配符、union/intersection/difference 短路、TTU、条件求值 |
+| Check | 支持 | 元组深度 25、computed alias 迭代折叠、循环检测、通配符、union/intersection/difference 短路、TTU、条件求值 |
 | BatchCheck | 支持 | 进程内批量执行，逐项返回结果或错误 |
-| ListObjects / ListUsers | 支持 | 条件、上下文元组、通配符用户、userset 过滤器；contextual 条件按官方 List API 的合并语义处理 |
+| ListObjects / ListUsers | 支持 | 反向对象证明 / 用户集合展开、独立深度与条件错误传播、wildcard、userset 过滤器、contextual 合并语义 |
 | Expand | 支持 | 返回关系重写树 |
 | Explain | 支持 | 返回允许/拒绝的解析路径（`--explain`，Playground 里画成树） |
 | CEL 子集 | 支持 | `int` / `uint` / `double` / `bool` / `string` / `duration` / `timestamp` / `list` / `map` / `ipaddress`，运算符、三元表达式、`exists` / `exists_one` / `all` / `map` / `filter`、常用字符串/时间/网络方法 |

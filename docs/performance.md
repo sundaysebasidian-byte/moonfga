@@ -44,3 +44,10 @@ cp -R benchmarks .upstream/benchmark-baseline/
 Check 4.59 µs ± 150.53 ns，ListObjects 44.27 ms ± 2.00 ms，两个 benchmark 均通过。
 原始输出见 evidence/bench-rework1.txt。此为当前代码的另一次实测，
 不把与首轮测量的差值单独归因于本轮语义修复。
+
+## 后端返工第 2 轮
+
+改为反向对象证明后，在同一 10 万元组 / 10 层 group 数据上重跑：
+Check 4.36 µs ± 97.39 ns；ListObjects 39.20 ms ± 678.66 µs；benchmark 2/2。
+原始输出见 evidence/bench-rework2.txt。每次 ListObjects 请求构造反向图，
+此样本不代表大型多关系图的峰值内存或所有查询分布。

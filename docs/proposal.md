@@ -12,8 +12,8 @@ native、wasm-gc、JavaScript 三个后端都能构建和测试，也能在浏�
 ## 和 OpenFGA 结果一致的证据
 - 官方 v1.22.1 测试矩阵：Check 516/516，ListObjects 354/354，ListUsers 393/394。
   唯一的跳过是上游用例把期望值嵌在 request 里，没有顶层断言，如实记为 skip。
-- DSL ↔ JSON 夹具（`openfga/language`）29/29；和官方 v1.22.1 二进制随机差分：两个 seed 共 6012 次比较，0 不一致；
-  差分中发现的 9 个 ListUsers 反例已固化为回归测试。
+- DSL ↔ JSON 夹具（`openfga/language`）29/29；和官方 v1.22.1 二进制随机差分：两个 seed 共 6396 次比较，0 不一致；
+  CEL 错误、Unicode、timestamp、List 深度及 Explain 反例已固化为三后端回归测试。
   复现：`scripts/fetch-upstream.sh` 下载固定 commit 的数据，`./scripts/conformance.sh` 跑全部矩阵。
 
 ## 覆盖矩阵

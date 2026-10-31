@@ -6,12 +6,17 @@ All notable changes to MoonFGA are documented here. The format follows
 
 ## [Unreleased]
 
+- Fix CEL logical error absorption, Unicode code point size, and RFC3339 timestamp strings with nanoseconds and numeric offsets.
+- Replace per-candidate List evaluation with reverse object proofs and user-set expansion; preserve List condition errors and API-specific depth semantics.
+- Record Explain witnesses on the actual successful Check path; share the non-fatal explanation status model between CLI and JS.
+- Expand the oracle to five scenario families and 64 frozen review fixtures; reject failed model/write setup.
+
 - Add a browser playground (`playground/` JS exports, static page in `web/`, GitHub Pages workflow) with a Node smoke test.
 - Fix resolver path cleanup on condition errors, contextual triple shadowing and identifier bounds.
-- Add depth/cycle, wildcard exclusion, condition and input regression tests (76 tests per backend).
+- Add depth/cycle, wildcard exclusion, condition and input regression tests (147 tests per backend).
 - Reuse parsed users and index object types; measured native queries improve about 38% on the documented workload.
 - Hide engine/store internals and validation helpers before the first published API.
-- Add a pinned OpenFGA v1.22.1 differential oracle matching the matrix commit: two seeds, 6012 comparisons, zero differences.
+- Add a pinned OpenFGA v1.22.1 differential oracle matching the matrix commit: two seeds, 6396 comparisons, zero differences.
 - Fix wildcard intersection witnesses and subtraction in ListUsers; freeze nine counterexamples as regression tests.
 - Match OpenFGA contextual condition semantics: Check shadows triples; List APIs combine both streams.
 - Align CI installers with official documentation; initialize Windows MSVC and pin Node 22.

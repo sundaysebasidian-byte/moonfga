@@ -7,6 +7,13 @@
   "regression_cases": 0,
   "comparisons": 3000,
   "mismatches": 0,
+  "families": {
+    "graph": 200,
+    "logical_errors": 200,
+    "unicode": 200,
+    "timestamp": 200,
+    "deep_graph": 200
+  },
   "by_api": {
     "check": {
       "compared": 1000,

@@ -1,0 +1,604 @@
+[
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": false,
+    "list_objects": [],
+    "list_users": []
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": false,
+    "list_objects": [],
+    "list_users": []
+  },
+  {
+    "check": false,
+    "list_objects": [],
+    "list_users": []
+  },
+  {
+    "check": false,
+    "list_objects": [],
+    "list_users": []
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": false,
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": "E2000",
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "group:0",
+      "group:1",
+      "group:10",
+      "group:11",
+      "group:12",
+      "group:13",
+      "group:14",
+      "group:15",
+      "group:16",
+      "group:17",
+      "group:18",
+      "group:19",
+      "group:2",
+      "group:20",
+      "group:21",
+      "group:22",
+      "group:23",
+      "group:24",
+      "group:25",
+      "group:26",
+      "group:3",
+      "group:4",
+      "group:5",
+      "group:6",
+      "group:7",
+      "group:8",
+      "group:9"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "group:0",
+      "group:1",
+      "group:10",
+      "group:11",
+      "group:12",
+      "group:13",
+      "group:14",
+      "group:15",
+      "group:16",
+      "group:17",
+      "group:18",
+      "group:19",
+      "group:2",
+      "group:20",
+      "group:21",
+      "group:22",
+      "group:23",
+      "group:24",
+      "group:25",
+      "group:26",
+      "group:3",
+      "group:4",
+      "group:5",
+      "group:6",
+      "group:7",
+      "group:8",
+      "group:9"
+    ],
+    "list_users": "E2002"
+  },
+  {
+    "check": "E2002",
+    "list_objects": [
+      "group:0",
+      "group:1",
+      "group:10",
+      "group:11",
+      "group:12",
+      "group:13",
+      "group:14",
+      "group:15",
+      "group:16",
+      "group:17",
+      "group:18",
+      "group:19",
+      "group:2",
+      "group:20",
+      "group:21",
+      "group:22",
+      "group:23",
+      "group:24",
+      "group:25",
+      "group:26",
+      "group:3",
+      "group:4",
+      "group:5",
+      "group:6",
+      "group:7",
+      "group:8",
+      "group:9"
+    ],
+    "list_users": "E2002"
+  },
+  {
+    "check": false,
+    "list_objects": [],
+    "list_users": []
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": false,
+    "list_objects": [],
+    "list_users": []
+  },
+  {
+    "check": "E2000",
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": false,
+    "list_objects": [],
+    "list_users": []
+  },
+  {
+    "check": false,
+    "list_objects": [],
+    "list_users": []
+  },
+  {
+    "check": false,
+    "list_objects": [],
+    "list_users": []
+  },
+  {
+    "check": "E2000",
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": false,
+    "list_objects": [],
+    "list_users": []
+  },
+  {
+    "check": "E2000",
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": false,
+    "list_objects": [],
+    "list_users": []
+  },
+  {
+    "check": "E2000",
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": "E2000",
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": "E2000",
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "document:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": false,
+    "list_objects": [],
+    "list_users": []
+  },
+  {
+    "check": true,
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": true,
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": true,
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": true,
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": false,
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": false,
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": false,
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": false,
+    "list_objects": "E2000",
+    "list_users": "E2000"
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "group:0",
+      "group:1",
+      "group:10",
+      "group:11",
+      "group:12",
+      "group:13",
+      "group:14",
+      "group:15",
+      "group:16",
+      "group:17",
+      "group:18",
+      "group:19",
+      "group:2",
+      "group:20",
+      "group:21",
+      "group:22",
+      "group:23",
+      "group:24",
+      "group:25",
+      "group:26",
+      "group:3",
+      "group:4",
+      "group:5",
+      "group:6",
+      "group:7",
+      "group:8",
+      "group:9"
+    ],
+    "list_users": "E2002"
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "group:0",
+      "group:1",
+      "group:10",
+      "group:11",
+      "group:12",
+      "group:13",
+      "group:14",
+      "group:15",
+      "group:16",
+      "group:17",
+      "group:18",
+      "group:19",
+      "group:2",
+      "group:20",
+      "group:21",
+      "group:22",
+      "group:23",
+      "group:24",
+      "group:25",
+      "group:26",
+      "group:3",
+      "group:4",
+      "group:5",
+      "group:6",
+      "group:7",
+      "group:8",
+      "group:9"
+    ],
+    "list_users": "E2002"
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "group:0",
+      "group:1",
+      "group:10",
+      "group:11",
+      "group:12",
+      "group:13",
+      "group:14",
+      "group:15",
+      "group:16",
+      "group:17",
+      "group:18",
+      "group:19",
+      "group:2",
+      "group:20",
+      "group:21",
+      "group:22",
+      "group:23",
+      "group:24",
+      "group:25",
+      "group:26",
+      "group:3",
+      "group:4",
+      "group:5",
+      "group:6",
+      "group:7",
+      "group:8",
+      "group:9"
+    ],
+    "list_users": "E2002"
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "group:0"
+    ],
+    "list_users": [
+      "user:0"
+    ]
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "group:0"
+    ],
+    "list_users": "E2002"
+  },
+  {
+    "check": true,
+    "list_objects": [
+      "group:0"
+    ],
+    "list_users": "E2002"
+  }
+]

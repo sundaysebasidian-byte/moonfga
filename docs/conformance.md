@@ -1324,67 +1324,90 @@ moon run cmd/language         # 29/29 transformer fixtures
 ```
 
 
-## 第 3a 阶段：官方服务随机差分（返工复验，2026-10-31）
+## 后端返工第 2 轮：同版本差分与审查回归
 
 官方二进制固定为 [OpenFGA v1.22.1](https://github.com/openfga/openfga/releases/tag/v1.22.1)，
-与矩阵源 commit `44054f542f64e9b9589dd26a595081b3d2cfd942` 相同。
-实际执行 binary version 确认该版本及完整 commit；脚本固定 macOS arm64 / Linux amd64
-release 压缩包 SHA-256 并在解包前校验。本次在 macOS arm64 运行；Linux 路径尚未实机执行。
+与矩阵使用相同 commit `44054f542f64e9b9589dd26a595081b3d2cfd942`。
+macOS arm64 / Linux amd64 release 压缩包 SHA-256 固定在脚本中，解包前校验。
+本次在 macOS arm64 执行；未取得 Linux/Windows 或 GitHub Actions 实机证据。
 
 ```bash
 export PATH="$HOME/.moon/bin:$PATH"
-./scripts/oracle-openfga.sh --cases 1000 --seed 314159 --output conformance-results/rework1/oracle-seed314159
-./scripts/oracle-openfga.sh --cases 1000 --seed 271828 --output conformance-results/rework1/oracle-seed271828
+./scripts/oracle-openfga.sh --cases 1000 --seed 314159 --output conformance-results/rework2/seed314159
+./scripts/oracle-openfga.sh --cases 1000 --seed 271828 --output conformance-results/rework2/seed271828
+moon build --target js --release playground
+node scripts/test-explain.mjs
 ```
 
-脚本以 memory datastore 在随机 loopback 端口启动官方服务，禁用 playground/profiler，
-每个模型单独建 store；结束（含异常）时终止自己启动的进程。
-仅需 Python 3 标准库和 MoonBit，不依赖 Docker。
-随机生成 computed、union、intersection、difference、递归 TTU、嵌套 group、
-wildcard、直接元组和不存在的用户。group/父对象边保持有向无环，循环与深度另有单元测试。
-每个 seed 另跑条件覆盖与缺少参数两组定向回归；这两组在两个 seed 下重复执行，
-不是 4 类不同的定向场景。未覆盖全部 CEL、非法模型或并发一致性组合。
+Python 标准库启动 memory datastore 的官方服务，绑定随机 loopback 端口；
+结束（含异常）时终止自己启动的进程。每个用例使用独立 store。
+建模或写入失败立即报错，不再把失败的初始化当作有效查询比较。
+
+每个 seed 的 1000 组随机用例按五类各 200 组生成：
+原有关系图；CEL 布尔值/除零错误及 union/intersection/存储与 contextual 分支；
+Unicode code point 长度（含补充平面、组合字符、空串）；
+timestamp 字符串（数值时区、负 epoch、纳秒）；深链、深浅混合及合法多对象循环。
+另执行 66 组定向回归：原有 2 组 contextual 条件，加上
+`examples/regressions/oracle.json` 中的 64 组。两轮会重复执行这 66 组固定回归，
+不把它们称为 132 类不同场景。
 
 | API | seed 314159 一致/比较 | seed 271828 一致/比较 | 不一致 |
 | --- | ---: | ---: | ---: |
-| Check | 1002/1002 | 1002/1002 | 0 |
-| ListObjects | 1002/1002 | 1002/1002 | 0 |
-| ListUsers | 1002/1002 | 1002/1002 | 0 |
+| Check | 1066/1066 | 1066/1066 | 0 |
+| ListObjects | 1066/1066 | 1066/1066 | 0 |
+| ListUsers | 1066/1066 | 1066/1066 | 0 |
 
-每次 1000 组随机模型 + 2 组定向回归，3006 次比较；两次共 6012 次比较，0 不一致。
-主 seed 的原始输入、官方期望、MoonFGA 输出及 HTTP 错误分别在输出目录的
-cases.json、expected.json、actual.json、http-errors.json，summary.json 保存统计。
-提交的 evidence/oracle-summary.json、evidence/oracle-seed271828-summary.json 保存两次摘要，
-evidence/oracle-mismatches.json 为空数组。差分失败时脚本退出 1，运行错误不会计为通过。
+合计 6396 次比较，0 不一致。原始模型、元组、双方结果与 HTTP 错误分别位于每个输出目录的
+cases.json、actual.json、expected.json、http-errors.json。提交的摘要为
+[evidence/oracle-summary.json](evidence/oracle-summary.json)、
+[evidence/oracle-seed271828-summary.json](evidence/oracle-seed271828-summary.json)，
+[evidence/oracle-mismatches.json](evidence/oracle-mismatches.json) 为空数组。
+64 组固定回归的官方期望另存 [evidence/review2-fixed-expected.json](evidence/review2-fixed-expected.json)。
+它们全部嵌入 engine/review_regression_test.mbt，在三个后端运行，不依赖 /tmp 或文件系统。
 
-### 修复及源码依据
+### B1–B5 与 I1 的处理
 
-在相同 v1.22.1 上，修复前仍有 11 处差异，原始日志见
-[evidence/oracle-v1.22.1-before.txt](evidence/oracle-v1.22.1-before.txt)；本轮均已消除。
+- **B1**：CEL `&&` / `||` 在左侧错误时继续求值右侧，让 false 吸收 AND 错误、true 吸收
+  OR 错误；决定性的左侧布尔值仍短路。两种运算各 3×3 的 true/false/error 组合均有
+  CEL 单元测试和三个授权 API 的官方期望回归。
+- **B2**：List 查询不在 union/intersection 的决定性结果处隐藏其余相关分支的条件错误；
+  Check 保留原短路规则。固定回归覆盖分支顺序与持久化/contextual 混合。
+- **B3 / ListObjects**：从请求用户沿反向依赖边传播证明，以工作队列去重，递归 group
+  不受逐对象 Check 的栈深限制。直接/union 证明直接输出，仅 intersection/difference
+  标记的候选走残余求值。这对应官方
+  [ReverseExpand](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/pkg/server/commands/reverseexpand/reverse_expand.go)
+  和 [NoFurtherEval / RequiresFurtherEval](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/pkg/server/commands/list_objects.go#L442)
+  的分工，不再先枚举所有对象然后逐个 Check。
+- **B3 / ListUsers**：按对象/关系展开用户集合，传播显式用户、wildcard、排除标记、错误及循环状态；
+  relation 入口在 depth>=25 时报告 E2002，与 Check 的 tuple 深度不同。group:0..26 的数据链
+  对 ListObjects 返回全体对象，ListUsers 在 25/26 层报错。固定回归另含深浅混合、循环及
+  computed alias 的 0/25/26 边界。Check 的纯 computed alias 迭代折叠，不增加 tuple 深度，
+  这是新增官方差分中发现的优化语义；元组链的 Check 深度上限仍为 25。
+  参考官方 [ListUsers.expand / rewrite handlers](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/pkg/server/commands/listusers/list_users_rpc.go#L352)。
+- **B4**：全局 `size(s)` 与 `s.size()` 都计 Unicode code points；CEL 字符串词法器按字符宽度
+  推进，避免补充平面字面量落在 UTF-16 surrogate 中间。
+- **B5**：CEL 专用 timestamp→RFC3339 转换保留纳秒及数值时区偏移，去掉多余小数秒尾零。
+  黑盒实测官方 `string(timestamp('2026-01-01T08:00:00+08:00'))` 保留 `+08:00`，
+  并非强制改写为 UTC；比较/算术仍按 UTC instant 处理。新增精确时间值保留既有毫秒接口，
+  条件 JSON 桥也输出 RFC3339。
+- **I1 后端**：Explain 在同一次 Check 的成功分支记录 witness，删除二次独立 witness 遍历。
+  CLI 与 JS API 共同使用 ExplainResult.to_json：allowed、paths（步骤数组）、complete 和可选
+  explain_error。决策成功但 witness 不完整时 complete=false，状态非致命；不再编造路径。
+  `scripts/test-explain.mjs` 实测 CLI 退出 0、JS ok=true，二者的 owner witness 与决策一致。
 
-- **ListUsers 的 9 个反例**：原算法全局关闭 wildcard 来寻找显式用户，遗漏
-  intersection 中由“一支 wildcard + 另一支显式用户”产生的结果，也错误忽略 subtract 分支的
-  wildcard。现在 intersection 先按完整成员资格检查所有分支，再在任意分支寻找显式证据；
-  subtract 始终按完整成员资格求值。union 与递归 TTU 继续逐支传播结果，不把 wildcard
-  展开为无关用户。9 个完整反例已固化为 engine/oracle_regression_test.mbt 的独立测试；
-  输入及官方结果同时保存在 [evidence/oracle-regressions.json](evidence/oracle-regressions.json)。
-  参考官方 [expandIntersection / expandUnion / expandExclusion](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/pkg/server/commands/listusers/list_users_rpc.go#L569)
-  的集合成员与 wildcard 语义，未复制 Go 实现。
-- **contextual 条件绑定**：新版官方行为仍区分 API。Check 的 ReadUserTuple 优先返回 contextual
-  三元组；List API 的 Read 合并 contextual 与持久化两路元组。已对齐：
-  持久化 enabled(ok=true)、contextual enabled(ok=false) 时，Check=false，
-  ListObjects 返回 document:0，ListUsers 返回 user:0。
-  contextual 缺少 ok 时三个 API 均报 validation_error / E2000；List 查询不会让有效的持久化
-  grant 掩盖该直接元组上的条件错误。
-  依据官方 [CombinedTupleReader.Read / ReadUserTuple](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/pkg/storage/storagewrappers/combinedtuplereader.go#L65)
-  与 [ListUsers.expandDirect](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/pkg/server/commands/listusers/list_users_rpc.go#L453)。
-  原先“保留兼容差异”的决策已撤销；当前这两组定向用例没有差异。
+Kimi 原 16 组脚本也实际重放过，48 次查询比较无差异。但其中原 self-cycle 写入属于官方拒绝的
+self-defining tuple，原脚本没有检查写入返回值；它不构成有效的官方循环遍历证明。
+本轮固定 oracle 改用合法二节点循环，随机生成器也不生成 self-defining tuple。
+原 self-cycle 的本地终止行为仍单独保留为测试。
 
-三后端各 76 个普通测试通过；Check / ListObjects / ListUsers 官方矩阵保持
-516/516、354/354、393/394（1 条缺期望跳过），language 29/29。
-性能实测及复现见 [performance.md](performance.md)。
+### 验证与边界
 
-CI 安装命令按 [MoonBit 官方下载文档](https://www.moonbitlang.com/download/) 校对，
-Windows 使用 PowerShell 脚本并显式初始化 MSVC，JS 显式安装 Node 22。
-尚无 GitHub Actions 或 Windows/Ubuntu 实机通过证据；本轮差分为固定两 seed 的有限测试，
-不宣称全部 OpenFGA 输入均完全兼容。
+三后端 `moon check --deny-warn`、`moon test`（各 147/147）、`moon fmt --check` 通过；
+`moon info` 后无 .mbti 差异。矩阵保持 Check 516/516、ListObjects 354/354、
+ListUsers 393/394（1 条缺期望跳过），language 29/29。native benchmark 2/2，
+详见 [performance.md](performance.md)。
+
+本轮不修改 web/。其旧 smoke 中“解释失败时 paths 必须为空并带 ip 错误”的断言，
+与现在从成功 owner 分支取得 witness 的行为冲突，需由前端负责人同步；本轮没有运行旧 Web smoke，
+也不声称 GitHub CI 已通过。前端 I2、发布 B6 均未纳入本轮后端修改。
+固定两 seed 的零差异不等于全部 OpenFGA 输入均兼容；CEL 完整标准库等既有不支持项仍有效。
