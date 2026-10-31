@@ -1,0 +1,75 @@
+# Changelog
+
+All notable changes to MoonFGA are documented here. The format follows
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.1.0] - 2026-10-31
+
+First public source release. The module is not published to Mooncakes; build
+it from source with the MoonBit toolchain 0.1.20261028 or newer.
+
+### Added
+
+- OpenFGA schema 1.1 DSL: `model`, `schema 1.1`, `type`, `relations`, `define`,
+  direct restrictions (`[user, group#member, user:*, user with cond]`),
+  `or` / `and` / `but not`, computed usersets, tuple-to-userset (`X from Y`),
+  parentheses, `condition` declarations, and comments.
+- AuthorizationModel JSON import/export and a DSL ↔ JSON transformer. Export
+  follows `openfga/language`: empty `type_definitions` are omitted and every
+  relation receives a `metadata.relations` entry.
+- Semantic model validation with line and column positions: unknown types and
+  relations, invalid tuple restrictions, forbidden cycles, duplicate
+  definitions, and condition parameter checks. Error codes mirror OpenFGA
+  (`E2000`, `E2001`, `E2002`, `E2003`, `E2021`, `E2022`, `E2027`).
+- Indexed in-memory tuple store (`object#relation`, user indexes), contextual
+  tuple overlays, and a `TupleReader` trait for embedding.
+- `Check` with depth limit 25, cycle detection, wildcard users, union /
+  intersection / difference short-circuiting, tuple-to-userset traversal, and
+  conditional relationships.
+- `BatchCheck`, `ListObjects`, `ListUsers` (including userset filters),
+  `Expand`, and explainable checks that return resolution paths.
+- Self-contained CEL subset covering `int`, `uint`, `double`, `bool`, `string`,
+  `duration`, `timestamp`, `list`, `map`, and `ipaddress`, with operators,
+  ternaries, `exists` / `exists_one` / `all` / `map` / `filter`, and common
+  string, time, and network helpers.
+- CLI with `validate`, `transform`, `check`, `list-objects`, `list-users`,
+  `expand`, and `test` commands. Tuple input accepts JSON, YAML, and
+  `object#relation@user` text.
+- `.fga.yaml` store test runner supporting `model` / `model_file`, suite and
+  per-test tuples, Check / ListObjects / ListUsers assertions, `context`,
+  `contextualTuples`, userset filters, and `errorCode`.
+- Conformance harness that replays the pinned OpenFGA matrix and the
+  `openfga/language` DSL ↔ JSON fixtures, with per-assertion JSON reports and
+  configurable pass thresholds (`scripts/conformance.sh`).
+- Runnable examples for basic ReBAC, ABAC conditions, and library embedding.
+
+### Conformance
+
+Pinned upstream revisions:
+
+- `openfga/openfga` `44054f542f64e9b9589dd26a595081b3d2cfd942` (v1.22.1)
+- `openfga/language` `ed62a11e759a0faa1354404ead761f956469e149`
+
+| API | Passed | Total | Failed | Skipped |
+| --- | ---: | ---: | ---: | ---: |
+| Check | 516 | 516 | 0 | 0 |
+| ListObjects | 354 | 354 | 0 | 0 |
+| ListUsers | 393 | 394 | 0 | 1 |
+| DSL ↔ JSON fixtures | 29 | 29 | 0 | 0 |
+
+The single skipped ListUsers assertion (`simple_computeduserset_indirect_ref`)
+has no top-level expectation or `errorCode` in the upstream file and is
+reported as `skip/no_expectation` rather than counted as a pass.
+
+### Known limitations
+
+- No FGA modules (`module` / `extends`); single-file models are fully
+  supported.
+- No `ReadChanges`; the in-memory store has no change log.
+- No persistent or distributed storage, HTTP/gRPC server, pagination, or
+  consistency preferences.
+- The CEL implementation is an OpenFGA-oriented subset, not the complete CEL
+  standard library (for example, `bytes` and regex capture groups are absent).
