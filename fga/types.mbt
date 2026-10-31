@@ -6,7 +6,8 @@
 
 ///|
 /// A CEL runtime value. Durations are stored in nanoseconds and timestamps
-/// in milliseconds since the Unix epoch.
+/// in milliseconds since the Unix epoch, with an optional sub-millisecond
+/// nanosecond remainder for precise RFC3339 inputs.
 pub(all) enum CelValue {
   VInt(Int64)
   VUint(UInt64)
@@ -15,6 +16,7 @@ pub(all) enum CelValue {
   VString(String)
   VDuration(Int64)
   VTimestamp(Int64)
+  VTimestampPrecise(Int64, Int32, Int32)
   VList(Array[CelValue])
   VMap(Map[String, CelValue])
   VIp(String)
@@ -30,7 +32,7 @@ pub fn cel_value_type_name(value : CelValue) -> String {
     VBool(_) => "bool"
     VString(_) => "string"
     VDuration(_) => "duration"
-    VTimestamp(_) => "timestamp"
+    VTimestamp(_) | VTimestampPrecise(_, _, _) => "timestamp"
     VList(_) => "list"
     VMap(_) => "map"
     VIp(_) => "ipaddress"
@@ -42,6 +44,10 @@ pub fn cel_value_type_name(value : CelValue) -> String {
 /// Structural equality with numeric coercion, used by CEL `==` and by the
 /// store when de-duplicating tuples.
 pub fn cel_value_eq(a : CelValue, b : CelValue) -> Bool {
+  match (a.timestamp_parts(), b.timestamp_parts()) {
+    (Some(x), Some(y)) => return x == y
+    _ => ()
+  }
   match (a, b) {
     (VNull, VNull) => true
     (VBool(x), VBool(y)) => x == y
@@ -112,6 +118,8 @@ pub fn cel_value_to_display(value : CelValue) -> String {
         x.to_string() + "ns"
       }
     VTimestamp(x) => x.to_string()
+    VTimestampPrecise(x, sub, _) =>
+      x.to_string() + "ms+" + sub.to_string() + "ns"
     VList(xs) => {
       let parts = xs.map(fn(v) { cel_value_to_display(v) })
       "[" + parts.join(", ") + "]"
@@ -604,4 +612,44 @@ pub(open) trait TupleReader {
   fn read_userset(Self, String, String) -> Array[Tuple]
   fn all_objects(Self, String) -> Array[String]
   fn all_users(Self) -> Array[String]
+}
+
+///|
+/// Timestamp components: epoch milliseconds and a non-negative nanosecond
+/// remainder below one millisecond.
+pub fn CelValue::timestamp_parts(self : CelValue) -> (Int64, Int32)? {
+  match self {
+    VTimestamp(ms) => Some((ms, 0))
+    VTimestampPrecise(ms, sub, _) => Some((ms, sub))
+    _ => None
+  }
+}
+
+///|
+/// Normalizes a timestamp remainder without narrowing the supported year range.
+pub fn timestamp_value(
+  ms : Int64,
+  remainder : Int64,
+  offset~ : Int32 = 0,
+) -> CelValue {
+  let carry = if remainder >= 0L {
+    remainder / 1000000L
+  } else {
+    (remainder - 999999L) / 1000000L
+  }
+  let sub = (remainder - carry * 1000000L).to_int()
+  if sub == 0 && offset == 0 {
+    VTimestamp(ms + carry)
+  } else {
+    VTimestampPrecise(ms + carry, sub, offset)
+  }
+}
+
+///|
+/// Preserved numeric timezone offset used by CEL string(timestamp).
+pub fn CelValue::timestamp_offset(self : CelValue) -> Int32 {
+  match self {
+    VTimestampPrecise(_, _, offset) => offset
+    _ => 0
+  }
 }

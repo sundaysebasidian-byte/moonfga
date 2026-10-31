@@ -66,6 +66,38 @@ fn eval_arithmetic(
   left : @fga.CelValue,
   right : @fga.CelValue,
 ) -> @fga.CelValue raise @fga.FgaError {
+  match (left.timestamp_parts(), right.timestamp_parts(), left, right) {
+    (Some((a, an)), Some((b, bn)), _, _) => {
+      if op == "-" {
+        return @fga.VDuration(
+          (a - b) * 1000000L + an.to_int64() - bn.to_int64(),
+        )
+      }
+      raise eval_error("unsupported timestamp operator")
+    }
+    (Some((a, an)), None, _, @fga.VDuration(ns)) => {
+      if op != "+" && op != "-" {
+        raise eval_error("unsupported timestamp operator")
+      }
+      let delta = if op == "+" { ns } else { -ns }
+      return @fga.timestamp_value(
+        a + delta / 1000000L,
+        an.to_int64() + delta % 1000000L,
+        offset=left.timestamp_offset(),
+      )
+    }
+    (None, Some((b, bn)), @fga.VDuration(ns), _) => {
+      if op != "+" {
+        raise eval_error("unsupported timestamp operator")
+      }
+      return @fga.timestamp_value(
+        b + ns / 1000000L,
+        bn.to_int64() + ns % 1000000L,
+        offset=right.timestamp_offset(),
+      )
+    }
+    _ => ()
+  }
   match (left, right) {
     (@fga.VInt(a), @fga.VInt(b)) =>
       match op {
@@ -125,28 +157,6 @@ fn eval_arithmetic(
       } else {
         raise eval_error("unsupported operator '" + op + "' for string")
       }
-    (@fga.VTimestamp(a), @fga.VDuration(b)) =>
-      if op == "+" {
-        @fga.VTimestamp(a + b / 1000000L)
-      } else if op == "-" {
-        @fga.VTimestamp(a - b / 1000000L)
-      } else {
-        raise eval_error("unsupported timestamp/duration operator '" + op + "'")
-      }
-    (@fga.VDuration(a), @fga.VTimestamp(b)) =>
-      if op == "+" {
-        @fga.VTimestamp(b + a / 1000000L)
-      } else {
-        raise eval_error("unsupported duration/timestamp operator '" + op + "'")
-      }
-    (@fga.VTimestamp(a), @fga.VTimestamp(b)) =>
-      if op == "-" {
-        @fga.VDuration((a - b) * 1000000L)
-      } else {
-        raise eval_error(
-          "unsupported timestamp/timestamp operator '" + op + "'",
-        )
-      }
     (@fga.VDuration(a), @fga.VDuration(b)) =>
       if op == "+" {
         @fga.VDuration(a + b)
@@ -192,6 +202,25 @@ fn compare_values(
   left : @fga.CelValue,
   right : @fga.CelValue,
 ) -> Bool raise @fga.FgaError {
+  match (left.timestamp_parts(), right.timestamp_parts()) {
+    (Some(a), Some(b)) => {
+      let n = if a.0 < b.0 || (a.0 == b.0 && a.1 < b.1) {
+        -1
+      } else if a == b {
+        0
+      } else {
+        1
+      }
+      return match op {
+        "<" => n < 0
+        "<=" => n <= 0
+        ">" => n > 0
+        ">=" => n >= 0
+        _ => false
+      }
+    }
+    _ => ()
+  }
   let ordering = match (left, right) {
     (@fga.VInt(a), @fga.VInt(b)) =>
       if a < b {
@@ -463,6 +492,8 @@ fn eval_method(
         }
         _ => raise eval_error("unsupported ipaddress method '" + name + "'")
       }
+    @fga.VTimestampPrecise(ms, _, _) =>
+      eval_method(@fga.VTimestamp(ms), name, args, env)
     @fga.VTimestamp(ms) =>
       match name {
         "getSeconds" => @fga.VInt(ms / 1000L - ms / 1000L / 86400L * 86400L)
@@ -505,7 +536,7 @@ fn eval_call(
       if values.length() != 1 {
         raise eval_error("timestamp expects one string argument")
       }
-      @fga.VTimestamp(parse_timestamp(as_string_value(values[0])))
+      parse_timestamp_value(as_string_value(values[0]))
     }
     "duration" => {
       if values.length() != 1 {
@@ -595,7 +626,8 @@ fn eval_call(
         raise eval_error("string expects one argument")
       }
       match values[0] {
-        @fga.VTimestamp(ms) => @fga.VString(format_timestamp(ms))
+        @fga.VTimestamp(_) | @fga.VTimestampPrecise(_, _, _) =>
+          @fga.VString(@fga.timestamp_to_rfc3339(values[0]))
         other => @fga.VString(@fga.cel_value_to_display(other))
       }
     }

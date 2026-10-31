@@ -36,7 +36,8 @@ pub fn cel_value_to_json(value : CelValue) -> Json {
     VBool(x) => Json::boolean(x)
     VString(x) => Json::string(x)
     VDuration(x) => Json::string(x.to_string() + "ns")
-    VTimestamp(x) => Json::string(x.to_string())
+    VTimestamp(_) | VTimestampPrecise(_, _, _) =>
+      Json::string(timestamp_to_rfc3339(value))
     VList(xs) => Json::array(xs.map(fn(x) { cel_value_to_json(x) }))
     VMap(m) => {
       let out : Map[String, Json] = Map([])

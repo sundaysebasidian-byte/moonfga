@@ -255,53 +255,45 @@ pub fn parse_duration(text : String) -> Int64 raise @fga.FgaError {
 }
 
 ///|
-fn pad_time(n : Int64, width : Int32) -> String {
-  let s = n.to_string()
-  let zeros = if width > s.length() { width - s.length() } else { 0 }
-  Array::make(zeros, "0").join("") + s
+/// Formats epoch milliseconds as UTC RFC3339.
+pub fn format_timestamp(ms : Int64) -> String {
+  @fga.timestamp_to_rfc3339(@fga.VTimestamp(ms))
 }
 
 ///|
-/// Formats milliseconds since the Unix epoch as UTC RFC3339.
-pub fn format_timestamp(ms : Int64) -> String {
-  let seconds = if ms >= 0L { ms / 1000L } else { (ms - 999L) / 1000L }
-  let millis = ms - seconds * 1000L
-  let days = if seconds >= 0L {
-    seconds / 86400L
-  } else {
-    (seconds - 86399L) / 86400L
-  }
-  let tod = seconds - days * 86400L
-  let z = days + 719468L
-  let era = if z >= 0L { z / 146097L } else { (z - 146096L) / 146097L }
-  let doe = z - era * 146097L
-  let yoe = (doe - doe / 1460L + doe / 36524L - doe / 146096L) / 365L
-  let y = yoe + era * 400L
-  let doy = doe - (365L * yoe + yoe / 4L - yoe / 100L)
-  let mp = (5L * doy + 2L) / 153L
-  let day = doy - (153L * mp + 2L) / 5L + 1L
-  let month = mp + (if mp < 10L { 3L } else { -9L })
-  let year = y + (if month <= 2L { 1L } else { 0L })
-  let fraction = if millis == 0L {
-    ""
-  } else {
-    let mut f = pad_time(millis, 3)
-    while f.has_suffix("0") {
-      f = f[:f.length() - 1].to_owned()
+fn parse_timestamp_value(text : String) -> @fga.CelValue raise @fga.FgaError {
+  let ms = parse_timestamp(text)
+  let mut ns = 0L
+  let mut scale = 100000L
+  let mut pos = 23
+  if text.get_char(19) == Some('.') {
+    while pos < text.length() && scale > 0L {
+      match text.get_char(pos) {
+        Some(c) =>
+          if c >= '0' && c <= '9' {
+            ns += (c.to_int() - 48).to_int64() * scale
+            scale /= 10L
+            pos += 1
+          } else {
+            break
+          }
+        None => break
+      }
     }
-    "." + f
   }
-  pad_time(year, 4) +
-  "-" +
-  pad_time(month, 2) +
-  "-" +
-  pad_time(day, 2) +
-  "T" +
-  pad_time(tod / 3600L, 2) +
-  ":" +
-  pad_time(tod / 60L % 60L, 2) +
-  ":" +
-  pad_time(tod % 60L, 2) +
-  fraction +
-  "Z"
+  let mut offset = 0
+  let sign_pos = text.length() - 6
+  if sign_pos >= 19 {
+    match text.get_char(sign_pos) {
+      Some('+') | Some('-') => {
+        offset = fixed_digits(text, sign_pos + 1, 2).unwrap() * 60 +
+          fixed_digits(text, sign_pos + 4, 2).unwrap()
+        if text.get_char(sign_pos) == Some('-') {
+          offset = -offset
+        }
+      }
+      _ => ()
+    }
+  }
+  @fga.timestamp_value(ms, ns, offset~)
 }

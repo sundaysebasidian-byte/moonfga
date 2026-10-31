@@ -69,7 +69,7 @@ fn coerce_primitive(
       }
     "timestamp" =>
       match value {
-        String(s) => @fga.VTimestamp(parse_timestamp(s))
+        String(s) => parse_timestamp_value(s)
         other => raise coercion_error(param_name, "a timestamp string", other)
       }
     "ipaddress" =>

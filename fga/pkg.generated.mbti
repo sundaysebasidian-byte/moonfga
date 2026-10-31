@@ -70,6 +70,10 @@ pub fn render_user_ref(UserRef) -> String
 
 pub fn restrictions_allow(Array[TypeRestriction], String) -> Bool
 
+pub fn timestamp_to_rfc3339(CelValue) -> String
+
+pub fn timestamp_value(Int64, Int64, offset? : Int32) -> CelValue
+
 pub fn tuple_from_json(Json) -> Tuple raise FgaError
 
 pub fn tuple_from_string(String) -> Tuple raise FgaError
@@ -113,11 +117,14 @@ pub(all) enum CelValue {
   VString(String)
   VDuration(Int64)
   VTimestamp(Int64)
+  VTimestampPrecise(Int64, Int32, Int32)
   VList(Array[CelValue])
   VMap(Map[String, CelValue])
   VIp(String)
   VNull
 }
+pub fn CelValue::timestamp_offset(Self) -> Int32
+pub fn CelValue::timestamp_parts(Self) -> (Int64, Int32)?
 
 pub(all) struct Condition {
   name : String

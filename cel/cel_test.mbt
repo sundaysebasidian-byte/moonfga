@@ -194,14 +194,48 @@ test "timestamp string is normalized RFC3339" {
   for
     pair in [
       ("2026-01-01T00:00:00Z", "2026-01-01T00:00:00Z"),
-      ("2026-01-01T08:00:00+08:00", "2026-01-01T00:00:00Z"),
+      ("2026-01-01T08:00:00+08:00", "2026-01-01T08:00:00+08:00"),
       ("2026-01-01T00:00:00.120Z", "2026-01-01T00:00:00.12Z"),
       ("1969-12-31T23:59:59.999Z", "1969-12-31T23:59:59.999Z"),
-      ("2000-02-29T23:30:00-01:00", "2000-03-01T00:30:00Z"),
+      ("2000-02-29T23:30:00-01:00", "2000-02-29T23:30:00-01:00"),
     ] {
     assert_eq(
       eval_empty("string(timestamp('" + pair.0 + "')) == '" + pair.1 + "'"),
       "true",
     )
   }
+}
+
+///|
+test "timestamp conversion preserves nanoseconds and offset normalization" {
+  assert_eq(
+    eval_empty(
+      "string(timestamp('2026-01-01T08:00:00.123456789+08:00')) == '2026-01-01T08:00:00.123456789+08:00'",
+    ),
+    "true",
+  )
+  assert_eq(
+    eval_empty(
+      "string(timestamp('1969-12-31T23:59:59.999999999Z')) == '1969-12-31T23:59:59.999999999Z'",
+    ),
+    "true",
+  )
+  assert_eq(
+    eval_empty(
+      "timestamp('2026-01-01T00:00:00.000000001Z') > timestamp('2026-01-01T00:00:00Z')",
+    ),
+    "true",
+  )
+  assert_eq(
+    eval_empty(
+      "timestamp('2026-01-01T00:00:00.000000001Z') == timestamp('2026-01-01T00:00:00Z')",
+    ),
+    "false",
+  )
+  assert_eq(
+    eval_empty(
+      "string(timestamp('2026-01-01T00:00:00Z') + duration('1ns')) == '2026-01-01T00:00:00.000000001Z'",
+    ),
+    "true",
+  )
 }
