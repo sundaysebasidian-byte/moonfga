@@ -49,7 +49,7 @@ jobs:
         run: moon build
 
       - name: Test
-        run: moon test
+        run: moon test --target native
 
       - name: Format check
         run: moon fmt --check
