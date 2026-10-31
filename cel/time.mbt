@@ -1,0 +1,261 @@
+// Timestamp, duration and IP address parsing for CEL values.
+
+///|
+fn fixed_digits(text : String, start : Int32, count : Int32) -> Int32? {
+  if start < 0 || start + count > text.length() {
+    return None
+  }
+  let mut value = 0
+  for i in 0..<count {
+    match text.get_char(start + i) {
+      Some(c) =>
+        if c >= '0' && c <= '9' {
+          value = value * 10 + (c.to_int() - '0'.to_int())
+        } else {
+          return None
+        }
+      None => return None
+    }
+  }
+  Some(value)
+}
+
+///|
+fn days_from_civil(year : Int64, month : Int64, day : Int64) -> Int64 {
+  let y = if month <= 2L { year - 1L } else { year }
+  let era = if y >= 0L { y / 400L } else { (y - 399L) / 400L }
+  let yoe = y - era * 400L
+  let mp = if month > 2L { month - 3L } else { month + 9L }
+  let doy = (153L * mp + 2L) / 5L + day - 1L
+  let doe = yoe * 365L + yoe / 4L - yoe / 100L + doy
+  era * 146097L + doe - 719468L
+}
+
+///|
+fn days_in_month(year : Int32, month : Int32) -> Int32 {
+  match month {
+    1 | 3 | 5 | 7 | 8 | 10 | 12 => 31
+    4 | 6 | 9 | 11 => 30
+    2 =>
+      if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
+        29
+      } else {
+        28
+      }
+    _ => 0
+  }
+}
+
+///|
+/// Parses an RFC 3339 timestamp into milliseconds since the Unix epoch.
+pub fn parse_timestamp(text : String) -> Int64 raise @fga.FgaError {
+  let invalid = @fga.fail(
+    @fga.ERR_VALIDATION,
+    "invalid timestamp '" + text + "'",
+  )
+  if text.length() < 19 {
+    raise invalid
+  }
+  let year = match fixed_digits(text, 0, 4) {
+    Some(v) => v
+    None => raise invalid
+  }
+  if text.get_char(4) != Some('-') || text.get_char(7) != Some('-') {
+    raise invalid
+  }
+  let month = match fixed_digits(text, 5, 2) {
+    Some(v) => v
+    None => raise invalid
+  }
+  let day = match fixed_digits(text, 8, 2) {
+    Some(v) => v
+    None => raise invalid
+  }
+  match text.get_char(10) {
+    Some('T') | Some('t') | Some(' ') => ()
+    _ => raise invalid
+  }
+  if text.get_char(13) != Some(':') || text.get_char(16) != Some(':') {
+    raise invalid
+  }
+  let hour = match fixed_digits(text, 11, 2) {
+    Some(v) => v
+    None => raise invalid
+  }
+  let minute = match fixed_digits(text, 14, 2) {
+    Some(v) => v
+    None => raise invalid
+  }
+  let second = match fixed_digits(text, 17, 2) {
+    Some(v) => v
+    None => raise invalid
+  }
+  if month < 1 ||
+    month > 12 ||
+    day < 1 ||
+    day > days_in_month(year, month) ||
+    hour > 23 ||
+    minute > 59 ||
+    second > 60 {
+    raise invalid
+  }
+  let mut pos = 19
+  let mut millis = 0L
+  if text.get_char(pos) == Some('.') {
+    pos = pos + 1
+    let mut digits = 0
+    let mut scale = 100
+    while true {
+      match text.get_char(pos) {
+        Some(c) =>
+          if c >= '0' && c <= '9' {
+            if digits < 3 {
+              millis = millis +
+                (c.to_int() - '0'.to_int()).to_int64() * scale.to_int64()
+              scale = scale / 10
+            }
+            digits = digits + 1
+            pos = pos + 1
+          } else {
+            break
+          }
+        None => break
+      }
+    }
+    if digits == 0 {
+      raise invalid
+    }
+  }
+  let mut offset_minutes = 0
+  match text.get_char(pos) {
+    Some('Z') | Some('z') => pos = pos + 1
+    Some('+') | Some('-') => {
+      let sign = if text.get_char(pos) == Some('+') { 1 } else { -1 }
+      let oh = match fixed_digits(text, pos + 1, 2) {
+        Some(v) => v
+        None => raise invalid
+      }
+      if text.get_char(pos + 3) != Some(':') {
+        raise invalid
+      }
+      let om = match fixed_digits(text, pos + 4, 2) {
+        Some(v) => v
+        None => raise invalid
+      }
+      offset_minutes = sign * (oh * 60 + om)
+      pos = pos + 6
+    }
+    _ => ()
+  }
+  if pos != text.length() {
+    raise invalid
+  }
+  let days = days_from_civil(year.to_int64(), month.to_int64(), day.to_int64())
+  let seconds = days * 86400L + (hour * 3600 + minute * 60 + second).to_int64()
+  seconds * 1000L + millis - offset_minutes.to_int64() * 60000L
+}
+
+///|
+fn duration_unit_ns(unit : String) -> Int64? {
+  match unit {
+    "ns" => Some(1L)
+    "us" => Some(1000L)
+    "µs" => Some(1000L)
+    "ms" => Some(1000000L)
+    "s" => Some(1000000000L)
+    "m" => Some(60000000000L)
+    "h" => Some(3600000000000L)
+    _ => None
+  }
+}
+
+///|
+/// Parses a Go-style duration such as `1h30m` or `250ms` into nanoseconds.
+pub fn parse_duration(text : String) -> Int64 raise @fga.FgaError {
+  let invalid = @fga.fail(
+    @fga.ERR_VALIDATION,
+    "invalid duration '" + text + "'",
+  )
+  if text.length() == 0 {
+    raise invalid
+  }
+  let mut pos = 0
+  let mut sign = 1L
+  match text.get_char(0) {
+    Some('+') => pos = 1
+    Some('-') => {
+      sign = -1L
+      pos = 1
+    }
+    _ => ()
+  }
+  if pos >= text.length() {
+    raise invalid
+  }
+  let mut total = 0L
+  while pos < text.length() {
+    let number_start = pos
+    let mut saw_digit = false
+    while true {
+      match text.get_char(pos) {
+        Some(c) =>
+          if c >= '0' && c <= '9' {
+            saw_digit = true
+            pos = pos + 1
+          } else {
+            break
+          }
+        None => break
+      }
+    }
+    if !saw_digit {
+      raise invalid
+    }
+    if text.get_char(pos) == Some('.') {
+      pos = pos + 1
+      let mut frac_digits = 0
+      while true {
+        match text.get_char(pos) {
+          Some(c) =>
+            if c >= '0' && c <= '9' {
+              frac_digits = frac_digits + 1
+              pos = pos + 1
+            } else {
+              break
+            }
+          None => break
+        }
+      }
+      if frac_digits == 0 {
+        raise invalid
+      }
+    }
+    let number_text = text[number_start:pos].to_owned()
+    let number = @string.parse_double(number_text) catch { _ => raise invalid }
+    let unit_start = pos
+    while pos < text.length() {
+      match text.get_char(pos) {
+        Some(c) =>
+          if (c >= 'a' && c <= 'z') || c >= '\u{00B5}' {
+            pos = pos + 1
+          } else {
+            break
+          }
+        None => break
+      }
+    }
+    let unit = text[unit_start:pos].to_owned()
+    let factor = match duration_unit_ns(unit) {
+      Some(v) => v
+      None => raise invalid
+    }
+    total = total + (number * factor.to_double()).to_int64()
+  }
+  sign * total
+}
+
+///|
+/// Formats a timestamp used in diagnostics.
+pub fn format_timestamp(ms : Int64) -> String {
+  ms.to_string()
+}

@@ -1,0 +1,47 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "sundaysebasidian-byte/moonfga/cel"
+
+import {
+  "sundaysebasidian-byte/moonfga/fga",
+}
+
+// Values
+pub fn canonical_ip(String) -> String raise @fga.FgaError
+
+pub fn coerce_context(@fga.ConditionParam, Json) -> @fga.CelValue raise @fga.FgaError
+
+pub fn compile(String) -> CelExpr raise @fga.FgaError
+
+pub fn eval_condition(@fga.Condition, Map[String, Json]) -> Bool raise @fga.FgaError
+
+pub fn eval_expr(CelExpr, Map[String, @fga.CelValue]) -> @fga.CelValue raise @fga.FgaError
+
+pub fn format_timestamp(Int64) -> String
+
+pub fn ip_in_cidr(String, String) -> Bool raise @fga.FgaError
+
+pub fn parse_duration(String) -> Int64 raise @fga.FgaError
+
+pub fn parse_timestamp(String) -> Int64 raise @fga.FgaError
+
+pub fn regex_matches(String, String) -> Bool raise @fga.FgaError
+
+// Errors
+
+// Types and methods
+pub(all) enum CelExpr {
+  CLiteral(@fga.CelValue)
+  CIdent(String)
+  CUnary(String, CelExpr)
+  CBinary(String, CelExpr, CelExpr)
+  CTernary(CelExpr, CelExpr, CelExpr)
+  CCall(String, Array[CelExpr])
+  CMethod(CelExpr, String, Array[CelExpr])
+  CIndex(CelExpr, CelExpr)
+  CList(Array[CelExpr])
+  CMap(Array[(CelExpr, CelExpr)])
+}
+
+// Type aliases
+
+// Traits
