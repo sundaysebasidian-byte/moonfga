@@ -1,0 +1,9 @@
+import {
+  "sundaysebasidian-byte/moonfga/fga",
+  "sundaysebasidian-byte/moonfga/cel",
+  "sundaysebasidian-byte/moonfga/store",
+}
+
+import {
+  "sundaysebasidian-byte/moonfga/dsl",
+} for "test"

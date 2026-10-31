@@ -1,0 +1,71 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "sundaysebasidian-byte/moonfga/engine"
+
+import {
+  "sundaysebasidian-byte/moonfga/fga",
+}
+
+// Values
+pub const INLINE_EXPRESSION : String = "$expression"
+
+pub fn parse_user_filter(@fga.AuthModel, String) -> @fga.UserRef raise @fga.FgaError
+
+pub fn tuple_binding_spec(@fga.AuthModel, String, String, @fga.Tuple) -> TupleBindingSpec
+
+pub fn validate_check_object(@fga.AuthModel, String, String) -> Unit raise @fga.FgaError
+
+pub fn validate_contextual_tuple(@fga.AuthModel, @fga.Tuple) -> Unit raise @fga.FgaError
+
+pub fn validate_list_users_object(@fga.AuthModel, String, String) -> Unit raise @fga.FgaError
+
+pub fn validate_object_type_relation(@fga.AuthModel, String, String) -> Unit raise @fga.FgaError
+
+pub fn validate_request_user(@fga.AuthModel, String) -> Unit raise @fga.FgaError
+
+// Errors
+
+// Types and methods
+pub(all) struct CheckRequest {
+  object : String
+  relation : String
+  user : String
+  context : Map[String, Json]
+  contextual_tuples : Array[@fga.Tuple]
+}
+pub fn CheckRequest::new(String, String, String) -> Self
+
+pub(all) struct CheckResult {
+  allowed : Bool?
+  error_code : Int32?
+  error_message : String?
+}
+
+pub(all) struct Engine {
+  model : @fga.AuthModel
+  reader : &@fga.TupleReader
+  match_wildcard_users : Bool
+}
+pub fn Engine::batch_check(Self, Array[CheckRequest]) -> Array[CheckResult]
+pub fn Engine::check(Self, String, String, String) -> Bool raise @fga.FgaError
+pub fn Engine::check_request(Self, CheckRequest) -> Bool raise @fga.FgaError
+pub fn Engine::check_with(Self, String, String, String, Map[String, Json], Array[@fga.Tuple]) -> Bool raise @fga.FgaError
+pub fn Engine::expand_json(Self, String, String, Array[@fga.Tuple]) -> Json raise @fga.FgaError
+pub fn Engine::explain_check(Self, String, String, String, Map[String, Json], Array[@fga.Tuple]) -> ExplainResult raise @fga.FgaError
+pub fn Engine::list_objects(Self, String, String, String, Map[String, Json], Array[@fga.Tuple]) -> Array[String] raise @fga.FgaError
+pub fn Engine::list_users(Self, String, String, Array[String], Map[String, Json], Array[@fga.Tuple]) -> Array[String] raise @fga.FgaError
+pub fn Engine::new(@fga.AuthModel, &@fga.TupleReader) -> Self
+
+pub(all) struct ExplainResult {
+  allowed : Bool
+  paths : Array[String]
+}
+
+pub(all) enum TupleBindingSpec {
+  Invalid
+  Unconditional
+  Condition(String)
+}
+
+// Type aliases
+
+// Traits
