@@ -527,11 +527,34 @@ pub fn matching_restriction_condition(
 }
 
 ///|
+/// True when an identifier contains no separators or whitespace.
+fn is_clean_ident(value : String) -> Bool {
+  if value == "" {
+    return false
+  }
+  for i in 0..<value.length() {
+    let c = value.get_char(i).unwrap()
+    if c == ':' || c == '#' || c == ' ' || c == '\t' || c == '\n' {
+      return false
+    }
+  }
+  true
+}
+
+///|
 /// True when the user string is syntactically valid OpenFGA user syntax.
 pub fn is_valid_user(user : String) -> Bool {
   match parse_user_ref(user) {
     None => false
-    Some(r) => if r.relation == Some("") { false } else { true }
+    Some(r) => {
+      if !is_clean_ident(r.type_name) || !is_clean_ident(r.id) {
+        return false
+      }
+      match r.relation {
+        Some(rel) => is_clean_ident(rel) && r.id != "*"
+        None => true
+      }
+    }
   }
 }
 
@@ -539,7 +562,11 @@ pub fn is_valid_user(user : String) -> Bool {
 pub fn is_valid_object(object : String) -> Bool {
   match object.find(":") {
     None => false
-    Some(i) => i > 0 && i + 1 < object.length()
+    Some(i) => {
+      let type_name = object[:i].to_owned()
+      let id = object[i + 1:].to_owned()
+      is_clean_ident(type_name) && is_clean_ident(id)
+    }
   }
 }
 
@@ -547,7 +574,7 @@ pub fn is_valid_object(object : String) -> Bool {
 /// Trait used by the engine to read tuples. Implementations must return
 /// tuples visible for the given object and relation (including wildcard and
 /// userset tuples).
-pub trait TupleReader {
+pub(open) trait TupleReader {
   fn read(Self, String, String) -> Array[Tuple]
   fn read_userset(Self, String, String) -> Array[Tuple]
   fn all_objects(Self, String) -> Array[String]

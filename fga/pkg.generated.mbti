@@ -179,7 +179,7 @@ pub(all) enum Userset {
 // Type aliases
 
 // Traits
-pub trait TupleReader {
+pub(open) trait TupleReader {
   fn read(Self, String, String) -> Array[Tuple]
   fn read_userset(Self, String, String) -> Array[Tuple]
   fn all_objects(Self, String) -> Array[String]
