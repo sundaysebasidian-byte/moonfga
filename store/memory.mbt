@@ -298,17 +298,21 @@ pub impl @fga.TupleReader for MemoryStore with fn all_users(self) {
 pub struct ContextualStore {
   priv base : &@fga.TupleReader
   priv extra : MemoryStore
+  priv shadow : Bool
 }
 
 ///|
-/// Creates a request-scoped overlay; contextual triples shadow base triples.
+/// Creates a request-scoped reader. By default contextual triples shadow base
+/// triples (Check semantics). With shadow=false both streams remain visible,
+/// including different condition bindings (OpenFGA List API semantics).
 pub fn ContextualStore::new(
   base : &@fga.TupleReader,
   tuples : Array[@fga.Tuple],
+  shadow~ : Bool = true,
 ) -> ContextualStore {
   let extra = MemoryStore::new()
   let _ = extra.write_all(tuples)
-  ContextualStore::{ base, extra, }
+  ContextualStore::{ base, extra, shadow, }
 }
 
 ///|
@@ -324,7 +328,12 @@ pub fn ContextualStore::from_store(
 fn merge_tuples(
   a : Array[@fga.Tuple],
   b : Array[@fga.Tuple],
+  shadow : Bool,
 ) -> Array[@fga.Tuple] {
+  if !shadow {
+    a.append(b)
+    return a
+  }
   let seen : Map[String, Unit] = Map([])
   let out : Array[@fga.Tuple] = []
   for t in a {
@@ -361,6 +370,7 @@ pub impl @fga.TupleReader for ContextualStore with fn read(
   merge_tuples(
     self.extra.read(object, relation),
     self.base.read(object, relation),
+    self.shadow,
   )
 }
 
@@ -373,6 +383,7 @@ pub impl @fga.TupleReader for ContextualStore with fn read_userset(
   merge_tuples(
     self.extra.read_userset(object, relation),
     self.base.read_userset(object, relation),
+    self.shadow,
   )
 }
 

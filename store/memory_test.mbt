@@ -99,3 +99,42 @@ test "object type index tracks last deletion clear and reinsertion" {
   assert_true(store.write(a))
   assert_eq(store.all_objects("document"), ["document:a"])
 }
+
+///|
+test "list reader combines distinct conditional bindings without mutating base" {
+  let base = @store.MemoryStore::new()
+  let t = tuple("document:1", "viewer", "user:a")
+  let stored = @fga.Tuple::{
+    ..t,
+    condition: Some(@fga.TupleCondition::{
+      name: "enabled",
+      context: Map([("ok", @fga.VBool(true))]),
+    }),
+  }
+  let overlay = @fga.Tuple::{
+    ..t,
+    condition: Some(@fga.TupleCondition::{
+      name: "enabled",
+      context: Map([("ok", @fga.VBool(false))]),
+    }),
+  }
+  let _ = base.write(stored)
+  let shadow = @store.ContextualStore::new(base as &@fga.TupleReader, [overlay])
+  let combined = @store.ContextualStore::new(
+    base as &@fga.TupleReader,
+    [overlay],
+    shadow=false,
+  )
+  assert_eq(shadow.read("document:1", "viewer").length(), 1)
+  let rows = combined.read("document:1", "viewer")
+  assert_eq(rows.length(), 2)
+  assert_true(
+    rows[0].condition.unwrap().context.get("ok") is Some(@fga.VBool(false)),
+  )
+  assert_true(
+    rows[1].condition.unwrap().context.get("ok") is Some(@fga.VBool(true)),
+  )
+  rows.clear()
+  assert_eq(combined.read("document:1", "viewer").length(), 2)
+  assert_eq(base.length(), 1)
+}

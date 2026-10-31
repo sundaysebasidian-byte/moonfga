@@ -87,10 +87,11 @@ pub fn Engine::list_objects(
   validate_object_type_relation(self.model, type_name, relation)
   validate_request_user(self.model, user)
   validate_contextual_for_list(self.model, contextual_tuples)
-  let reader = self.reader_with(contextual_tuples)
+  let reader = self.reader_with(contextual_tuples, shadow=false)
   let engine = Engine::{
     model: self.model,
     reader,
+    list_query: true,
     match_wildcard_users: self.match_wildcard_users,
   }
   let results : Array[String] = []
@@ -124,11 +125,17 @@ pub fn Engine::list_users(
   for filter in filters {
     parsed_filters.push(parse_user_filter(self.model, filter))
   }
-  let reader = self.reader_with(contextual_tuples)
-  let full = Engine::{ model: self.model, reader, match_wildcard_users: true, }
+  let reader = self.reader_with(contextual_tuples, shadow=false)
+  let full = Engine::{
+    model: self.model,
+    reader,
+    list_query: true,
+    match_wildcard_users: true,
+  }
   let explicit = Engine::{
     model: self.model,
     reader,
+    list_query: true,
     match_wildcard_users: false,
   }
   let results : Array[String] = []

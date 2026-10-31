@@ -243,6 +243,7 @@ pub fn Engine::explain_check(
   let engine = Engine::{
     model: self.model,
     reader,
+    list_query: self.list_query,
     match_wildcard_users: self.match_wildcard_users,
   }
   let allowed = engine.check_resolved(object, relation, user, context)

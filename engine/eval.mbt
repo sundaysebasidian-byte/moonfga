@@ -11,6 +11,7 @@ pub struct Engine {
   priv reader : &@fga.TupleReader
   // ListUsers enumerates concrete users from the tuple graph; users covered
   // only by a wildcard must not be reported individually.
+  priv list_query : Bool
   priv match_wildcard_users : Bool
 }
 
@@ -21,7 +22,7 @@ pub fn Engine::new(
   model : @fga.AuthModel,
   reader : &@fga.TupleReader,
 ) -> Engine {
-  Engine::{ model, reader, match_wildcard_users: true, }
+  Engine::{ model, reader, list_query: false, match_wildcard_users: true, }
 }
 
 ///|
@@ -463,6 +464,7 @@ fn Engine::resolve_direct(
   let tuples = self.reader.read(object, relation)
   let mut pending_error : @fga.FgaError? = None
   let mut saw_cycle = false
+  let mut allowed = false
   for tuple in tuples {
     let parsed_user = match @fga.parse_user_ref(tuple.user) {
       Some(r) => r
@@ -492,7 +494,10 @@ fn Engine::resolve_direct(
         }
       }
       if holds {
-        return OTrue
+        if !self.list_query {
+          return OTrue
+        }
+        allowed = true
       }
       continue
     }
@@ -508,7 +513,10 @@ fn Engine::resolve_direct(
           }
         }
         if holds {
-          return OTrue
+          if !self.list_query {
+            return OTrue
+          }
+          allowed = true
         }
       }
     } else {
@@ -544,13 +552,29 @@ fn Engine::resolve_direct(
             }
           }
           match child {
-            OTrue => return OTrue
+            OTrue =>
+              if !self.list_query {
+                return OTrue
+              } else {
+                allowed = true
+              }
             OCycle => saw_cycle = true
             OFalse => ()
           }
         }
         None => ()
       }
+    }
+  }
+  // List readers consume both streams: a successful stored grant must not
+  // conceal an invalid/missing contextual condition in another direct tuple.
+  if self.list_query {
+    match pending_error {
+      Some(err) => raise err
+      None => ()
+    }
+    if allowed {
+      return OTrue
     }
   }
   if saw_cycle {
@@ -700,11 +724,16 @@ fn validate_contextual(
 fn Engine::reader_with(
   self : Engine,
   contextual_tuples : Array[@fga.Tuple],
+  shadow~ : Bool = true,
 ) -> &@fga.TupleReader {
   if contextual_tuples.length() == 0 {
     self.reader
   } else {
-    let wrapper = @store.ContextualStore::new(self.reader, contextual_tuples)
+    let wrapper = @store.ContextualStore::new(
+      self.reader,
+      contextual_tuples,
+      shadow~,
+    )
     wrapper as &@fga.TupleReader
   }
 }
@@ -750,6 +779,7 @@ pub fn Engine::check_with(
   let engine = Engine::{
     model: self.model,
     reader,
+    list_query: self.list_query,
     match_wildcard_users: self.match_wildcard_users,
   }
   engine.check_resolved(object, relation, user, context)

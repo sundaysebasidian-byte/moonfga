@@ -498,7 +498,7 @@ test "condition errors unwind paths before sibling resolution" {
 }
 
 ///|
-test "contextual condition replaces stored binding for the same triple" {
+test "contextual conditions shadow Check and combine in List APIs" {
   let source =
     #|model
     #|  schema 1.1
@@ -537,13 +537,35 @@ test "contextual condition replaces stored binding for the same triple" {
     engine
     .list_objects("document", "viewer", "user:a", Map([]), [overlay])
     .length(),
-    0,
+    1,
   )
   assert_eq(
     engine
     .list_users("document:1", "viewer", ["user"], Map([]), [overlay])
     .length(),
-    0,
+    1,
+  )
+  let missing = @fga.Tuple::{
+    ..overlay,
+    condition: Some(@fga.TupleCondition::{ name: "enabled", context: Map([]), }),
+  }
+  inspect(
+    status_of(() => {
+      engine.check_with("document:1", "viewer", "user:a", Map([]), [missing])
+    }),
+    content="E2000",
+  )
+  inspect(
+    list_status(() => {
+      engine.list_objects("document", "viewer", "user:a", Map([]), [missing])
+    }),
+    content="E2000",
+  )
+  inspect(
+    list_status(() => {
+      engine.list_users("document:1", "viewer", ["user"], Map([]), [missing])
+    }),
+    content="E2000",
   )
 }
 

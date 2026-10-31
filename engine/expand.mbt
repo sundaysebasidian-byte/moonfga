@@ -159,6 +159,7 @@ pub fn Engine::expand_json(
   let engine = Engine::{
     model: self.model,
     reader,
+    list_query: self.list_query,
     match_wildcard_users: self.match_wildcard_users,
   }
   expand_relation(engine, object, relation, 0, [])

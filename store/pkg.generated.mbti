@@ -16,7 +16,7 @@ pub struct ContextualStore {
 pub fn ContextualStore::all_objects(Self, String) -> Array[String]
 pub fn ContextualStore::all_users(Self) -> Array[String]
 pub fn ContextualStore::from_store(MemoryStore, Array[@fga.Tuple]) -> Self
-pub fn ContextualStore::new(&@fga.TupleReader, Array[@fga.Tuple]) -> Self
+pub fn ContextualStore::new(&@fga.TupleReader, Array[@fga.Tuple], shadow? : Bool) -> Self
 pub fn ContextualStore::read(Self, String, String) -> Array[@fga.Tuple]
 pub fn ContextualStore::read_userset(Self, String, String) -> Array[@fga.Tuple]
 pub impl @fga.TupleReader for ContextualStore
