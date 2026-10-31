@@ -532,9 +532,15 @@ fn is_clean_ident(value : String) -> Bool {
   if value == "" {
     return false
   }
-  for i in 0..<value.length() {
-    let c = value.get_char(i).unwrap()
-    if c == ':' || c == '#' || c == ' ' || c == '\t' || c == '\n' {
+  for c in value.iter() {
+    if c == ':' ||
+      c == '#' ||
+      c == ' ' ||
+      c == '\t' ||
+      c == '\n' ||
+      c == '\r' ||
+      c == '\u000B' ||
+      c == '\u000C' {
       return false
     }
   }
@@ -544,6 +550,22 @@ fn is_clean_ident(value : String) -> Bool {
 ///|
 /// True when the user string is syntactically valid OpenFGA user syntax.
 pub fn is_valid_user(user : String) -> Bool {
+  let mut bytes = 0
+  for c in user.iter() {
+    let n = c.to_int()
+    bytes += if n < 128 {
+      1
+    } else if n < 2048 {
+      2
+    } else if n < 65536 {
+      3
+    } else {
+      4
+    }
+    if bytes > 512 {
+      return false
+    }
+  }
   match parse_user_ref(user) {
     None => false
     Some(r) => {
@@ -560,6 +582,9 @@ pub fn is_valid_user(user : String) -> Bool {
 
 ///|
 pub fn is_valid_object(object : String) -> Bool {
+  if object.char_length() > 256 {
+    return false
+  }
   match object.find(":") {
     None => false
     Some(i) => {

@@ -309,7 +309,7 @@ fn Engine::resolve(
   depth : Int32,
   path : Array[String],
 ) -> Outcome raise @fga.FgaError {
-  if depth > 25 {
+  if depth > @fga.MAX_RESOLUTION_DEPTH {
     raise @fga.fail(
       @fga.ERR_RESOLUTION_TOO_COMPLEX,
       "resolution depth exceeded " +
@@ -341,11 +341,10 @@ fn Engine::resolve(
       }
   }
   path.push(key)
-  let result = self.resolve_rewrite(
-    object, relation, rewrite, subject, context, depth, path,
-  )
-  let _ = path.pop()
-  result
+  defer {
+    let _ = path.pop()
+  }
+  self.resolve_rewrite(object, relation, rewrite, subject, context, depth, path)
 }
 
 ///|

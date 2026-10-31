@@ -431,3 +431,171 @@ test "expand builds rewrite tree" {
   inspect(tree.stringify().contains("tupleToUserset"), content="true")
   inspect(tree.stringify().contains("folder:f1"), content="true")
 }
+
+///|
+test "depth boundary and long cyclic tuple graph terminate" {
+  let source =
+    #|model
+    #|  schema 1.1
+    #|type user
+    #|type group
+    #|  relations
+    #|    define member: [user, group#member]
+  let tuples : Array[@fga.Tuple] = [tup("group:0", "member", "user:alice")]
+  for i in 1..<1000 {
+    tuples.push(
+      tup(
+        "group:" + i.to_string(),
+        "member",
+        "group:" + (i - 1).to_string() + "#member",
+      ),
+    )
+  }
+  tuples.push(tup("group:0", "member", "group:999#member"))
+  let engine = engine_of(source, tuples)
+  inspect(
+    status_of(() => engine.check("group:25", "member", "user:alice")),
+    content="true",
+  )
+  inspect(
+    status_of(() => engine.check("group:26", "member", "user:alice")),
+    content="E2002",
+  )
+  inspect(
+    status_of(() => engine.check("group:999", "member", "user:nobody")),
+    content="E2002",
+  )
+}
+
+///|
+test "condition errors unwind paths before sibling resolution" {
+  let source =
+    #|model
+    #|  schema 1.1
+    #|type user
+    #|type document
+    #|  relations
+    #|    define reader: [user with enabled]
+    #|    define viewer: reader or reader
+    #|condition enabled(ok: bool) {
+    #|  ok
+    #|}
+  let t = @fga.Tuple::{
+    object: "document:1",
+    relation: "reader",
+    user: "user:a",
+    condition: Some(@fga.TupleCondition::{ name: "enabled", context: Map([]), }),
+  }
+  let engine = engine_of(source, [t])
+  inspect(
+    status_of(() => engine.check("document:1", "viewer", "user:a")),
+    content="E2000",
+  )
+  inspect(
+    status_of(() => engine.check("document:1", "reader", "user:a")),
+    content="E2000",
+  )
+}
+
+///|
+test "contextual condition replaces stored binding for the same triple" {
+  let source =
+    #|model
+    #|  schema 1.1
+    #|type user
+    #|type document
+    #|  relations
+    #|    define viewer: [user with enabled]
+    #|condition enabled(ok: bool) {
+    #|  ok
+    #|}
+  let stored = @fga.Tuple::{
+    object: "document:1",
+    relation: "viewer",
+    user: "user:a",
+    condition: Some(@fga.TupleCondition::{
+      name: "enabled",
+      context: Map([("ok", @fga.VBool(true))]),
+    }),
+  }
+  let overlay = @fga.Tuple::{
+    object: "document:1",
+    relation: "viewer",
+    user: "user:a",
+    condition: Some(@fga.TupleCondition::{
+      name: "enabled",
+      context: Map([("ok", @fga.VBool(false))]),
+    }),
+  }
+  let engine = engine_of(source, [stored])
+  inspect(
+    engine.check_with("document:1", "viewer", "user:a", Map([]), [overlay]),
+    content="false",
+  )
+  inspect(engine.check("document:1", "viewer", "user:a"), content="true")
+  assert_eq(
+    engine
+    .list_objects("document", "viewer", "user:a", Map([]), [overlay])
+    .length(),
+    0,
+  )
+  assert_eq(
+    engine
+    .list_users("document:1", "viewer", ["user"], Map([]), [overlay])
+    .length(),
+    0,
+  )
+}
+
+///|
+test "wildcard exclusion blocks concrete users across list and check" {
+  let engine = engine_of(
+    "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define reader: [user:*]\n    define blocked: [user]\n    define viewer: reader but not blocked",
+    [
+      tup("document:1", "reader", "user:*"),
+      tup("document:1", "blocked", "user:a"),
+    ],
+  )
+  inspect(engine.check("document:1", "viewer", "user:a"), content="false")
+  inspect(engine.check("document:1", "viewer", "user:b"), content="true")
+  assert_eq(
+    engine.list_objects("document", "viewer", "user:a", Map([]), []).length(),
+    0,
+  )
+}
+
+///|
+test "request identifier lengths and forbidden separators are rejected" {
+  let engine = engine_of(demo_model, demo_tuples())
+  let long_id = Array::make(513, "x").join("")
+  for
+    object in [
+      "document:" + long_id,
+      "document:bad#id",
+      "document:bad\rid",
+      "document:bad id",
+    ] {
+    inspect(
+      status_of(() => engine.check(object, "viewer", "user:a")),
+      content="E2000",
+    )
+    inspect(
+      list_status(() => {
+        engine.list_users(object, "viewer", ["user"], Map([]), [])
+      }),
+      content="E2000",
+    )
+  }
+  for user in ["user:" + long_id, "user:bad#id", "user:bad\rid", "user:bad id"] {
+    inspect(
+      status_of(() => engine.check("document:1", "viewer", user)),
+      content="E2000",
+    )
+    inspect(
+      list_status(() => {
+        engine.list_objects("document", "viewer", user, Map([]), [])
+      }),
+      content="E2000",
+    )
+  }
+}

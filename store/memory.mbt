@@ -293,14 +293,16 @@ fn merge_tuples(
   let seen : Map[String, Unit] = Map([])
   let out : Array[@fga.Tuple] = []
   for t in a {
-    if !seen.contains(t.key()) {
-      seen[t.key()] = ()
+    let key = t.object + "#" + t.relation + "@" + t.user
+    if !seen.contains(key) {
+      seen[key] = ()
       out.push(t)
     }
   }
   for t in b {
-    if !seen.contains(t.key()) {
-      seen[t.key()] = ()
+    let key = t.object + "#" + t.relation + "@" + t.user
+    if !seen.contains(key) {
+      seen[key] = ()
       out.push(t)
     }
   }
