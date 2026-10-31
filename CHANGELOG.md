@@ -6,6 +6,7 @@ All notable changes to MoonFGA are documented here. The format follows
 
 ## [Unreleased]
 
+- Add a browser playground (`playground/` JS exports, static page in `web/`, GitHub Pages workflow) with a Node smoke test.
 - Fix resolver path cleanup on condition errors, contextual triple shadowing and identifier bounds.
 - Add depth/cycle, wildcard exclusion, condition and input regression tests (76 tests per backend).
 - Reuse parsed users and index object types; measured native queries improve about 38% on the documented workload.
