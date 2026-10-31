@@ -396,6 +396,27 @@ fn Engine::resolve_rewrite(
       }
     }
     Intersection(children) => {
+      if !self.match_wildcard_users {
+        // Enumeration needs an explicit witness in any operand, while every
+        // operand must authorize the candidate (including through wildcards).
+        let full = Engine::{ ..self, match_wildcard_users: true, }
+        match
+          full.resolve_rewrite(
+            object, relation, rewrite, subject, context, depth, path,
+          ) {
+          OTrue =>
+            return self.resolve_rewrite(
+              object,
+              relation,
+              @fga.Union(children),
+              subject,
+              context,
+              depth,
+              path,
+            )
+          outcome => return outcome
+        }
+      }
       let mut pending_error : @fga.FgaError? = None
       let mut saw_cycle = false
       for child in children {
@@ -621,6 +642,7 @@ fn Engine::resolve_difference(
   depth : Int32,
   path : Array[String],
 ) -> Outcome raise @fga.FgaError {
+  let subtract_engine = Engine::{ ..self, match_wildcard_users: true, }
   let mut base_error : @fga.FgaError? = None
   let base_outcome = self.resolve_rewrite(
     object, relation, base, subject, context, depth, path,
@@ -635,7 +657,7 @@ fn Engine::resolve_difference(
       if base_error is Some(_) {
         // The base failed, but a true subtract side would still make the
         // difference false; evaluate it before surfacing the base error.
-        let sub_outcome = self.resolve_rewrite(
+        let sub_outcome = subtract_engine.resolve_rewrite(
           object, relation, subtract, subject, context, depth, path,
         )
         match sub_outcome {
@@ -652,7 +674,7 @@ fn Engine::resolve_difference(
       }
     OCycle => OCycle
     OTrue => {
-      let sub_outcome = self.resolve_rewrite(
+      let sub_outcome = subtract_engine.resolve_rewrite(
         object, relation, subtract, subject, context, depth, path,
       )
       match sub_outcome {
