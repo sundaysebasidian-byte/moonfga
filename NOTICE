@@ -1,0 +1,31 @@
+MoonFGA
+Copyright 2026 sundaysebasidian-byte
+
+This product includes software developed at, and reference material derived
+from, the following open source projects:
+
+1. OpenFGA (https://github.com/openfga/openfga)
+   License: Apache License 2.0
+   Use: protocol semantics, error code names, and the conformance test matrix
+        (assets/tests/consolidated_1_1_tests.yaml, assets/tests/abac_tests.yaml).
+        The test data is downloaded at test time into a git-ignored cache and is
+        not redistributed in this repository. MoonFGA contains an independent
+        MoonBit implementation; no Go source code is copied.
+
+2. openfga/language (https://github.com/openfga/language)
+   License: Apache License 2.0
+   Use: OpenFGA DSL grammar reference (OpenFGALexer.g4, OpenFGAParser.g4) and
+        transformer regression fixtures from tests/data (downloaded at test
+        time into a git-ignored cache, not redistributed). The MoonBit lexer and
+        parser are independently written.
+
+3. moonbit-community/yaml (https://github.com/moonbit-community/yaml.mbt)
+   License: MIT
+   Use: YAML parsing for the conformance runner and .fga.yaml test files.
+
+4. moonbitlang/x (https://github.com/moonbitlang/x)
+   License: Apache License 2.0
+   Use: filesystem access in the command line interface.
+
+The full Apache License 2.0 text is in the LICENSE file. The MIT license text
+for moonbit-community/yaml is reproduced in its distributed package.
