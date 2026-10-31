@@ -1,0 +1,21 @@
+{
+  "version": "1.8.16",
+  "seed": 314159,
+  "cases": 1000,
+  "comparisons": 3000,
+  "mismatches": 9,
+  "by_api": {
+    "check": {
+      "compared": 1000,
+      "mismatches": 0
+    },
+    "list_objects": {
+      "compared": 1000,
+      "mismatches": 0
+    },
+    "list_users": {
+      "compared": 1000,
+      "mismatches": 9
+    }
+  }
+}
