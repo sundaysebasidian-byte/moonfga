@@ -246,76 +246,14 @@ priv enum ModelLoad {
 
 ///|
 fn load_model(source : String) -> ModelLoad {
-  try {
-    if source.trim().has_prefix("{") {
-      ModelOk(@model.json_to_model(source))
-    } else {
-      ModelOk(@dsl.parse_model(source))
-    }
-  } catch {
+  ModelOk(@model.model_from_source(source)) catch {
     @fga.FgaError(..) as err => ModelFailed(@fga.format_error(err))
   }
 }
 
 ///|
-fn parse_tuple_context(
-  value : Json,
-) -> Map[String, @fga.CelValue] raise @fga.FgaError {
-  match value {
-    Null => Map([])
-    Object(fields) => {
-      let out : Map[String, @fga.CelValue] = Map([])
-      for key in fields.keys() {
-        match fields.get(key) {
-          Some(field) => out[key] = @fga.json_to_cel_value_raw(field)
-          None => ()
-        }
-      }
-      out
-    }
-    _ => raise invalid("tuple condition context must be an object")
-  }
-}
-
-///|
-fn parse_tuple(value : Json) -> @fga.Tuple raise @fga.FgaError {
-  let obj = as_object(value, "tuple")
-  let condition = match obj.get("condition") {
-    None | Some(Null) => None
-    Some(condition_value) => {
-      let c = as_object(condition_value, "tuple condition")
-      let name = as_string(
-        required(c, "name", "tuple condition"),
-        "tuple condition name",
-      )
-      let context = match c.get("context") {
-        None | Some(Null) => Map([])
-        Some(ctx) => parse_tuple_context(ctx)
-      }
-      Some(@fga.TupleCondition::{ name, context, })
-    }
-  }
-  @fga.Tuple::{
-    object: as_string(required(obj, "object", "tuple"), "tuple object"),
-    relation: as_string(required(obj, "relation", "tuple"), "tuple relation"),
-    user: as_string(required(obj, "user", "tuple"), "tuple user"),
-    condition,
-  }
-}
-
-///|
 fn parse_tuples(value : Json?) -> Array[@fga.Tuple] raise @fga.FgaError {
-  match value {
-    None | Some(Null) => []
-    Some(Array(items)) => {
-      let out : Array[@fga.Tuple] = []
-      for item in items {
-        out.push(parse_tuple(item))
-      }
-      out
-    }
-    Some(_) => raise invalid("tuples must be an array")
-  }
+  @fga.tuples_from_json(value)
 }
 
 ///|
