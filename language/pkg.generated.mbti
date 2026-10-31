@@ -1,0 +1,33 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "sundaysebasidian-byte/moonfga/language"
+
+import {
+  "sundaysebasidian-byte/moonfga/fga",
+}
+
+// Values
+pub fn format_transform_report(TransformReport) -> String
+
+pub fn run_transformer_dir(String) -> TransformReport raise @fga.FgaError
+
+// Errors
+
+// Types and methods
+pub(all) struct TransformCaseResult {
+  name : String
+  dsl_to_json : Bool
+  json_to_model : Bool
+  error : String
+}
+
+pub(all) struct TransformReport {
+  root : String
+  total : Int32
+  passed : Int32
+  failed : Int32
+  results : Array[TransformCaseResult]
+}
+
+// Type aliases
+
+// Traits

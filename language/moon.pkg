@@ -1,0 +1,7 @@
+import {
+  "moonbitlang/core/json",
+  "moonbitlang/x/fs",
+  "sundaysebasidian-byte/moonfga/fga",
+  "sundaysebasidian-byte/moonfga/dsl",
+  "sundaysebasidian-byte/moonfga/model",
+}
