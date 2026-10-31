@@ -1,0 +1,7 @@
+import {
+  "moonbitlang/core/bench",
+  "sundaysebasidian-byte/moonfga/fga",
+  "sundaysebasidian-byte/moonfga/dsl",
+  "sundaysebasidian-byte/moonfga/store",
+  "sundaysebasidian-byte/moonfga/engine",
+} for "test"

@@ -76,3 +76,26 @@ test "contextual store overlays tuples" {
   inspect(reader.read("document:1", "viewer").length(), content="2")
   inspect(reader.all_users().join(","), content="user:bob,user:alice")
 }
+
+///|
+test "object type index tracks last deletion clear and reinsertion" {
+  let store = @store.MemoryStore::new()
+  let a = tuple("document:a", "viewer", "user:a")
+  let b = tuple("document:a", "editor", "user:b")
+  let c = tuple("document:c", "viewer", "user:c")
+  let _ = store.write_all([a, b, c, tuple("group:g", "member", "user:a")])
+  assert_eq(store.all_objects("document"), ["document:a", "document:c"])
+  let returned = store.all_objects("document")
+  returned.clear()
+  assert_eq(store.all_objects("document").length(), 2)
+  assert_true(store.delete(a))
+  assert_eq(store.all_objects("document").length(), 2)
+  assert_true(store.delete(b))
+  assert_eq(store.all_objects("document"), ["document:c"])
+  assert_true(store.write(a))
+  assert_eq(store.all_objects("document"), ["document:c", "document:a"])
+  store.clear()
+  assert_eq(store.all_objects("document").length(), 0)
+  assert_true(store.write(a))
+  assert_eq(store.all_objects("document"), ["document:a"])
+}

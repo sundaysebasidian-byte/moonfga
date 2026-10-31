@@ -8,20 +8,25 @@
 ///
 /// Writes are idempotent: writing a tuple that already exists (same object,
 /// relation, user and condition) is a no-op.
-pub(all) struct MemoryStore {
+pub struct MemoryStore {
   tuples : Array[@fga.Tuple]
   by_object : Map[String, Array[@fga.Tuple]]
   by_user : Map[String, Array[@fga.Tuple]]
   keys : Map[String, Unit]
+  objects_by_type : Map[String, Array[String]]
+  object_counts : Map[String, Int32]
 }
 
 ///|
+/// Creates an empty store with independent indexes.
 pub fn MemoryStore::new() -> MemoryStore {
   MemoryStore::{
     tuples: [],
     by_object: Map([]),
     by_user: Map([]),
     keys: Map([]),
+    objects_by_type: Map([]),
+    object_counts: Map([]),
   }
 }
 
@@ -75,6 +80,15 @@ pub fn MemoryStore::write(self : MemoryStore, tuple : @fga.Tuple) -> Bool {
   }
   self.keys[key] = ()
   self.tuples.push(tuple)
+  let count = self.object_counts.get(tuple.object).unwrap_or(0)
+  if count == 0 {
+    let type_name = @fga.object_type(tuple.object)
+    match self.objects_by_type.get(type_name) {
+      Some(objects) => objects.push(tuple.object)
+      None => self.objects_by_type[type_name] = [tuple.object]
+    }
+  }
+  self.object_counts[tuple.object] = count + 1
   push_index(
     self.by_object,
     object_index_key(tuple.object, tuple.relation),
@@ -107,6 +121,24 @@ pub fn MemoryStore::delete(self : MemoryStore, tuple : @fga.Tuple) -> Bool {
     return false
   }
   self.keys.remove(key)
+  let remaining = self.object_counts.get(tuple.object).unwrap_or(1) - 1
+  if remaining == 0 {
+    self.object_counts.remove(tuple.object)
+    let type_name = @fga.object_type(tuple.object)
+    match self.objects_by_type.get(type_name) {
+      Some(objects) => {
+        let kept = objects.filter(fn(o) { o != tuple.object })
+        if kept.is_empty() {
+          self.objects_by_type.remove(type_name)
+        } else {
+          self.objects_by_type[type_name] = kept
+        }
+      }
+      None => ()
+    }
+  } else {
+    self.object_counts[tuple.object] = remaining
+  }
   remove_index(
     self.by_object,
     object_index_key(tuple.object, tuple.relation),
@@ -125,6 +157,7 @@ pub fn MemoryStore::delete(self : MemoryStore, tuple : @fga.Tuple) -> Bool {
 }
 
 ///|
+/// Deletes exact tuples, returning the number removed.
 pub fn MemoryStore::delete_all(
   self : MemoryStore,
   tuples : Array[@fga.Tuple],
@@ -139,11 +172,14 @@ pub fn MemoryStore::delete_all(
 }
 
 ///|
+/// Removes all tuples and resets every index.
 pub fn MemoryStore::clear(self : MemoryStore) -> Unit {
   self.tuples.clear()
   self.by_object.clear()
   self.by_user.clear()
   self.keys.clear()
+  self.objects_by_type.clear()
+  self.object_counts.clear()
 }
 
 ///|
@@ -194,6 +230,7 @@ pub fn MemoryStore::read_by_user(
 }
 
 ///|
+/// Returns an insertion-ordered copy of all stored tuples.
 pub fn MemoryStore::all_tuples(self : MemoryStore) -> Array[@fga.Tuple] {
   self.tuples.copy()
 }
@@ -204,15 +241,10 @@ pub fn MemoryStore::all_objects(
   self : MemoryStore,
   type_name : String,
 ) -> Array[String] {
-  let seen : Map[String, Unit] = Map([])
-  let out : Array[String] = []
-  for t in self.tuples {
-    if @fga.object_type(t.object) == type_name && !seen.contains(t.object) {
-      seen[t.object] = ()
-      out.push(t.object)
-    }
+  match self.objects_by_type.get(type_name) {
+    Some(objects) => objects.copy()
+    None => []
   }
-  out
 }
 
 ///|
@@ -231,6 +263,7 @@ pub fn MemoryStore::all_users(self : MemoryStore) -> Array[String] {
 }
 
 ///|
+/// Returns the number of distinct stored tuples.
 pub fn MemoryStore::length(self : MemoryStore) -> Int32 {
   self.tuples.length()
 }
@@ -262,12 +295,13 @@ pub impl @fga.TupleReader for MemoryStore with fn all_users(self) {
 ///|
 /// Reader that overlays contextual tuples on top of a base reader. Contextual
 /// tuples are only visible for the lifetime of a single request.
-pub(all) struct ContextualStore {
+pub struct ContextualStore {
   base : &@fga.TupleReader
   extra : MemoryStore
 }
 
 ///|
+/// Creates a request-scoped overlay; contextual triples shadow base triples.
 pub fn ContextualStore::new(
   base : &@fga.TupleReader,
   tuples : Array[@fga.Tuple],
@@ -278,6 +312,7 @@ pub fn ContextualStore::new(
 }
 
 ///|
+/// Creates a request overlay backed by an in-memory store.
 pub fn ContextualStore::from_store(
   store : MemoryStore,
   tuples : Array[@fga.Tuple],

@@ -6,21 +6,6 @@ import {
 }
 
 // Values
-pub const INLINE_EXPRESSION : String = "$expression"
-
-pub fn parse_user_filter(@fga.AuthModel, String) -> @fga.UserRef raise @fga.FgaError
-
-pub fn tuple_binding_spec(@fga.AuthModel, String, String, @fga.Tuple) -> TupleBindingSpec
-
-pub fn validate_check_object(@fga.AuthModel, String, String) -> Unit raise @fga.FgaError
-
-pub fn validate_contextual_tuple(@fga.AuthModel, @fga.Tuple) -> Unit raise @fga.FgaError
-
-pub fn validate_list_users_object(@fga.AuthModel, String, String) -> Unit raise @fga.FgaError
-
-pub fn validate_object_type_relation(@fga.AuthModel, String, String) -> Unit raise @fga.FgaError
-
-pub fn validate_request_user(@fga.AuthModel, String) -> Unit raise @fga.FgaError
 
 // Errors
 
@@ -40,7 +25,7 @@ pub(all) struct CheckResult {
   error_message : String?
 }
 
-pub(all) struct Engine {
+pub struct Engine {
   model : @fga.AuthModel
   reader : &@fga.TupleReader
   match_wildcard_users : Bool
@@ -58,12 +43,6 @@ pub fn Engine::new(@fga.AuthModel, &@fga.TupleReader) -> Self
 pub(all) struct ExplainResult {
   allowed : Bool
   paths : Array[String]
-}
-
-pub(all) enum TupleBindingSpec {
-  Invalid
-  Unconditional
-  Condition(String)
 }
 
 // Type aliases

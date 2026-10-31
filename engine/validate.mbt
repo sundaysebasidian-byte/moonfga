@@ -6,7 +6,7 @@
 // types and relations in the request itself.
 
 ///|
-pub const INLINE_EXPRESSION : String = "$expression"
+const INLINE_EXPRESSION : String = "$expression"
 
 ///|
 fn fail_tuple(message : String) -> @fga.FgaError {
@@ -53,7 +53,7 @@ fn user_ref_for(
 
 ///|
 /// Validates a check/ListObjects request user. Wildcard users are allowed.
-pub fn validate_request_user(
+fn validate_request_user(
   model : @fga.AuthModel,
   user : String,
 ) -> Unit raise @fga.FgaError {
@@ -62,7 +62,7 @@ pub fn validate_request_user(
 
 ///|
 /// Validates `object` and `relation` for Check, using 2000 for every failure.
-pub fn validate_check_object(
+fn validate_check_object(
   model : @fga.AuthModel,
   object : String,
   relation : String,
@@ -86,7 +86,7 @@ pub fn validate_check_object(
 
 ///|
 /// Validates the type and relation of a ListObjects request.
-pub fn validate_object_type_relation(
+fn validate_object_type_relation(
   model : @fga.AuthModel,
   type_name : String,
   relation : String,
@@ -109,7 +109,7 @@ pub fn validate_object_type_relation(
 
 ///|
 /// Validates the target object of a ListUsers request.
-pub fn validate_list_users_object(
+fn validate_list_users_object(
   model : @fga.AuthModel,
   object : String,
   relation : String,
@@ -136,7 +136,7 @@ pub fn validate_list_users_object(
 
 ///|
 /// Parses a ListUsers filter such as `user` or `group#member`.
-pub fn parse_user_filter(
+fn parse_user_filter(
   model : @fga.AuthModel,
   filter : String,
 ) -> @fga.UserRef raise @fga.FgaError {
@@ -185,7 +185,7 @@ pub fn parse_user_filter(
 }
 
 ///|
-pub fn validate_contextual_tuple(
+fn validate_contextual_tuple(
   model : @fga.AuthModel,
   tuple : @fga.Tuple,
 ) -> Unit raise @fga.FgaError {
@@ -256,7 +256,7 @@ pub fn validate_contextual_tuple(
 ///|
 /// Binding of a tuple user to one of the relation's direct type restrictions,
 /// including the condition attached to the matching facet.
-pub(all) enum TupleBindingSpec {
+priv enum TupleBindingSpec {
   Invalid
   Unconditional
   Condition(String)
@@ -268,17 +268,29 @@ pub(all) enum TupleBindingSpec {
 /// A conditional restriction only binds a tuple carrying that exact condition;
 /// an unconditional facet only binds tuples without a condition. This mirrors
 /// OpenFGA's condition/type-restriction pairing.
-pub fn tuple_binding_spec(
+fn tuple_binding_spec(
   model : @fga.AuthModel,
   type_name : String,
   relation : String,
   tuple : @fga.Tuple,
 ) -> TupleBindingSpec {
-  let restrictions = model.direct_restrictions(type_name, relation)
   let ur = match @fga.parse_user_ref(tuple.user) {
     Some(r) => r
     None => return TupleBindingSpec::Invalid
   }
+  tuple_binding_for_user(model, type_name, relation, tuple, ur)
+}
+
+///|
+/// Reuses the parsed user when the resolver also needs the userset target.
+fn tuple_binding_for_user(
+  model : @fga.AuthModel,
+  type_name : String,
+  relation : String,
+  tuple : @fga.Tuple,
+  ur : @fga.UserRef,
+) -> TupleBindingSpec {
+  let restrictions = model.direct_restrictions(type_name, relation)
   let is_wildcard = ur.id == "*" && ur.relation == None
   let tuple_condition = match tuple.condition {
     None => None

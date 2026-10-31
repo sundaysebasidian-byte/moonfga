@@ -6,7 +6,7 @@
 // differences instead of being flattened into a boolean.
 
 ///|
-pub(all) struct Engine {
+pub struct Engine {
   model : @fga.AuthModel
   reader : &@fga.TupleReader
   // ListUsers enumerates concrete users from the tuple graph; users covered
@@ -15,6 +15,8 @@ pub(all) struct Engine {
 }
 
 ///|
+/// Creates a read-only evaluator over a model and tuple reader.
+/// Mutations to the reader are visible to subsequent requests.
 pub fn Engine::new(
   model : @fga.AuthModel,
   reader : &@fga.TupleReader,
@@ -32,6 +34,7 @@ pub(all) struct CheckRequest {
 }
 
 ///|
+/// Creates a request with empty context and no contextual tuples.
 pub fn CheckRequest::new(
   object : String,
   relation : String,
@@ -440,7 +443,17 @@ fn Engine::resolve_direct(
   let mut pending_error : @fga.FgaError? = None
   let mut saw_cycle = false
   for tuple in tuples {
-    let binding = tuple_binding_spec(self.model, type_name, relation, tuple)
+    let parsed_user = match @fga.parse_user_ref(tuple.user) {
+      Some(r) => r
+      None => continue
+    }
+    let binding = tuple_binding_for_user(
+      self.model,
+      type_name,
+      relation,
+      tuple,
+      parsed_user,
+    )
     match binding {
       TupleBindingSpec::Invalid => continue
       _ => ()
@@ -462,65 +475,61 @@ fn Engine::resolve_direct(
       }
       continue
     }
-    match @fga.parse_user_ref(tuple.user) {
-      Some(rref) =>
-        if is_wildcard_user(tuple.user) {
-          if self.match_wildcard_users &&
-            subject_matches_wildcard(subject, rref) {
-            let holds = self.condition_holds(tuple, binding, context) catch {
-              err => {
-                if pending_error is None {
-                  pending_error = Some(err)
-                }
-                false
-              }
+    let rref = parsed_user
+    if rref.id == "*" && rref.relation == None {
+      if self.match_wildcard_users && subject_matches_wildcard(subject, rref) {
+        let holds = self.condition_holds(tuple, binding, context) catch {
+          err => {
+            if pending_error is None {
+              pending_error = Some(err)
             }
-            if holds {
-              return OTrue
-            }
-          }
-        } else {
-          match rref.relation {
-            Some(userset_relation) => {
-              // A userset edge condition gates traversal regardless of the
-              // concrete subject inside the referenced userset.
-              let holds = self.condition_holds(tuple, binding, context) catch {
-                err => {
-                  if pending_error is None {
-                    pending_error = Some(err)
-                  }
-                  false
-                }
-              }
-              if !holds {
-                continue
-              }
-              let target = rref.type_name + ":" + rref.id
-              let child = self.resolve(
-                target,
-                userset_relation,
-                subject,
-                context,
-                depth + 1,
-                path,
-              ) catch {
-                err => {
-                  if pending_error is None {
-                    pending_error = Some(err)
-                  }
-                  OFalse
-                }
-              }
-              match child {
-                OTrue => return OTrue
-                OCycle => saw_cycle = true
-                OFalse => ()
-              }
-            }
-            None => ()
+            false
           }
         }
-      None => ()
+        if holds {
+          return OTrue
+        }
+      }
+    } else {
+      match rref.relation {
+        Some(userset_relation) => {
+          // A userset edge condition gates traversal regardless of the
+          // concrete subject inside the referenced userset.
+          let holds = self.condition_holds(tuple, binding, context) catch {
+            err => {
+              if pending_error is None {
+                pending_error = Some(err)
+              }
+              false
+            }
+          }
+          if !holds {
+            continue
+          }
+          let target = rref.type_name + ":" + rref.id
+          let child = self.resolve(
+            target,
+            userset_relation,
+            subject,
+            context,
+            depth + 1,
+            path,
+          ) catch {
+            err => {
+              if pending_error is None {
+                pending_error = Some(err)
+              }
+              OFalse
+            }
+          }
+          match child {
+            OTrue => return OTrue
+            OCycle => saw_cycle = true
+            OFalse => ()
+          }
+        }
+        None => ()
+      }
     }
   }
   if saw_cycle {
@@ -725,6 +734,7 @@ pub fn Engine::check_with(
 }
 
 ///|
+/// Evaluates a request; validation and condition failures raise FgaError.
 pub fn Engine::check_request(
   self : Engine,
   request : CheckRequest,
