@@ -37,3 +37,10 @@ cp -R benchmarks .upstream/benchmark-baseline/
 
 机器负载、编译器及运行时版本会影响数字；没有测 Windows/Linux 性能。
 未增加全局结果缓存：结果依赖条件、请求上下文、深度和循环路径，盲目共享缓存会改变语义。
+
+## 第 3a 阶段返工复验
+
+对齐 v1.22.1 List 语义后，用上述相同数据和命令重新执行：
+Check 4.59 µs ± 150.53 ns，ListObjects 44.27 ms ± 2.00 ms，两个 benchmark 均通过。
+原始输出见 evidence/bench-rework1.txt。此为当前代码的另一次实测，
+不把与首轮测量的差值单独归因于本轮语义修复。

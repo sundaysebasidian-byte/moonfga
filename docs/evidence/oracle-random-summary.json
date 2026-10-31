@@ -1,9 +1,12 @@
 {
-  "version": "1.8.16",
+  "version": "1.22.1",
+  "commit": "44054f542f64e9b9589dd26a595081b3d2cfd942",
   "seed": 314159,
   "cases": 1000,
+  "random_cases": 1000,
+  "regression_cases": 0,
   "comparisons": 3000,
-  "mismatches": 9,
+  "mismatches": 0,
   "by_api": {
     "check": {
       "compared": 1000,
@@ -15,7 +18,7 @@
     },
     "list_users": {
       "compared": 1000,
-      "mismatches": 9
+      "mismatches": 0
     }
   }
 }

@@ -13,6 +13,7 @@ import urllib.error
 import urllib.request
 
 VERSION = "1.22.1"
+COMMIT = "44054f542f64e9b9589dd26a595081b3d2cfd942"
 HASHES = {
     ("Darwin", "arm64"): ("darwin_arm64", "4d64ccd3ead676e3b13154bb32372421f3cd4735eda0211f5d0b7d244c689b90"),
     ("Linux", "x86_64"): ("linux_amd64", "80d2d4b582762c02dc86b1246f7f6f54d6854259727b36e5b5c43ba90792814a"),
@@ -112,10 +113,11 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--cases", type=int, default=1000)
     p.add_argument("--seed", type=int, default=314159)
+    p.add_argument("--output", type=Path, default=Path("conformance-results/oracle"))
     args = p.parse_args()
     if args.cases < 1:
         p.error("--cases must be positive")
-    out = Path("conformance-results/oracle")
+    out = args.output
     out.mkdir(parents=True, exist_ok=True)
     rng = random.Random(args.seed)
     cases = [generate(rng, i) for i in range(args.cases)]
@@ -184,7 +186,7 @@ def main():
             except subprocess.TimeoutExpired:
                 proc.kill()
                 proc.wait()
-    summary = {"version": VERSION, "seed": args.seed, "cases": len(cases), "random_cases": args.cases, "regression_cases": 2, "comparisons": len(cases)*3, "mismatches": len(mismatches),
+    summary = {"version": VERSION, "commit": COMMIT, "seed": args.seed, "cases": len(cases), "random_cases": args.cases, "regression_cases": 2, "comparisons": len(cases)*3, "mismatches": len(mismatches),
                "by_api": {k: {"compared": len(cases), "mismatches": sum(m["kind"] == k for m in mismatches)} for k in ["check", "list_objects", "list_users"]}}
     for name, value in [("summary", summary), ("mismatches", mismatches), ("expected", expected), ("actual", actual), ("http-errors", HTTP_ERRORS)]:
         (out / f"{name}.json").write_text(json.dumps(value, indent=2) + "\n")

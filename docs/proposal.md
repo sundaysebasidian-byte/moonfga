@@ -13,12 +13,12 @@ Check / BatchCheck / ListObjects / ListUsers / Expand / Explain；自研 CEL 子
 - Check：516/516（consolidated 364，ABAC 152）。
 - ListObjects：354/354（consolidated 272，ABAC 82）。
 - ListUsers：393/394（consolidated 296/297，ABAC 97；1 个上游断言缺顶层期望值，记为 skip）。
-- DSL ↔ JSON：openfga/language 夹具 29/29。
+- DSL ↔ JSON：openfga/language 夹具 29/29；同版本 OpenFGA v1.22.1 差分两 seed 共 6012 次比较，0 不一致。
 ## 明确不支持
 FGA modules（`module` / `extends`）、ReadChanges、持久化/分布式存储、HTTP/gRPC 服务端、
 分页与 consistency preference、完整 CEL 标准库（如 `bytes`）。
 ## 差异化
-独立实现、按上游矩阵验收，覆盖 schema 1.1 条件关系（随机差分尚有 11 处 List API 差异）与 `.fga.yaml` 测试；不基于
+独立实现、按上游矩阵验收，覆盖 schema 1.1 条件关系与 `.fga.yaml` 测试；不基于
 `jhshuai/moonpolicykit` 代码，两者定位与验收标准不同。
 ## 复现
 `scripts/fetch-upstream.sh` 下载固定 commit 的 Apache-2.0 测试数据；`./scripts/conformance.sh`

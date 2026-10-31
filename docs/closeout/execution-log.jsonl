@@ -1,1 +1,2 @@
 {"action": "audit_only", "moved": 0, "restore_map": [], "reason": "Retain current source, dependency inputs and verification evidence; no eligible obsolete source copies identified."}
+{"phase": "3a rework 1", "action": "audit_only", "moved": 0, "restore_map": [], "manifest": "rework1-manifest.json", "reason": "Keep current source, upstream references and original/final verification evidence."}

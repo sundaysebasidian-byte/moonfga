@@ -7,10 +7,12 @@ All notable changes to MoonFGA are documented here. The format follows
 ## [Unreleased]
 
 - Fix resolver path cleanup on condition errors, contextual triple shadowing and identifier bounds.
-- Add depth/cycle, wildcard exclusion, condition and input regression tests (66 tests per backend).
+- Add depth/cycle, wildcard exclusion, condition and input regression tests (76 tests per backend).
 - Reuse parsed users and index object types; measured native queries improve about 38% on the documented workload.
 - Hide engine/store internals and validation helpers before the first published API.
-- Add a pinned OpenFGA differential oracle: 3006 comparisons, 11 documented List API differences.
+- Add a pinned OpenFGA v1.22.1 differential oracle matching the matrix commit: two seeds, 6012 comparisons, zero differences.
+- Fix wildcard intersection witnesses and subtraction in ListUsers; freeze nine counterexamples as regression tests.
+- Match OpenFGA contextual condition semantics: Check shadows triples; List APIs combine both streams.
 - Align CI installers with official documentation; initialize Windows MSVC and pin Node 22.
 
 ## [0.1.0] - 2026-10-31

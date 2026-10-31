@@ -237,6 +237,8 @@ Engine、MemoryStore、ContextualStore 的字段不再公开，避免调用方�
 错误仍可模式匹配 FgaError(code~, message~, line~, column~)，也可用 error_code / error_message。
 native、wasm-gc、js 使用同一核心 API；这些后端的库测试通过不等同于浏览器 JS 模块导出验收。
 
-contextual tuple 按 object/relation/user 遮蔽持久化绑定，仅作用于当前请求。
-固定官方服务的 List API 在条件覆盖用例上的行为差异见 conformance.md；
-不能由 Check 的兼容性推断 List API 完全兼容。
+contextual tuple 仅作用于当前请求。Check 按 object/relation/user 遮蔽持久化绑定；
+List API 合并两路元组，保留同一三元组的不同条件上下文，并报告直接求值中的条件错误。
+ContextualStore::new 的 shadow 参数默认 true，List 查询显式传 false，与官方读取方式对应。
+ListUsers 的显式用户枚举在 intersection 中使用完整成员资格作门槛、任一分支的显式结果作证据；
+差集的 subtract 始终使用完整成员资格，包含 wildcard。官方源码依据及固定反例见 conformance.md。
