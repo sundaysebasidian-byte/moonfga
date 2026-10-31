@@ -1,0 +1,12 @@
+model
+  schema 1.1
+
+type user
+
+condition office_access(office: string, allowed: list<string>) {
+  office == "hq" || allowed.exists(o, o == office)
+}
+
+type document
+  relations
+    define viewer: [user with office_access]

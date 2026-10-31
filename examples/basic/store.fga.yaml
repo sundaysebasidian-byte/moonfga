@@ -1,0 +1,42 @@
+name: basic
+model_file: model.fga
+tuples:
+  - object: document:budget
+    relation: owner
+    user: user:anne
+  - object: document:budget
+    relation: viewer
+    user: user:anne
+  - object: group:finance
+    relation: member
+    user: user:bob
+  - object: document:budget
+    relation: viewer
+    user: group:finance#member
+tests:
+  - name: budget viewers
+    check:
+      - user: user:anne
+        object: document:budget
+        assertions:
+          owner: true
+          viewer: true
+      - user: user:bob
+        object: document:budget
+        assertions:
+          viewer: true
+          owner: false
+      - user: user:carl
+        object: document:budget
+        assertions:
+          viewer: false
+    listObjects:
+      - user: user:bob
+        type: document
+        assertions:
+          viewer: [document:budget]
+    listUsers:
+      - object: document:budget
+        filters: [user]
+        assertions:
+          viewer: [user:anne, user:bob]

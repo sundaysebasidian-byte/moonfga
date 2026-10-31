@@ -1,0 +1,16 @@
+pkgtype(kind: "executable")
+
+import {
+  "moonbitlang/core/env",
+  "moonbitlang/core/json",
+  "moonbitlang/x/fs",
+  "moonbitlang/x/sys",
+  "moonbit-community/yaml",
+  "sundaysebasidian-byte/moonfga/fga",
+  "sundaysebasidian-byte/moonfga/dsl",
+  "sundaysebasidian-byte/moonfga/model",
+  "sundaysebasidian-byte/moonfga/store",
+  "sundaysebasidian-byte/moonfga/engine",
+  "sundaysebasidian-byte/moonfga/validate",
+  "sundaysebasidian-byte/moonfga/storetest",
+}

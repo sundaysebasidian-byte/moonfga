@@ -1,0 +1,27 @@
+name: abac
+model_file: model.fga
+tuples:
+  - object: document:plan
+    relation: viewer
+    user: user:dana
+    condition:
+      name: office_access
+      context: {office: "hq", allowed: ["remote"]}
+tests:
+  - name: office access
+    check:
+      - user: user:dana
+        object: document:plan
+        context: {office: "hq", allowed: ["remote"]}
+        assertions:
+          viewer: true
+      - user: user:dana
+        object: document:plan
+        context: {office: "branch", allowed: ["remote"]}
+        assertions:
+          viewer: false
+      - user: user:erin
+        object: document:plan
+        context: {office: "hq", allowed: ["remote"]}
+        assertions:
+          viewer: false

@@ -1,0 +1,4 @@
+document:budget#owner@user:anne
+document:budget#viewer@user:anne
+group:finance#member@user:bob
+document:budget#viewer@group:finance#member
