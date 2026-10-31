@@ -12,10 +12,10 @@ import time
 import urllib.error
 import urllib.request
 
-VERSION = "1.8.16"
+VERSION = "1.22.1"
 HASHES = {
-    ("Darwin", "arm64"): ("darwin_arm64", "d40de7a505a30953211c81a3fa3cc402d3f6376644789267bba3b36234177179"),
-    ("Linux", "x86_64"): ("linux_amd64", "ba9ef4b05d7290978fdeaf4ddc98db019da96ef345b3e512e7dcacec90beb72e"),
+    ("Darwin", "arm64"): ("darwin_arm64", "4d64ccd3ead676e3b13154bb32372421f3cd4735eda0211f5d0b7d244c689b90"),
+    ("Linux", "x86_64"): ("linux_amd64", "80d2d4b582762c02dc86b1246f7f6f54d6854259727b36e5b5c43ba90792814a"),
 }
 
 

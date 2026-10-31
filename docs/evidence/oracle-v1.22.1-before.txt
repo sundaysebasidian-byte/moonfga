@@ -1,0 +1,33 @@
+oracle: 100/1002
+oracle: 200/1002
+oracle: 300/1002
+oracle: 400/1002
+oracle: 500/1002
+oracle: 600/1002
+oracle: 700/1002
+oracle: 800/1002
+oracle: 900/1002
+oracle: 1000/1002
+{
+  "version": "1.22.1",
+  "seed": 314159,
+  "cases": 1002,
+  "random_cases": 1000,
+  "regression_cases": 2,
+  "comparisons": 3006,
+  "mismatches": 11,
+  "by_api": {
+    "check": {
+      "compared": 1002,
+      "mismatches": 0
+    },
+    "list_objects": {
+      "compared": 1002,
+      "mismatches": 1
+    },
+    "list_users": {
+      "compared": 1002,
+      "mismatches": 10
+    }
+  }
+}
