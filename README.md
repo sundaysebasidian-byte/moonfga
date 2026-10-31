@@ -40,7 +40,7 @@ Playground 就是同一个引擎编译成 JS 在浏览器里跑。
 request 里面，没有顶层期望值或 `errorCode`，所以按 `skip/no_expectation` 如实记录，不算通过。
 
 除了固定用例，还和官方 v1.22.1 二进制做了随机差分：两个 seed 各 1095 组（1000 随机＋95 定向），共 6570 次比较，
-0 不一致。另复跑独立 R2 定向脚本，204 组 / 612 次比较，0 不一致。随机生成覆盖 CEL 逻辑错误、Unicode、timestamp 与深链；审查反例已固化为三后端测试，见
+0 不一致。另有独立定向差分脚本 `scripts/oracle_directed.py`，204 组 / 612 次比较，0 不一致。随机生成覆盖 CEL 逻辑错误、Unicode、timestamp 与深链；审查反例已固化为三后端测试，见
 [差分报告](docs/conformance.md)。性能实测与复现命令见
 [performance.md](docs/performance.md)。
 

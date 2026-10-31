@@ -1,7 +1,7 @@
 [
   {
-    "name": "n1_ttu_24_False",
-    "family": "n1_depth",
+    "name": "depth_ttu_24_False",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -259,8 +259,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_ttu_24_True",
-    "family": "n1_depth",
+    "name": "depth_ttu_24_True",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -523,8 +523,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_ttu_25_False",
-    "family": "n1_depth",
+    "name": "depth_ttu_25_False",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -787,8 +787,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_ttu_25_True",
-    "family": "n1_depth",
+    "name": "depth_ttu_25_True",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -1056,8 +1056,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_ttu_26_False",
-    "family": "n1_depth",
+    "name": "depth_ttu_26_False",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -1325,8 +1325,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_ttu_26_True",
-    "family": "n1_depth",
+    "name": "depth_ttu_26_True",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -1599,8 +1599,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_userset_25_False",
-    "family": "n1_depth",
+    "name": "depth_userset_25_False",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -1863,8 +1863,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_userset_25_True",
-    "family": "n1_depth",
+    "name": "depth_userset_25_True",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -2132,8 +2132,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_userset_26_False",
-    "family": "n1_depth",
+    "name": "depth_userset_26_False",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -2401,8 +2401,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_userset_26_True",
-    "family": "n1_depth",
+    "name": "depth_userset_26_True",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -2675,8 +2675,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_alternating_24_False",
-    "family": "n1_depth",
+    "name": "depth_alternating_24_False",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -2938,8 +2938,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_alternating_24_True",
-    "family": "n1_depth",
+    "name": "depth_alternating_24_True",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -3206,8 +3206,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_alternating_25_False",
-    "family": "n1_depth",
+    "name": "depth_alternating_25_False",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -3474,8 +3474,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_alternating_25_True",
-    "family": "n1_depth",
+    "name": "depth_alternating_25_True",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -3747,8 +3747,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_alternating_26_False",
-    "family": "n1_depth",
+    "name": "depth_alternating_26_False",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -4020,8 +4020,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_alternating_26_True",
-    "family": "n1_depth",
+    "name": "depth_alternating_26_True",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -4298,8 +4298,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_ttu_then_usersets_24",
-    "family": "n1_depth",
+    "name": "depth_ttu_then_usersets_24",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -4557,8 +4557,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_ttu_then_usersets_25",
-    "family": "n1_depth",
+    "name": "depth_ttu_then_usersets_25",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -4821,8 +4821,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_ttu_then_usersets_26",
-    "family": "n1_depth",
+    "name": "depth_ttu_then_usersets_26",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -5090,8 +5090,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_userset_then_ttu_24",
-    "family": "n1_depth",
+    "name": "depth_userset_then_ttu_24",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -5353,8 +5353,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_userset_then_ttu_25",
-    "family": "n1_depth",
+    "name": "depth_userset_then_ttu_25",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -5621,8 +5621,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_userset_then_ttu_26",
-    "family": "n1_depth",
+    "name": "depth_userset_then_ttu_26",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -5894,8 +5894,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_usersets_then_leaf_ttu_24",
-    "family": "n1_depth",
+    "name": "depth_usersets_then_leaf_ttu_24",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -6165,8 +6165,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_usersets_then_leaf_ttu_25",
-    "family": "n1_depth",
+    "name": "depth_usersets_then_leaf_ttu_25",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -6441,8 +6441,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_usersets_then_leaf_ttu_26",
-    "family": "n1_depth",
+    "name": "depth_usersets_then_leaf_ttu_26",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -6722,8 +6722,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_finite_usersets_leaf_join_24",
-    "family": "n1_depth",
+    "name": "depth_finite_usersets_leaf_join_24",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -7217,8 +7217,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_finite_usersets_leaf_join_25",
-    "family": "n1_depth",
+    "name": "depth_finite_usersets_leaf_join_25",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -7728,8 +7728,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_finite_usersets_leaf_join_26",
-    "family": "n1_depth",
+    "name": "depth_finite_usersets_leaf_join_26",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [
@@ -8255,8 +8255,8 @@
     "user": "user:0"
   },
   {
-    "name": "n1_missing_computed_parent_is_not_dispatched",
-    "family": "n1_depth",
+    "name": "depth_missing_computed_parent_is_not_dispatched",
+    "family": "depth",
     "model": {
       "schema_version": "1.1",
       "type_definitions": [

@@ -6,7 +6,7 @@ All notable changes to MoonFGA are documented here. The format follows
 
 ## [Unreleased]
 
-- Fix N1 Check depth accounting: cap full dispatches at 25 while retaining computed aliases and terminal userset/TTU joins; add 29 boundary and mixed-chain regressions.
+- Fix Check depth accounting: cap full dispatches at 25 while retaining computed aliases and terminal userset/TTU joins; add 29 boundary and mixed-chain regressions.
 
 - Fix CEL logical error absorption, Unicode code point size, and RFC3339 timestamp strings with nanoseconds and numeric offsets.
 - Replace per-candidate List evaluation with reverse object proofs and user-set expansion; preserve List condition errors and API-specific depth semantics.

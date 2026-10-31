@@ -12,8 +12,8 @@
   "seed_comparisons": 6570,
   "mismatches": 0,
   "data_sources": [
-    "conformance-results/n1/directed",
-    "conformance-results/n1/seed314159",
-    "conformance-results/n1/seed271828"
+    "conformance-results/directed",
+    "conformance-results/seed314159",
+    "conformance-results/seed271828"
   ]
 }

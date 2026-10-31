@@ -1324,7 +1324,7 @@ moon run cmd/language         # 29/29 transformer fixtures
 ```
 
 
-## 后端最终 N1 返工：同版本差分与审查回归
+## 同版本差分与定向回归
 
 官方二进制固定为 [OpenFGA v1.22.1](https://github.com/openfga/openfga/releases/tag/v1.22.1)，
 与矩阵使用相同 commit `44054f542f64e9b9589dd26a595081b3d2cfd942`。
@@ -1333,8 +1333,8 @@ macOS arm64 / Linux amd64 release 压缩包 SHA-256 固定在脚本中，解包�
 
 ```bash
 export PATH="$HOME/.moon/bin:$PATH"
-./scripts/oracle-openfga.sh --cases 1000 --seed 314159 --output conformance-results/n1/seed314159
-./scripts/oracle-openfga.sh --cases 1000 --seed 271828 --output conformance-results/n1/seed271828
+./scripts/oracle-openfga.sh --cases 1000 --seed 314159 --output conformance-results/seed314159
+./scripts/oracle-openfga.sh --cases 1000 --seed 271828 --output conformance-results/seed271828
 moon build --target js --release playground
 node scripts/test-explain.mjs
 ```
@@ -1382,7 +1382,7 @@ cases.json、actual.json、expected.json、http-errors.json。提交的摘要为
   relation 入口在 depth>=25 时报告 E2002，与 Check 的 tuple 深度不同。group:0..26 的数据链
   对 ListObjects 返回全体对象，ListUsers 在 25/26 层报错。固定回归另含深浅混合、循环及
   computed alias 的 0/25/26 边界。Check 的纯 computed alias 迭代折叠，不增加 tuple 深度，
-  这是新增官方差分中发现的优化语义；完整 Check dispatch 的预算及终端 join 的差别见下方 N1 说明。
+  这是新增官方差分中发现的优化语义；完整 Check dispatch 的预算及终端 join 的差别见下方“TTU Check 的终点深度”。
   参考官方 [ListUsers.expand / rewrite handlers](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/pkg/server/commands/listusers/list_users_rpc.go#L352)。
 - **B4**：全局 `size(s)` 与 `s.size()` 都计 Unicode code points；CEL 字符串词法器按字符宽度
   推进，避免补充平面字面量落在 UTF-16 surrogate 中间。
@@ -1395,12 +1395,12 @@ cases.json、actual.json、expected.json、http-errors.json。提交的摘要为
   explain_error。决策成功但 witness 不完整时 complete=false，状态非致命；不再编造路径。
   `scripts/test-explain.mjs` 实测 CLI 退出 0、JS ok=true，二者的 owner witness 与决策一致。
 
-Kimi 原 16 组脚本也实际重放过，48 次查询比较无差异。但其中原 self-cycle 写入属于官方拒绝的
+独立审查者编写的 16 组脚本也实际重放过，48 次查询比较无差异。但其中原 self-cycle 写入属于官方拒绝的
 self-defining tuple，原脚本没有检查写入返回值；它不构成有效的官方循环遍历证明。
 本轮固定 oracle 改用合法二节点循环，随机生成器也不生成 self-defining tuple。
 原 self-cycle 的本地终止行为仍单独保留为测试。
 
-### N1：TTU Check 的终点深度
+### TTU Check 的终点深度
 
 官方完整 ResolveCheck 请求从 depth=0 起算，dispatch 加 1，在 depth=25 时先报 E2002；
 computed userset 不增加 dispatch 深度。递归 userset 与符合模型形状的 terminal join
@@ -1411,19 +1411,18 @@ computed userset 不增加 dispatch 深度。递归 userset 与符合模型形�
 29 个新增固定用例覆盖 TTU 24/25/26 层 DAG/cycle、直接 userset 25/26 层、
 交替链、TTU→userset、userset→TTU、叶子 TTU join、有限 userset join，以及异构父类型。
 它们在 engine/check_depth_test.mbt 对 Check/ListObjects/ListUsers 同时断言，
-官方期望保存于 [evidence/n1-depth-expected.json](evidence/n1-depth-expected.json)。
+官方期望保存于 [evidence/depth-expected.json](evidence/depth-expected.json)。
 
-按复审提供的原脚本原样重跑（它仍读取原有 64 组固定用例，未扩充其 204 组集合）：
+定向差分脚本已收入仓库（64 组历史反例 + 140 组图遍历与深度用例）：
 
 ```bash
-python3 /tmp/moonfga-r2-directed.py "$PWD" "$PWD/conformance-results/n1/directed"
+python3 scripts/oracle_directed.py "$PWD" "$PWD/conformance-results/directed"
 ```
 
 实际结果：204 cases、612 comparisons、0 mismatches，原 190/191 用例的 Check 均为 E2002。
-摘要见 [evidence/n1-directed-summary.json](evidence/n1-directed-summary.json)；
-完整 cases/actual/expected/mismatches 保存在 conformance-results/n1/directed/。
-原临时脚本另按 SHA-256 留存于忽略目录 .upstream/rework-n1/moonfga-r2-directed.py，
-避免 /tmp 丢失后失去本次审查证据；版本控制内的新 29 用例可直接用标准 oracle 重现。
+摘要见 [evidence/directed-summary.json](evidence/directed-summary.json)；
+完整 cases/actual/expected/mismatches 写入 conformance-results/directed/（git 忽略）；
+新增的 29 个深度用例也可直接用标准 oracle 重现。
 
 ### 验证与边界
 
