@@ -1,0 +1,27 @@
+import {
+  "moonbitlang/core/json",
+  "sundaysebasidian-byte/moonfga/fga",
+  "sundaysebasidian-byte/moonfga/dsl",
+  "sundaysebasidian-byte/moonfga/model",
+  "sundaysebasidian-byte/moonfga/store",
+  "sundaysebasidian-byte/moonfga/engine",
+  "sundaysebasidian-byte/moonfga/validate",
+  "sundaysebasidian-byte/moonfga/storetest",
+}
+
+options(
+  link: {
+    "js": {
+      "exports": [
+        "validate_model",
+        "dsl_to_json",
+        "json_to_dsl",
+        "check",
+        "list_objects",
+        "list_users",
+        "run_tests",
+      ],
+      "format": "esm",
+    },
+  },
+)

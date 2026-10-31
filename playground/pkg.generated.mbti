@@ -1,0 +1,25 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "sundaysebasidian-byte/moonfga/playground"
+
+// Values
+pub fn check(String) -> String
+
+pub fn dsl_to_json(String) -> String
+
+pub fn json_to_dsl(String) -> String
+
+pub fn list_objects(String) -> String
+
+pub fn list_users(String) -> String
+
+pub fn run_tests(String) -> String
+
+pub fn validate_model(String) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
