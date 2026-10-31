@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-test:
+    name: check / test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MoonBit (Linux / macOS)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          curl -fsSL https://cli.moonbitlang.cn/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Install MoonBit (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+          irm https://cli.moonbitlang.cn/install/powershell.ps1 | iex
+          "$env:USERPROFILE\.moon\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Toolchain version
+        run: moon version
+
+      - name: Check
+        run: moon check --deny-warn
+
+      - name: Build
+        run: moon build
+
+      - name: Test
+        run: moon test
+
+      - name: Format check
+        run: moon fmt --check
+
+      - name: Public interface is up to date
+        run: |
+          moon info
+          git diff --exit-code -- "*.mbti"
+
+  extra-targets:
+    name: test (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [wasm-gc, js]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MoonBit
+        shell: bash
+        run: |
+          curl -fsSL https://cli.moonbitlang.cn/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Test ${{ matrix.target }}
+        run: moon test --target ${{ matrix.target }}
+
+  conformance:
+    name: upstream conformance
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MoonBit
+        shell: bash
+        run: |
+          curl -fsSL https://cli.moonbitlang.cn/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Fetch pinned upstream data
+        run: scripts/fetch-upstream.sh
+
+      - name: OpenFGA Check / ListObjects / ListUsers matrix
+        run: ./scripts/conformance.sh
+
+      - name: openfga/language DSL <-> JSON fixtures
+        run: moon run cmd/language
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: conformance-results
+          path: conformance-results/
+          if-no-files-found: warn
