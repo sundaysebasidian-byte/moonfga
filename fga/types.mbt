@@ -7,7 +7,7 @@
 ///|
 /// A CEL runtime value. Durations are stored in nanoseconds and timestamps
 /// in milliseconds since the Unix epoch.
-pub enum CelValue {
+pub(all) enum CelValue {
   VInt(Int64)
   VUint(UInt64)
   VDouble(Double)
@@ -56,8 +56,18 @@ pub fn cel_value_eq(a : CelValue, b : CelValue) -> Bool {
     (VDouble(x), VInt(y)) => x == y.to_double()
     (VUint(x), VDouble(y)) => x.to_double() == y
     (VDouble(x), VUint(y)) => x == y.to_double()
-    (VInt(x), VUint(y)) => if x < 0L { false } else { x.to_uint64() == y }
-    (VUint(x), VInt(y)) => if y < 0L { false } else { x == y.to_uint64() }
+    (VInt(x), VUint(y)) =>
+      if x < 0L {
+        false
+      } else {
+        x.reinterpret_as_uint64() == y
+      }
+    (VUint(x), VInt(y)) =>
+      if y < 0L {
+        false
+      } else {
+        x == y.reinterpret_as_uint64()
+      }
     (VList(xs), VList(ys)) =>
       if xs.length() != ys.length() {
         false
@@ -115,7 +125,7 @@ pub fn cel_value_to_display(value : CelValue) -> String {
 ///|
 /// A typed wildcard, concrete user, userset or condition-restricted type
 /// restriction from `directly_related_user_types`.
-pub struct TypeRestriction {
+pub(all) struct TypeRestriction {
   type_name : String
   relation : String?
   wildcard : Bool
@@ -125,7 +135,7 @@ pub struct TypeRestriction {
 ///|
 /// Resolved form of a tuple user string: `type:id`, `type:*` or
 /// `type:id#relation`.
-pub struct UserRef {
+pub(all) struct UserRef {
   type_name : String
   id : String
   relation : String?
@@ -202,13 +212,13 @@ pub fn tuple_user_matches(u : UserRef, user : String) -> Bool {
 }
 
 ///|
-pub struct TupleCondition {
+pub(all) struct TupleCondition {
   name : String
   context : Map[String, CelValue]
 }
 
 ///|
-pub struct Tuple {
+pub(all) struct Tuple {
   object : String
   relation : String
   user : String
@@ -219,7 +229,7 @@ pub struct Tuple {
 pub fn Tuple::key(self : Tuple) -> String {
   let cond = match self.condition {
     None => ""
-    Some(c) => "|" + c.name + "|" + c.context.size().to_string()
+    Some(c) => "|" + c.name + "|" + c.context.length().to_string()
   }
   self.object + "#" + self.relation + "@" + self.user + cond
 }
@@ -242,14 +252,14 @@ pub fn Tuple::condition_name(self : Tuple) -> String? {
 
 ///|
 /// A condition parameter declaration such as `x: int` or `xs: list<string>`.
-pub struct ConditionParam {
+pub(all) struct ConditionParam {
   name : String
   type_name : String
   generic_type : String?
 }
 
 ///|
-pub struct Condition {
+pub(all) struct Condition {
   name : String
   expression : String
   parameters : Array[ConditionParam]
@@ -269,7 +279,7 @@ pub fn Condition::find_param(
 }
 
 ///|
-pub enum Userset {
+pub(all) enum Userset {
   This
   Computed(String)
   TupleToUserset(String, String)
@@ -279,7 +289,7 @@ pub enum Userset {
 }
 
 ///|
-pub struct TypeDefinition {
+pub(all) struct TypeDefinition {
   name : String
   relations : Map[String, Userset]
   relation_order : Array[String]
@@ -335,11 +345,18 @@ pub fn TypeDefinition::has_direct(self : TypeDefinition, name : String) -> Bool 
 }
 
 ///|
-pub struct AuthModel {
+pub(all) struct Span {
+  line : Int32
+  column : Int32
+}
+
+///|
+pub(all) struct AuthModel {
   schema_version : String
   types : Array[TypeDefinition]
   conditions : Map[String, Condition]
   condition_order : Array[String]
+  spans : Map[String, Span]
 }
 
 ///|
@@ -349,7 +366,23 @@ pub fn AuthModel::new(schema_version : String) -> AuthModel {
     types: [],
     conditions: Map([]),
     condition_order: [],
+    spans: Map([]),
   }
+}
+
+///|
+pub fn AuthModel::set_span(
+  self : AuthModel,
+  key : String,
+  line : Int32,
+  column : Int32,
+) -> Unit {
+  self.spans[key] = Span::{ line, column, }
+}
+
+///|
+pub fn AuthModel::span(self : AuthModel, key : String) -> Span? {
+  self.spans.get(key)
 }
 
 ///|
