@@ -1,0 +1,48 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "sundaysebasidian-byte/moonfga/store"
+
+import {
+  "sundaysebasidian-byte/moonfga/fga",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct ContextualStore {
+  base : &@fga.TupleReader
+  extra : MemoryStore
+}
+pub fn ContextualStore::all_objects(Self, String) -> Array[String]
+pub fn ContextualStore::all_users(Self) -> Array[String]
+pub fn ContextualStore::from_store(MemoryStore, Array[@fga.Tuple]) -> Self
+pub fn ContextualStore::new(&@fga.TupleReader, Array[@fga.Tuple]) -> Self
+pub fn ContextualStore::read(Self, String, String) -> Array[@fga.Tuple]
+pub fn ContextualStore::read_userset(Self, String, String) -> Array[@fga.Tuple]
+pub impl @fga.TupleReader for ContextualStore
+
+pub(all) struct MemoryStore {
+  tuples : Array[@fga.Tuple]
+  by_object : Map[String, Array[@fga.Tuple]]
+  by_user : Map[String, Array[@fga.Tuple]]
+  keys : Map[String, Unit]
+}
+pub fn MemoryStore::all_objects(Self, String) -> Array[String]
+pub fn MemoryStore::all_tuples(Self) -> Array[@fga.Tuple]
+pub fn MemoryStore::all_users(Self) -> Array[String]
+pub fn MemoryStore::clear(Self) -> Unit
+pub fn MemoryStore::delete(Self, @fga.Tuple) -> Bool
+pub fn MemoryStore::delete_all(Self, Array[@fga.Tuple]) -> Int32
+pub fn MemoryStore::length(Self) -> Int32
+pub fn MemoryStore::new() -> Self
+pub fn MemoryStore::read(Self, String, String) -> Array[@fga.Tuple]
+pub fn MemoryStore::read_by_user(Self, String) -> Array[@fga.Tuple]
+pub fn MemoryStore::read_userset(Self, String, String) -> Array[@fga.Tuple]
+pub fn MemoryStore::write(Self, @fga.Tuple) -> Bool
+pub fn MemoryStore::write_all(Self, Array[@fga.Tuple]) -> Int32
+pub impl @fga.TupleReader for MemoryStore
+
+// Type aliases
+
+// Traits
