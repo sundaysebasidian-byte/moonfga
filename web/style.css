@@ -270,6 +270,15 @@ button.primary:hover { filter: brightness(1.06); }
 .verdict::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
 .verdict.ok { color: var(--ok); }
 .verdict.no { color: var(--bad); }
+.verdict-row { display: flex; align-items: center; gap: 14px; }
+.badge {
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  cursor: help;
+}
 .error { color: var(--bad); font: 13px/1.6 var(--mono); white-space: pre-wrap; word-break: break-word; }
 .note { color: var(--muted); font-size: 12px; }
 

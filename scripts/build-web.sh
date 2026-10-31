@@ -18,13 +18,10 @@ dist="web/dist"
 rm -rf "$dist"
 mkdir -p "$dist"
 
-# The store-test loader can read `model_file` through node:fs. A browser has no
-# such module, so replace the import with a stub that fails like a missing file.
-# The playground only ever passes inline models, so the stub is never reached.
-sed -E 's#^import \{ readFileSync as ([A-Za-z0-9_$]+) \} from "node:fs";#const \1 = () => { throw new Error("file system is not available"); };#' \
-  "$built" > "$dist/moonfga.js"
+cp "$built" "$dist/moonfga.js"
+# The playground must stay free of file-system packages; a browser has no node:fs.
 if grep -q 'from "node:' "$dist/moonfga.js"; then
-  echo "error: playground.js still imports a node: module" >&2
+  echo "error: playground.js imports a node: module" >&2
   exit 1
 fi
 

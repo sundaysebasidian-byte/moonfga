@@ -237,7 +237,14 @@ function runCheck() {
   });
   if (!res.ok) return showError(host, res.error);
   const verdict = el("div", `verdict ${res.allowed ? "ok" : "no"}`, res.allowed ? "Allowed" : "Denied");
-  host.replaceChildren(verdict);
+  const head = el("div", "verdict-row");
+  head.append(verdict);
+  if (res.complete === false) {
+    const badge = el("span", "badge", "Incomplete");
+    if (res.explain_error) badge.title = res.explain_error;
+    head.append(badge);
+  }
+  host.replaceChildren(head);
   if (res.paths.length) host.append(renderTree(buildTree(res.paths)));
 }
 
@@ -267,7 +274,7 @@ function runUsers() {
     ...base(),
     object: fields.usersObject.value.trim(),
     relation: fields.usersRelation.value.trim(),
-    filters: fields.usersFilters.value,
+    filters: fields.usersFilters.value.trim() || null,
     context: fields.usersContext.value,
   });
   if (!res.ok) return showError(host, res.error);

@@ -109,21 +109,75 @@ test("queries on an invalid model return an error with issues", () => {
   assert.equal(res.issues.length, 1);
 });
 
-test("a failed explanation does not change the decision", () => {
+test("explain keeps the decision of a plain check and reports completeness", () => {
   const abac = examples.find((e) => e.id === "abac");
-  const res = call("check", {
-    model: abac.model,
-    tuples: abac.tuples,
-    user: "user:dana",
-    relation: "viewer",
-    object: "document:plan",
-    context: { current_time: "2026-10-20T00:00:00Z" },
-    explain: true,
+  const base = { model: abac.model, tuples: abac.tuples, relation: "viewer", object: "document:plan" };
+  const contexts = [
+    {},
+    { current_time: "2026-10-20T00:00:00Z" },
+    { current_time: "2027-01-01T00:00:00Z" },
+    { ip: "10.1.2.3" },
+    { current_time: "2026-10-20T00:00:00Z", ip: "192.168.0.9" },
+  ];
+  for (const user of ["user:dana", "user:erin", "user:anne", "user:zed"]) {
+    for (const context of contexts) {
+      const query = { ...base, user, context };
+      const plain = call("check", query);
+      const explained = call("check", { ...query, explain: true });
+      assert.equal(explained.ok, plain.ok, JSON.stringify({ user, context }));
+      if (!plain.ok) continue;
+      assert.equal(explained.allowed, plain.allowed, JSON.stringify({ user, context }));
+      assert.equal(typeof explained.complete, "boolean");
+      assert.equal(explained.complete, !explained.allowed || explained.paths.length > 0);
+      assert.equal("explain_error" in explained, !explained.complete);
+    }
+  }
+});
+
+test("allowed explanations are complete and carry a path", () => {
+  for (const example of examples) {
+    const res = call("check", { model: example.model, tuples: example.tuples, ...example.check, explain: true });
+    assert.equal(res.complete, true, example.id);
+    assert.ok(res.paths.length > 0, example.id);
+    assert.equal("explain_error" in res, false, example.id);
+  }
+});
+
+test("list-users filters: absent, null and valid values are accepted", () => {
+  const e = examples[0];
+  const q = { model: e.model, tuples: e.tuples, object: "repo:api", relation: "reader" };
+  const all = call("list_users", q);
+  assert.equal(all.ok, true);
+  assert.deepEqual(call("list_users", { ...q, filters: null }), all);
+  assert.deepEqual(call("list_users", { ...q, filters: ["user"] }).users, all.users);
+  assert.deepEqual(call("list_users", { ...q, filters: "user" }).users, all.users);
+});
+
+for (const [label, filters] of [
+  ["number", 42],
+  ["object", { type: "user" }],
+  ["boolean", true],
+  ["mixed array", ["user", 1]],
+  ["array holding null", ["user", null]],
+  ["blank string", " , "],
+]) {
+  test(`list-users rejects filters of kind ${label}`, () => {
+    const e = examples[0];
+    const res = call("list_users", { model: e.model, tuples: e.tuples, object: "repo:api", relation: "reader", filters });
+    assert.equal(res.ok, false);
+    assert.match(res.error.message, /filters/);
   });
-  assert.equal(res.ok, true);
-  assert.equal(res.allowed, true);
-  assert.deepEqual(res.paths, []);
-  assert.match(res.explain_error, /ip/);
+}
+
+test("tuples accept an array or a string, not an object", () => {
+  const e = examples[0];
+  const q = { model: e.model, ...e.check };
+  const wrapped = call("check", { ...q, tuples: { tuples: [] } });
+  assert.equal(wrapped.ok, false);
+  assert.match(wrapped.error.message, /tuples/);
+  const asString = call("check", { ...q, tuples: JSON.stringify({ tuples: [] }) });
+  assert.equal(asString.ok, false);
+  assert.match(asString.error.message, /JSON array/);
 });
 
 test("errors are JSON, never exceptions", () => {

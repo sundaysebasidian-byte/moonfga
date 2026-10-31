@@ -97,8 +97,8 @@ fn string_field(req : Map[String, Json], name : String) -> String raise Error {
 }
 
 ///|
-/// Accepts a JSON array of tuples, an object with `tuples`, or text
-/// (JSON, or one `object#relation@user` per line).
+/// Accepts a JSON array of tuple objects, or a string: JSON text of such an
+/// array, or one `object#relation@user` per line.
 fn tuples_field(
   req : Map[String, Json],
   name : String,
@@ -110,6 +110,9 @@ fn tuples_field(
       let trimmed = text.trim().to_owned()
       if trimmed == "" {
         return []
+      }
+      if trimmed.has_prefix("{") {
+        raise bad_request("'" + name + "' must be a JSON array of tuples")
       }
       if trimmed.has_prefix("[") {
         let parsed = @json.parse(trimmed) catch {
@@ -254,10 +257,10 @@ pub fn json_to_dsl(request : String) -> String {
 
 ///|
 /// Request: `{model, tuples?, object, relation, user, context?, contextual_tuples?, explain?}`.
-/// Response: `{"ok":true,"allowed":bool,"paths":[[step,...],...]}`; `paths`
-/// is only present with `explain`, one array of steps per witness path. If the
-/// explanation is incomplete, complete=false and explain_error says why.
-/// CLI and this API use the same ExplainResult JSON model.
+/// Response: `{"ok":true,"allowed":bool}`; with `explain` it is the engine's
+/// `ExplainResult` JSON plus `ok`: `{"ok":true,"allowed","complete","paths":[[step,...],...]}`
+/// and, when the decision succeeded but the explanation is incomplete,
+/// `complete:false` with `explain_error`. The CLI prints the same model.
 pub fn check(request : String) -> String {
   respond(fn() raise Error {
     let req = parse_request(request)
@@ -310,7 +313,8 @@ pub fn list_objects(request : String) -> String {
 
 ///|
 /// Request: `{model, tuples?, object, relation, filters?, context?, contextual_tuples?}`;
-/// `filters` is an array such as `["user","group#member"]`, defaulting to every type.
+/// `filters` is an array such as `["user","group#member"]` or a comma-separated
+/// string; only when it is absent or `null` does it default to every type.
 /// Response: `{"ok":true,"users":[...]}`.
 pub fn list_users(request : String) -> String {
   respond(fn() raise Error {
@@ -318,6 +322,12 @@ pub fn list_users(request : String) -> String {
     let engine = build_engine(req)
     let filters : Array[String] = []
     match req.get("filters") {
+      None | Some(Null) => {
+        let model = load_valid_model(string_field(req, "model"))
+        for type_def in model.types {
+          filters.push(type_def.name)
+        }
+      }
       Some(Array(items)) =>
         for item in items {
           match item {
@@ -325,20 +335,21 @@ pub fn list_users(request : String) -> String {
             _ => raise bad_request("'filters' must be an array of strings")
           }
         }
-      Some(String(text)) =>
+      Some(String(text)) => {
         for part in text.split(",") {
           let filter = part.trim().to_owned()
           if filter != "" {
             filters.push(filter)
           }
         }
-      _ => ()
-    }
-    if filters.length() == 0 {
-      let model = load_valid_model(string_field(req, "model"))
-      for type_def in model.types {
-        filters.push(type_def.name)
+        if filters.length() == 0 {
+          raise bad_request("'filters' has no entries")
+        }
       }
+      Some(_) =>
+        raise bad_request(
+          "'filters' must be an array of strings or a comma-separated string",
+        )
     }
     let users = engine.list_users(
       string_field(req, "object"),

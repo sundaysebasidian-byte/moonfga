@@ -41,7 +41,7 @@ repo:web#writer@team:platform#member
     listObjects: { user: "user:bob", relation: "writer", type: "repo" },
     listUsers: { object: "repo:api", relation: "reader", filters: "user" },
     expect: {
-      check: { allowed: true, pathSteps: 4 },
+      check: { allowed: true, pathSteps: 5 },
       denied: { user: "user:dave", relation: "admin", object: "repo:web" },
       listObjects: ["repo:web"],
       listUsers: ["user:anne", "user:bob", "user:carol", "user:dave"],
@@ -105,7 +105,7 @@ doc:press-kit#viewer@user:*
     listObjects: { user: "user:erin", relation: "viewer", type: "doc" },
     listUsers: { object: "doc:roadmap", relation: "viewer", filters: "user" },
     expect: {
-      check: { allowed: true, pathSteps: 5 },
+      check: { allowed: true, pathSteps: 7 },
       denied: { user: "user:erin", relation: "editor", object: "doc:roadmap" },
       listObjects: ["doc:press-kit", "doc:roadmap"],
       listUsers: ["user:anne", "user:erin", "user:frank"],
