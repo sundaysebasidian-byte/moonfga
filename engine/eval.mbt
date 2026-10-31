@@ -312,7 +312,7 @@ fn Engine::resolve(
   depth : Int32,
   path : Array[String],
 ) -> Outcome raise @fga.FgaError {
-  if depth > @fga.MAX_RESOLUTION_DEPTH {
+  if depth >= @fga.MAX_RESOLUTION_DEPTH {
     raise @fga.fail(
       @fga.ERR_RESOLUTION_TOO_COMPLEX,
       "resolution depth exceeded " +
@@ -618,13 +618,20 @@ fn Engine::resolve_direct(
             continue
           }
           let target = rref.type_name + ":" + rref.id
-          let child = self.resolve(
+          let child = self.dispatch_check(
             target,
             userset_relation,
             subject,
             context,
             depth + 1,
             path,
+            if depth + 1 == @fga.MAX_RESOLUTION_DEPTH {
+              self.userset_terminal_mode(
+                object, relation, target, userset_relation,
+              )
+            } else {
+              FullRequest
+            },
           ) catch {
             err => {
               if pending_error is None {
@@ -718,13 +725,24 @@ fn Engine::resolve_ttu(
       // Tuple-to-userset only follows concrete objects.
       continue
     }
-    let child = self.resolve(
+    // The official TTU producer skips a parent type without the computed
+    // relation before dispatching; it must not consume a depth slot.
+    match self.model.find_type(@fga.object_type(tuple.user)) {
+      Some(td) => if !td.relations.contains(computed) { continue }
+      None => continue
+    }
+    let child = self.dispatch_check(
       tuple.user,
       computed,
       subject,
       context,
       depth + 1,
       path,
+      if depth + 1 == @fga.MAX_RESOLUTION_DEPTH {
+        self.ttu_terminal_mode(object, tupleset, computed)
+      } else {
+        FullRequest
+      },
     ) catch {
       err => {
         if pending_error is None {

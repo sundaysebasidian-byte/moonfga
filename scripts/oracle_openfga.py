@@ -133,6 +133,7 @@ def main():
         c["contextual"] = [{"object": c["object"], "relation": "viewer", "user": c["user"], "condition": {"name": "enabled", "context": {"ok": False} if i == 0 else {}}}]
         cases.append(c)
     fixed = json.loads(Path("examples/regressions/oracle.json").read_text())
+    fixed += json.loads(Path("examples/regressions/check-depth.json").read_text())
     cases.extend(fixed)
     (out / "cases.json").write_text(json.dumps(cases))
     local = subprocess.run(["moon", "run", "--target", "native", "cmd/oracle", "--", str(out / "cases.json")], check=False, text=True, capture_output=True)
