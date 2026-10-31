@@ -42,8 +42,11 @@ jobs:
       - name: Toolchain version
         run: moon version
 
-      - name: Check
-        run: moon check --deny-warn
+      - name: Check (native)
+        run: moon check --deny-warn --target native
+
+      - name: Check (wasm-gc)
+        run: moon check --deny-warn --target wasm-gc
 
       - name: Build
         run: moon build
@@ -75,8 +78,60 @@ jobs:
           curl -fsSL https://cli.moonbitlang.cn/install/unix.sh | bash
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
 
+      - name: Check ${{ matrix.target }}
+        run: moon check --deny-warn --target ${{ matrix.target }}
+
       - name: Test ${{ matrix.target }}
         run: moon test --target ${{ matrix.target }}
+
+  readme-quickstart:
+    name: README quick start
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MoonBit
+        shell: bash
+        run: |
+          curl -fsSL https://cli.moonbitlang.cn/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Library example
+        run: moon run examples/library
+
+      - name: Validate and transform
+        run: |
+          moon run cmd/main -- validate examples/basic/model.fga
+          moon run cmd/main -- transform examples/basic/model.fga --to json > /dev/null
+          moon run cmd/main -- transform examples/basic/model.fga --to dsl > /dev/null
+
+      - name: Check, list and expand
+        run: |
+          moon run cmd/main -- check \
+            --model examples/basic/model.fga \
+            --store examples/basic/tuples.fga \
+            --object document:budget --relation viewer --user user:bob --explain
+          moon run cmd/main -- list-objects \
+            --model examples/basic/model.fga --store examples/basic/tuples.fga \
+            --type document --relation viewer --user user:bob
+          moon run cmd/main -- list-users \
+            --model examples/basic/model.fga --store examples/basic/tuples.fga \
+            --object document:budget --relation viewer --filters user
+          moon run cmd/main -- expand \
+            --model examples/basic/model.fga --store examples/basic/tuples.fga \
+            --object document:budget --relation viewer > /dev/null
+
+      - name: ABAC condition
+        run: |
+          moon run cmd/main -- check \
+            --model examples/abac/model.fga --store examples/abac/tuples.fga \
+            --object document:plan --relation viewer --user user:dana \
+            --context '{"office":"hq","allowed":["remote"]}'
+
+      - name: Store test suites
+        run: |
+          moon run cmd/main -- test examples/basic/store.fga.yaml
+          moon run cmd/main -- test examples/abac/store.fga.yaml
 
   conformance:
     name: upstream conformance
