@@ -6,6 +6,8 @@ All notable changes to MoonFGA are documented here. The format follows
 
 ## [Unreleased]
 
+- Fix N1 Check depth accounting: cap full dispatches at 25 while retaining computed aliases and terminal userset/TTU joins; add 29 boundary and mixed-chain regressions.
+
 - Fix CEL logical error absorption, Unicode code point size, and RFC3339 timestamp strings with nanoseconds and numeric offsets.
 - Replace per-candidate List evaluation with reverse object proofs and user-set expansion; preserve List condition errors and API-specific depth semantics.
 - Record Explain witnesses on the actual successful Check path; share the non-fatal explanation status model between CLI and JS.
@@ -15,10 +17,10 @@ All notable changes to MoonFGA are documented here. The format follows
 - Playground passes the engine's explain result through unchanged and marks an incomplete explanation; `filters` and `tuples` reject malformed values.
 - Move `model_file` reading out of `storetest` (`load_store_test` takes an optional reader), so the playground bundle imports no Node modules.
 - Fix resolver path cleanup on condition errors, contextual triple shadowing and identifier bounds.
-- Add depth/cycle, wildcard exclusion, condition and input regression tests (148 tests per backend).
+- Add depth/cycle, wildcard exclusion, condition and input regression tests (177 tests per backend).
 - Reuse parsed users and index object types; measured native queries improve about 38% on the documented workload.
 - Hide engine/store internals and validation helpers before the first published API.
-- Add a pinned OpenFGA v1.22.1 differential oracle matching the matrix commit: two seeds, 6396 comparisons, zero differences.
+- Add a pinned OpenFGA v1.22.1 differential oracle matching the matrix commit: two seeds, 6570 comparisons, zero differences.
 - Fix wildcard intersection witnesses and subtraction in ListUsers; freeze nine counterexamples as regression tests.
 - Match OpenFGA contextual condition semantics: Check shadows triples; List APIs combine both streams.
 - Align CI installers with official documentation; initialize Windows MSVC and pin Node 22.

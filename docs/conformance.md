@@ -1324,7 +1324,7 @@ moon run cmd/language         # 29/29 transformer fixtures
 ```
 
 
-## 后端返工第 2 轮：同版本差分与审查回归
+## 后端最终 N1 返工：同版本差分与审查回归
 
 官方二进制固定为 [OpenFGA v1.22.1](https://github.com/openfga/openfga/releases/tag/v1.22.1)，
 与矩阵使用相同 commit `44054f542f64e9b9589dd26a595081b3d2cfd942`。
@@ -1333,8 +1333,8 @@ macOS arm64 / Linux amd64 release 压缩包 SHA-256 固定在脚本中，解包�
 
 ```bash
 export PATH="$HOME/.moon/bin:$PATH"
-./scripts/oracle-openfga.sh --cases 1000 --seed 314159 --output conformance-results/rework2/seed314159
-./scripts/oracle-openfga.sh --cases 1000 --seed 271828 --output conformance-results/rework2/seed271828
+./scripts/oracle-openfga.sh --cases 1000 --seed 314159 --output conformance-results/n1/seed314159
+./scripts/oracle-openfga.sh --cases 1000 --seed 271828 --output conformance-results/n1/seed271828
 moon build --target js --release playground
 node scripts/test-explain.mjs
 ```
@@ -1347,17 +1347,17 @@ Python 标准库启动 memory datastore 的官方服务，绑定随机 loopback 
 原有关系图；CEL 布尔值/除零错误及 union/intersection/存储与 contextual 分支；
 Unicode code point 长度（含补充平面、组合字符、空串）；
 timestamp 字符串（数值时区、负 epoch、纳秒）；深链、深浅混合及合法多对象循环。
-另执行 66 组定向回归：原有 2 组 contextual 条件，加上
-`examples/regressions/oracle.json` 中的 64 组。两轮会重复执行这 66 组固定回归，
-不把它们称为 132 类不同场景。
+另执行 95 组定向回归：原有 2 组 contextual 条件、
+`examples/regressions/oracle.json` 中的 64 组、`examples/regressions/check-depth.json` 中的 29 组。
+两轮会重复执行这 95 组固定回归，不把它们称为 190 类不同场景。
 
 | API | seed 314159 一致/比较 | seed 271828 一致/比较 | 不一致 |
 | --- | ---: | ---: | ---: |
-| Check | 1066/1066 | 1066/1066 | 0 |
-| ListObjects | 1066/1066 | 1066/1066 | 0 |
-| ListUsers | 1066/1066 | 1066/1066 | 0 |
+| Check | 1095/1095 | 1095/1095 | 0 |
+| ListObjects | 1095/1095 | 1095/1095 | 0 |
+| ListUsers | 1095/1095 | 1095/1095 | 0 |
 
-合计 6396 次比较，0 不一致。原始模型、元组、双方结果与 HTTP 错误分别位于每个输出目录的
+合计 6570 次比较，0 不一致。原始模型、元组、双方结果与 HTTP 错误分别位于每个输出目录的
 cases.json、actual.json、expected.json、http-errors.json。提交的摘要为
 [evidence/oracle-summary.json](evidence/oracle-summary.json)、
 [evidence/oracle-seed271828-summary.json](evidence/oracle-seed271828-summary.json)，
@@ -1382,7 +1382,7 @@ cases.json、actual.json、expected.json、http-errors.json。提交的摘要为
   relation 入口在 depth>=25 时报告 E2002，与 Check 的 tuple 深度不同。group:0..26 的数据链
   对 ListObjects 返回全体对象，ListUsers 在 25/26 层报错。固定回归另含深浅混合、循环及
   computed alias 的 0/25/26 边界。Check 的纯 computed alias 迭代折叠，不增加 tuple 深度，
-  这是新增官方差分中发现的优化语义；元组链的 Check 深度上限仍为 25。
+  这是新增官方差分中发现的优化语义；完整 Check dispatch 的预算及终端 join 的差别见下方 N1 说明。
   参考官方 [ListUsers.expand / rewrite handlers](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/pkg/server/commands/listusers/list_users_rpc.go#L352)。
 - **B4**：全局 `size(s)` 与 `s.size()` 都计 Unicode code points；CEL 字符串词法器按字符宽度
   推进，避免补充平面字面量落在 UTF-16 surrogate 中间。
@@ -1400,9 +1400,34 @@ self-defining tuple，原脚本没有检查写入返回值；它不构成有效�
 本轮固定 oracle 改用合法二节点循环，随机生成器也不生成 self-defining tuple。
 原 self-cycle 的本地终止行为仍单独保留为测试。
 
+### N1：TTU Check 的终点深度
+
+官方完整 ResolveCheck 请求从 depth=0 起算，dispatch 加 1，在 depth=25 时先报 E2002；
+computed userset 不增加 dispatch 深度。递归 userset 与符合模型形状的 terminal join
+可以不创建新的完整请求，不能用所有元组边数共用一个 > 或 >= 判定。
+修复把完整请求预算与终端读取分开，并在 TTU dispatch 前跳过不存在 computed relation 的父类型。
+语义依据和具体边界表见 [design.md](design.md#完整请求与终端连接的深度)，未复制官方 Go 实现。
+
+29 个新增固定用例覆盖 TTU 24/25/26 层 DAG/cycle、直接 userset 25/26 层、
+交替链、TTU→userset、userset→TTU、叶子 TTU join、有限 userset join，以及异构父类型。
+它们在 engine/check_depth_test.mbt 对 Check/ListObjects/ListUsers 同时断言，
+官方期望保存于 [evidence/n1-depth-expected.json](evidence/n1-depth-expected.json)。
+
+按复审提供的原脚本原样重跑（它仍读取原有 64 组固定用例，未扩充其 204 组集合）：
+
+```bash
+python3 /tmp/moonfga-r2-directed.py "$PWD" "$PWD/conformance-results/n1/directed"
+```
+
+实际结果：204 cases、612 comparisons、0 mismatches，原 190/191 用例的 Check 均为 E2002。
+摘要见 [evidence/n1-directed-summary.json](evidence/n1-directed-summary.json)；
+完整 cases/actual/expected/mismatches 保存在 conformance-results/n1/directed/。
+原临时脚本另按 SHA-256 留存于忽略目录 .upstream/rework-n1/moonfga-r2-directed.py，
+避免 /tmp 丢失后失去本次审查证据；版本控制内的新 29 用例可直接用标准 oracle 重现。
+
 ### 验证与边界
 
-三后端 `moon check --deny-warn`、`moon test`（各 148/148）、`moon fmt --check` 通过；
+三后端 `moon check --deny-warn`、`moon test`（各 177/177）、`moon fmt --check` 通过；
 `moon info` 后无 .mbti 差异。矩阵保持 Check 516/516、ListObjects 354/354、
 ListUsers 393/394（1 条缺期望跳过），language 29/29。native benchmark 2/2，
 详见 [performance.md](performance.md)。

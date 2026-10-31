@@ -127,7 +127,7 @@ enum Userset {
 
 `engine/eval.mbt` 的核心是 `resolve(object, relation, user, depth)`：
 
-- 元组遍历深度上限 25，超限返回 `E2002`；纯 computed alias 迭代折叠，不计入元组深度；
+- 完整 Check 请求从 depth=0 开始，dispatch 加 1；depth>=25 时在处理关系前返回 `E2002`；computed alias 不增加 dispatch 深度；
 - 每个 `(object, relation, user)` 维护访问集合以检测循环；
 - `This` 读取直接元组；`Computed` 在同对象上迭代解析其他关系，防止长 alias 链栈溢出；
 - `TupleToUserset` 先读取 tupleset 关系，再对每个目标对象递归；
@@ -141,6 +141,38 @@ enum Userset {
 元组缺少参数时产生伪错误。
 
 `BatchCheck` 复用同一引擎逐项执行，保持每项独立的错误。
+
+### 完整请求与终端连接的深度
+
+不能按数据链的总边数统一写成“25 层可解析、26 层报错”。官方
+[dispatch / ResolveCheck](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/internal/graph/check.go#L380)
+给完整子请求加深度，并在入口的 25 上限处拒绝；
+[checkComputedUserset](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/internal/graph/check.go#L839)
+重新解析同一对象的关系，不 dispatch，也不增加深度。
+
+直接 userset 和 TTU 都可能产生完整 dispatch，但符合模型形状的
+[weight-two join](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/internal/graph/weight_two_resolver.go#L51)
+或 [recursive userset](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/internal/graph/recursive_resolver.go#L84)
+可以提前读到终端成员。这种读取没有创建新的完整请求。
+本实现把这两件事分开：resolve 严格执行完整请求预算；dispatch_check 在边界处按模型形状
+选择终端连接或递归 userset 的终端探测。探测 reader 不返回 userset 元组，因此不能借此
+继续跨数据边递归；非终端路径仍须真正 dispatch。循环模型不能错误套用普通的终端 join。
+TTU 遇到未定义 computed relation 的父类型在 dispatch 前跳过，与官方
+[produceTTUDispatches](https://github.com/openfga/openfga/blob/44054f542f64e9b9589dd26a595081b3d2cfd942/internal/graph/default_resolver.go#L158)
+一致，不消耗新请求的预算。
+
+在固定 v1.22.1 二进制下确认的边界（请求主体均为 user:0）：
+
+| 数据链 / 模型 | 24 条边 | 25 条边 | 26 条边 |
+| --- | --- | --- | --- |
+| viewer = reader or viewer from parent | true | E2002 | E2002 |
+| member = [user, group#member] | — | true | E2002 |
+| TTU 后接递归 userset 链 | true | true | E2002 |
+| userset 后接递归 TTU 链 | true | E2002 | E2002 |
+| userset 链末端的叶子 TTU join | true | true | E2002 |
+
+DAG、多对象 cycle、交替 TTU/userset、有限 userset join 和缺少 computed relation 的父类型
+均在 29 个新固定用例中覆盖。纯 computed alias 仍迭代折叠；这不意味着越过完整请求入口的预算。
 
 ## ListObjects / ListUsers
 
@@ -223,7 +255,8 @@ CLI 打印 `error <code>: <message>` 并以 1 退出；参数/文件错误以 2 
 直接关系解析复用一次解析得到的 UserRef；不引入可能跨请求泄漏条件或循环状态的全局 memo。
 内存存储维护按类型的候选对象索引和每个对象的元组计数，最后一条元组删除、clear、
 重新插入均同步更新索引；对外返回副本。新增索引以额外内存和写入维护成本换取候选枚举效率。
-解析深度从 0 起算，25 层可解析，26 层报 E2002；1000 节点链不会无限递归。
+完整 Check dispatch 从 0 起算，入口在 depth>=25 报 E2002；终端 join 不额外 dispatch。
+直接 userset、TTU 和混合链的不同边界见上节；1000 节点链不会无限递归。
 
 Engine、MemoryStore、ContextualStore 的字段不再公开，避免调用方绕过索引或修改内部解析模式。
 构造函数和查询方法保留；CheckRequest / CheckResult 的数据字段仍公开。

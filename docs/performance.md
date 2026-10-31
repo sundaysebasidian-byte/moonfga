@@ -51,3 +51,13 @@ Check 4.59 µs ± 150.53 ns，ListObjects 44.27 ms ± 2.00 ms，两个 benchmark
 Check 4.36 µs ± 97.39 ns；ListObjects 39.20 ms ± 678.66 µs；benchmark 2/2。
 原始输出见 evidence/bench-rework2.txt。每次 ListObjects 请求构造反向图，
 此样本不代表大型多关系图的峰值内存或所有查询分布。
+
+## 最终 N1 深度修复复验
+
+同一命令、相同 10 万元组 / 10 层 group 数据，benchmark 两次均为 2/2：
+首测 Check 22.90 µs ± 8.20 µs，ListObjects 263.99 ms ± 27.49 ms；
+复测 Check 4.44 µs ± 99.97 ns，ListObjects 39.24 ms ± 633.82 µs。
+两次原始输出分别见 evidence/bench-n1.txt、evidence/bench-n1-repeat.txt。
+复测前机器 load averages 实测 16.75 / 21.54 / 17.18，首测也有较大样本波动；
+不丢弃这组异常样本，也不将测量差异单独归因于代码变化。
+本轮没有改变基准数据或计时边界，没有据此宣称性能提升。
