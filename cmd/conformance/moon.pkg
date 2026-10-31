@@ -1,0 +1,7 @@
+pkgtype(kind: "executable")
+
+import {
+  "moonbitlang/core/env",
+  "moonbitlang/x/sys",
+  "sundaysebasidian-byte/moonfga/conformance" @conf,
+}

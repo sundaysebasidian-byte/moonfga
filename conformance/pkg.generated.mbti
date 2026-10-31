@@ -1,0 +1,48 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "sundaysebasidian-byte/moonfga/conformance"
+
+import {
+  "sundaysebasidian-byte/moonfga/fga",
+}
+
+// Values
+pub fn format_report(ConformanceReport) -> String
+
+pub fn run_conformance_file(String) -> ConformanceReport raise @fga.FgaError
+
+pub fn run_conformance_source(String, String) -> ConformanceReport raise @fga.FgaError
+
+// Errors
+
+// Types and methods
+pub(all) struct AssertionResult {
+  kind : String
+  test_name : String
+  stage : Int32
+  status : String
+  category : String
+  detail : String
+}
+
+pub(all) struct CategoryReport {
+  kind : String
+  total : Int32
+  passed : Int32
+  failed : Int32
+  skipped : Int32
+  failures : Array[String]
+  categories : Array[(String, Int32)]
+}
+
+pub(all) struct ConformanceReport {
+  label : String
+  test_count : Int32
+  check : CategoryReport
+  list_objects : CategoryReport
+  list_users : CategoryReport
+  results : Array[AssertionResult]
+}
+
+// Type aliases
+
+// Traits
