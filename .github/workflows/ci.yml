@@ -92,6 +92,28 @@ jobs:
       - name: Test ${{ matrix.target }}
         run: moon test --target ${{ matrix.target }}
 
+  web:
+    name: web playground
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MoonBit
+        shell: bash
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build playground
+        run: scripts/build-web.sh
+
+      - name: Smoke test
+        run: node web/smoke.mjs
+
   readme-quickstart:
     name: README quick start
     runs-on: ubuntu-latest
