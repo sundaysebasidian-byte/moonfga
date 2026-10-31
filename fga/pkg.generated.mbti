@@ -1,0 +1,179 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "sundaysebasidian-byte/moonfga/fga"
+
+// Values
+pub const ERR_INVALID_TUPLE : Int32 = 2027
+
+pub const ERR_INVALID_WRITE : Int32 = 2003
+
+pub const ERR_MODEL_NOT_FOUND : Int32 = 2001
+
+pub const ERR_RELATION_NOT_FOUND : Int32 = 2022
+
+pub const ERR_RESOLUTION_TOO_COMPLEX : Int32 = 2002
+
+pub const ERR_TYPE_NOT_FOUND : Int32 = 2021
+
+pub const ERR_UNKNOWN_CONDITION : Int32 = 2021
+
+pub const ERR_VALIDATION : Int32 = 2000
+
+pub const MAX_RESOLUTION_DEPTH : Int32 = 25
+
+pub fn cel_value_eq(CelValue, CelValue) -> Bool
+
+pub fn cel_value_to_display(CelValue) -> String
+
+pub fn cel_value_to_json(CelValue) -> Json
+
+pub fn cel_value_type_name(CelValue) -> String
+
+pub fn error_code(FgaError) -> Int32
+
+pub fn error_message(FgaError) -> String
+
+pub fn fail(Int32, String) -> FgaError
+
+pub fn fail_at(Int32, String, Int32, Int32) -> FgaError
+
+pub fn format_error(FgaError) -> String
+
+pub fn is_valid_object(String) -> Bool
+
+pub fn is_valid_user(String) -> Bool
+
+pub fn json_get_array(Json, String) -> Array[Json]
+
+pub fn json_get_bool(Json, String) -> Bool?
+
+pub fn json_get_object(Json, String) -> Json?
+
+pub fn json_get_string(Json, String) -> String?
+
+pub fn json_object_get(Json, String) -> Json?
+
+pub fn json_object_to_value_map(Json) -> Map[String, CelValue] raise FgaError
+
+pub fn json_to_cel_value_raw(Json) -> CelValue
+
+pub fn matching_restriction_condition(Array[TypeRestriction], String) -> String? raise FgaError
+
+pub fn object_id(String) -> String
+
+pub fn object_type(String) -> String
+
+pub fn parse_user_ref(String) -> UserRef?
+
+pub fn render_user_ref(UserRef) -> String
+
+pub fn restrictions_allow(Array[TypeRestriction], String) -> Bool
+
+pub fn tuple_user_matches(UserRef, String) -> Bool
+
+pub fn user_type_name(String) -> String
+
+// Errors
+pub suberror FgaError {
+  FgaError(code~ : Int32, message~ : String, line~ : Int32, column~ : Int32)
+}
+
+// Types and methods
+pub struct AuthModel {
+  schema_version : String
+  types : Array[TypeDefinition]
+  conditions : Map[String, Condition]
+  condition_order : Array[String]
+}
+pub fn AuthModel::add_condition(Self, Condition) -> Unit
+pub fn AuthModel::add_type(Self, TypeDefinition) -> Unit
+pub fn AuthModel::direct_restrictions(Self, String, String) -> Array[TypeRestriction]
+pub fn AuthModel::find_condition(Self, String) -> Condition?
+pub fn AuthModel::find_type(Self, String) -> TypeDefinition?
+pub fn AuthModel::new(String) -> Self
+pub fn AuthModel::relation(Self, String, String) -> Userset raise FgaError
+
+pub enum CelValue {
+  VInt(Int64)
+  VUint(UInt64)
+  VDouble(Double)
+  VBool(Bool)
+  VString(String)
+  VDuration(Int64)
+  VTimestamp(Int64)
+  VList(Array[CelValue])
+  VMap(Map[String, CelValue])
+  VIp(String)
+  VNull
+}
+
+pub struct Condition {
+  name : String
+  expression : String
+  parameters : Array[ConditionParam]
+}
+pub fn Condition::find_param(Self, String) -> ConditionParam?
+
+pub struct ConditionParam {
+  name : String
+  type_name : String
+  generic_type : String?
+}
+
+pub struct Tuple {
+  object : String
+  relation : String
+  user : String
+  condition : TupleCondition?
+}
+pub fn Tuple::condition_name(Self) -> String?
+pub fn Tuple::has_condition(Self) -> Bool
+pub fn Tuple::key(Self) -> String
+
+pub struct TupleCondition {
+  name : String
+  context : Map[String, CelValue]
+}
+
+pub struct TypeDefinition {
+  name : String
+  relations : Map[String, Userset]
+  relation_order : Array[String]
+  direct : Map[String, Array[TypeRestriction]]
+}
+pub fn TypeDefinition::has_direct(Self, String) -> Bool
+pub fn TypeDefinition::new(String) -> Self
+pub fn TypeDefinition::relation_rewrite(Self, String) -> Userset?
+pub fn TypeDefinition::restrictions(Self, String) -> Array[TypeRestriction]
+pub fn TypeDefinition::set_relation(Self, String, Userset, Array[TypeRestriction]) -> Unit
+
+pub struct TypeRestriction {
+  type_name : String
+  relation : String?
+  wildcard : Bool
+  condition : String?
+}
+
+pub struct UserRef {
+  type_name : String
+  id : String
+  relation : String?
+}
+
+pub enum Userset {
+  This
+  Computed(String)
+  TupleToUserset(String, String)
+  Union(Array[Userset])
+  Intersection(Array[Userset])
+  Difference(Userset, Userset)
+}
+
+// Type aliases
+
+// Traits
+pub trait TupleReader {
+  fn read(Self, String, String) -> Array[Tuple]
+  fn read_userset(Self, String, String) -> Array[Tuple]
+  fn all_objects(Self, String) -> Array[String]
+  fn all_users(Self) -> Array[String]
+}
