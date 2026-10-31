@@ -69,7 +69,7 @@ request 里面，没有顶层期望值或 `errorCode`，所以按 `skip/no_expec
 
 页面是纯静态的（HTML + CSS + 原生 JS，无框架、无 CDN），引擎由 `playground/` 包编译到 JS。
 左边编辑模型（DSL 或 JSON）和元组，错误会标到具体行；右边查询 Check / ListObjects / ListUsers，
-Check 的解析路径画成树，Tests 标签页直接运行 `.fga.yaml`。内置 GitHub、Drive、ABAC 三个示例。
+Check 的解析路径画成树（解释不完整时结果旁标出 Incomplete），Tests 标签页直接运行 `.fga.yaml`。内置 GitHub、Drive、ABAC 三个示例。
 
 本地构建并打开：
 
@@ -82,7 +82,7 @@ python3 -m http.server -d web/dist  # 然后访问 http://localhost:8000
 `playground` 包导出 7 个函数，输入输出都是 JSON 字符串，错误以 `{"ok":false,"error":{...}}`
 返回，不抛异常：`validate_model`、`dsl_to_json`、`json_to_dsl`、`check`、`list_objects`、
 `list_users`、`run_tests`。请求字段见 [`playground/api.mbt`](playground/api.mbt) 的注释。
-注意 `.fga.yaml` 在浏览器里必须用内联的 `model:`，`model_file` 需要文件系统。
+`.fga.yaml` 在浏览器里必须用内联的 `model:`；`storetest` 只负责解析和运行，`model_file` 由调用方提供读取函数（CLI 会提供）。
 
 推送到 `main` 后，[`pages.yml`](.github/workflows/pages.yml) 会构建、跑冒烟测试并发布到 GitHub Pages。
 

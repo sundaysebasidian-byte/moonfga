@@ -12,8 +12,10 @@ All notable changes to MoonFGA are documented here. The format follows
 - Expand the oracle to five scenario families and 64 frozen review fixtures; reject failed model/write setup.
 
 - Add a browser playground (`playground/` JS exports, static page in `web/`, GitHub Pages workflow) with a Node smoke test.
+- Playground passes the engine's explain result through unchanged and marks an incomplete explanation; `filters` and `tuples` reject malformed values.
+- Move `model_file` reading out of `storetest` (`load_store_test` takes an optional reader), so the playground bundle imports no Node modules.
 - Fix resolver path cleanup on condition errors, contextual triple shadowing and identifier bounds.
-- Add depth/cycle, wildcard exclusion, condition and input regression tests (147 tests per backend).
+- Add depth/cycle, wildcard exclusion, condition and input regression tests (148 tests per backend).
 - Reuse parsed users and index object types; measured native queries improve about 38% on the documented workload.
 - Hide engine/store internals and validation helpers before the first published API.
 - Add a pinned OpenFGA v1.22.1 differential oracle matching the matrix commit: two seeds, 6396 comparisons, zero differences.

@@ -1402,12 +1402,11 @@ self-defining tuple，原脚本没有检查写入返回值；它不构成有效�
 
 ### 验证与边界
 
-三后端 `moon check --deny-warn`、`moon test`（各 147/147）、`moon fmt --check` 通过；
+三后端 `moon check --deny-warn`、`moon test`（各 148/148）、`moon fmt --check` 通过；
 `moon info` 后无 .mbti 差异。矩阵保持 Check 516/516、ListObjects 354/354、
 ListUsers 393/394（1 条缺期望跳过），language 29/29。native benchmark 2/2，
 详见 [performance.md](performance.md)。
 
-本轮不修改 web/。其旧 smoke 中“解释失败时 paths 必须为空并带 ip 错误”的断言，
-与现在从成功 owner 分支取得 witness 的行为冲突，需由前端负责人同步；本轮没有运行旧 Web smoke，
-也不声称 GitHub CI 已通过。前端 I2、发布 B6 均未纳入本轮后端修改。
+Web 端已同步：Playground 直接透传 `ExplainResult` JSON（`complete`、`explain_error`），
+`node web/smoke.mjs` 36/36 通过；GitHub CI 与 Pages 尚未在远端验证。
 固定两 seed 的零差异不等于全部 OpenFGA 输入均兼容；CEL 完整标准库等既有不支持项仍有效。
