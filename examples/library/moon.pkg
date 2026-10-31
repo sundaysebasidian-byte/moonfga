@@ -1,0 +1,8 @@
+pkgtype(kind: "executable")
+
+import {
+  "sundaysebasidian-byte/moonfga/fga",
+  "sundaysebasidian-byte/moonfga/dsl",
+  "sundaysebasidian-byte/moonfga/store",
+  "sundaysebasidian-byte/moonfga/engine",
+}
