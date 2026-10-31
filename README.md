@@ -32,7 +32,8 @@ results, [`docs/design.md`](docs/design.md) for the architecture,
 | 元组存储 | 支持 | 内存索引（按 `object#relation`、按 user）、写入/删除、上下文元组覆盖层、`TupleReader` trait |
 | Check | 支持 | 深度 25、循环检测、通配符、union/intersection/difference 短路、TTU、条件求值 |
 | BatchCheck | 支持 | 进程内批量执行，逐项返回结果或错误 |
-| ListObjects / ListUsers / Expand | 支持 | 条件、上下文元组、通配符用户、userset 过滤器 |
+| ListObjects / ListUsers | 部分支持 | 条件、上下文元组、通配符用户、userset 过滤器；随机差分有 11 处已记录差异 |
+| Expand | 支持 | 返回关系重写树 |
 | Explain | 支持 | 返回允许/拒绝的解析路径（`--explain`） |
 | ReadChanges | 不支持 | 内存存储没有变更日志；接口未实现 |
 | FGA Modules | 不支持 | `module` / `extends` 语法与模块合并未实现；单文件模型可完整使用 |
@@ -41,6 +42,10 @@ results, [`docs/design.md`](docs/design.md) for the architecture,
 | CEL 子集 | 支持 | `int` / `uint` / `double` / `bool` / `string` / `duration` / `timestamp` / `list` / `map` / `ipaddress`，运算符、三元表达式、`exists` / `exists_one` / `all` / `map` / `filter`、常用字符串/时间/网络方法 |
 | CLI | 支持 | `validate`、`transform`、`check`、`list-objects`、`list-users`、`expand`、`test` |
 | `.fga.yaml` 测试 | 支持 | `model` / `model_file`、全局与用例元组、Check / ListObjects / ListUsers 断言、`errorCode` |
+
+随机官方服务差分：1002 组 / 3006 次比较，11 处差异（ListUsers 10、ListObjects 1）；
+含 wildcard 组合与条件覆盖边界，见 [差分报告](docs/conformance.md#第-3a-阶段官方服务随机差分2026-10-31)。
+性能实测与复现命令见 [performance.md](docs/performance.md)。
 
 上游一致性结果（固定 commit，当前结果）：
 

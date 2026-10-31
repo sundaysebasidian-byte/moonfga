@@ -6,6 +6,13 @@ All notable changes to MoonFGA are documented here. The format follows
 
 ## [Unreleased]
 
+- Fix resolver path cleanup on condition errors, contextual triple shadowing and identifier bounds.
+- Add depth/cycle, wildcard exclusion, condition and input regression tests (66 tests per backend).
+- Reuse parsed users and index object types; measured native queries improve about 38% on the documented workload.
+- Hide engine/store internals and validation helpers before the first published API.
+- Add a pinned OpenFGA differential oracle: 3006 comparisons, 11 documented List API differences.
+- Align CI installers with official documentation; initialize Windows MSVC and pin Node 22.
+
 ## [0.1.0] - 2026-10-31
 
 First public source release. The module is not published to Mooncakes; build

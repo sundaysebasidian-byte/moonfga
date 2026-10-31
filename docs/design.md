@@ -221,3 +221,22 @@ CLI 打印 `error <code>: <message>` 并以 1 退出；参数/文件错误以 2 
 - 跳过模块语法：单文件 schema 1.1 已覆盖全部上游模型用例。
 - ListUsers 的通配符语义是复现上游行为中最复杂的部分，采用“标记 + 显式枚举”算法；
   相关边界继续由上游用例回归。
+
+## 第 3a 阶段：查询路径与公开 API
+
+解析路径使用作用域清理，条件求值抛错时也会弹出当前节点，避免兄弟分支误判为循环。
+直接关系解析复用一次解析得到的 UserRef；不引入可能跨请求泄漏条件或循环状态的全局 memo。
+内存存储维护按类型的候选对象索引和每个对象的元组计数，最后一条元组删除、clear、
+重新插入均同步更新索引；对外返回副本。新增索引以额外内存和写入维护成本换取候选枚举效率。
+解析深度从 0 起算，25 层可解析，26 层报 E2002；1000 节点链不会无限递归。
+
+Engine、MemoryStore、ContextualStore 的字段不再公开，避免调用方绕过索引或修改内部解析模式。
+构造函数和查询方法保留；CheckRequest / CheckResult 的数据字段仍公开。
+引擎内部的校验函数、TupleBindingSpec 和 inline-expression 常量不再导出。
+这是发布前 0.1.0 API 收窄；依赖原公开字段的调用方必须改用方法。
+错误仍可模式匹配 FgaError(code~, message~, line~, column~)，也可用 error_code / error_message。
+native、wasm-gc、js 使用同一核心 API；这些后端的库测试通过不等同于浏览器 JS 模块导出验收。
+
+contextual tuple 按 object/relation/user 遮蔽持久化绑定，仅作用于当前请求。
+固定官方服务的 List API 在条件覆盖用例上的行为差异见 conformance.md；
+不能由 Check 的兼容性推断 List API 完全兼容。
