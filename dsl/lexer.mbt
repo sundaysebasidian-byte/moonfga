@@ -319,7 +319,7 @@ pub fn lex(src : String) -> Array[Token] raise @fga.FgaError {
             }
           }
           lexer.emit(Version, sb.to_string(), line, column)
-        } else if is_alpha(c) {
+        } else if is_alpha(c) || c == '$' {
           let word = lexer.scan_word()
           if word == "but" {
             // Merge "but not" into a single token.

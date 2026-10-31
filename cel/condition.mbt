@@ -3,8 +3,9 @@
 ///|
 /// Evaluates a condition expression against a request context.
 ///
-/// Missing parameters are bound to `null`, mirroring how conditions guard
-/// optional context values. Unknown context keys are rejected.
+/// Every declared parameter must be present in the merged context; unknown
+/// context keys are rejected. Both errors use the validation code 2000, which
+/// is what OpenFGA returns for an unsatisfiable condition evaluation.
 pub fn eval_condition(
   condition : @fga.Condition,
   context : Map[String, Json],
@@ -13,10 +14,19 @@ pub fn eval_condition(
   let known : Map[String, Bool] = Map([])
   for param in condition.parameters {
     known[param.name] = true
-    env[param.name] = match context.get(param.name) {
+    let value = match context.get(param.name) {
       Some(value) => coerce_context(param, value)
-      None => @fga.VNull
+      None =>
+        raise @fga.fail(
+          @fga.ERR_VALIDATION,
+          "missing context parameter '" +
+          param.name +
+          "' for condition '" +
+          condition.name +
+          "'",
+        )
     }
+    env[param.name] = value
   }
   let mut unknown : String? = None
   context.each(fn(key, _) {

@@ -97,6 +97,7 @@ fn CelLexer::skip_comment(self : CelLexer) -> Unit {
 ///|
 fn CelLexer::scan_string(
   self : CelLexer,
+  quote : Char,
   line : Int32,
   column : Int32,
 ) -> String raise @fga.FgaError {
@@ -108,7 +109,7 @@ fn CelLexer::scan_string(
       Some(c) => c
       None => raise cel_fail("unterminated string literal", line, column)
     }
-    if c == '"' {
+    if c == quote {
       self.advance()
       done = true
     } else if c == '\\' {
@@ -269,8 +270,8 @@ fn lex_cel_tokens(source : String) -> Array[CToken] raise @fga.FgaError {
         _ => ()
       }
     }
-    if c == '"' {
-      let text = lexer.scan_string(line, column)
+    if c == '"' || c == '\'' {
+      let text = lexer.scan_string(c, line, column)
       lexer.emit(CStringLit(text), line, column)
       continue
     }
