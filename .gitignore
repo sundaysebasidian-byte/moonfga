@@ -6,3 +6,5 @@ target/
 *.log
 conformance-results/
 web/dist/
+
+__pycache__/

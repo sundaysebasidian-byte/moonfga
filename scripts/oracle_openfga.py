@@ -1,4 +1,5 @@
 """Seeded black-box differential oracle; Python standard library only."""
+from oracle_cases import boundary_case
 import argparse
 import hashlib
 import json
@@ -120,7 +121,7 @@ def main():
     out = args.output
     out.mkdir(parents=True, exist_ok=True)
     rng = random.Random(args.seed)
-    cases = [generate(rng, i) for i in range(args.cases)]
+    cases = [generate(rng, i) if i % 5 == 0 else boundary_case(rng, i) for i in range(args.cases)]
     for i in range(2):
         c = generate(random.Random(args.seed + i), 0)
         c["model"]["conditions"] = {"enabled": {"name": "enabled", "expression": "ok", "parameters": {"ok": {"type_name": "TYPE_NAME_BOOL"}}}}
@@ -131,6 +132,8 @@ def main():
         c["tuples"] = [{"object": c["object"], "relation": "viewer", "user": c["user"], "condition": {"name": "enabled", "context": {"ok": True}}}]
         c["contextual"] = [{"object": c["object"], "relation": "viewer", "user": c["user"], "condition": {"name": "enabled", "context": {"ok": False} if i == 0 else {}}}]
         cases.append(c)
+    fixed = json.loads(Path("examples/regressions/oracle.json").read_text())
+    cases.extend(fixed)
     (out / "cases.json").write_text(json.dumps(cases))
     local = subprocess.run(["moon", "run", "--target", "native", "cmd/oracle", "--", str(out / "cases.json")], check=False, text=True, capture_output=True)
     if local.returncode:
@@ -160,11 +163,13 @@ def main():
                 path = f"/stores/{store}"
                 mid = request(base, path + "/authorization-models", c["model"])["authorization_model_id"]
                 if c["tuples"]:
-                    request(base, path + "/write", {"authorization_model_id": mid, "writes": {"tuple_keys": c["tuples"]}})
+                    written = request(base, path + "/write", {"authorization_model_id": mid, "writes": {"tuple_keys": c["tuples"]}})
+                    if not isinstance(written, dict):
+                        raise RuntimeError(f"case {i}: oracle setup write rejected: {HTTP_ERRORS[-1]}")
                 common = {"authorization_model_id": mid, "context": c.get("context", {}), "contextual_tuples": {"tuple_keys": c.get("contextual", [])}}
                 check = request(base, path + "/check", {**common, "tuple_key": {k: c[k] for k in ["object", "relation", "user"]}})
-                objects = request(base, path + "/list-objects", {**common, "type": "document", "relation": c["relation"], "user": c["user"]})
-                users = request(base, path + "/list-users", {**common, "contextual_tuples": c.get("contextual", []), "object": {"type": "document", "id": c["object"].split(":")[1]}, "relation": c["relation"], "user_filters": [{"type": "user"}]})
+                objects = request(base, path + "/list-objects", {**common, "type": c["object"].split(":", 1)[0], "relation": c["relation"], "user": c["user"]})
+                users = request(base, path + "/list-users", {**common, "contextual_tuples": c.get("contextual", []), "object": {"type": c["object"].split(":", 1)[0], "id": c["object"].split(":", 1)[1]}, "relation": c["relation"], "user_filters": [{"type": "user"}]})
                 result = {"check": check if isinstance(check, str) else check.get("allowed", False),
                           "list_objects": objects if isinstance(objects, str) else sorted(objects.get("objects", [])),
                           "list_users": users if isinstance(users, str) else sorted(
@@ -186,7 +191,8 @@ def main():
             except subprocess.TimeoutExpired:
                 proc.kill()
                 proc.wait()
-    summary = {"version": VERSION, "commit": COMMIT, "seed": args.seed, "cases": len(cases), "random_cases": args.cases, "regression_cases": 2, "comparisons": len(cases)*3, "mismatches": len(mismatches),
+    summary = {"version": VERSION, "commit": COMMIT, "seed": args.seed, "cases": len(cases), "random_cases": args.cases, "regression_cases": 2 + len(fixed), "comparisons": len(cases)*3, "mismatches": len(mismatches),
+               "families": {k: sum(c.get("family", "graph") == k for c in cases[:args.cases]) for k in ["graph", "logical_errors", "unicode", "timestamp", "deep_graph"]},
                "by_api": {k: {"compared": len(cases), "mismatches": sum(m["kind"] == k for m in mismatches)} for k in ["check", "list_objects", "list_users"]}}
     for name, value in [("summary", summary), ("mismatches", mismatches), ("expected", expected), ("actual", actual), ("http-errors", HTTP_ERRORS)]:
         (out / f"{name}.json").write_text(json.dumps(value, indent=2) + "\n")
