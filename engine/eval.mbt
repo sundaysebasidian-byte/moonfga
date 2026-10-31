@@ -11,6 +11,7 @@ pub struct Engine {
   priv reader : &@fga.TupleReader
   // ListUsers enumerates concrete users from the tuple graph; users covered
   // only by a wildcard must not be reported individually.
+  priv traces : Map[String, Array[String]]?
   priv list_query : Bool
   priv match_wildcard_users : Bool
 }
@@ -22,7 +23,13 @@ pub fn Engine::new(
   model : @fga.AuthModel,
   reader : &@fga.TupleReader,
 ) -> Engine {
-  Engine::{ model, reader, list_query: false, match_wildcard_users: true, }
+  Engine::{
+    model,
+    reader,
+    traces: None,
+    list_query: false,
+    match_wildcard_users: true,
+  }
 }
 
 ///|
@@ -96,14 +103,6 @@ fn path_key(object : String, relation : String) -> String {
 fn is_concrete_user(user : String) -> Bool {
   match @fga.parse_user_ref(user) {
     Some(r) => r.relation == None && r.id != "*"
-    None => false
-  }
-}
-
-///|
-fn is_wildcard_user(user : String) -> Bool {
-  match @fga.parse_user_ref(user) {
-    Some(r) => r.relation == None && r.id == "*"
     None => false
   }
 }
@@ -331,6 +330,7 @@ fn Engine::resolve(
     }
   }
   if is_userset_user(subject) && subject == key {
+    self.record_trace(object, relation, subject, [key + "@" + subject])
     return OTrue
   }
   // Relations referenced through computed usersets or tuple-to-userset may be
@@ -364,22 +364,79 @@ fn Engine::resolve_rewrite(
 ) -> Outcome raise @fga.FgaError {
   match rewrite {
     This => self.resolve_direct(object, relation, subject, context, depth, path)
-    Computed(target) =>
-      self.resolve(object, target, subject, context, depth + 1, path)
-    TupleToUserset(computed, tupleset) =>
-      self.resolve_ttu(
+    Computed(target) => {
+      // OpenFGA resolves computed aliases without charging tuple traversal
+      // depth. Collapse the alias chain iteratively so it cannot overflow
+      // the stack, while preserving cycle and userset-identity checks.
+      let alias_path = path.copy()
+      let aliases = [relation]
+      let mut resolved = target
+      let td = self.model.find_type(@fga.object_type(object)).unwrap()
+      while true {
+        let key = path_key(object, resolved)
+        if alias_path.contains(key) {
+          return OCycle
+        }
+        if is_userset_user(subject) && subject == key {
+          break
+        }
+        match td.relation_rewrite(resolved) {
+          Some(@fga.Computed(next)) => {
+            alias_path.push(key)
+            aliases.push(resolved)
+            resolved = next
+          }
+          _ => break
+        }
+      }
+      let outcome = self.resolve(
+        object, resolved, subject, context, depth, alias_path,
+      )
+      if outcome is OTrue && self.traces is Some(_) {
+        let prefix = aliases.map(fn(r) { object + "#" + r }).join(" -> ")
+        self.record_trace(
+          object,
+          relation,
+          subject,
+          self
+          .trace_for(object, resolved, subject)
+          .map(fn(p) { prefix + " -> computed " + resolved + " -> " + p }),
+        )
+      }
+      outcome
+    }
+    TupleToUserset(computed, tupleset) => {
+      let outcome = self.resolve_ttu(
         object, tupleset, computed, subject, context, depth, path,
       )
+      if outcome is OTrue && self.traces is Some(_) {
+        self.record_trace(
+          object,
+          relation,
+          subject,
+          self
+          .trace_for(object, tupleset, subject)
+          .map(fn(p) { object + "#" + relation + " -> " + p }),
+        )
+      }
+      outcome
+    }
     Union(children) => {
       let mut pending_error : @fga.FgaError? = None
       let mut saw_cycle = false
+      let mut allowed = false
       for child in children {
         try {
           match
             self.resolve_rewrite(
               object, relation, child, subject, context, depth, path,
             ) {
-            OTrue => return OTrue
+            OTrue => {
+              if !self.list_query {
+                return OTrue
+              }
+              allowed = true
+            }
             OFalse => ()
             OCycle => saw_cycle = true
           }
@@ -387,7 +444,15 @@ fn Engine::resolve_rewrite(
           err => if pending_error is None { pending_error = Some(err) }
         }
       }
-      if saw_cycle {
+      if self.list_query {
+        match pending_error {
+          Some(err) => raise err
+          None => ()
+        }
+      }
+      if allowed {
+        OTrue
+      } else if saw_cycle {
         OCycle
       } else {
         match pending_error {
@@ -397,44 +462,44 @@ fn Engine::resolve_rewrite(
       }
     }
     Intersection(children) => {
-      if !self.match_wildcard_users {
-        // Enumeration needs an explicit witness in any operand, while every
-        // operand must authorize the candidate (including through wildcards).
-        let full = Engine::{ ..self, match_wildcard_users: true, }
-        match
-          full.resolve_rewrite(
-            object, relation, rewrite, subject, context, depth, path,
-          ) {
-          OTrue =>
-            return self.resolve_rewrite(
-              object,
-              relation,
-              @fga.Union(children),
-              subject,
-              context,
-              depth,
-              path,
-            )
-          outcome => return outcome
-        }
-      }
       let mut pending_error : @fga.FgaError? = None
       let mut saw_cycle = false
+      let mut denied = false
+      let witnesses : Array[String] = []
       for child in children {
         try {
           match
             self.resolve_rewrite(
               object, relation, child, subject, context, depth, path,
             ) {
-            OFalse => return OFalse
-            OTrue => ()
+            OFalse => {
+              if !self.list_query {
+                return OFalse
+              }
+              denied = true
+            }
+            OTrue =>
+              if self.traces is Some(_) {
+                witnesses.append(self.trace_for(object, relation, subject))
+              }
             OCycle => saw_cycle = true
           }
         } catch {
           err => if pending_error is None { pending_error = Some(err) }
         }
       }
-      if saw_cycle {
+      if self.list_query {
+        match pending_error {
+          Some(err) => raise err
+          None => ()
+        }
+      }
+      if !denied && !saw_cycle && pending_error is None {
+        self.record_trace(object, relation, subject, witnesses)
+      }
+      if denied {
+        OFalse
+      } else if saw_cycle {
         OCycle
       } else {
         match pending_error {
@@ -494,6 +559,11 @@ fn Engine::resolve_direct(
         }
       }
       if holds {
+        if self.traces is Some(_) {
+          self.record_trace(object, relation, subject, [
+            object + "#" + relation + "@" + tuple.user,
+          ])
+        }
         if !self.list_query {
           return OTrue
         }
@@ -513,6 +583,18 @@ fn Engine::resolve_direct(
           }
         }
         if holds {
+          if self.traces is Some(_) {
+            self.record_trace(object, relation, subject, [
+              object +
+              "#" +
+              relation +
+              "@" +
+              subject +
+              " (wildcard " +
+              tuple.user +
+              ")",
+            ])
+          }
           if !self.list_query {
             return OTrue
           }
@@ -552,12 +634,25 @@ fn Engine::resolve_direct(
             }
           }
           match child {
-            OTrue =>
+            OTrue => {
+              if self.traces is Some(_) {
+                self.record_trace(
+                  object,
+                  relation,
+                  subject,
+                  self
+                  .trace_for(target, userset_relation, subject)
+                  .map(fn(p) {
+                    object + "#" + relation + " -> " + tuple.user + " -> " + p
+                  }),
+                )
+              }
               if !self.list_query {
                 return OTrue
               } else {
                 allowed = true
               }
+            }
             OCycle => saw_cycle = true
             OFalse => ()
           }
@@ -639,7 +734,29 @@ fn Engine::resolve_ttu(
       }
     }
     match child {
-      OTrue => return OTrue
+      OTrue => {
+        if self.traces is Some(_) {
+          self.record_trace(
+            object,
+            tupleset,
+            subject,
+            self
+            .trace_for(tuple.user, computed, subject)
+            .map(fn(p) {
+              object +
+              "#" +
+              tupleset +
+              " -> " +
+              tuple.user +
+              "#" +
+              computed +
+              " -> " +
+              p
+            }),
+          )
+        }
+        return OTrue
+      }
       OCycle => saw_cycle = true
       OFalse => ()
     }
@@ -676,7 +793,12 @@ fn Engine::resolve_difference(
       OFalse
     }
   }
-  match base_outcome {
+  let witnesses = if self.traces is Some(_) {
+    self.trace_for(object, relation, subject)
+  } else {
+    []
+  }
+  let outcome = match base_outcome {
     OFalse =>
       if base_error is Some(_) {
         // The base failed, but a true subtract side would still make the
@@ -708,6 +830,10 @@ fn Engine::resolve_difference(
       }
     }
   }
+  if outcome is OTrue {
+    self.record_trace(object, relation, subject, witnesses)
+  }
+  outcome
 }
 
 ///|
@@ -779,6 +905,7 @@ pub fn Engine::check_with(
   let engine = Engine::{
     model: self.model,
     reader,
+    traces: self.traces,
     list_query: self.list_query,
     match_wildcard_users: self.match_wildcard_users,
   }

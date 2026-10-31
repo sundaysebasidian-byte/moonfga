@@ -1,11 +1,7 @@
 // ListObjects and ListUsers.
 //
-// Candidates are discovered from the tuple index and then evaluated with the
-// same resolution algorithm as Check, so wildcards, usersets, conditions and
-// exclusions behave consistently across the three APIs. Userset subjects are
-// checked with the same resolver: a relation includes its own userset, and
-// computed/union/difference rewrites include the usersets they structurally
-// contain.
+// ListObjects propagates reverse proofs; ListUsers expands result sets.
+// Neither API enumerates every candidate and invokes Check.
 
 ///|
 fn add_unique(
@@ -25,25 +21,6 @@ fn sorted(values : Array[String]) -> Array[String] {
   // `String::compare` orders by length first; API output is lexicographic.
   copy.sort_by(fn(a, b) { a.lexical_compare(b) })
   copy
-}
-
-///|
-fn concrete_users(
-  reader : &@fga.TupleReader,
-  type_name : String,
-) -> Array[String] {
-  let out : Array[String] = []
-  let seen : Map[String, Unit] = Map([])
-  for user in reader.all_users() {
-    match @fga.parse_user_ref(user) {
-      Some(r) =>
-        if r.type_name == type_name && r.relation == None && r.id != "*" {
-          add_unique(out, seen, user)
-        }
-      None => ()
-    }
-  }
-  out
 }
 
 ///|
@@ -91,17 +68,11 @@ pub fn Engine::list_objects(
   let engine = Engine::{
     model: self.model,
     reader,
+    traces: None,
     list_query: true,
     match_wildcard_users: self.match_wildcard_users,
   }
-  let results : Array[String] = []
-  for object in reader.all_objects(type_name) {
-    let allowed = engine.check_resolved(object, relation, user, context)
-    if allowed {
-      results.push(object)
-    }
-  }
-  sorted(results)
+  engine.reverse_objects(type_name, relation, user, context)
 }
 
 ///|
@@ -126,80 +97,26 @@ pub fn Engine::list_users(
     parsed_filters.push(parse_user_filter(self.model, filter))
   }
   let reader = self.reader_with(contextual_tuples, shadow=false)
-  let full = Engine::{
+  let engine = Engine::{
     model: self.model,
     reader,
+    traces: None,
     list_query: true,
     match_wildcard_users: true,
   }
-  let explicit = Engine::{
-    model: self.model,
-    reader,
-    list_query: true,
-    match_wildcard_users: false,
-  }
   let results : Array[String] = []
-  let seen_results : Map[String, Unit] = Map([])
+  let seen : Map[String, Unit] = Map([])
   for filter in parsed_filters {
-    match filter.relation {
-      None => {
-        let wildcard = filter.type_name + ":*"
-        let wildcard_allowed = full.check_resolved(
-          object, relation, wildcard, context,
-        )
-        if wildcard_allowed {
-          add_unique(results, seen_results, wildcard)
-        }
-        // When a wildcard satisfies the relation, only users reachable through
-        // explicit (non-wildcard) grants are enumerated; everyone else is
-        // represented by the `type:*` marker. Without a surviving wildcard the
-        // full resolver decides which concrete users are allowed.
-        let evaluator = if wildcard_allowed { explicit } else { full }
-        for candidate in concrete_users(reader, filter.type_name) {
-          if evaluator.check_resolved(object, relation, candidate, context) {
-            add_unique(results, seen_results, candidate)
-          }
-        }
-      }
-      Some(filter_relation) => {
-        let candidates : Array[String] = []
-        let seen_candidates : Map[String, Unit] = Map([])
-        for candidate_object in reader.all_objects(filter.type_name) {
-          add_unique(
-            candidates,
-            seen_candidates,
-            candidate_object + "#" + filter_relation,
-          )
-        }
-        for user in reader.all_users() {
-          match @fga.parse_user_ref(user) {
-            Some(r) =>
-              if r.type_name == filter.type_name {
-                match r.relation {
-                  Some(user_relation) =>
-                    if user_relation == filter_relation {
-                      add_unique(candidates, seen_candidates, user)
-                    }
-                  None =>
-                    if r.id != "*" {
-                      add_unique(
-                        candidates,
-                        seen_candidates,
-                        user + "#" + filter_relation,
-                      )
-                    }
-                }
-              }
-            None => ()
-          }
-        }
-        for candidate in candidates {
-          if full.check_resolved(object, relation, candidate, context) {
-            add_unique(results, seen_results, candidate)
-          }
-        }
-      }
+    let expanded = engine.expand_users(object, relation, filter, context, 0, [])
+    match expanded.error {
+      Some(err) => raise err
+      None => ()
     }
+    expanded.found.each(fn(user, allowed) {
+      if allowed {
+        add_unique(results, seen, user)
+      }
+    })
   }
   sorted(results)
 }

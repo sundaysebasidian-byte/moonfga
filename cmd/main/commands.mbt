@@ -110,18 +110,15 @@ fn command_check(args : CliArgs) -> Int32 raise @fga.FgaError {
       object, relation, user, context, contextual,
     )
     if has_flag(args, "--json") {
-      let fields : Map[String, Json] = Map([])
-      fields["allowed"] = Json::boolean(result.allowed)
-      let paths : Array[Json] = []
-      for path in result.paths {
-        paths.push(Json::string(path))
-      }
-      fields["paths"] = Json::array(paths)
-      println(Json::object(fields).stringify(indent=2))
+      println(result.to_json().stringify(indent=2))
     } else {
       println("allowed: " + result.allowed.to_string())
       for path in result.paths {
         println("  " + path)
+      }
+      match result.explain_error {
+        Some(message) => println("explanation incomplete: " + message)
+        None => ()
       }
     }
   } else {

@@ -1,0 +1,13 @@
+[
+  {
+    "object": "document:0",
+    "relation": "conditional",
+    "user": "user:0",
+    "condition": {"name": "enabled", "context": {}}
+  },
+  {
+    "object": "document:0",
+    "relation": "owner",
+    "user": "user:0"
+  }
+]

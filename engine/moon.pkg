@@ -6,4 +6,6 @@ import {
 
 import {
   "sundaysebasidian-byte/moonfga/dsl",
+  "sundaysebasidian-byte/moonfga/model",
+  "moonbitlang/core/json",
 } for "test"

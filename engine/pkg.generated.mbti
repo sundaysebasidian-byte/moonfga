@@ -41,7 +41,10 @@ pub fn Engine::new(@fga.AuthModel, &@fga.TupleReader) -> Self
 pub(all) struct ExplainResult {
   allowed : Bool
   paths : Array[String]
+  complete : Bool
+  explain_error : String?
 }
+pub fn ExplainResult::to_json(Self) -> Json
 
 // Type aliases
 

@@ -1,0 +1,14 @@
+model
+  schema 1.1
+
+type user
+
+type document
+  relations
+    define conditional: [user with enabled]
+    define owner: [user]
+    define viewer: conditional or owner
+
+condition enabled(ok: bool) {
+  ok
+}

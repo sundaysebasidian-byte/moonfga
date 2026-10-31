@@ -185,14 +185,6 @@ fn failure_json(failure : Error) -> Json {
 }
 
 ///|
-fn error_text(err : Error) -> String {
-  match err {
-    @fga.FgaError(message~, ..) => message
-    _ => "unexpected error"
-  }
-}
-
-///|
 fn respond(body : () -> Json raise Error) -> String {
   let result = body() catch { e => failure_json(e) }
   result.stringify()
@@ -264,7 +256,8 @@ pub fn json_to_dsl(request : String) -> String {
 /// Request: `{model, tuples?, object, relation, user, context?, contextual_tuples?, explain?}`.
 /// Response: `{"ok":true,"allowed":bool,"paths":[[step,...],...]}`; `paths`
 /// is only present with `explain`, one array of steps per witness path. If the
-/// explanation itself fails, `paths` is empty and `explain_error` says why.
+/// explanation is incomplete, complete=false and explain_error says why.
+/// CLI and this API use the same ExplainResult JSON model.
 pub fn check(request : String) -> String {
   respond(fn() raise Error {
     let req = parse_request(request)
@@ -279,35 +272,15 @@ pub fn check(request : String) -> String {
       _ => false
     }
     if explain {
-      // `explain_check` surfaces an error from any branch, while `check`
-      // tolerates a failing branch when another one decides the answer.
-      // Fall back to the plain decision so the two never disagree.
       let result = engine.explain_check(
         object, relation, user, context, contextual,
-      ) catch {
-        err => {
-          let allowed = engine.check_with(
-            object, relation, user, context, contextual,
-          )
-          return ok_with([
-            ("allowed", Json::boolean(allowed)),
-            ("paths", Json::array([])),
-            ("explain_error", Json::string(error_text(err))),
-          ])
-        }
+      )
+      let response = result.to_json()
+      match response {
+        Object(fields) => fields["ok"] = Json::boolean(true)
+        _ => ()
       }
-      let paths : Array[Json] = []
-      for path in result.paths {
-        let steps : Array[String] = []
-        for step in path.split(" -> ") {
-          steps.push(step.to_owned())
-        }
-        paths.push(strings_json(steps))
-      }
-      ok_with([
-        ("allowed", Json::boolean(result.allowed)),
-        ("paths", Json::array(paths)),
-      ])
+      response
     } else {
       let allowed = engine.check_with(
         object, relation, user, context, contextual,
