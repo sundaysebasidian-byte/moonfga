@@ -26,9 +26,7 @@ pub(all) struct CheckResult {
 }
 
 pub struct Engine {
-  model : @fga.AuthModel
-  reader : &@fga.TupleReader
-  match_wildcard_users : Bool
+  // private fields
 }
 pub fn Engine::batch_check(Self, Array[CheckRequest]) -> Array[CheckResult]
 pub fn Engine::check(Self, String, String, String) -> Bool raise @fga.FgaError

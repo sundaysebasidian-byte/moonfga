@@ -9,12 +9,12 @@
 /// Writes are idempotent: writing a tuple that already exists (same object,
 /// relation, user and condition) is a no-op.
 pub struct MemoryStore {
-  tuples : Array[@fga.Tuple]
-  by_object : Map[String, Array[@fga.Tuple]]
-  by_user : Map[String, Array[@fga.Tuple]]
-  keys : Map[String, Unit]
-  objects_by_type : Map[String, Array[String]]
-  object_counts : Map[String, Int32]
+  priv tuples : Array[@fga.Tuple]
+  priv by_object : Map[String, Array[@fga.Tuple]]
+  priv by_user : Map[String, Array[@fga.Tuple]]
+  priv keys : Map[String, Unit]
+  priv objects_by_type : Map[String, Array[String]]
+  priv object_counts : Map[String, Int32]
 }
 
 ///|
@@ -296,8 +296,8 @@ pub impl @fga.TupleReader for MemoryStore with fn all_users(self) {
 /// Reader that overlays contextual tuples on top of a base reader. Contextual
 /// tuples are only visible for the lifetime of a single request.
 pub struct ContextualStore {
-  base : &@fga.TupleReader
-  extra : MemoryStore
+  priv base : &@fga.TupleReader
+  priv extra : MemoryStore
 }
 
 ///|

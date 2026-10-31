@@ -11,8 +11,7 @@ import {
 
 // Types and methods
 pub struct ContextualStore {
-  base : &@fga.TupleReader
-  extra : MemoryStore
+  // private fields
 }
 pub fn ContextualStore::all_objects(Self, String) -> Array[String]
 pub fn ContextualStore::all_users(Self) -> Array[String]
@@ -23,12 +22,7 @@ pub fn ContextualStore::read_userset(Self, String, String) -> Array[@fga.Tuple]
 pub impl @fga.TupleReader for ContextualStore
 
 pub struct MemoryStore {
-  tuples : Array[@fga.Tuple]
-  by_object : Map[String, Array[@fga.Tuple]]
-  by_user : Map[String, Array[@fga.Tuple]]
-  keys : Map[String, Unit]
-  objects_by_type : Map[String, Array[String]]
-  object_counts : Map[String, Int32]
+  // private fields
 }
 pub fn MemoryStore::all_objects(Self, String) -> Array[String]
 pub fn MemoryStore::all_tuples(Self) -> Array[@fga.Tuple]

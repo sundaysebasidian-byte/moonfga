@@ -7,11 +7,11 @@
 
 ///|
 pub struct Engine {
-  model : @fga.AuthModel
-  reader : &@fga.TupleReader
+  priv model : @fga.AuthModel
+  priv reader : &@fga.TupleReader
   // ListUsers enumerates concrete users from the tuple graph; users covered
   // only by a wildcard must not be reported individually.
-  match_wildcard_users : Bool
+  priv match_wildcard_users : Bool
 }
 
 ///|
