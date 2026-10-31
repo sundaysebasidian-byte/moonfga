@@ -68,7 +68,7 @@ fn CelLexer::advance(self : CelLexer) -> Unit {
       } else {
         self.column = self.column + 1
       }
-      self.i = self.i + 1
+      self.i = self.i + (if c.to_int() > 65535 { 2 } else { 1 })
     }
     None => ()
   }

@@ -151,3 +151,57 @@ test "condition errors" {
   }
   inspect(bad_type, content="error")
 }
+
+///|
+test "logical operators absorb errors on either side" {
+  for op in ["&&", "||"] {
+    for left in ["true", "false", "(1 / 0 > 0)"] {
+      for right in ["true", "false", "(1 / 0 > 0)"] {
+        let result = eval_empty(left + " " + op + " " + right)
+        let deciding = if op == "&&" { "false" } else { "true" }
+        let expected = if left == deciding || right == deciding {
+          deciding
+        } else if left == "(1 / 0 > 0)" || right == "(1 / 0 > 0)" {
+          "error: division by zero"
+        } else if op == "&&" {
+          "true"
+        } else {
+          "false"
+        }
+        assert_eq(result, expected)
+      }
+    }
+  }
+}
+
+///|
+test "string size counts Unicode code points in both forms" {
+  for
+    pair in [
+      ("", "0"),
+      ("中", "1"),
+      ("😀", "1"),
+      ("é", "2"),
+      ("a😀中", "3"),
+    ] {
+    assert_eq(eval_empty("size('" + pair.0 + "')"), pair.1)
+    assert_eq(eval_empty("'" + pair.0 + "'.size()"), pair.1)
+  }
+}
+
+///|
+test "timestamp string is normalized RFC3339" {
+  for
+    pair in [
+      ("2026-01-01T00:00:00Z", "2026-01-01T00:00:00Z"),
+      ("2026-01-01T08:00:00+08:00", "2026-01-01T00:00:00Z"),
+      ("2026-01-01T00:00:00.120Z", "2026-01-01T00:00:00.12Z"),
+      ("1969-12-31T23:59:59.999Z", "1969-12-31T23:59:59.999Z"),
+      ("2000-02-29T23:30:00-01:00", "2000-03-01T00:30:00Z"),
+    ] {
+    assert_eq(
+      eval_empty("string(timestamp('" + pair.0 + "')) == '" + pair.1 + "'"),
+      "true",
+    )
+  }
+}

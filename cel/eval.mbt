@@ -355,7 +355,7 @@ fn eval_method(
   match receiver {
     @fga.VString(s) =>
       match name {
-        "size" => @fga.VInt(s.length().to_int64())
+        "size" => @fga.VInt(s.char_length().to_int64())
         "startsWith" => {
           if args.length() != 1 {
             raise eval_error("startsWith expects one argument")
@@ -525,7 +525,7 @@ fn eval_call(
         raise eval_error("size expects one argument")
       }
       match values[0] {
-        @fga.VString(s) => @fga.VInt(s.length().to_int64())
+        @fga.VString(s) => @fga.VInt(s.char_length().to_int64())
         @fga.VList(items) => @fga.VInt(items.length().to_int64())
         @fga.VMap(entries) => @fga.VInt(entries.length().to_int64())
         other =>
@@ -594,7 +594,10 @@ fn eval_call(
       if values.length() != 1 {
         raise eval_error("string expects one argument")
       }
-      @fga.VString(@fga.cel_value_to_display(values[0]))
+      match values[0] {
+        @fga.VTimestamp(ms) => @fga.VString(format_timestamp(ms))
+        other => @fga.VString(@fga.cel_value_to_display(other))
+      }
     }
     "bool" => {
       if values.length() != 1 {
@@ -603,6 +606,35 @@ fn eval_call(
       @fga.VBool(as_bool_value(values[0]))
     }
     _ => raise eval_error("unknown function '" + name + "'")
+  }
+}
+
+///|
+/// A deciding boolean absorbs an error on either side. A deciding left
+/// value still short-circuits, and unresolved errors remain errors.
+fn eval_logical(
+  left : CelExpr,
+  right : CelExpr,
+  env : Map[String, @fga.CelValue],
+  deciding : Bool,
+) -> @fga.CelValue raise @fga.FgaError {
+  let mut left_error : @fga.FgaError? = None
+  let value = as_bool_value(eval_expr(left, env)) catch {
+    err => {
+      left_error = Some(err)
+      !deciding
+    }
+  }
+  if value == deciding && left_error is None {
+    return @fga.VBool(deciding)
+  }
+  let other = as_bool_value(eval_expr(right, env))
+  if other == deciding {
+    return @fga.VBool(deciding)
+  }
+  match left_error {
+    Some(err) => raise err
+    None => @fga.VBool(other)
   }
 }
 
@@ -635,22 +667,8 @@ pub fn eval_expr(
         _ => raise eval_error("unsupported unary operator '" + op + "'")
       }
     }
-    CBinary("&&", left, right) => {
-      let l = as_bool_value(eval_expr(left, env))
-      if !l {
-        @fga.VBool(false)
-      } else {
-        @fga.VBool(as_bool_value(eval_expr(right, env)))
-      }
-    }
-    CBinary("||", left, right) => {
-      let l = as_bool_value(eval_expr(left, env))
-      if l {
-        @fga.VBool(true)
-      } else {
-        @fga.VBool(as_bool_value(eval_expr(right, env)))
-      }
-    }
+    CBinary("&&", left, right) => eval_logical(left, right, env, false)
+    CBinary("||", left, right) => eval_logical(left, right, env, true)
     CBinary("==", left, right) =>
       @fga.VBool(@fga.cel_value_eq(eval_expr(left, env), eval_expr(right, env)))
     CBinary("!=", left, right) =>
