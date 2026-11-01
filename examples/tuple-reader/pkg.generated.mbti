@@ -1,0 +1,25 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "sundaysebasidian-byte/moonfga/examples/tuple-reader"
+
+import {
+  "sundaysebasidian-byte/moonfga/fga",
+}
+
+// Values
+pub fn load_snapshot(Result[Array[@fga.Tuple], String]) -> Snapshot raise @fga.FgaError
+
+// Errors
+
+// Types and methods
+pub struct Snapshot {
+  // private fields
+}
+pub fn Snapshot::all_objects(Self, String) -> Array[String]
+pub fn Snapshot::all_users(Self) -> Array[String]
+pub fn Snapshot::read(Self, String, String) -> Array[@fga.Tuple]
+pub fn Snapshot::read_userset(Self, String, String) -> Array[@fga.Tuple]
+pub impl @fga.TupleReader for Snapshot
+
+// Type aliases
+
+// Traits

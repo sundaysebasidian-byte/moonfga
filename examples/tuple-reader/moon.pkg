@@ -1,0 +1,8 @@
+import {
+  "sundaysebasidian-byte/moonfga/fga",
+}
+
+import {
+  "sundaysebasidian-byte/moonfga/dsl",
+  "sundaysebasidian-byte/moonfga/engine",
+} for "wbtest"

@@ -606,7 +606,11 @@ pub fn is_valid_object(object : String) -> Bool {
 ///|
 /// Trait used by the engine to read tuples. Implementations must return
 /// tuples visible for the given object and relation (including wildcard and
-/// userset tuples).
+/// userset tuples). Returned arrays must be caller-owned; all methods must see
+/// a consistent snapshot during evaluation. Empty results mean no matching
+/// data, never a backend failure. This synchronous trait has no error channel:
+/// fallible hosts must load a snapshot successfully before creating an Engine.
+/// See examples/tuple-reader for a standalone host and executable contract.
 pub(open) trait TupleReader {
   fn read(Self, String, String) -> Array[Tuple]
   fn read_userset(Self, String, String) -> Array[Tuple]
