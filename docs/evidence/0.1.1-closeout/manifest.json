@@ -1,0 +1,87 @@
+{
+  "timestamp_utc": "2026-11-01T06:22:05Z",
+  "project": "/Users/sebasidian/.t3/projects/moonbit-nov/moonfga",
+  "delivery_head": "2738d5b1d790c16f760d34f24838c0459f4cdf43",
+  "version": "0.1.1 (local; unpublished)",
+  "git_status_before_audit": "",
+  "backup": {
+    "path": "/Users/sebasidian/.t3/projects/moonbit-nov/moonfga/.upstream/closeout-0.1.1/source.bundle",
+    "sha256": "4a2899b016b70acfcd12dca44f98176e3d57efc033302a87047200c0ba94d665",
+    "verification": ".upstream/closeout-0.1.1/source.bundle is okay\nThe bundle contains these 5 refs:\n2738d5b1d790c16f760d34f24838c0459f4cdf43 refs/heads/main\na769ecff6a04a970873123c59f767a5d4e6b2d8a refs/remotes/origin/HEAD\na769ecff6a04a970873123c59f767a5d4e6b2d8a refs/remotes/origin/main\nb37f3e6ca416fd0b0a7fdf3c971b3c1b68c573d4 refs/tags/v0.1.0\n2738d5b1d790c16f760d34f24838c0459f4cdf43 HEAD\nThe bundle records a complete history.\nThe bundle uses this hash algorithm: sha1\n",
+    "scope": "all local Git refs through delivery_head; ignored snapshots/dependencies remain protected",
+    "github_backup": "not verified; no source copies eligible for removal"
+  },
+  "active_task_processes": [],
+  "services_started_remaining": 0,
+  "browser_tabs_opened": 0,
+  "trash_read_check": "[Errno 1] Operation not permitted: '/Users/sebasidian/.Trash'",
+  "moved_items": 0,
+  "moved_bytes": 0,
+  "space_released_attributable_bytes": 0,
+  "df_initial_kib": {
+    "available": 153586332
+  },
+  "df_closeout": "Filesystem   1024-blocks      Used Available Capacity iused      ifree %iused  Mounted on\n/dev/disk3s5   482797652 302753968 153317604    67% 3962204 1533176040    0%   /System/Volumes/Data",
+  "candidates": [
+    {
+      "original_path": "/Users/sebasidian/.t3/projects/moonbit-nov/moonfga/.upstream/perf-before/_build",
+      "classification": "task-generated build cache",
+      "files": 39,
+      "logical_bytes": 1457757,
+      "sha256_tree": "d4008c26d680792248f98eed3412c98dce02565a720b458e7d43f62e3670d7fb",
+      "lsof_exit": 1,
+      "lsof_stdout": "",
+      "action": "blocked",
+      "reason": "Trash directory enumeration denied: Operation not permitted; exact recovery destination cannot be verified. No move attempted.",
+      "trash_destination": null,
+      "regeneration": "python3 scripts/performance.py LABEL (isolated source and tool versions retained)"
+    },
+    {
+      "original_path": "/Users/sebasidian/.t3/projects/moonbit-nov/moonfga/.upstream/perf-before-v2/_build",
+      "classification": "task-generated build cache",
+      "files": 39,
+      "logical_bytes": 1458173,
+      "sha256_tree": "ff60b2eb73bd3720b31a00318506dd679bb309f252794618912f4124e202f3c7",
+      "lsof_exit": 1,
+      "lsof_stdout": "",
+      "action": "blocked",
+      "reason": "Trash directory enumeration denied: Operation not permitted; exact recovery destination cannot be verified. No move attempted.",
+      "trash_destination": null,
+      "regeneration": "python3 scripts/performance.py LABEL (isolated source and tool versions retained)"
+    },
+    {
+      "original_path": "/Users/sebasidian/.t3/projects/moonbit-nov/moonfga/.upstream/perf-baseline/_build",
+      "classification": "task-generated build cache",
+      "files": 59,
+      "logical_bytes": 6573438,
+      "sha256_tree": "de32f936cd1b7a3a73c2cfa546efcd077eaadd697417765960b31cf85812f914",
+      "lsof_exit": 1,
+      "lsof_stdout": "",
+      "action": "blocked",
+      "reason": "Trash directory enumeration denied: Operation not permitted; exact recovery destination cannot be verified. No move attempted.",
+      "trash_destination": null,
+      "regeneration": "python3 scripts/performance.py LABEL (isolated source and tool versions retained)"
+    },
+    {
+      "original_path": "/Users/sebasidian/.t3/projects/moonbit-nov/moonfga/.upstream/perf-optimized/_build",
+      "classification": "task-generated build cache",
+      "files": 59,
+      "logical_bytes": 6676079,
+      "sha256_tree": "c3ac3fb008ebd0110a1350ab9e149c89187ba8f7a5ba54b28588fa4268e7e86a",
+      "lsof_exit": 1,
+      "lsof_stdout": "",
+      "action": "blocked",
+      "reason": "Trash directory enumeration denied: Operation not permitted; exact recovery destination cannot be verified. No move attempted.",
+      "trash_destination": null,
+      "regeneration": "python3 scripts/performance.py LABEL (isolated source and tool versions retained)"
+    }
+  ],
+  "retained": [
+    "current checkout and local commits",
+    "all test evidence and source materials",
+    "isolated experiment source snapshots including failed harness attempts",
+    "shared .mooncakes dependencies and root _build (other tasks ownership not asserted)",
+    "local verified Git bundle",
+    "unknown or pre-existing files"
+  ]
+}
