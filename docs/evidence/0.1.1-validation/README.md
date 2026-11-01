@@ -7,7 +7,7 @@
 | 检查 | 结果 |
 | --- | --- |
 | moon check --deny-warn --target all | 通过，四后端 |
-| moon test --target all | wasm / wasm-gc / js / native 各 182/182 |
+| moon test --target all | wasm / wasm-gc / js / native 各 183/183 |
 | moon fmt --check | 通过 |
 | moon info；git diff --exit-code -- '*.mbti' | 通过；既有接口无差异 |
 | ./scripts/conformance.sh | Check 516/516；ListObjects 354/354；ListUsers 393/394，1 个既有 no_expectation skip |

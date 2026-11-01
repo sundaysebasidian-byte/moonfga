@@ -26,12 +26,12 @@ RSS 是 macOS `/usr/bin/time -l` 的整个子进程高水位，包含建模、�
 Check 代码未修改，也不据这些测量宣称 Check 加速；小规模样本及 JS 高扇出的
 Check 分布有波动，说明单次前后实验仍受主机状态影响。
 
-复现（使用未用过的 label；macOS arm64，Moon 与 Node 版本见环境 JSON）：
+复现（macOS arm64，Moon 与 Node 版本见环境 JSON）。仓库已提交 `baseline` 与 `optimized` 两组证据，本地复跑请换用新 label，例如：
 
 ```sh
 export PATH="$HOME/.moon/bin:$PATH"
-python3 scripts/performance.py baseline --engine-ref a769ecf
-python3 scripts/performance.py optimized
+python3 scripts/performance.py rerun-baseline --engine-ref a769ecf
+python3 scripts/performance.py rerun-optimized
 python3 scripts/performance_report.py
 ```
 

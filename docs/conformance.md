@@ -1426,7 +1426,7 @@ python3 scripts/oracle_directed.py "$PWD" "$PWD/conformance-results/directed"
 
 ### 验证与边界
 
-三后端 `moon check --deny-warn`、`moon test`（各 177/177）、`moon fmt --check` 通过；
+三后端 `moon check --deny-warn`、`moon test`（当时各 177/177；0.1.1 起四后端各 183/183）、`moon fmt --check` 通过；
 `moon info` 后无 .mbti 差异。矩阵保持 Check 516/516、ListObjects 354/354、
 ListUsers 393/394（1 条缺期望跳过），language 29/29。native benchmark 2/2，
 详见 [performance.md](performance.md)。

@@ -34,8 +34,8 @@ All notable changes to MoonFGA are documented here. The format follows
 
 ## [0.1.0] - 2026-10-31
 
-First public source release. The module is not published to Mooncakes; build
-it from source with the MoonBit toolchain 0.1.20261028 or newer.
+First public release, published to Mooncakes as
+`sundaysebasidian-byte/moonfga@0.1.0`. Requires MoonBit toolchain 0.1.20261028 or newer.
 
 ### Added
 
