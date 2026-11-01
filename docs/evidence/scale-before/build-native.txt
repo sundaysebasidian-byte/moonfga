@@ -1,28 +1,28 @@
 Using cached moonbitlang/x@0.5.7
 Using cached moonbit-community/yaml@0.0.8
 Error: [4021]
-   ╭─[ /Users/sebasidian/.t3/projects/moonbit-nov/moonfga/.upstream/perf-before/lab/main.mbt:4:11 ]
+   ╭─[ ./.upstream/perf-before/lab/main.mbt:4:11 ]
    │
  4 │   let n = @strconv.parse_int(args[1]) catch { _ => abort("size") }
    │           ─────────┬────────  
    │                    ╰────────── Value parse_int not found in package `strconv`.
 ───╯
 Warning: [0023]
-   ╭─[ /Users/sebasidian/.t3/projects/moonbit-nov/moonfga/.upstream/perf-before/lab/main.mbt:4:11 ]
+   ╭─[ ./.upstream/perf-before/lab/main.mbt:4:11 ]
    │
  4 │   let n = @strconv.parse_int(args[1]) catch { _ => abort("size") }
    │           ─────────────┬─────────────  
    │                        ╰─────────────── Warning (unused_try): The body of this try expression never raises any error.
 ───╯
 Error: [4021]
-   ╭─[ /Users/sebasidian/.t3/projects/moonbit-nov/moonfga/.upstream/perf-before/lab/main.mbt:5:13 ]
+   ╭─[ ./.upstream/perf-before/lab/main.mbt:5:13 ]
    │
  5 │   let fan = @strconv.parse_int(args[2]) catch { _ => abort("fanout") }
    │             ─────────┬────────  
    │                      ╰────────── Value parse_int not found in package `strconv`.
 ───╯
 Warning: [0023]
-   ╭─[ /Users/sebasidian/.t3/projects/moonbit-nov/moonfga/.upstream/perf-before/lab/main.mbt:5:13 ]
+   ╭─[ ./.upstream/perf-before/lab/main.mbt:5:13 ]
    │
  5 │   let fan = @strconv.parse_int(args[2]) catch { _ => abort("fanout") }
    │             ─────────────┬─────────────  

@@ -2,4 +2,4 @@ Using cached moonbitlang/x@0.5.7
 Using cached moonbit-community/yaml@0.0.8
 Finished. moon: ran 34 tasks, now up to date
 Artifacts:
-  sundaysebasidian-byte/moonfga/lab  native  /Users/sebasidian/.t3/projects/moonbit-nov/moonfga/.upstream/perf-optimized/_build/native/release/build/lab/lab.exe
+  sundaysebasidian-byte/moonfga/lab  native  ./.upstream/perf-optimized/_build/native/release/build/lab/lab.exe

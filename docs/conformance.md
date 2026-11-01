@@ -1362,8 +1362,8 @@ cases.json、actual.json、expected.json、http-errors.json。提交的摘要为
 [evidence/oracle-summary.json](evidence/oracle-summary.json)、
 [evidence/oracle-seed271828-summary.json](evidence/oracle-seed271828-summary.json)，
 [evidence/oracle-mismatches.json](evidence/oracle-mismatches.json) 为空数组。
-64 组固定回归的官方期望另存 [evidence/review2-fixed-expected.json](evidence/review2-fixed-expected.json)。
-它们全部嵌入 engine/review_regression_test.mbt，在三个后端运行，不依赖 /tmp 或文件系统。
+64 组固定回归的官方期望另存 [evidence/fixed-regressions-expected.json](evidence/fixed-regressions-expected.json)。
+它们全部嵌入 engine/upstream_regression_test.mbt，在三个后端运行，不依赖 /tmp 或文件系统。
 
 ### B1–B5 与 I1 的处理
 
