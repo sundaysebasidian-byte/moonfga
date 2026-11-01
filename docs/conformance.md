@@ -1395,7 +1395,7 @@ cases.json、actual.json、expected.json、http-errors.json。提交的摘要为
   explain_error。决策成功但 witness 不完整时 complete=false，状态非致命；不再编造路径。
   `scripts/test-explain.mjs` 实测 CLI 退出 0、JS ok=true，二者的 owner witness 与决策一致。
 
-独立审查者编写的 16 组脚本也实际重放过，48 次查询比较无差异。但其中原 self-cycle 写入属于官方拒绝的
+另一套独立编写的 16 组定向脚本也实际重放过，48 次查询比较无差异。但其中原 self-cycle 写入属于官方拒绝的
 self-defining tuple，原脚本没有检查写入返回值；它不构成有效的官方循环遍历证明。
 本轮固定 oracle 改用合法二节点循环，随机生成器也不生成 self-defining tuple。
 原 self-cycle 的本地终止行为仍单独保留为测试。

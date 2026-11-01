@@ -18,7 +18,7 @@ All notable changes to MoonFGA are documented here. The format follows
 - Fix CEL logical error absorption, Unicode code point size, and RFC3339 timestamp strings with nanoseconds and numeric offsets.
 - Replace per-candidate List evaluation with reverse object proofs and user-set expansion; preserve List condition errors and API-specific depth semantics.
 - Record Explain witnesses on the actual successful Check path; share the non-fatal explanation status model between CLI and JS.
-- Expand the oracle to five scenario families and 64 frozen review fixtures; reject failed model/write setup.
+- Expand the oracle to five scenario families and 64 frozen upstream regression fixtures; reject failed model/write setup.
 
 - Add a browser playground (`playground/` JS exports, static page in `web/`, GitHub Pages workflow) with a Node smoke test.
 - Playground passes the engine's explain result through unchanged and marks an incomplete explanation; `filters` and `tuples` reject malformed values.
