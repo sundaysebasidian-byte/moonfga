@@ -1,0 +1,319 @@
++ set -euo pipefail
++ export 'PATH=/Users/sebasidian/.moon/bin:/Users/sebasidian/.moon/bin:/Users/sebasidian/.qoder-cn/entry:/Users/sebasidian/.qoder/entry:/Users/sebasidian/.local/bin:/Users/sebasidian/.local/node/bin:/Users/sebasidian/.npm-global/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/opt/homebrew/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/sebasidian/.codex/tmp/arg0-macos/codex-arg02n8FBt:/Users/sebasidian/.grok/bin:/Users/sebasidian/.local/bin:/Users/sebasidian/.npm-global/bin:/Users/sebasidian/.local/node/bin:/opt/homebrew/sbin'
++ PATH='/Users/sebasidian/.moon/bin:/Users/sebasidian/.moon/bin:/Users/sebasidian/.qoder-cn/entry:/Users/sebasidian/.qoder/entry:/Users/sebasidian/.local/bin:/Users/sebasidian/.local/node/bin:/Users/sebasidian/.npm-global/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Applications/VMware Fusion.app/Contents/Public:/opt/homebrew/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/sebasidian/.codex/tmp/arg0-macos/codex-arg02n8FBt:/Users/sebasidian/.grok/bin:/Users/sebasidian/.local/bin:/Users/sebasidian/.npm-global/bin:/Users/sebasidian/.local/node/bin:/opt/homebrew/sbin'
++ moon check --deny-warn --target all
+Finished. moon: ran 143 tasks, now up to date
++ moon test --target all
+Total tests: 182, passed: 182, failed: 0. [wasm]
+Total tests: 182, passed: 182, failed: 0. [wasm-gc]
+Total tests: 182, passed: 182, failed: 0. [js]
+Total tests: 182, passed: 182, failed: 0. [native]
++ moon fmt --check
+Finished. moon: ran 80 tasks, now up to date
++ moon info
+Finished. moon: ran 23 tasks, now up to date
++ git diff --exit-code -- '*.mbti'
++ ./scripts/conformance.sh
+conformance: .upstream/openfga/consolidated_1_1_tests.yaml
+tests: 138
+check: 364/364 passed (100.0%), 0 failed, 0 skipped
+list_objects: 272/272 passed (100.0%), 0 failed, 0 skipped
+list_users: 296/297 passed (99.6%), 0 failed, 1 skipped
+  skip/no_expectation: 1
+
+conformance: .upstream/openfga/abac_tests.yaml
+tests: 33
+check: 152/152 passed (100.0%), 0 failed, 0 skipped
+list_objects: 82/82 passed (100.0%), 0 failed, 0 skipped
+list_users: 97/97 passed (100.0%), 0 failed, 0 skipped
+
+totals: check 516/516, list_objects 354/354, list_users 393/394
+check        516/516  100.00%  (target 95%)
+list_objects 354/354  100.00%  (target 90%)
+list_users   393/394  99.75%  (target 90%)
++ scripts/build-web.sh
+Finished. moon: ran 10 tasks, now up to date
+Artifacts:
+  sundaysebasidian-byte/moonfga/playground  js  /Users/sebasidian/.t3/projects/moonbit-nov/moonfga/_build/js/release/build/playground/playground.js
+built web/dist
++ node web/smoke.mjs
+ok   github: model is valid
+ok   github: DSL -> JSON -> DSL keeps the model
+ok   github: check allowed with explain
+ok   github: check denied
+ok   github: list-objects
+ok   github: list-users
+ok   github: .fga.yaml suite passes
+ok   drive: model is valid
+ok   drive: DSL -> JSON -> DSL keeps the model
+ok   drive: check allowed with explain
+ok   drive: check denied
+ok   drive: list-objects
+ok   drive: list-users
+ok   drive: .fga.yaml suite passes
+ok   abac: model is valid
+ok   abac: DSL -> JSON -> DSL keeps the model
+ok   abac: check allowed with explain
+ok   abac: check denied
+ok   abac: list-objects
+ok   abac: list-users
+ok   abac: .fga.yaml suite passes
+ok   validation errors carry line and column
+ok   syntax errors are reported as issues with a line
+ok   queries on an invalid model return an error with issues
+ok   explain keeps the decision of a plain check and reports completeness
+ok   allowed explanations are complete and carry a path
+ok   list-users filters: absent, null and valid values are accepted
+ok   list-users rejects filters of kind number
+ok   list-users rejects filters of kind object
+ok   list-users rejects filters of kind boolean
+ok   list-users rejects filters of kind mixed array
+ok   list-users rejects filters of kind array holding null
+ok   list-users rejects filters of kind blank string
+ok   tuples accept an array or a string, not an object
+ok   errors are JSON, never exceptions
+ok   tuples accept text, JSON text and arrays
+36 checks passed
++ node scripts/test-explain.mjs
+Explain CLI / JS: same allowed decision, owner witness, complete status
++ moon run examples/library
+anne can view roadmap: true
++ moon run cmd/main -- validate examples/basic/model.fga
+model is valid
++ moon run cmd/main -- transform examples/basic/model.fga --to json
+{
+  "schema_version": "1.1",
+  "type_definitions": [
+    {
+      "type": "user",
+      "relations": {},
+      "metadata": null
+    },
+    {
+      "type": "group",
+      "relations": {
+        "member": {
+          "this": {}
+        }
+      },
+      "metadata": {
+        "relations": {
+          "member": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "document",
+      "relations": {
+        "owner": {
+          "this": {}
+        },
+        "editor": {
+          "this": {}
+        },
+        "viewer": {
+          "union": {
+            "child": [
+              {
+                "this": {}
+              },
+              {
+                "computedUserset": {
+                  "relation": "editor"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "metadata": {
+        "relations": {
+          "owner": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              }
+            ]
+          },
+          "editor": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              },
+              {
+                "type": "group",
+                "relation": "member"
+              }
+            ]
+          },
+          "viewer": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              },
+              {
+                "type": "user",
+                "wildcard": {}
+              },
+              {
+                "type": "group",
+                "relation": "member"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
++ moon run cmd/main -- transform examples/basic/model.fga --to dsl
+model
+  schema 1.1
+
+type user
+
+type group
+  relations
+    define member: [user]
+
+type document
+  relations
+    define owner: [user]
+    define editor: [user, group#member]
+    define viewer: [user, user:*, group#member] or editor
+
++ moon run cmd/main -- check --model examples/basic/model.fga --store examples/basic/tuples.fga --object document:budget --relation viewer --user user:bob --explain
+allowed: true
+  document:budget#viewer -> group:finance#member -> group:finance#member@user:bob
++ moon run cmd/main -- list-objects --model examples/basic/model.fga --store examples/basic/tuples.fga --type document --relation viewer --user user:bob
+document:budget
++ moon run cmd/main -- list-users --model examples/basic/model.fga --store examples/basic/tuples.fga --object document:budget --relation viewer --filters user
+user:anne
+user:bob
++ moon run cmd/main -- expand --model examples/basic/model.fga --store examples/basic/tuples.fga --object document:budget --relation viewer
+{
+  "type": "union",
+  "children": [
+    {
+      "type": "leaf",
+      "users": [
+        "user:anne",
+        "group:finance#member"
+      ]
+    },
+    {
+      "type": "computed",
+      "relation": "editor",
+      "child": {
+        "type": "leaf",
+        "users": []
+      }
+    }
+  ]
+}
++ moon run cmd/main -- check --model examples/abac/model.fga --store examples/abac/tuples.fga --object document:plan --relation viewer --user user:dana --context '{"office":"hq","allowed":["remote"]}'
+true
++ moon run cmd/main -- test examples/basic/store.fga.yaml
+store test: basic
+tests: 1/1 passed
+assertions: 7/7 passed
+
++ moon run cmd/main -- test examples/abac/store.fga.yaml
+store test: abac
+tests: 1/1 passed
+assertions: 3/3 passed
+
++ moon run cmd/language
+transformer: .upstream/language/data/transformer
+cases: 29/29 passed
+
++ python3 scripts/oracle_openfga.py --seed 314159 --output docs/evidence/0.1.1-validation/oracle-314159
+oracle: 100/1095
+oracle: 200/1095
+oracle: 300/1095
+oracle: 400/1095
+oracle: 500/1095
+oracle: 600/1095
+oracle: 700/1095
+oracle: 800/1095
+oracle: 900/1095
+oracle: 1000/1095
+{
+  "version": "1.22.1",
+  "commit": "44054f542f64e9b9589dd26a595081b3d2cfd942",
+  "seed": 314159,
+  "cases": 1095,
+  "random_cases": 1000,
+  "regression_cases": 95,
+  "comparisons": 3285,
+  "mismatches": 0,
+  "families": {
+    "graph": 200,
+    "logical_errors": 200,
+    "unicode": 200,
+    "timestamp": 200,
+    "deep_graph": 200
+  },
+  "by_api": {
+    "check": {
+      "compared": 1095,
+      "mismatches": 0
+    },
+    "list_objects": {
+      "compared": 1095,
+      "mismatches": 0
+    },
+    "list_users": {
+      "compared": 1095,
+      "mismatches": 0
+    }
+  }
+}
++ python3 scripts/oracle_openfga.py --seed 271828 --output docs/evidence/0.1.1-validation/oracle-271828
+oracle: 100/1095
+oracle: 200/1095
+oracle: 300/1095
+oracle: 400/1095
+oracle: 500/1095
+oracle: 600/1095
+oracle: 700/1095
+oracle: 800/1095
+oracle: 900/1095
+oracle: 1000/1095
+{
+  "version": "1.22.1",
+  "commit": "44054f542f64e9b9589dd26a595081b3d2cfd942",
+  "seed": 271828,
+  "cases": 1095,
+  "random_cases": 1000,
+  "regression_cases": 95,
+  "comparisons": 3285,
+  "mismatches": 0,
+  "families": {
+    "graph": 200,
+    "logical_errors": 200,
+    "unicode": 200,
+    "timestamp": 200,
+    "deep_graph": 200
+  },
+  "by_api": {
+    "check": {
+      "compared": 1095,
+      "mismatches": 0
+    },
+    "list_objects": {
+      "compared": 1095,
+      "mismatches": 0
+    },
+    "list_users": {
+      "compared": 1095,
+      "mismatches": 0
+    }
+  }
+}

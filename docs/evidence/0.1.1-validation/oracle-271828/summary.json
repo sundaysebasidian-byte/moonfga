@@ -1,0 +1,31 @@
+{
+  "version": "1.22.1",
+  "commit": "44054f542f64e9b9589dd26a595081b3d2cfd942",
+  "seed": 271828,
+  "cases": 1095,
+  "random_cases": 1000,
+  "regression_cases": 95,
+  "comparisons": 3285,
+  "mismatches": 0,
+  "families": {
+    "graph": 200,
+    "logical_errors": 200,
+    "unicode": 200,
+    "timestamp": 200,
+    "deep_graph": 200
+  },
+  "by_api": {
+    "check": {
+      "compared": 1095,
+      "mismatches": 0
+    },
+    "list_objects": {
+      "compared": 1095,
+      "mismatches": 0
+    },
+    "list_users": {
+      "compared": 1095,
+      "mismatches": 0
+    }
+  }
+}

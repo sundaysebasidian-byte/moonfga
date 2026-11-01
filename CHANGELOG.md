@@ -6,6 +6,13 @@ All notable changes to MoonFGA are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-01
+
+- Build ListObjects reverse proofs only for transitive query dependencies; retain fresh reads for writes, deletes and contextual tuples without a shared cache.
+- Add reproducible native/JS scale experiments (10k/100k/1m tuples, three fanouts, 20 group levels), latency distributions, process peak RSS and graph-build attribution.
+- Add an independent TupleReader snapshot host and executable contracts for exact reads, empty results and host failures; keep the engine API unchanged.
+
+
 - Fix Check depth accounting: cap full dispatches at 25 while retaining computed aliases and terminal userset/TTU joins; add 29 boundary and mixed-chain regressions.
 
 - Fix CEL logical error absorption, Unicode code point size, and RFC3339 timestamp strings with nanoseconds and numeric offsets.

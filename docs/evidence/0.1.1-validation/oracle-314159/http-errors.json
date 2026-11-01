@@ -1,0 +1,2506 @@
+[
+  {
+    "path": "/stores/01M6AW60HHVHK4D6878XHGNN49/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60HHVHK4D6878XHGNN49/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60HNCREDEYMAMTMS4GQM/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60HNCREDEYMAMTMS4GQM/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60HNCREDEYMAMTMS4GQM/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60JRM959F0181Q64E643/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60JRM959F0181Q64E643/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60JRM959F0181Q64E643/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60JX42BW93Y1YZZT1RN1/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60KGFVYK9ZHCH3VCCA2A/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60KGFVYK9ZHCH3VCCA2A/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60KQEHGT06MSEMVS4KRP/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60KQEHGT06MSEMVS4KRP/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60MNWD2BJXMMD0KHVZQ7/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60MNWD2BJXMMD0KHVZQ7/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60MNWD2BJXMMD0KHVZQ7/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60N9DRG10AXK7577048N/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60NCNSQTBE3FT5P3J8T9/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60NCNSQTBE3FT5P3J8T9/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60NCNSQTBE3FT5P3J8T9/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60NKVWEX7D1S0G39GKM7/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60NKVWEX7D1S0G39GKM7/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60NKVWEX7D1S0G39GKM7/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60PE8W03GWTX0G8EW5Q3/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60PE8W03GWTX0G8EW5Q3/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60PSHYN0SEHH87R27DY7/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60PSHYN0SEHH87R27DY7/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60PSHYN0SEHH87R27DY7/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60Q57ESPWG181DP70ZVW/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60Q57ESPWG181DP70ZVW/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60QN5DBG9TVYD88D8283/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60RFKWNZ0FBT22JDGS8E/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60RFKWNZ0FBT22JDGS8E/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60T838V4HYYC2B0AXDSQ/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60TFY61HK66EG2GX0WM0/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60TFY61HK66EG2GX0WM0/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60TQV3J3BE047962ZANS/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60TQV3J3BE047962ZANS/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60V0WWGFVVRFCH7SHDVZ/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60VGB1VKB2NWP9AAZJMD/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60VQRYSTV9XCFAD9Z9BV/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60X53VTGQANGVMJ70P3M/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60X53VTGQANGVMJ70P3M/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60Y349A6ME53JB0KGYZY/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60Y349A6ME53JB0KGYZY/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60YEQSSZ9101F7QQRJQY/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60YEQSSZ9101F7QQRJQY/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60YEQSSZ9101F7QQRJQY/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60Z2HWA6GT6GMMM0RZ8T/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60ZAABZ79GPV8YKHYCA3/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60ZAABZ79GPV8YKHYCA3/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60ZVCHKJ5QMP67MYC8QJ/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60ZVCHKJ5QMP67MYC8QJ/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW60ZVCHKJ5QMP67MYC8QJ/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6100D4F4ASQDSGG5X32P/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6100D4F4ASQDSGG5X32P/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6107MQ09JZX80681VGVP/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6107MQ09JZX80681VGVP/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW610YAN7TG56CSZG6RTDA/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW610YAN7TG56CSZG6RTDA/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW611VABGVPARRA2HDEQDQ/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW611VABGVPARRA2HDEQDQ/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW611VABGVPARRA2HDEQDQ/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6120WHY460PYXYE2P9F4/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61369EDP9FPHQRKFCMM0/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW613SYD35TAWK5J20PA6X/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW613SYD35TAWK5J20PA6X/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW613SYD35TAWK5J20PA6X/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW614BDBQN76RVBT8P55D6/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW614BDBQN76RVBT8P55D6/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW614KCEYZGBN5EQ6YX0KA/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6153Y95XECA89Y737G0E/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6153Y95XECA89Y737G0E/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6157T3DJYZR09X33KMM0/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6157T3DJYZR09X33KMM0/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6157T3DJYZR09X33KMM0/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW615KPCJQAFE9SAPNCX5D/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW615KPCJQAFE9SAPNCX5D/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW615VXGC6SDSRTD5KDNKR/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6164QYS4SPQTEK4C0MBX/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6164QYS4SPQTEK4C0MBX/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW616C3BXH8ZZ2JQB6S435/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW616MA4R74HK685TM85D6/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW617AH3H5F3QYANDHPGVG/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW617FZXND1JKWF50SK9PP/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW617FZXND1JKWF50SK9PP/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW617FZXND1JKWF50SK9PP/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61826M0920ZMVPFR3XF6/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61826M0920ZMVPFR3XF6/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW618AR5XHM0BQ3GX1P6SP/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW618JA88JV0A0Z0DKG5R6/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW618JA88JV0A0Z0DKG5R6/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61A060JWB3GGE9A6AAE2/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61A060JWB3GGE9A6AAE2/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61AH3EJTXYARXHH5NNPS/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61AH3EJTXYARXHH5NNPS/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61AN1450JNN1VPZB5E9R/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61AN1450JNN1VPZB5E9R/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61AN1450JNN1VPZB5E9R/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61ASXQ2MFZRR25VR21NM/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61ASXQ2MFZRR25VR21NM/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61AX23XXC675RTC5QA40/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61AX23XXC675RTC5QA40/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61AX23XXC675RTC5QA40/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61B88MYETR84D6TJPTCY/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61BS15BW6EFQ621RCXXE/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61C1YP4AMNR54E2V6HJR/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61C9JBQHYDVRTC6CY0JN/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61C9JBQHYDVRTC6CY0JN/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61CH3N3Q3GM55CAFXW8V/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61DGTRAZFYT3NK8XCVMN/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61DZ88629V44468NE515/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61DZ88629V44468NE515/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61E3S4DF2TM2TQYKZ60C/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61E3S4DF2TM2TQYKZ60C/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61E3S4DF2TM2TQYKZ60C/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61E7W6CG6RFSPJ0J516P/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61EAA7WCXTF8F64P4RHG/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61EAA7WCXTF8F64P4RHG/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61EAA7WCXTF8F64P4RHG/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61ER0V2JYDFK23HM1BXX/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61ER0V2JYDFK23HM1BXX/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61EVBNT76GJAZGXP0EHC/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61EVBNT76GJAZGXP0EHC/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61EVBNT76GJAZGXP0EHC/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61FF4RMQPH3C7J5D0H5K/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61FPGTFF546QK508VD2K/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61FY0G3JP827JQFAA30A/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61G56EYXT6KAVVW2QPC3/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61GBHFDQXA0JSQMY65QQ/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61GBHFDQXA0JSQMY65QQ/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61GP94X67T675AP8VQYQ/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61GP94X67T675AP8VQYQ/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61HDKE4M9VMPQX47PK4A/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61HPDVP4AAR3HDB6P2M8/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61HPDVP4AAR3HDB6P2M8/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61HPDVP4AAR3HDB6P2M8/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61KDY4YM35BCY97K77TJ/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61KDY4YM35BCY97K77TJ/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61KRXCJXA5W79RYVKC96/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61KRXCJXA5W79RYVKC96/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61MQJ062V1FCW49ZJYFG/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61MQJ062V1FCW49ZJYFG/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61MQJ062V1FCW49ZJYFG/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61N220ZZNMP6AZ5VCQAC/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61N220ZZNMP6AZ5VCQAC/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61NADBX1XMPPG4134ZY6/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61NADBX1XMPPG4134ZY6/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61P9RQQ266YWPM4DCFWX/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61P9RQQ266YWPM4DCFWX/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61PMTGT5EB5WCFN241J2/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61PMTGT5EB5WCFN241J2/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61PMTGT5EB5WCFN241J2/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61PZ7RTHE791EE0SN5P9/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61Q6GMKPNQ94B09XDP67/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61Q6GMKPNQ94B09XDP67/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61QHYMJHMXSV16BY5EC7/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61QHYMJHMXSV16BY5EC7/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61QHYMJHMXSV16BY5EC7/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61QNM1961T70D3S30ERQ/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61QNM1961T70D3S30ERQ/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61QZP3BDZJ0BP6MY4GDZ/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61R6F7X3NQN3XBNN5CQN/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61R6F7X3NQN3XBNN5CQN/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61REVD9FB0G0BDG9ZT21/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61RX3MTKDGWM8SF0YSJJ/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61SEJQE84QBN8SKFYNK9/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61SEJQE84QBN8SKFYNK9/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61SEJQE84QBN8SKFYNK9/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61SSZMNKRQHD55CQ4GKT/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61SSZMNKRQHD55CQ4GKT/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61T0P4691GN9W6WYGSPD/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61T0P4691GN9W6WYGSPD/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61T0P4691GN9W6WYGSPD/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61T46A0H7E20JQQG1XY8/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61T46A0H7E20JQQG1XY8/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61TBMG6V82X13B8MG6Q3/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61TBMG6V82X13B8MG6Q3/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61TXX8F44BQQW46AK8QD/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61TXX8F44BQQW46AK8QD/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61TXX8F44BQQW46AK8QD/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61W0SQV1SP220TXP0SHW/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61W0SQV1SP220TXP0SHW/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61W0SQV1SP220TXP0SHW/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61W47Z6GXGDYNPJGXH83/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61WKX42S0YBJPFGM4VDH/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61X9VRD08H3Q5860K6TE/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61X9VRD08H3Q5860K6TE/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61XMXP3W17GCJ098MFN9/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61XWRHRTQ9STR6ECYYP6/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61XWRHRTQ9STR6ECYYP6/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61Y7DWPC9NP785MG9JK6/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61Y7DWPC9NP785MG9JK6/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61Y7DWPC9NP785MG9JK6/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61YBX0F7RAWYD7G7KGZM/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61YBX0F7RAWYD7G7KGZM/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61YFXZEJT9TCWEH58KQQ/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61YFXZEJT9TCWEH58KQQ/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61YP7M1M82X7BKKNS1D2/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61YP7M1M82X7BKKNS1D2/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61YP7M1M82X7BKKNS1D2/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61YXKST2WW7B7DSXF4TZ/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61YXKST2WW7B7DSXF4TZ/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61YXKST2WW7B7DSXF4TZ/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61Z4X4SDZDJ799RREMRG/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61Z4X4SDZDJ799RREMRG/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61Z4X4SDZDJ799RREMRG/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61Z84B2PR6YKAHXY9ARK/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61Z84B2PR6YKAHXY9ARK/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61ZTYG51X2N4PZQ4HT6D/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61ZTYG51X2N4PZQ4HT6D/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61ZYJAGZ324FRCCQJ914/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61ZYJAGZ324FRCCQJ914/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW61ZYJAGZ324FRCCQJ914/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW620AB7S2P53YY78X9HZQ/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW620AB7S2P53YY78X9HZQ/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW620NRJG33FYDQG5NCJ3K/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW620NRJG33FYDQG5NCJ3K/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW620NRJG33FYDQG5NCJ3K/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW621E1F0R2AMRZZERVQJP/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW621WCZHS8Z5ZYTM4AE9K/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#viewer@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW621WCZHS8Z5ZYTM4AE9K/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - tuple 'document:0#viewer@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW621WCZHS8Z5ZYTM4AE9K/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#viewer@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6228NHSPVX3ZF5PTXDXE/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6228NHSPVX3ZF5PTXDXE/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6229MTKSR8ZR15VS3GZD/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6229MTKSR8ZR15VS3GZD/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW622BJRZHMP7A8QV38T05/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW622BJRZHMP7A8QV38T05/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW622BJRZHMP7A8QV38T05/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW622EW4F6ZAR4BTPPK2GC/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW622GDBMHE9CV6WS85B6W/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW622GDBMHE9CV6WS85B6W/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW622Q7D5E905JC1N98GFQ/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW622Q7D5E905JC1N98GFQ/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW622Q7D5E905JC1N98GFQ/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW622X6ZVMJTWJEWWPRGX5/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW622X6ZVMJTWJEWWPRGX5/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW622X6ZVMJTWJEWWPRGX5/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6230F5GVGQ3SK9HMJAX0/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6230F5GVGQ3SK9HMJAX0/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6230F5GVGQ3SK9HMJAX0/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW62388SJJF6EK6MM42QRC/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW62388SJJF6EK6MM42QRC/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW62388SJJF6EK6MM42QRC/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW623BVFXY9J7NA137NV8G/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW623BVFXY9J7NA137NV8G/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW623BVFXY9J7NA137NV8G/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW623CHF5BNECWYYVC9XSX/check",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW623CHF5BNECWYYVC9XSX/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW623CHF5BNECWYYVC9XSX/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - failed to evaluate condition expression: division by zero"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6246S2KDEENXGQEYKV8W/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6246S2KDEENXGQEYKV8W/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW62484Z237WA2P3QTHDCJ/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW62484Z237WA2P3QTHDCJ/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6249FP6YA5F7AJJQDH58/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6249FP6YA5F7AJJQDH58/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624BY6BV5N4JGVEB8MP9/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624BY6BV5N4JGVEB8MP9/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624C7Z84Z57YNB2AGHX5/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624C7Z84Z57YNB2AGHX5/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624E2WZWTEG37B4P2S59/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624E2WZWTEG37B4P2S59/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624FTRCQHDYKWMAY5ERF/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624FTRCQHDYKWMAY5ERF/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624H88B6E217Y54WTX6P/list-objects",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "iterator: failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624H88B6E217Y54WTX6P/list-users",
+    "status": 400,
+    "body": {
+      "code": "validation_error",
+      "message": "failed to evaluate relationship condition: 'enabled' - tuple 'document:0#conditional@user:0' is missing context parameters '[ok]'"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624J8KNXW730W6DZ2061/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624M6Q4GF2K22DB02ECJ/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624P5MR2546X4KGK73G3/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624S87N48Z9D9PBR1ZRA/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624V01NVZE527M2A3NFR/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW624X0YX37ARJJWRY508K/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6250BZ05B5ZJ6S1NS4ZM/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6253H43HPTZP7QWPBXSW/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6253H43HPTZP7QWPBXSW/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6256FRD5EGK640T2QFYQ/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6256FRD5EGK640T2QFYQ/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6259KF2ZESED87G1BMF3/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6259KF2ZESED87G1BMF3/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW625BAWMRPSEXYYQXPX7N/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW625BAWMRPSEXYYQXPX7N/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW625E4FVVRJWC7DN6JQTE/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW625GY7N5DGM1P56H44T3/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW625JZ1FE4X0JEXVSD1DF/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW625JZ1FE4X0JEXVSD1DF/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW625MV7DJMSQHG56JXNA4/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW625MV7DJMSQHG56JXNA4/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW625SSQTP1F83V1XTKWAV/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW625W1ZA68Y9VH11RAQAV/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW625ZDSYHWHN57EG29KHV/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW625ZDSYHWHN57EG29KHV/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6262HZCJ5W4G43EYZXRE/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6262HZCJ5W4G43EYZXRE/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6265BE9GVDQSFDGB08DS/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6265BE9GVDQSFDGB08DS/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW62686YPG4WMSSGBXESKX/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW62686YPG4WMSSGBXESKX/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW626D9F95VWG6ZDDZA5GQ/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW626F2JZNPGVP8KDF4K8S/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW626F2JZNPGVP8KDF4K8S/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW626JXTXVRRX9TTBYGC01/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW626NKYW5DS1EDSMTNPJY/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW626NKYW5DS1EDSMTNPJY/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW626QBMJAKVKHKXMMMMKQ/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW626QBMJAKVKHKXMMMMKQ/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW626XS43MDWTDT8WX1PH2/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW626ZY17H9WPMBYVGVGJ4/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW626ZY17H9WPMBYVGVGJ4/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6275A6ZAQ8AFH2NPPKVW/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6278SRNR8MX5Y1G4ZEHD/check",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW6278SRNR8MX5Y1G4ZEHD/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  },
+  {
+    "path": "/stores/01M6AW627BKM345NGRYSY3XPM0/list-users",
+    "status": 400,
+    "body": {
+      "code": "authorization_model_resolution_too_complex",
+      "message": "Authorization Model resolution required too many rewrite rules to be resolved. Check your authorization model for infinite recursion or too much nesting"
+    }
+  }
+]

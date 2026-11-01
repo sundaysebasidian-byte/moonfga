@@ -1,0 +1,2 @@
+cannot read conformance file: /Users/sebasidian/.t3/projects/moonbit-nov/moonfga/_build/js/debug/build/cmd/conformance/conformance.js
+totals: check 0/0, list_objects 0/0, list_users 0/0

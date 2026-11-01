@@ -119,20 +119,51 @@ fn Engine::reverse_objects(
 ) -> Array[String] raise @fga.FgaError {
   let edges : Array[ReverseEdge] = []
   let roots : Map[String, String] = Map([])
-  for td in self.model.types {
-    for object in self.reader.all_objects(td.name) {
-      if td.name == type_name {
-        roots[path_key(object, relation)] = object
+  // Discover only relation nodes that can contribute to the requested roots.
+  // Keep the reader's object inventory authoritative, including sparse objects.
+  let inventoried : Map[String, Unit] = Map([])
+  let present : Map[String, Bool] = Map([])
+  let scheduled : Map[String, Unit] = Map([])
+  let work : Array[(String, String)] = []
+  let objects = self.reader.all_objects(type_name)
+  inventoried[type_name] = ()
+  for object in objects {
+    let key = path_key(object, relation)
+    roots[key] = object
+    scheduled[key] = ()
+    present[object] = true
+    work.push((object, relation))
+  }
+  let mut cursor = 0
+  while cursor < work.length() {
+    let (object, r) = work[cursor]
+    cursor += 1
+    let td = match self.model.find_type(@fga.object_type(object)) {
+      Some(td) => td
+      None => continue
+    }
+    if !inventoried.contains(td.name) {
+      for candidate in self.reader.all_objects(td.name) {
+        present[candidate] = true
       }
-      for r in td.relation_order {
-        self.reverse_rules(
-          object,
-          r,
-          td.relation_rewrite(r).unwrap(),
-          user,
-          false,
-          edges,
-        )
+      inventoried[td.name] = ()
+    }
+    let exists = present.get(object).unwrap_or(false)
+    if !exists {
+      continue
+    }
+    let rewrite = match td.relation_rewrite(r) {
+      Some(rewrite) => rewrite
+      None => continue
+    }
+    let begin = edges.length()
+    self.reverse_rules(object, r, rewrite, user, false, edges)
+    for i in begin..<edges.length() {
+      let source = edges[i].source
+      if source != "$subject" && !scheduled.contains(source) {
+        scheduled[source] = ()
+        let parts = source.split("#").map(fn(s) { s.to_owned() }).to_array()
+        work.push((parts[0], parts[1]))
       }
     }
   }

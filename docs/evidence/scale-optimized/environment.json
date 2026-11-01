@@ -1,0 +1,11 @@
+{
+  "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "seed": 20261101,
+  "samples": 30,
+  "warmups": 3,
+  "head": "85a76da46c64f0a2ac8d26e8676954be07d91d64",
+  "moon": "moon 0.1.20261028 (e1e1f15 2026-10-28) ~/.moon/bin/moon\nmoonc v0.10.18+6c83a7f62 (2026-10-28) ~/.moon/bin/moonc\nmoonrun 0.1.20261028 (e1e1f15 2026-10-28) ~/.moon/bin/moonrun\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg\n",
+  "node": "v24.18.0\n",
+  "source_sha256": "2e4159012a35e378434159d0cea8d42722a9ccf453b184f9d26af0d10ea15334",
+  "fixture_sha256": "d4375b5bb6f72dc493909bef222bec397e58cf8c54d2aefdbdc2d1dd2d95c2bc"
+}

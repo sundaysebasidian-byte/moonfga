@@ -35,6 +35,8 @@ out = ROOT/'docs/evidence'/('scale-'+label)
 out.mkdir(parents=True, exist_ok=resume)
 meta = {'platform':platform.platform(),'seed':20261101,'samples':30,'warmups':3,'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'moon':subprocess.check_output(['moon','version','--all'],text=True),'node':subprocess.check_output(['node','--version'],text=True),'source_sha256':engine_hash if not resume else None, 'fixture_sha256':hashlib.sha256((ROOT/'scripts/perf/main.mbt').read_bytes()).hexdigest()}
 if not resume: (out/'environment.json').write_text(json.dumps(meta,indent=2))
+shutil.copy2(lab/'lab/main.mbt', out/'fixture.mbt')
+shutil.copy2(lab/'engine/list_reverse.mbt', out/'instrumented-engine.mbt')
 rows=json.loads((out/'summary.json').read_text()) if resume else []
 for target in ['native','js']:
     subprocess.run(['moon','build','--target',target,'--release','lab'],cwd=lab,check=True,stdout=(out/f'build-{target}.txt').open('w'),stderr=subprocess.STDOUT)
