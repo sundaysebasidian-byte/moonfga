@@ -38,7 +38,7 @@ Playground 就是同一个引擎编译成 JS 在浏览器里跑。
 | mooncakes | `sundaysebasidian-byte/moonfga@0.1.0` | 包内容固定，不随 main 变化 |
 | Pages | 最近一次推送到 main 的构建 | [`pages.yml`](.github/workflows/pages.yml) 每次 push 到 main 都会重新构建，可能领先于 0.1.0 |
 
-定位发布提交：`git rev-list -n 1 v0.1.0`。tag 尚未推送时，直接用上表中的提交。下面三条命令分别复现三个面：
+定位发布提交：`git rev-list -n 1 v0.1.0`。下面三条命令分别复现三个面：
 
 ```bash
 # 源码测试
