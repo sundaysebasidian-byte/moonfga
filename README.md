@@ -18,6 +18,42 @@ Playground 就是同一个引擎编译成 JS 在浏览器里跑。
 文档：[一致性测试结果](docs/conformance.md) · [设计说明](docs/design.md) ·
 [性能](docs/performance.md) · [提案](docs/proposal.md) · [更新日志](CHANGELOG.md)
 
+## 评审入口
+
+汇总数字都能跳到原始证据。注意：ListUsers 是 393/394，有 **1 条断言被跳过**，没有失败，也不计入通过。
+
+| 要看什么 | 汇总 | 原始证据与复现 |
+| --- | --- | --- |
+| 固定版本的上游矩阵 | OpenFGA v1.22.1（commit `44054f54`）：Check 516/516，ListObjects 354/354，ListUsers 393/394（1 skip）；语言夹具 29/29 | [`docs/conformance.md`](docs/conformance.md) 的 Summary 与逐断言表；固定 commit 写在 [`scripts/fetch-upstream.sh`](scripts/fetch-upstream.sh)；`scripts/fetch-upstream.sh && ./scripts/conformance.sh` |
+| 唯一的 skip | `simple_computeduserset_indirect_ref`（list_users，`consolidated_1_1_tests.yaml`）：期望值嵌在 request 里，没有顶层 `expectation` 或 `errorCode`，记为 `skip/no_expectation` | [`docs/conformance.md` 的 Failure categories](docs/conformance.md#failure-categories)；逐断言表编号 57 |
+| 随机差分 | seed 314159、271828 各 1095 组（1000 随机＋95 定向），共 6570 次比较，0 不一致；定向脚本 204 组 / 612 次比较，0 不一致 | [`docs/evidence/oracle-summary.json`](docs/evidence/oracle-summary.json)、[`oracle-seed271828-summary.json`](docs/evidence/oracle-seed271828-summary.json)、[`directed-summary.json`](docs/evidence/directed-summary.json)；命令见 [同版本差分](docs/conformance.md#同版本差分与定向回归) |
+| 性能条件 | 10 万条元组、10 层 group，native release；macOS arm64，单机，未做跨平台测量 | [`docs/performance.md`](docs/performance.md)，原始输出在 [`docs/evidence/`](docs/evidence) 的 `bench-*.txt`；`moon bench --target native -p benchmarks` |
+| 安装包调用 | `moonfga@0.1.0` 在全新模块中构造模型和元组后 Check，输出 `anne can view roadmap: true` | 见下表“版本对应” |
+
+## 版本对应
+
+| 面 | 对应 | 说明 |
+| --- | --- | --- |
+| 源码 | tag `v0.1.0`（提交 `b37f3e6`） | mooncakes 0.1.0 的打包内容与该提交一致 |
+| mooncakes | `sundaysebasidian-byte/moonfga@0.1.0` | 包内容固定，不随 main 变化 |
+| Pages | 最近一次推送到 main 的构建 | [`pages.yml`](.github/workflows/pages.yml) 每次 push 到 main 都会重新构建，可能领先于 0.1.0 |
+
+定位发布提交：`git rev-list -n 1 v0.1.0`。tag 尚未推送时，直接用上表中的提交。下面三条命令分别复现三个面：
+
+```bash
+# 源码测试
+git checkout v0.1.0
+moon test --target all
+
+# 安装包调用：在仓库外新建模块，复制 examples/library 的 main.mbt 和 moon.pkg 到 cmd/main
+moon new consumer && cd consumer
+moon add sundaysebasidian-byte/moonfga@0.1.0
+moon run cmd/main
+
+# 线上引擎：打开 Pages；对应的构建见 Actions 中 Pages 工作流的运行记录
+gh run list --workflow pages.yml --limit 1
+```
+
 ## 为什么做这个
 
 - 在 MoonBit 上提供一个能直接嵌入的 Zanzibar / OpenFGA 风格授权引擎。
