@@ -28,3 +28,7 @@ FGA modules（`module` / `extends`）、ReadChanges、持久化/分布式存储�
 
 ## 与 moonpolicykit 的区别
 独立实现，不含 `jhshuai/moonpolicykit` 的代码；MoonFGA 以 OpenFGA 官方测试定义兼容性。
+
+## 基础、本期工作与参考来源
+2026-10-31 新建仓库从零开发，此前没有代码基础；仓库全部提交均为本期工作。技术路线：DSL 递归下降解析 → 模型校验 → 索引元组存储 → 带深度与循环检测的重写求值，CEL 子集自研（现有 `moon_cel` 缺 timestamp/duration/ipaddress）。
+原创实现，本项目 Apache-2.0。参考 OpenFGA（https://github.com/openfga/openfga ，Apache-2.0）的语义与测试矩阵、openfga/language（https://github.com/openfga/language ，Apache-2.0）的语法与转换夹具，均按固定 commit 运行时下载、不入库；依赖 moonbit-community/yaml（MIT）。详见 NOTICE。
