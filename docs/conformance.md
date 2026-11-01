@@ -1432,5 +1432,5 @@ ListUsers 393/394（1 条缺期望跳过），language 29/29。native benchmark 
 详见 [performance.md](performance.md)。
 
 Web 端已同步：Playground 直接透传 `ExplainResult` JSON（`complete`、`explain_error`），
-`node web/smoke.mjs` 36/36 通过；GitHub CI 与 Pages 尚未在远端验证。
+`node web/smoke.mjs` 36/36 通过；GitHub [CI](https://github.com/sundaysebasidian-byte/moonfga/actions/runs/41246946728) 与 [Pages](https://github.com/sundaysebasidian-byte/moonfga/actions/runs/41246946750) 已在远端通过（2026-11-01 核验）；线上静态资源与本地构建 SHA-256 一致，下载后的 bundle 36/36 冒烟检查通过。
 固定两 seed 的零差异不等于全部 OpenFGA 输入均兼容；CEL 完整标准库等既有不支持项仍有效。

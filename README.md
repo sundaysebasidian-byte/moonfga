@@ -88,7 +88,13 @@ python3 -m http.server -d web/dist  # 然后访问 http://localhost:8000
 
 ## 安装与构建
 
-模块还没发布到 Mooncakes，需要从源码构建：
+在已有 MoonBit 模块中安装：
+
+```bash
+moon add sundaysebasidian-byte/moonfga@0.1.0
+```
+
+从源码构建：
 
 ```bash
 git clone https://github.com/sundaysebasidian-byte/moonfga
