@@ -1,7 +1,7 @@
 # MoonFGA 提案
 
 - 在线体验：https://sundaysebasidian-byte.github.io/moonfga/
-- GitHub：https://github.com/sundaysebasidian-byte/moonfga　Gitlink：TODO(用户填写)
+- GitHub：https://github.com/sundaysebasidian-byte/moonfga
 
 ## 解决什么问题，给谁用
 应用要回答"这个用户能不能操作这个资源"，而组织、团队、文件夹层层嵌套时，权限规则很快散落在业务代码里。
