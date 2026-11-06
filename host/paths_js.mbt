@@ -12,7 +12,8 @@ extern "js" fn contained(
   #|   try {
   #|     const root = resolve(base || '.');
   #|     const file = resolve(path);
-  #|     return file.startsWith(root.endsWith('/') ? root : root + '/');
+  #|     const separator = process.platform === 'win32' ? '\\' : '/';
+  #|     return file.startsWith(root.endsWith(separator) ? root : root + separator);
   #|   } catch { return false; }
   #| }
 
