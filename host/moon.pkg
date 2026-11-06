@@ -1,0 +1,13 @@
+import {
+  "moonbitlang/core/encoding/utf8",
+  "sundaysebasidian-byte/moonfga/fga",
+}
+
+options(
+  "native-stub": [ "paths.c" ],
+  targets: {
+    "paths_native.mbt": [ "native" ],
+    "paths_js.mbt": [ "js" ],
+    "paths_wasm.mbt": [ "wasm-gc", "wasm" ],
+  },
+)

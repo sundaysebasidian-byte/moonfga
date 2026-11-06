@@ -17,7 +17,18 @@ fn write_text(path : String, text : String) -> Unit raise @fga.FgaError {
 
 ///|
 fn load_model_file(path : String) -> @fga.AuthModel raise @fga.FgaError {
-  @model.model_from_source(read_text(path))
+  if path.has_suffix(".mod") {
+    let source = read_text(path)
+    let files : Array[@dsl.ModuleFile] = []
+    for name in @model.parse_mod(source) {
+      let target = dirname(path) + name
+      @host.require_contained(dirname(path), target)
+      files.push(@dsl.ModuleFile::{ name, contents: read_text(target), })
+    }
+    @model.modules_to_model(source, files)
+  } else {
+    @model.model_from_source(read_text(path))
+  }
 }
 
 ///|

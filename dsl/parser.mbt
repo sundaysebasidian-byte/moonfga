@@ -426,8 +426,7 @@ fn parse_condition(
 ///|
 /// Parses a schema 1.1 DSL document into an authorization model.
 ///
-/// Module headers are accepted and flattened; multi-file fga.mod composition
-/// is intentionally not supported (see docs/conformance.md).
+/// Use merge_modules for multi-file module composition.
 pub fn parse_model(source : String) -> @fga.AuthModel raise @fga.FgaError {
   let tokens = lex(source)
   let p = Parser::{ tokens, pos: 0, }
@@ -441,10 +440,12 @@ pub fn parse_model(source : String) -> @fga.AuthModel raise @fga.FgaError {
     let version = p.peek()
     match version.kind {
       Version => {
-        if version.text != "1.1" {
+        if version.text != "1.1" && version.text != "1.2" {
           raise @fga.fail_at(
             @fga.ERR_VALIDATION,
-            "invalid schema " + version.text + " (only 1.1 is supported)",
+            "invalid schema " +
+            version.text +
+            " (only 1.1 and 1.2 are supported)",
             version.line,
             version.column,
           )

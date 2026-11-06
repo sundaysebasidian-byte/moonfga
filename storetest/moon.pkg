@@ -1,4 +1,5 @@
 import {
+  "sundaysebasidian-byte/moonfga/dsl",
   "moonbit-community/yaml",
   "sundaysebasidian-byte/moonfga/fga",
   "sundaysebasidian-byte/moonfga/model",

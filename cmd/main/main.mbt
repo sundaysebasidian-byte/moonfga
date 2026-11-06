@@ -30,7 +30,7 @@ fn dispatch(args : CliArgs) -> Int32 raise @fga.FgaError {
 ///|
 fn main {
   let code = try {
-    let args = parse_cli_args(@env.args())
+    let args = parse_cli_args(cli_arguments())
     if has_flag(args, "--help") {
       println(usage())
       0
@@ -45,7 +45,7 @@ fn main {
         println(usage())
         2
       } else {
-        println("error " + @fga.error_code(err).to_string() + ": " + message)
+        println(@fga.format_error(err))
         1
       }
     }

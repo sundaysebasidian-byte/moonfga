@@ -365,6 +365,7 @@ pub(all) struct AuthModel {
   conditions : Map[String, Condition]
   condition_order : Array[String]
   spans : Map[String, Span]
+  metadata : Map[String, Json]
 }
 
 ///|
@@ -375,6 +376,7 @@ pub fn AuthModel::new(schema_version : String) -> AuthModel {
     conditions: Map([]),
     condition_order: [],
     spans: Map([]),
+    metadata: Map([]),
   }
 }
 

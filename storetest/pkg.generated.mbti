@@ -8,7 +8,7 @@ import {
 // Values
 pub fn format_store_test_report(StoreTestReport) -> String
 
-pub fn load_store_test(String, String, read_file? : (String) -> String raise @fga.FgaError) -> StoreTestSuite raise @fga.FgaError
+pub fn load_store_test(String, String, read_file? : (String) -> String raise @fga.FgaError, check_module_path? : (String, String) -> Unit raise @fga.FgaError) -> StoreTestSuite raise @fga.FgaError
 
 pub fn run_store_test(StoreTestSuite) -> StoreTestReport
 

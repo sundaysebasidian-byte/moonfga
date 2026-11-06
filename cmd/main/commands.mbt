@@ -6,7 +6,7 @@ fn usage() -> String {
     #|MoonFGA - OpenFGA-compatible authorization engine
     #|
     #|Usage:
-    #|  moonfga validate <model.fga|model.json> [--json]
+    #|  moonfga validate <model.fga|model.json|fga.mod> [--json]
     #|  moonfga transform <model> --to json|dsl [--out <file>]
     #|  moonfga check --model <file> --object <obj> --relation <rel> --user <user>
     #|                [--store <tuples>] [--context <json>] [--contextual <file>]
@@ -204,6 +204,7 @@ fn command_test(args : CliArgs) -> Int32 raise @fga.FgaError {
     read_text(path),
     dirname(path),
     read_file=read_text,
+    check_module_path=@host.require_contained,
   )
   let report = @storetest.run_store_test(suite)
   println(@storetest.format_store_test_report(report))

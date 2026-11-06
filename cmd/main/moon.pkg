@@ -1,6 +1,7 @@
 pkgtype(kind: "executable")
 
 import {
+  "sundaysebasidian-byte/moonfga/host",
   "moonbitlang/core/env",
   "moonbitlang/core/json",
   "moonbitlang/x/fs",
@@ -14,3 +15,10 @@ import {
   "sundaysebasidian-byte/moonfga/validate",
   "sundaysebasidian-byte/moonfga/storetest",
 }
+
+options(
+  targets: {
+    "env_js.mbt": [ "js" ],
+    "env_other.mbt": [ "native", "wasm", "wasm-gc" ],
+  },
+)

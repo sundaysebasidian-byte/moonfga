@@ -2,6 +2,7 @@
 package "sundaysebasidian-byte/moonfga/model"
 
 import {
+  "sundaysebasidian-byte/moonfga/dsl",
   "sundaysebasidian-byte/moonfga/fga",
 }
 
@@ -25,6 +26,10 @@ pub fn model_from_source(String) -> @fga.AuthModel raise @fga.FgaError
 pub fn model_to_json(@fga.AuthModel) -> Json raise @fga.FgaError
 
 pub fn model_to_json_string(@fga.AuthModel) -> String raise @fga.FgaError
+
+pub fn modules_to_model(String, Array[@dsl.ModuleFile]) -> @fga.AuthModel raise @fga.FgaError
+
+pub fn parse_mod(String) -> Array[String] raise @fga.FgaError
 
 pub fn userset_eq(@fga.Userset, @fga.Userset) -> Bool
 

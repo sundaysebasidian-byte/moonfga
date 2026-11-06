@@ -303,6 +303,7 @@ pub fn load_store_test(
   source : String,
   base_dir : String,
   read_file? : (String) -> String raise @fga.FgaError,
+  check_module_path? : (String, String) -> Unit raise @fga.FgaError,
 ) -> StoreTestSuite raise @fga.FgaError {
   let documents = @yaml.Yaml::load_from_string(source) catch {
     _ => raise store_test_error("invalid YAML in store test")
@@ -328,7 +329,27 @@ pub fn load_store_test(
           raise store_test_error("store test requires model or model_file")
       }
   }
-  let model = @model.model_from_source(model_source)
+  let model = match
+    (optional_string_field(root, "model_file"), read_file, root.get("model")) {
+    (Some(file), Some(read), None) if file.has_suffix(".mod") => {
+      let parts = file.split("/").to_array()
+      parts.pop() |> ignore
+      let dir = if parts.length() == 0 {
+        base_dir
+      } else {
+        join_path(base_dir, parts.join("/"))
+      }
+      let files = @model.parse_mod(model_source).map(name => {
+        let target = join_path(dir, name)
+        if check_module_path is Some(check) {
+          check(dir, target)
+        }
+        @dsl.ModuleFile::{ name, contents: read(target), }
+      })
+      @model.modules_to_model(model_source, files)
+    }
+    _ => @model.model_from_source(model_source)
+  }
   let tests_json = array_field(root, "tests")
   let tests : Array[StoreTest] = []
   for item in tests_json {

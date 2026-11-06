@@ -323,6 +323,27 @@ pub fn model_from_json(value : Json) -> @fga.AuthModel raise @fga.FgaError {
             }
           }
         }
+        match type_obj.get("metadata") {
+          Some(Object(meta)) => {
+            let base = meta.copy()
+            base.remove("relations") |> ignore
+            if base.length() > 0 {
+              model.metadata["type:" + type_name] = Json::object(base)
+            }
+            relation_metadata.each(fn(rel, value) {
+              if value is Object(rmeta) {
+                let extra = rmeta.copy()
+                extra.remove("directly_related_user_types") |> ignore
+                if extra.length() > 0 {
+                  model.metadata["rel:" + type_name + ":" + rel] = Json::object(
+                    extra,
+                  )
+                }
+              }
+            })
+          }
+          _ => ()
+        }
         model.add_type(td)
       }
   }
@@ -333,8 +354,14 @@ pub fn model_from_json(value : Json) -> @fga.AuthModel raise @fga.FgaError {
       let conditions = as_object(v, "conditions")
       for name in conditions.keys() {
         match conditions.get(name) {
-          Some(cond_value) =>
+          Some(cond_value) => {
             model.add_condition(parse_condition(name, cond_value))
+            if cond_value is Object(cobj) {
+              if cobj.get("metadata") is Some(meta) {
+                model.metadata["condition:" + name] = meta
+              }
+            }
+          }
           None => ()
         }
       }
@@ -518,7 +545,30 @@ fn condition_to_json(c : @fga.Condition) -> Json raise @fga.FgaError {
 pub fn model_to_json(model : @fga.AuthModel) -> Json raise @fga.FgaError {
   let type_definitions : Array[Json] = []
   for td in model.types {
-    type_definitions.push(type_to_json(td))
+    let value = type_to_json(td)
+    if value is Object(obj) {
+      let meta = match obj.get("metadata") {
+        Some(Object(m)) => m
+        _ => Map([])
+      }
+      if model.metadata.get("type:" + td.name) is Some(Object(extra)) {
+        extra.each(fn(k, v) { meta[k] = v })
+      }
+      if meta.get("relations") is Some(Object(rels)) {
+        for rel in td.relation_order {
+          if rels.get(rel) is Some(Object(rmeta)) {
+            if model.metadata.get("rel:" + td.name + ":" + rel)
+              is Some(Object(extra)) {
+              extra.each(fn(k, v) { rmeta[k] = v })
+            }
+          }
+        }
+      }
+      if meta.length() > 0 {
+        obj["metadata"] = Json::object(meta)
+      }
+    }
+    type_definitions.push(value)
   }
   let fields : Array[(String, Json)] = [
     ("schema_version", Json::string(model.schema_version)),
@@ -530,7 +580,15 @@ pub fn model_to_json(model : @fga.AuthModel) -> Json raise @fga.FgaError {
     let conditions = Map([])
     for name in model.condition_order {
       match model.conditions.get(name) {
-        Some(c) => conditions[name] = condition_to_json(c)
+        Some(c) => {
+          let value = condition_to_json(c)
+          if value is Object(obj) {
+            if model.metadata.get("condition:" + name) is Some(meta) {
+              obj["metadata"] = meta
+            }
+          }
+          conditions[name] = value
+        }
         None => ()
       }
     }

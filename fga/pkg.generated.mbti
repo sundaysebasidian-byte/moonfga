@@ -98,6 +98,7 @@ pub(all) struct AuthModel {
   conditions : Map[String, Condition]
   condition_order : Array[String]
   spans : Map[String, Span]
+  metadata : Map[String, Json]
 }
 pub fn AuthModel::add_condition(Self, Condition) -> Unit
 pub fn AuthModel::add_type(Self, TypeDefinition) -> Unit

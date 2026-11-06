@@ -57,9 +57,24 @@ fn issue_at(
     Some(span) => (span.line, span.column)
     None => (-1, -1)
   }
+  let source = match model.metadata.get(key) {
+    Some(meta) => Some(meta)
+    None => {
+      let parts = key.split(":").to_array()
+      if parts.length() > 1 {
+        model.metadata.get("type:" + parts[1].to_owned())
+      } else {
+        None
+      }
+    }
+  }
   issues.push(ValidationIssue::{
     code: @fga.ERR_VALIDATION,
-    message,
+    message: match source {
+      Some(Object(meta)) =>
+        "[" + Json::object(meta).stringify() + "] " + message
+      _ => message
+    },
     line,
     column,
     symbol,
@@ -713,12 +728,12 @@ fn validate_condition(
 /// model is valid.
 pub fn validate_model(model : @fga.AuthModel) -> Array[ValidationIssue] {
   let issues : Array[ValidationIssue] = []
-  if model.schema_version != "1.1" {
+  if model.schema_version != "1.1" && model.schema_version != "1.2" {
     issues.push(ValidationIssue::{
       code: @fga.ERR_VALIDATION,
       message: "invalid schema " +
       model.schema_version +
-      " (only 1.1 is supported)",
+      " (only 1.1 and 1.2 are supported)",
       line: -1,
       column: -1,
       symbol: model.schema_version,
