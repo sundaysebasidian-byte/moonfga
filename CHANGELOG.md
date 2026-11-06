@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2
+
+- Add offline fixed-seed release benchmarks for Check, ListObjects and ListUsers across tuple scales, relation shapes and native/JS/wasm-gc backends, with raw samples, latency quantiles, throughput, memory and reverse-graph attribution.
+- Document measured query limits and the contract required before adding cross-request caching; no cache or query optimization added.
+
 ## 0.2.1
 
 - Add `modules_with_diagnostics` and `collect_module_diagnostics` to collect parse, composition and semantic errors; retain the fail-first `modules_to_model` API. CLI module validation prints every diagnostic (also with `--json`).

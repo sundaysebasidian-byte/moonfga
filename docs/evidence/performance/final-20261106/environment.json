@@ -1,0 +1,24 @@
+{
+  "commit": "695ce55d46012b541a7b2cf8a974bd4744ec944f",
+  "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "machine": "Mac16,12",
+  "cpu": "Apple M4",
+  "cores": 10,
+  "memory_bytes": 17179869184,
+  "moon": "moon 0.1.20261104 (940aa18 2026-11-04) <toolchain>\nmoonc v0.10.20+65efd5b93 (2026-11-05) <toolchain>\nmoonrun 0.1.20261104 (940aa18 2026-11-04) <toolchain>\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+  "node": "v24.18.0",
+  "seed": 20261106,
+  "warmups": 5,
+  "iterations": 30,
+  "build": "release",
+  "timeout_seconds_per_process": 60,
+  "units": "microseconds",
+  "engine_sha256": "2e4159012a35e378434159d0cea8d42722a9ccf453b184f9d26af0d10ea15334",
+  "fixture_sha256": "e1624dea5a82e5e03fd793dd24137c69fb4c44d4b43a06f59c67032183f67ec1",
+  "started_utc": "2026-11-06T18:58:59Z",
+  "observations": [
+    "Shared host; validation briefly overlapped early collection.",
+    "Another task benchmark executable was observed while native 1m requests ran; not stopped. No exclusive CPU or memory reservation."
+  ],
+  "finished_utc": "2026-11-06T19:53:26Z"
+}

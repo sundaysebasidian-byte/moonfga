@@ -1,0 +1,10 @@
+pkgtype(kind: "executable")
+
+import {
+  "moonbitlang/core/env",
+  "moonbitlang/core/bench",
+  "sundaysebasidian-byte/moonfga/store",
+  "sundaysebasidian-byte/moonfga/fga",
+  "sundaysebasidian-byte/moonfga/dsl",
+  "sundaysebasidian-byte/moonfga/engine",
+}

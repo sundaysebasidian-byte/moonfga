@@ -27,8 +27,12 @@ Playground 就是同一个引擎编译成 JS 在浏览器里跑。
 | 固定版本的上游矩阵 | OpenFGA v1.22.1（commit `44054f54`）：Check 516/516，ListObjects 354/354，ListUsers 393/394（1 skip）；语言夹具 29/29 | [`docs/conformance.md`](docs/conformance.md) 的 Summary 与逐断言表；固定 commit 写在 [`scripts/fetch-upstream.sh`](scripts/fetch-upstream.sh)；`scripts/fetch-upstream.sh && ./scripts/conformance.sh` |
 | 唯一的 skip | `simple_computeduserset_indirect_ref`（list_users，`consolidated_1_1_tests.yaml`）：期望值嵌在 request 里，没有顶层 `expectation` 或 `errorCode`，记为 `skip/no_expectation` | [`docs/conformance.md` 的 Failure categories](docs/conformance.md#failure-categories)；逐断言表编号 57 |
 | 随机差分 | seed 314159、271828 各 1095 组（1000 随机＋95 定向），共 6570 次比较，0 不一致；定向脚本 204 组 / 612 次比较，0 不一致 | [`docs/evidence/oracle-summary.json`](docs/evidence/oracle-summary.json)、[`oracle-seed271828-summary.json`](docs/evidence/oracle-seed271828-summary.json)、[`directed-summary.json`](docs/evidence/directed-summary.json)；命令见 [同版本差分](docs/conformance.md#同版本差分与定向回归) |
-| 性能条件 | 1 万 / 10 万 / 100 万元组，三种扇出、20 层 group；native 与 JS release 的 p50/p95/max、峰值 RSS、图构建占比，macOS arm64 合成数据 | [实验方法](docs/performance.md)、[完整测量表](docs/evidence/scale-results.md)；`python3 scripts/performance.py optimized` |
+| 性能条件 | 单机 macOS release：1 万 / 10 万 / 100 万元组，11 种形状；Check / ListObjects / ListUsers，多/少结果，native / JS / wasm-gc，含未完成记录；无跨请求缓存 | [方法与限制](docs/performance.md)、[完整实测](docs/evidence/performance/final-20261106/results.md)；`./scripts/bench-scale.sh docs/evidence/performance/my-run --timeout 60` |
 | 安装包调用 | `moonfga@0.1.1` 在全新模块中构造模型和元组后 Check，输出 `anne can view roadmap: true` | 见下表“版本对应” |
+
+本轮 native release 的 ListObjects p95：1 万元组 0.736–13.706 ms；
+百万直接关系多/少结果 563.387 / 371.945 ms。百万 group/TTU/wildcard 的 ListObjects
+整组采样未在 60 秒预算内完成；不是单次查询超时结论。完整后端数据与内存边界见上表。
 
 ## 版本对应
 

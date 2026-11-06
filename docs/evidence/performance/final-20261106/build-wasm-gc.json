@@ -1,0 +1,4 @@
+{
+  "exit_code": 0,
+  "output": "Artifacts:\n  sundaysebasidian-byte/moonfga/lab  wasm-gc  <repo>/.upstream/scale-final-20261106/_build/wasm-gc/release/build/lab/lab.wasm\nFinished. moon: ran 7 tasks, now up to date\n"
+}

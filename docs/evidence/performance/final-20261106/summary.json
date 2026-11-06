@@ -1,0 +1,272 @@
+[
+  {
+    "target": "native",
+    "tuples": 10000,
+    "completed": 66,
+    "total": 66,
+    "check_hit": {
+      "p95_us_min": 1.042,
+      "p95_us_max": 19.791
+    },
+    "check_miss": {
+      "p95_us_min": 1.25,
+      "p95_us_max": 19.542
+    },
+    "objects_few": {
+      "p95_us_min": 799.75,
+      "p95_us_max": 12213.0
+    },
+    "objects_many": {
+      "p95_us_min": 735.958,
+      "p95_us_max": 13705.5
+    },
+    "users_few": {
+      "p95_us_min": 1.041,
+      "p95_us_max": 2.083
+    },
+    "users_many": {
+      "p95_us_min": 1.125,
+      "p95_us_max": 45.083
+    }
+  },
+  {
+    "target": "native",
+    "tuples": 100000,
+    "completed": 66,
+    "total": 66,
+    "check_hit": {
+      "p95_us_min": 1.084,
+      "p95_us_max": 19.042
+    },
+    "check_miss": {
+      "p95_us_min": 1.291,
+      "p95_us_max": 19.542
+    },
+    "objects_few": {
+      "p95_us_min": 8802.209,
+      "p95_us_max": 186794.875
+    },
+    "objects_many": {
+      "p95_us_min": 9397.084,
+      "p95_us_max": 197995.08400000003
+    },
+    "users_few": {
+      "p95_us_min": 1.084,
+      "p95_us_max": 1.959
+    },
+    "users_many": {
+      "p95_us_min": 1.292,
+      "p95_us_max": 61.417
+    }
+  },
+  {
+    "target": "native",
+    "tuples": 1000000,
+    "completed": 56,
+    "total": 66,
+    "check_hit": {
+      "p95_us_min": 1.0,
+      "p95_us_max": 26.25
+    },
+    "check_miss": {
+      "p95_us_min": 1.25,
+      "p95_us_max": 21.959
+    },
+    "objects_few": {
+      "p95_us_min": 81073.584,
+      "p95_us_max": 673689.541
+    },
+    "objects_many": {
+      "p95_us_min": 83195.75,
+      "p95_us_max": 938403.042
+    },
+    "users_few": {
+      "p95_us_min": 1.125,
+      "p95_us_max": 2.1670000000000003
+    },
+    "users_many": {
+      "p95_us_min": 1.709,
+      "p95_us_max": 49.042
+    }
+  },
+  {
+    "target": "js",
+    "tuples": 10000,
+    "completed": 66,
+    "total": 66,
+    "check_hit": {
+      "p95_us_min": 19.54200000000128,
+      "p95_us_max": 90.29200000000515
+    },
+    "check_miss": {
+      "p95_us_min": 18.000000000000682,
+      "p95_us_max": 92.79199999999577
+    },
+    "objects_few": {
+      "p95_us_min": 1674.2089999999905,
+      "p95_us_max": 21622.915999999976
+    },
+    "objects_many": {
+      "p95_us_min": 1512.208000000001,
+      "p95_us_max": 29750.74999999998
+    },
+    "users_few": {
+      "p95_us_min": 23.125000000000284,
+      "p95_us_max": 51.6669999999948
+    },
+    "users_many": {
+      "p95_us_min": 24.62500000000034,
+      "p95_us_max": 234.91699999999582
+    }
+  },
+  {
+    "target": "js",
+    "tuples": 100000,
+    "completed": 66,
+    "total": 66,
+    "check_hit": {
+      "p95_us_min": 18.292000000002417,
+      "p95_us_max": 85.58300000001395
+    },
+    "check_miss": {
+      "p95_us_min": 21.74999999999727,
+      "p95_us_max": 85.99999999998431
+    },
+    "objects_few": {
+      "p95_us_min": 8636.62500000001,
+      "p95_us_max": 322897.66599999985
+    },
+    "objects_many": {
+      "p95_us_min": 8601.666999999992,
+      "p95_us_max": 375410.87500000047
+    },
+    "users_few": {
+      "p95_us_min": 21.957999999983713,
+      "p95_us_max": 61.292000000008784
+    },
+    "users_many": {
+      "p95_us_min": 27.291999999988548,
+      "p95_us_max": 179.91700000001742
+    }
+  },
+  {
+    "target": "js",
+    "tuples": 1000000,
+    "completed": 55,
+    "total": 66,
+    "check_hit": {
+      "p95_us_min": 17.415999999911946,
+      "p95_us_max": 78.04200000009587
+    },
+    "check_miss": {
+      "p95_us_min": 23.374999999987267,
+      "p95_us_max": 92.58300000010422
+    },
+    "objects_few": {
+      "p95_us_min": 80627.45799999993,
+      "p95_us_max": 1914824.291000001
+    },
+    "objects_many": {
+      "p95_us_min": 84778.83399999974,
+      "p95_us_max": 1584226.6249999993
+    },
+    "users_few": {
+      "p95_us_min": 22.625000000061846,
+      "p95_us_max": 158.8339999998425
+    },
+    "users_many": {
+      "p95_us_min": 26.000000000294676,
+      "p95_us_max": 201.70899999993708
+    }
+  },
+  {
+    "target": "wasm-gc",
+    "tuples": 10000,
+    "completed": 66,
+    "total": 66,
+    "check_hit": {
+      "p95_us_min": 9.125,
+      "p95_us_max": 202.458
+    },
+    "check_miss": {
+      "p95_us_min": 9.209,
+      "p95_us_max": 194.208
+    },
+    "objects_few": {
+      "p95_us_min": 2507.25,
+      "p95_us_max": 54706.458
+    },
+    "objects_many": {
+      "p95_us_min": 2706.792,
+      "p95_us_max": 62132.0
+    },
+    "users_few": {
+      "p95_us_min": 7.4159999999999995,
+      "p95_us_max": 25.75
+    },
+    "users_many": {
+      "p95_us_min": 11.25,
+      "p95_us_max": 849.5
+    }
+  },
+  {
+    "target": "wasm-gc",
+    "tuples": 100000,
+    "completed": 66,
+    "total": 66,
+    "check_hit": {
+      "p95_us_min": 4.583,
+      "p95_us_max": 126.25
+    },
+    "check_miss": {
+      "p95_us_min": 3.5829999999999997,
+      "p95_us_max": 103.167
+    },
+    "objects_few": {
+      "p95_us_min": 23763.75,
+      "p95_us_max": 876760.792
+    },
+    "objects_many": {
+      "p95_us_min": 24715.041,
+      "p95_us_max": 811862.625
+    },
+    "users_few": {
+      "p95_us_min": 5.0,
+      "p95_us_max": 23.167
+    },
+    "users_many": {
+      "p95_us_min": 3.458,
+      "p95_us_max": 290.166
+    }
+  },
+  {
+    "target": "wasm-gc",
+    "tuples": 1000000,
+    "completed": 56,
+    "total": 66,
+    "check_hit": {
+      "p95_us_min": 3.125,
+      "p95_us_max": 42.875
+    },
+    "check_miss": {
+      "p95_us_min": 3.75,
+      "p95_us_max": 60.334
+    },
+    "objects_few": {
+      "p95_us_min": 78970.584,
+      "p95_us_max": 1051872.167
+    },
+    "objects_many": {
+      "p95_us_min": 86384.791,
+      "p95_us_max": 1580435.5
+    },
+    "users_few": {
+      "p95_us_min": 3.0829999999999997,
+      "p95_us_max": 7.458
+    },
+    "users_many": {
+      "p95_us_min": 3.084,
+      "p95_us_max": 86.0
+    }
+  }
+]
