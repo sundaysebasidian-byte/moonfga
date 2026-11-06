@@ -245,7 +245,7 @@ CLI 打印 `error <code>: <message>` 并以 1 退出；参数/文件错误以 2 
 - 只做进程内内存存储：换来无依赖、易测试的核心；持久化和多节点一致性留给上层。
 - 不做 HTTP/gRPC 与分页：当前目标是嵌入式库与 CLI。
 - CEL 是受控子集：覆盖 OpenFGA ABAC 测试所需类型与方法，但不宣称完整 CEL 标准。
-- 跳过模块语法：单文件 schema 1.1 已覆盖全部上游模型用例。
+- schema 1.2 模块通过宿主提供的文件内容组合，保留来源元数据。
 - ListUsers 的通配符语义是复现上游行为中最复杂的部分，采用“标记 + 显式枚举”算法；
   相关边界由上游矩阵和定向回归覆盖。
 
@@ -271,3 +271,22 @@ ContextualStore::new 的 shadow 参数默认 true，List 查询显式传 false�
 ListUsers 已改为关系集合展开；ListObjects 使用反向证明工作队列，只有非单调候选需要残余求值。
 CEL timestamp 在必要时采用 VTimestampPrecise 保存 epoch 毫秒、纳秒余数及数值时区；
 timestamp_parts/offset 与 RFC3339 转换供 CEL 和条件 JSON 桥共用。旧 VTimestamp 和毫秒 parser 保留。
+
+## FGA Modules
+
+`dsl.merge_modules` 先收集所有基础类型、条件和扩展片段，再合并扩展。
+因此内容清单顺序不限制引用关系，也无需对循环模块引用做拓扑排序。
+重复类型、条件、关系和文件会失败；同名 module 是可跨文件的命名空间。
+已有语义校验负责未知引用、TTU 和无入口循环；高层 `model.modules_to_model` 返回首个错误。
+错误保留片段行列，消息携带模块和文件。语义位置是声明位置，而非官方逐 token 范围。
+
+`AuthModel.metadata` 按 `type:name`、`rel:type:relation`、`condition:name` 保存来源。
+JSON 导入导出保留这些元数据；基础关系继承类型来源，扩展关系保存自己的来源。
+DSL 输出将模型展开为单文件，不重建原始文件或来源注释。
+
+`model.parse_mod` 复用 YAML 依赖，要求 schema 字符串 1.2 和字符串内容清单。
+不把 fga.mod 转成带 YAML token 范围的官方中间 JSON。
+核心库不读磁盘；CLI 在读取前核验相对路径和 canonical path，拒绝符号链接逃逸。
+native 使用 POSIX realpath；JS 使用 node:fs realpathSync；wasm 的现有接口不能安全解析来源路径，故拒绝文件加载，使用内容 API。
+路径核验和读取之间不是原子操作，调用方必须避免并发修改路径。
+Store 测试加载器支持 model_file 指向 fga.mod，并提供可选路径核验回调；CLI 始终传入。

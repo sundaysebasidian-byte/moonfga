@@ -1434,3 +1434,23 @@ ListUsers 393/394（1 条缺期望跳过），language 29/29。native benchmark 
 Web 端已同步：Playground 直接透传 `ExplainResult` JSON（`complete`、`explain_error`），
 `node web/smoke.mjs` 36/36 通过；GitHub [CI](https://github.com/sundaysebasidian-byte/moonfga/actions/runs/41246946728) 与 [Pages](https://github.com/sundaysebasidian-byte/moonfga/actions/runs/41246946750) 已在远端通过（2026-11-01 核验）；线上静态资源与本地构建 SHA-256 一致，下载后的 bundle 36/36 冒烟检查通过。
 固定两 seed 的零差异不等于全部 OpenFGA 输入均兼容；CEL 完整标准库等既有不支持项仍有效。
+
+## Modular model fixtures
+
+Pinned language commit: `ed62a11e759a0faa1354404ead761f956469e149` (Apache-2.0).
+`moon run cmd/language` includes all seven transformer-module directories and all nine fga-mod-transformer cases.
+Single-file DSL ↔ JSON remains 29/29.
+
+| Fixture | Result | Comparison boundary |
+| --- | --- | --- |
+| 00-simple-module | pass | Full JSON structural equality, including source_info |
+| 01-module-with-errors | rejection pass | First error only; official nine-diagnostic list is not matched |
+| 02-module-with-extends | pass | Full JSON structural equality, including condition and extension metadata |
+| 03-module-with-more-errors | rejection pass | Existing validator rejects model; official nine-diagnostic list and token spans are not matched |
+| 04-module-with-even-more-errors | rejection pass | Existing cycle/entrypoint validation rejects model; official four-diagnostic list is not matched |
+| 05-module-with-relation-errors | rejection pass | Existing reference validation rejects model; official two-diagnostic list is not matched |
+| 06-complex-module | input unavailable | Pinned directory contains no module files; expected JSON metadata roundtrip passes, excluded from module-input denominator |
+
+Totals: 2/2 full JSON transformations, 4/4 invalid-model rejections, 1 missing-input fixture reported explicitly.
+The nine fga.mod cases pass acceptance/rejection checks. Official YAML intermediate JSON locations and complete diagnostic arrays are not compared.
+`python3 scripts/test-modules.py` exercises native and JS validate/transform/store-test commands and rejects parent traversal, file symlink escape and directory symlink escape.

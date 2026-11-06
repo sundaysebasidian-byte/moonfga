@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0
+
+- Add schema 1.2 module composition, forward type extensions, fga.mod YAML parsing and host-supplied module contents APIs.
+- Preserve module/source_info metadata across JSON imports and exports; reject conflicting definitions and validate cross-file references and cycles.
+- Add native POSIX / JS fga.mod CLI loading, canonical path containment and model_file support in store tests. Wasm callers supply contents; wasm CLI refuses modular file loading.
+- Add two official full-JSON module transformations, four invalid-module rejection checks and nine fga.mod acceptance/rejection checks; retain 29 single-file fixtures. The complex upstream fixture lacks module inputs; only its JSON metadata roundtrip is checked. Complete official diagnostic arrays and YAML intermediate locations remain unsupported.
+- Expected generated interfaces: fga AuthModel.metadata; dsl ModuleFile/merge_modules; model parse_mod/modules_to_model; storetest optional check_module_path; language module fixture entrypoints; new host path-containment package.
+
+
 All notable changes to MoonFGA are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).

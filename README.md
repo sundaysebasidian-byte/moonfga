@@ -99,7 +99,7 @@ request 里面，没有顶层期望值或 `errorCode`，所以按 `skip/no_expec
 | CLI | 支持 | `validate`、`transform`、`check`、`list-objects`、`list-users`、`expand`、`test` |
 | `.fga.yaml` 测试 | 支持 | `model` / `model_file`、全局与用例元组、Check / ListObjects / ListUsers 断言、`errorCode` |
 | ReadChanges | 不支持 | 内存存储没有变更日志 |
-| FGA Modules | 不支持 | `module` / `extends` 语法与模块合并未实现；单文件模型可完整使用 |
+| FGA Modules | 支持 | schema 1.2；宿主传入文件内容并合并，保留 module / source_info；CLI 安全文件读取限 native（POSIX）/ JS；错误列表非逐条兼容 |
 | 持久化存储 / HTTP / gRPC | 不支持 | 只提供可嵌入的内存引擎和 CLI，持久化需要调用方自己封装 |
 | 分页、consistency preference | 不支持 | List 接口一次返回全部结果 |
 
@@ -276,10 +276,40 @@ consistency preference、完整 CEL 标准库（如 `bytes`、正则捕获组等
 
 1. 可插拔持久化存储与变更日志（ReadChanges）。
 2. 服务端 API（HTTP/gRPC）与一致性偏好。
-3. FGA modules 与模块级校验。
+3. 模块诊断列表与官方诊断格式进一步对齐。
 4. 扩展 CEL 标准库，错误定位更细。
 
 ## 许可证
 
 Apache-2.0，见 [`LICENSE`](LICENSE) 和 [`NOTICE`](NOTICE)。上游一致性测试数据只在本地按固定 commit
 下载，不随仓库分发。
+
+## 多文件模型
+
+`examples/modules/fga.mod` 使用 schema 1.2，`contents` 按清单顺序列出相对 `.fga` 路径。
+每个文件以 `module <name>` 开头；`extend type` 可引用后出现文件中的类型。
+同一 module 名可以跨文件组成一个命名空间（官方 board 用例如此）；类型、关系、条件重复定义及重复文件会报错。
+跨文件引用与递归使用现有模型校验；无入口的关系循环被拒绝。
+
+```sh
+moon run cmd/main --target native -- validate examples/modules/fga.mod
+moon run cmd/main --target native -- transform examples/modules/fga.mod --to json
+moon run cmd/main --target native -- transform examples/modules/fga.mod --to dsl
+moon run cmd/main --target native -- test examples/modules/store.fga.yaml
+python3 scripts/test-modules.py
+```
+
+库入口：`@model.parse_mod(source)` 返回内容路径；
+`@model.modules_to_model(source, files)` 接受 `Array[@dsl.ModuleFile]`（`name`、`contents`），完成合并和语义校验；
+`@dsl.merge_modules(files)` 是只解析合并的底层入口。
+三个库后端均不需要文件系统。JSON 导入导出保留类型、扩展关系和条件的来源元数据；
+DSL 输出是完整的单文件模型，不保留模块拆分或来源注释。
+
+CLI 拒绝绝对路径、父目录、编码路径、反斜杠及符号链接逃逸。
+文件系统接口缺少 canonical path 能力的 wasm CLI 会明确拒绝 `.mod` 文件读取，请使用 native / JS 或宿主内容 API。
+读取期间宿主必须保持路径稳定；不保证抵抗并发替换符号链接。
+`.fga.yaml` 的 `model_file: fga.mod` 使用相同加载规则。
+
+新增官方用例：2/2 完整 JSON 转换、4/4 错误模型拒绝、9/9 fga.mod 接受／拒绝。
+`06-complex-module` 上游没有模块输入，仅验证其 JSON 元数据往返；不计入模块输入通过数。
+错误沿用 E2000 和 1-based 行列，模块语义错误附来源；不承诺官方全部诊断列表、精确措辞或 token 范围一致。
