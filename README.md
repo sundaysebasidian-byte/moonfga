@@ -99,7 +99,7 @@ request 里面，没有顶层期望值或 `errorCode`，所以按 `skip/no_expec
 | CLI | 支持 | `validate`、`transform`、`check`、`list-objects`、`list-users`、`expand`、`test` |
 | `.fga.yaml` 测试 | 支持 | `model` / `model_file`、全局与用例元组、Check / ListObjects / ListUsers 断言、`errorCode` |
 | ReadChanges | 不支持 | 内存存储没有变更日志 |
-| FGA Modules | 支持 | schema 1.2；宿主传入文件内容并合并，保留 module / source_info；CLI 安全文件读取限 native（POSIX）/ JS；错误列表非逐条兼容 |
+| FGA Modules | 支持 | schema 1.2；宿主传入文件内容并合并，保留 module / source_info；CLI 安全文件读取支持 native（POSIX / Windows）与 JS；夹具 01、03、04、05 的 24 条官方诊断逐条一致，06 缺上游源文件，仅验证 JSON 往返 |
 | 持久化存储 / HTTP / gRPC | 不支持 | 只提供可嵌入的内存引擎和 CLI，持久化需要调用方自己封装 |
 | 分页、consistency preference | 不支持 | List 接口一次返回全部结果 |
 
