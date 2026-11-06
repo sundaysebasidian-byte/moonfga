@@ -30,6 +30,7 @@ pub(all) struct Token {
 }
 pub fn Token::is_word(Self, String) -> Bool
 
+#derive(Eq)
 pub(all) enum TokenKind {
   Word
   Version
@@ -47,7 +48,7 @@ pub(all) enum TokenKind {
   Greater
   ConditionBody
   Eof
-} derive(Eq)
+}
 pub fn TokenKind::equal(Self, Self) -> Bool
 pub fn TokenKind::not_equal(Self, Self) -> Bool
 

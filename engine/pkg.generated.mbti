@@ -2,6 +2,7 @@
 package "sundaysebasidian-byte/moonfga/engine"
 
 import {
+  "moonbitlang/core/json",
   "sundaysebasidian-byte/moonfga/fga",
 }
 
@@ -14,7 +15,7 @@ pub(all) struct CheckRequest {
   object : String
   relation : String
   user : String
-  context : Map[String, Json]
+  context : Map[String, @json.Json]
   contextual_tuples : Array[@fga.Tuple]
 }
 pub fn CheckRequest::new(String, String, String) -> Self
@@ -31,11 +32,11 @@ pub struct Engine {
 pub fn Engine::batch_check(Self, Array[CheckRequest]) -> Array[CheckResult]
 pub fn Engine::check(Self, String, String, String) -> Bool raise @fga.FgaError
 pub fn Engine::check_request(Self, CheckRequest) -> Bool raise @fga.FgaError
-pub fn Engine::check_with(Self, String, String, String, Map[String, Json], Array[@fga.Tuple]) -> Bool raise @fga.FgaError
-pub fn Engine::expand_json(Self, String, String, Array[@fga.Tuple]) -> Json raise @fga.FgaError
-pub fn Engine::explain_check(Self, String, String, String, Map[String, Json], Array[@fga.Tuple]) -> ExplainResult raise @fga.FgaError
-pub fn Engine::list_objects(Self, String, String, String, Map[String, Json], Array[@fga.Tuple]) -> Array[String] raise @fga.FgaError
-pub fn Engine::list_users(Self, String, String, Array[String], Map[String, Json], Array[@fga.Tuple]) -> Array[String] raise @fga.FgaError
+pub fn Engine::check_with(Self, String, String, String, Map[String, @json.Json], Array[@fga.Tuple]) -> Bool raise @fga.FgaError
+pub fn Engine::expand_json(Self, String, String, Array[@fga.Tuple]) -> @json.Json raise @fga.FgaError
+pub fn Engine::explain_check(Self, String, String, String, Map[String, @json.Json], Array[@fga.Tuple]) -> ExplainResult raise @fga.FgaError
+pub fn Engine::list_objects(Self, String, String, String, Map[String, @json.Json], Array[@fga.Tuple]) -> Array[String] raise @fga.FgaError
+pub fn Engine::list_users(Self, String, String, Array[String], Map[String, @json.Json], Array[@fga.Tuple]) -> Array[String] raise @fga.FgaError
 pub fn Engine::new(@fga.AuthModel, &@fga.TupleReader) -> Self
 
 pub(all) struct ExplainResult {
@@ -44,7 +45,7 @@ pub(all) struct ExplainResult {
   complete : Bool
   explain_error : String?
 }
-pub fn ExplainResult::to_json(Self) -> Json
+pub fn ExplainResult::to_json(Self) -> @json.Json
 
 // Type aliases
 

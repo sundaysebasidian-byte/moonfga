@@ -2,17 +2,18 @@
 package "sundaysebasidian-byte/moonfga/cel"
 
 import {
+  "moonbitlang/core/json",
   "sundaysebasidian-byte/moonfga/fga",
 }
 
 // Values
 pub fn canonical_ip(String) -> String raise @fga.FgaError
 
-pub fn coerce_context(@fga.ConditionParam, Json) -> @fga.CelValue raise @fga.FgaError
+pub fn coerce_context(@fga.ConditionParam, @json.Json) -> @fga.CelValue raise @fga.FgaError
 
 pub fn compile(String) -> CelExpr raise @fga.FgaError
 
-pub fn eval_condition(@fga.Condition, Map[String, Json]) -> Bool raise @fga.FgaError
+pub fn eval_condition(@fga.Condition, Map[String, @json.Json]) -> Bool raise @fga.FgaError
 
 pub fn eval_expr(CelExpr, Map[String, @fga.CelValue]) -> @fga.CelValue raise @fga.FgaError
 

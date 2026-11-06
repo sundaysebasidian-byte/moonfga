@@ -2,6 +2,7 @@
 package "sundaysebasidian-byte/moonfga/model"
 
 import {
+  "moonbitlang/core/json",
   "sundaysebasidian-byte/moonfga/dsl",
   "sundaysebasidian-byte/moonfga/fga",
 }
@@ -11,7 +12,7 @@ pub fn dsl_to_json(String) -> String raise @fga.FgaError
 
 pub fn dsl_to_model(String) -> @fga.AuthModel raise @fga.FgaError
 
-pub fn json_eq(Json, Json) -> Bool
+pub fn json_eq(@json.Json, @json.Json) -> Bool
 
 pub fn json_to_dsl(String) -> String raise @fga.FgaError
 
@@ -19,11 +20,11 @@ pub fn json_to_model(String) -> @fga.AuthModel raise @fga.FgaError
 
 pub fn model_eq(@fga.AuthModel, @fga.AuthModel) -> Bool
 
-pub fn model_from_json(Json) -> @fga.AuthModel raise @fga.FgaError
+pub fn model_from_json(@json.Json) -> @fga.AuthModel raise @fga.FgaError
 
 pub fn model_from_source(String) -> @fga.AuthModel raise @fga.FgaError
 
-pub fn model_to_json(@fga.AuthModel) -> Json raise @fga.FgaError
+pub fn model_to_json(@fga.AuthModel) -> @json.Json raise @fga.FgaError
 
 pub fn model_to_json_string(@fga.AuthModel) -> String raise @fga.FgaError
 

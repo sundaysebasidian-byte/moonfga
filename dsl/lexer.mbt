@@ -6,6 +6,7 @@
 // separator and therefore not a comment.
 
 ///|
+#derive(Eq)
 pub(all) enum TokenKind {
   Word
   Version
@@ -23,7 +24,7 @@ pub(all) enum TokenKind {
   Greater
   ConditionBody
   Eof
-} derive(Eq)
+}
 
 ///|
 pub extend TokenKind with Eq::{not_equal, equal}

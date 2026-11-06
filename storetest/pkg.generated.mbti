@@ -2,6 +2,7 @@
 package "sundaysebasidian-byte/moonfga/storetest"
 
 import {
+  "moonbitlang/core/json",
   "sundaysebasidian-byte/moonfga/fga",
 }
 
@@ -18,25 +19,25 @@ pub fn run_store_test(StoreTestSuite) -> StoreTestReport
 pub(all) struct CheckCase {
   user : String
   object : String
-  context : Map[String, Json]
+  context : Map[String, @json.Json]
   contextual : Array[@fga.Tuple]
-  assertions : Array[(String, Json)]
+  assertions : Array[(String, @json.Json)]
 }
 
 pub(all) struct ListObjectsCase {
   user : String
   object_type : String
-  context : Map[String, Json]
+  context : Map[String, @json.Json]
   contextual : Array[@fga.Tuple]
-  assertions : Array[(String, Json)]
+  assertions : Array[(String, @json.Json)]
 }
 
 pub(all) struct ListUsersCase {
   object : String
   filters : Array[String]
-  context : Map[String, Json]
+  context : Map[String, @json.Json]
   contextual : Array[@fga.Tuple]
-  assertions : Array[(String, Json)]
+  assertions : Array[(String, @json.Json)]
 }
 
 pub(all) struct StoreTest {

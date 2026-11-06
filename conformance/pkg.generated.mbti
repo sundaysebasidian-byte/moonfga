@@ -2,6 +2,7 @@
 package "sundaysebasidian-byte/moonfga/conformance"
 
 import {
+  "moonbitlang/core/json",
   "sundaysebasidian-byte/moonfga/fga",
 }
 
@@ -10,7 +11,7 @@ pub fn format_report(ConformanceReport) -> String
 
 pub fn format_report_json(ConformanceReport) -> String
 
-pub fn report_to_json(ConformanceReport) -> Json
+pub fn report_to_json(ConformanceReport) -> @json.Json
 
 pub fn run_conformance_file(String) -> ConformanceReport raise @fga.FgaError
 

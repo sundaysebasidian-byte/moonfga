@@ -1,6 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "sundaysebasidian-byte/moonfga/fga"
 
+import {
+  "moonbitlang/core/json",
+}
+
 // Values
 pub const ERR_INVALID_TUPLE : Int32 = 2027
 
@@ -24,11 +28,11 @@ pub fn cel_value_eq(CelValue, CelValue) -> Bool
 
 pub fn cel_value_to_display(CelValue) -> String
 
-pub fn cel_value_to_json(CelValue) -> Json
+pub fn cel_value_to_json(CelValue) -> @json.Json
 
 pub fn cel_value_type_name(CelValue) -> String
 
-pub fn context_from_json(Json?) -> Map[String, CelValue] raise FgaError
+pub fn context_from_json(@json.Json?) -> Map[String, CelValue] raise FgaError
 
 pub fn error_code(FgaError) -> Int32
 
@@ -44,19 +48,19 @@ pub fn is_valid_object(String) -> Bool
 
 pub fn is_valid_user(String) -> Bool
 
-pub fn json_get_array(Json, String) -> Array[Json]
+pub fn json_get_array(@json.Json, String) -> Array[@json.Json]
 
-pub fn json_get_bool(Json, String) -> Bool?
+pub fn json_get_bool(@json.Json, String) -> Bool?
 
-pub fn json_get_object(Json, String) -> Json?
+pub fn json_get_object(@json.Json, String) -> @json.Json?
 
-pub fn json_get_string(Json, String) -> String?
+pub fn json_get_string(@json.Json, String) -> String?
 
-pub fn json_object_get(Json, String) -> Json?
+pub fn json_object_get(@json.Json, String) -> @json.Json?
 
-pub fn json_object_to_value_map(Json) -> Map[String, CelValue] raise FgaError
+pub fn json_object_to_value_map(@json.Json) -> Map[String, CelValue] raise FgaError
 
-pub fn json_to_cel_value_raw(Json) -> CelValue
+pub fn json_to_cel_value_raw(@json.Json) -> CelValue
 
 pub fn matching_restriction_condition(Array[TypeRestriction], String) -> String? raise FgaError
 
@@ -74,13 +78,13 @@ pub fn timestamp_to_rfc3339(CelValue) -> String
 
 pub fn timestamp_value(Int64, Int64, offset? : Int32) -> CelValue
 
-pub fn tuple_from_json(Json) -> Tuple raise FgaError
+pub fn tuple_from_json(@json.Json) -> Tuple raise FgaError
 
 pub fn tuple_from_string(String) -> Tuple raise FgaError
 
 pub fn tuple_user_matches(UserRef, String) -> Bool
 
-pub fn tuples_from_json(Json?) -> Array[Tuple] raise FgaError
+pub fn tuples_from_json(@json.Json?) -> Array[Tuple] raise FgaError
 
 pub fn tuples_from_text(String) -> Array[Tuple] raise FgaError
 
@@ -98,7 +102,7 @@ pub(all) struct AuthModel {
   conditions : Map[String, Condition]
   condition_order : Array[String]
   spans : Map[String, Span]
-  metadata : Map[String, Json]
+  metadata : Map[String, @json.Json]
 }
 pub fn AuthModel::add_condition(Self, Condition) -> Unit
 pub fn AuthModel::add_type(Self, TypeDefinition) -> Unit
