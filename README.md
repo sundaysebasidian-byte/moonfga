@@ -248,7 +248,7 @@ moon run cmd/main -- test examples/abac/store.fga.yaml
 ```bash
 scripts/fetch-upstream.sh          # 首次运行，固定 commit
 ./scripts/conformance.sh           # 运行两个矩阵并检查 95/90 阈值
-moon run cmd/language              # 单文件 29/29；模块完整 JSON 2/2、错误拒绝 4/4、fga.mod 9/9；06 仅 JSON 往返
+moon run cmd/language              # 单文件 29/29；模块完整 JSON 2/2、完整诊断 4/4、fga.mod 9/9；06 仅 JSON 往返
 ```
 
 `./scripts/conformance.sh` 会在 `conformance-results/` 写入 `summary.txt` 和 `summary.json`
@@ -277,7 +277,7 @@ MoonFGA 是独立的 OpenFGA 兼容实现，没有复用 `moonpolicykit` 的代�
 
 1. 可插拔持久化存储与变更日志（ReadChanges）。
 2. 服务端 API（HTTP/gRPC）与一致性偏好。
-3. 模块诊断列表与官方诊断格式进一步对齐。
+3. 扩展模块诊断的语法恢复覆盖。
 4. 扩展 CEL 标准库，错误定位更细。
 
 ## 许可证
@@ -311,6 +311,8 @@ CLI 拒绝绝对路径、父目录、编码路径、反斜杠及符号链接逃�
 读取期间宿主必须保持路径稳定；不保证抵抗并发替换符号链接。
 `.fga.yaml` 的 `model_file: fga.mod` 使用相同加载规则。
 
-新增官方用例：2/2 完整 JSON 转换、4/4 错误模型拒绝、9/9 fga.mod 接受／拒绝。
+新增官方用例：2/2 完整 JSON 转换、4/4 完整错误诊断（24/24 条）、9/9 fga.mod 接受／拒绝。
 `06-complex-module` 上游没有模块输入，仅验证其 JSON 元数据往返；不计入模块输入通过数。
-错误沿用 E2000 和 1-based 行列，模块语义错误附来源；不承诺官方全部诊断列表、精确措辞或 token 范围一致。
+0.2.1：`modules_with_diagnostics(manifest, files)` 与 `collect_module_diagnostics(files)` 返回 `(model, diagnostics)`；诊断非空时模型为部分结果，不可用于授权。原 `modules_to_model` 仍抛出首个错误。
+CLI `validate fga.mod [--json]` 打印全部诊断；新诊断使用 0-based 行列及 end-exclusive 范围，含文件、模块和官方错误类型。旧抛错 API 与单文件诊断保留原格式。
+官方 01/03/04/05 共 24 条诊断逐条匹配，无过滤或豁免；06 因上游缺模块源文件仅验证 JSON 往返。

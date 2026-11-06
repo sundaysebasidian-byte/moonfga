@@ -1,6 +1,5 @@
 import {
   "moonbit-community/yaml",
-  "sundaysebasidian-byte/moonfga/validate",
   "moonbitlang/core/json",
   "moonbitlang/x/fs",
   "sundaysebasidian-byte/moonfga/fga",

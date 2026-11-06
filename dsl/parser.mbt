@@ -235,10 +235,11 @@ fn parse_relation(
   p : Parser,
   model : @fga.AuthModel,
   td : @fga.TypeDefinition,
+  module_mode~ : Bool = false,
 ) -> Unit raise @fga.FgaError {
   p.advance() // define
   let name_tok = p.expect_word("a relation name")
-  if name_tok.text == "self" || name_tok.text == "this" {
+  if !module_mode && (name_tok.text == "self" || name_tok.text == "this") {
     raise @fga.fail_at(
       @fga.ERR_VALIDATION,
       "a relation cannot be named 'self' or 'this'",
@@ -274,11 +275,12 @@ fn parse_type_body(
   p : Parser,
   model : @fga.AuthModel,
   td : @fga.TypeDefinition,
+  module_mode~ : Bool = false,
 ) -> Unit raise @fga.FgaError {
   if p.at_word("relations") {
     p.advance()
     while p.at_word("define") {
-      parse_relation(p, model, td)
+      parse_relation(p, model, td, module_mode~)
     }
   }
 }
@@ -287,10 +289,11 @@ fn parse_type_body(
 fn parse_type_definition(
   p : Parser,
   model : @fga.AuthModel,
+  module_mode~ : Bool = false,
 ) -> Unit raise @fga.FgaError {
   let type_tok = p.expect_word("type")
   let name_tok = p.expect_word("a type name")
-  if name_tok.text == "self" || name_tok.text == "this" {
+  if !module_mode && (name_tok.text == "self" || name_tok.text == "this") {
     raise @fga.fail_at(
       @fga.ERR_VALIDATION,
       "a type cannot be named 'self' or 'this'",
@@ -310,7 +313,7 @@ fn parse_type_definition(
   }
   let td = @fga.TypeDefinition::new(name_tok.text)
   model.set_span("type:" + name_tok.text, type_tok.line, type_tok.column)
-  parse_type_body(p, model, td)
+  parse_type_body(p, model, td, module_mode~)
   model.add_type(td)
 }
 

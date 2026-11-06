@@ -56,6 +56,32 @@ fn issues_json(issues : Array[@validate.ValidationIssue]) -> Json {
 ///|
 fn command_validate(args : CliArgs) -> Int32 raise @fga.FgaError {
   let path = positional(args, 1, "model file")
+  if path.has_suffix(".mod") {
+    let (source, files) = read_module_files(path)
+    let (_, diagnostics) = @model.modules_with_diagnostics(source, files)
+    if has_flag(args, "--json") {
+      println(
+        Json::array(diagnostics.map(fn(d) { d.to_json() })).stringify(indent=2),
+      )
+    } else if diagnostics.is_empty() {
+      println("model is valid")
+    } else {
+      for d in diagnostics {
+        println(
+          d.file +
+          " (" +
+          d.module_name +
+          ") " +
+          d.line.to_string() +
+          ":" +
+          d.column.to_string() +
+          ": " +
+          d.message,
+        )
+      }
+    }
+    return if diagnostics.is_empty() { 0 } else { 1 }
+  }
   let model = load_model_file(path)
   let issues = @validate.validate_model(model)
   if has_flag(args, "--json") {

@@ -18,13 +18,7 @@ fn write_text(path : String, text : String) -> Unit raise @fga.FgaError {
 ///|
 fn load_model_file(path : String) -> @fga.AuthModel raise @fga.FgaError {
   if path.has_suffix(".mod") {
-    let source = read_text(path)
-    let files : Array[@dsl.ModuleFile] = []
-    for name in @model.parse_mod(source) {
-      let target = dirname(path) + name
-      @host.require_contained(dirname(path), target)
-      files.push(@dsl.ModuleFile::{ name, contents: read_text(target), })
-    }
+    let (source, files) = read_module_files(path)
     @model.modules_to_model(source, files)
   } else {
     @model.model_from_source(read_text(path))
@@ -165,4 +159,18 @@ fn dirname(path : String) -> String {
   } else {
     path[:last + 1].to_owned()
   }
+}
+
+///|
+fn read_module_files(
+  path : String,
+) -> (String, Array[@dsl.ModuleFile]) raise @fga.FgaError {
+  let source = read_text(path)
+  let files : Array[@dsl.ModuleFile] = []
+  for name in @model.parse_mod(source) {
+    let target = dirname(path) + name
+    @host.require_contained(dirname(path), target)
+    files.push(@dsl.ModuleFile::{ name, contents: read_text(target), })
+  }
+  (source, files)
 }

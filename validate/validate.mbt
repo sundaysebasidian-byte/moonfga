@@ -844,7 +844,13 @@ pub fn validate_model(model : @fga.AuthModel) -> Array[ValidationIssue] {
             relation +
             "` is an impossible relation for `" +
             td.name +
-            "` (potential loop).",
+            "` (" +
+            (if td.relations[relation] is @fga.Computed(_) {
+              "potential loop"
+            } else {
+              "no entrypoint"
+            }) +
+            ").",
             relation,
           )
         _ => ()

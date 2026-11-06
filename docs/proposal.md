@@ -13,13 +13,13 @@
 
 | 范围 | 状态 | 说明 |
 | --- | --- | --- |
-| Schema 1.1 DSL 与 JSON 互转、模型校验（带行列） | 已支持 | openfga/language 单文件夹具 29/29；模块成功转换 2/2、错误拒绝 4/4，fga.mod 9/9 |
+| Schema 1.1 DSL 与 JSON 互转、模型校验（带行列） | 已支持 | openfga/language 单文件夹具 29/29；模块成功转换 2/2、完整诊断 4/4，fga.mod 9/9 |
 | 内存元组存储、上下文元组、`TupleReader` 扩展接口 | 已支持 | 宿主可实现自己的存储 |
 | Check（深度 25、循环检测、通配符、并交差、TTU）、BatchCheck、ListObjects、ListUsers、Expand、解析路径 Explain | 已支持 | Check 516/516，ListObjects 354/354，ListUsers 393/394 |
 | 条件（ABAC）：自研 CEL 子集 | 已支持，范围见下 | 类型 int / uint / double / bool / string / duration / timestamp / list / map / ipaddress；运算符、三元表达式、`exists` / `all` / `map` / `filter`、常用字符串 / 时间 / 网络方法 |
 | CLI（validate / transform / check / list-objects / list-users / expand / test）、`.fga.yaml` 测试运行器 | 已支持 | 浏览器 Playground 使用同一引擎 |
 | CEL 未覆盖的部分（`bytes`、正则捕获组、其余标准库函数） | 明确不支持 | 使用它们的条件在求值时返回错误码 E2000，不会当作 false；不使用它们的条件不受影响 |
-| FGA Modules（`module` / `extend type` / `fga.mod`） | 已支持 | schema 1.2；宿主传入文件内容并合并，保留 module / source_info；CLI 安全文件读取限 native（POSIX）/ JS；错误列表非逐条兼容；官方成功转换 2/2、错误拒绝 4/4、fga.mod 9/9；1 个无输入夹具仅 JSON 往返 |
+| FGA Modules（`module` / `extend type` / `fga.mod`） | 已支持 | schema 1.2；宿主传入文件内容并合并，保留 module / source_info；CLI 安全文件读取限 native（POSIX）/ JS；0.2.1 完整比较官方 24 条诊断（含 0-based 行列、文件和错误类型）；官方成功转换 2/2、完整诊断 4/4、fga.mod 9/9；06 因上游缺少模块源文件仅 JSON 往返 |
 | ReadChanges | 明确不支持 | 内存存储没有变更日志；只服务于同步服务端数据的场景 |
 | 持久化、HTTP / gRPC 服务端 | 明确不支持 | 属于产品定位：只做可嵌入的引擎，存储由宿主通过 `TupleReader` 提供 |
 | 分页、consistency preference | 明确不支持 | 内存快照单一一致，List 接口一次返回全部结果 |

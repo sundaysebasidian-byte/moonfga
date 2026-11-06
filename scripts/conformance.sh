@@ -8,7 +8,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-export PATH="$HOME/.moon/bin:$PATH"
+export PATH="${MOON_HOME:-$HOME/.moon}/bin:$PATH"
 
 CHECK_TARGET="${CHECK_TARGET:-95}"
 LIST_TARGET="${LIST_TARGET:-90}"

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+- Add `modules_with_diagnostics` and `collect_module_diagnostics` to collect parse, composition and semantic errors; retain the fail-first `modules_to_model` API. CLI module validation prints every diagnostic (also with `--json`).
+- Match all 24 official diagnostics in module fixtures 01/03/04/05, including messages, zero-based source ranges, files and error types; expose module names separately. Compare complete diagnostic multisets without filtering error types.
+- Retain Check 516/516, ListObjects 354/354, ListUsers 393/394 (one upstream skip), single-file DSL 29/29, module JSON 2/2, module diagnostics 4/4 and fga.mod 9/9. Fixture 06 remains JSON-only because upstream supplies no module source files.
+
 ## 0.2.0
 
 - Reject repeated extensions of the same type within a file and cyclic YAML aliases; bound fga.mod YAML depth and alias expansion.

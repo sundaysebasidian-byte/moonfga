@@ -171,3 +171,80 @@ test "fga.mod accepts finite scalar and sequence aliases" {
   )
   assert_eq(paths, ["a.fga"])
 }
+
+///|
+test "collect module diagnostics recovers across declarations and files" {
+  let (_, diagnostics) = @model.modules_with_diagnostics(
+    "schema: '1.2'\ncontents: [a.fga, b.fga, c.fga]",
+    [
+      @dsl.ModuleFile::{
+        name: "a.fga",
+        contents: "module alpha\ntype this\n relations\n  define this: [absent]\n",
+      },
+      @dsl.ModuleFile::{
+        name: "b.fga",
+        contents: "module beta\nextend type missing\ncondition duplicate(v: int) { v > 0 }\ncondition duplicate(v: int) { v > 0 }\n",
+      },
+      @dsl.ModuleFile::{ name: "c.fga", contents: "type user", },
+    ],
+  )
+  assert_true(diagnostics.length() >= 6)
+  assert_true(
+    diagnostics.any(fn(d) {
+      d.file == "a.fga" &&
+      d.module_name == "alpha" &&
+      d.line == 1 &&
+      d.column == 5 &&
+      d.error_type == "reserved-type-keywords"
+    }),
+  )
+  assert_true(
+    diagnostics.any(fn(d) {
+      d.file == "b.fga" && d.message == "extended type missing does not exist"
+    }),
+  )
+  assert_true(
+    diagnostics.any(fn(d) {
+      d.file == "b.fga" && d.message == "duplicate condition duplicate"
+    }),
+  )
+  assert_true(
+    diagnostics.any(fn(d) {
+      d.file == "c.fga" && d.message == "file is not a module"
+    }),
+  )
+}
+
+///|
+test "diagnostics retain extension file when lines overlap the base" {
+  let (_, diagnostics) = @model.modules_with_diagnostics(
+    "schema: '1.2'\ncontents: [a.fga, b.fga]",
+    [
+      @dsl.ModuleFile::{
+        name: "a.fga",
+        contents: "module alpha\ntype user\ntype doc\n relations\n  define owner: [user]\n",
+      },
+      @dsl.ModuleFile::{
+        name: "b.fga",
+        contents: "module beta\n\nextend type doc\n relations\n  define viewer: [unknown]\n",
+      },
+    ],
+  )
+  assert_eq(diagnostics.length(), 1)
+  let d = diagnostics[0]
+  assert_eq(d.file, "b.fga")
+  assert_eq(d.module_name, "beta")
+  assert_eq(d.line, 4)
+  assert_eq(d.column, 18)
+}
+
+///|
+test "missing module name is reported rather than accepted" {
+  let (_, diagnostics) = @model.collect_module_diagnostics([
+    @dsl.ModuleFile::{ name: "broken.fga", contents: "module", },
+    @dsl.ModuleFile::{ name: "valid.fga", contents: "module valid\ntype user", },
+  ])
+  assert_eq(diagnostics.length(), 1)
+  assert_eq(diagnostics[0].file, "broken.fga")
+  assert_eq(diagnostics[0].error_type, "syntax")
+}

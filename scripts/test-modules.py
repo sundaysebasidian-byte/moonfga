@@ -22,6 +22,31 @@ def run(target, *args, success=True):
 
 for target in ('native', 'js'):
     run(target, 'validate', 'examples/modules/fga.mod')
+    # Each CLI diagnostic must match the pinned upstream array, including ranges
+    # and error metadata. Compare as a multiset; file traversal order is not API.
+    upstream = ROOT / '.upstream/language/data/transformer-module'
+    for fixture in sorted(upstream.glob('*/expected_errors.json')):
+        files = sorted((fixture.parent / 'module').rglob('*.fga'))
+        with tempfile.TemporaryDirectory(prefix='moonfga-diagnostics-') as temp:
+            root = Path(temp)
+            for file in files:
+                relative = file.relative_to(fixture.parent / 'module')
+                (root / relative).parent.mkdir(parents=True, exist_ok=True)
+                (root / relative).write_bytes(file.read_bytes())
+            manifest = root / 'fga.mod'
+            manifest.write_text("schema: '1.2'\ncontents: " + json.dumps([
+                file.relative_to(fixture.parent / 'module').as_posix() for file in files
+            ]))
+            diagnostics = json.loads(run(target, 'validate', manifest, '--json', success=False))
+            expected = json.loads(fixture.read_text())
+            for item in expected:
+                contents = (root / item['file']).read_text().split()
+                item['module'] = contents[1] if contents[0] == 'module' else ''
+            canonical = lambda items: sorted(json.dumps(item, sort_keys=True) for item in items)
+            assert canonical(diagnostics) == canonical(expected), (fixture, diagnostics)
+            output = run(target, 'validate', manifest, success=False)
+            assert len(output.strip().splitlines()) == len(expected), output
+
     result = json.loads(run(target, 'transform', 'examples/modules/fga.mod', '--to', 'json'))
     assert result['schema_version'] == '1.2'
     assert result['type_definitions'][1]['metadata']['relations']['viewer']['source_info']['file'] == 'document.fga'

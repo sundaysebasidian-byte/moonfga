@@ -211,16 +211,22 @@ pub fn run_module_dir(root : String) -> Int32 raise @fga.FgaError {
     let files = module_files(directory + "/module", "")
     let expects_error = @fs.path_exists(directory + "/expected_errors.json")
     let result = try {
-      let model = @dsl.merge_modules(files)
-      let issues = @validate.validate_model(model)
+      let (model, diagnostics) = @model.collect_module_diagnostics(files)
       if expects_error {
-        issues.length() > 0
+        let expected = @json.parse(
+          read_text(directory + "/expected_errors.json"),
+        ) catch {
+          _ => raise transform_error("invalid diagnostic fixture")
+        }
+        let actual = Json::array(diagnostics.map(fn(d) { d.to_json() }))
+        compare_diagnostics(expected, actual, files)
       } else {
         let expected = @json.parse(
           read_text(directory + "/authorization-model.json"),
         ) catch {
           _ => raise transform_error("invalid JSON fixture")
         }
+        diagnostics.is_empty() &&
         @model.json_eq(@model.model_to_json(model), expected)
       }
     } catch {
@@ -228,7 +234,7 @@ pub fn run_module_dir(root : String) -> Int32 raise @fga.FgaError {
         if !expects_error {
           println(@fga.format_error(err))
         }
-        expects_error
+        false
       }
     }
     println(
@@ -236,7 +242,7 @@ pub fn run_module_dir(root : String) -> Int32 raise @fga.FgaError {
       (if result { "PASS " } else { "FAIL " }) +
       name +
       (if expects_error {
-        " (rejection; diagnostic-list equality not asserted)"
+        " (diagnostic-list equality)"
       } else {
         " (full JSON equality)"
       }),
@@ -297,4 +303,54 @@ pub fn run_mod_cases(path : String) -> Int32 raise @fga.FgaError {
     " acceptance/rejection cases",
   )
   cases.length() - passed
+}
+
+///|
+fn compare_diagnostics(
+  expected : Json,
+  actual : Json,
+  files : Array[@dsl.ModuleFile],
+) -> Bool {
+  let wanted = match expected {
+    Array(xs) => xs
+    _ => return false
+  }
+  let got = match actual {
+    Array(xs) => xs
+    _ => return false
+  }
+  // Upstream stores no module field. Derive it independently from each file.
+  for item in wanted {
+    if item is Object(obj) {
+      let mut module_name = ""
+      for file in files {
+        if obj.get("file") == Some(Json::string(file.name)) {
+          let tokens = @dsl.lex(file.contents) catch { _ => [] }
+          if tokens.length() > 1 && tokens[0].text == "module" {
+            module_name = tokens[1].text
+          }
+        }
+      }
+      obj["module"] = Json::string(module_name)
+    }
+  }
+  if wanted.length() != got.length() {
+    return false
+  }
+  let remaining = got.copy()
+  for item in wanted {
+    let mut found = -1
+    for i, value in remaining {
+      if @model.json_eq(item, value) {
+        found = i
+        break
+      }
+    }
+    if found < 0 {
+      println("MISSING " + item.stringify())
+      return false
+    }
+    remaining.remove(found) |> ignore
+  }
+  true
 }

@@ -8,6 +8,8 @@ import {
 }
 
 // Values
+pub fn collect_module_diagnostics(Array[@dsl.ModuleFile]) -> (@fga.AuthModel, Array[@dsl.ModuleDiagnostic])
+
 pub fn dsl_to_json(String) -> String raise @fga.FgaError
 
 pub fn dsl_to_model(String) -> @fga.AuthModel raise @fga.FgaError
@@ -29,6 +31,8 @@ pub fn model_to_json(@fga.AuthModel) -> @json.Json raise @fga.FgaError
 pub fn model_to_json_string(@fga.AuthModel) -> String raise @fga.FgaError
 
 pub fn modules_to_model(String, Array[@dsl.ModuleFile]) -> @fga.AuthModel raise @fga.FgaError
+
+pub fn modules_with_diagnostics(String, Array[@dsl.ModuleFile]) -> (@fga.AuthModel, Array[@dsl.ModuleDiagnostic]) raise @fga.FgaError
 
 pub fn parse_mod(String) -> Array[String] raise @fga.FgaError
 
