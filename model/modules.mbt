@@ -1,4 +1,36 @@
 ///|
+// Bound both recursion (including aliases) and total expanded nodes before
+// constructing JSON. Never call the dependency's unbounded container to_json.
+fn mod_yaml_to_json(
+  node : @yaml.Yaml,
+  depth : Int32,
+  count : Array[Int32],
+) -> Json raise @fga.FgaError {
+  if depth > 64 || count[0] >= 10000 {
+    raise invalid("fga.mod YAML exceeds depth or expanded node limit")
+  }
+  count[0] += 1
+  match node {
+    @yaml.Map(values) => {
+      let result : Map[String, Json] = Map([])
+      for key, value in values {
+        result[key] = mod_yaml_to_json(value, depth + 1, count)
+      }
+      Json::object(result)
+    }
+    @yaml.Array(values) => {
+      let result : Array[Json] = []
+      for value in values {
+        result.push(mod_yaml_to_json(value, depth + 1, count))
+      }
+      Json::array(result)
+    }
+    @yaml.BadValue => raise invalid("invalid fga.mod YAML value or alias")
+    _ => node.to_json()
+  }
+}
+
+///|
 /// Parse fga.mod schema and relative content paths using YAML.
 fn parse_mod_paths(source : String) -> Array[String] raise @fga.FgaError {
   let docs = @yaml.Yaml::load_from_string(source) catch {
@@ -7,7 +39,7 @@ fn parse_mod_paths(source : String) -> Array[String] raise @fga.FgaError {
   if docs.length() != 1 {
     raise invalid("fga.mod requires one YAML document")
   }
-  let obj = as_object(docs[0].to_json(), "fga.mod")
+  let obj = as_object(mod_yaml_to_json(docs[0], 0, [0]), "fga.mod")
   if as_string(required(obj, "schema", "fga.mod"), "schema") != "1.2" {
     raise invalid("fga.mod requires schema '1.2'")
   }
@@ -57,6 +89,8 @@ pub fn modules_to_model(
 ///|
 priv struct ModLocations {
   scalars : Map[String, @fga.Span]
+  anchors : Array[Int32]
+  mut cyclic_alias : Bool
 }
 
 ///|
@@ -65,6 +99,16 @@ impl @yaml.MarkedEventReceiver for ModLocations with fn on_event(
   event,
   mark,
 ) {
+  match event {
+    @yaml.SequenceStart(id~, ..) | @yaml.MappingStart(id~, ..) =>
+      self.anchors.push(id)
+    @yaml.SequenceEnd | @yaml.MappingEnd => ignore(self.anchors.pop())
+    @yaml.Alias(id~) =>
+      if self.anchors.contains(id) {
+        self.cyclic_alias = true
+      }
+    _ => ()
+  }
   if event is @yaml.Scalar(value~, ..) {
     self.scalars[value] = @fga.Span::{ line: mark.line, column: mark.col + 1, }
   }
@@ -73,7 +117,11 @@ impl @yaml.MarkedEventReceiver for ModLocations with fn on_event(
 ///|
 /// Parse the module manifest. Errors identify fga.mod and a YAML source position.
 pub fn parse_mod(source : String) -> Array[String] raise @fga.FgaError {
-  let locations = ModLocations::{ scalars: Map([]), }
+  let locations = ModLocations::{
+    scalars: Map([]),
+    anchors: [],
+    cyclic_alias: false,
+  }
   @yaml.Parser::Parser(source).load(locations, true) catch {
     @yaml.YamlError(mark~, info~) =>
       raise @fga.fail_at(
@@ -82,6 +130,9 @@ pub fn parse_mod(source : String) -> Array[String] raise @fga.FgaError {
         mark.line,
         mark.col + 1,
       )
+  }
+  if locations.cyclic_alias {
+    raise @fga.fail_at(@fga.ERR_VALIDATION, "fga.mod: cyclic YAML alias", 1, 1)
   }
   parse_mod_paths(source) catch {
     @fga.FgaError(code~, message~, ..) => {

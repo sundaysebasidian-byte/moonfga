@@ -35,6 +35,7 @@ pub fn merge_modules(
       let _ = p.expect_word_text("module")
       module_name = p.expect_word("a module name").text
       let meta = module_metadata(module_name, file.name)
+      let extended_types : Map[String, Bool] = Map([])
       while !p.at_kind(Eof) {
         let part = @fga.AuthModel::new("1.2")
         let extended = p.at_word("extend")
@@ -50,6 +51,16 @@ pub fn merge_modules(
             part.metadata["rel:" + td.name + ":" + rel] = meta
           }
           if extended {
+            if extended_types.contains(td.name) {
+              let span = part.spans[key]
+              raise @fga.fail_at(
+                @fga.ERR_VALIDATION,
+                "'" + td.name + "' is already extended in file.",
+                span.line,
+                span.column,
+              )
+            }
+            extended_types[td.name] = true
             extensions.push((part, module_name, file.name))
           } else {
             if model.find_type(td.name) is Some(_) {

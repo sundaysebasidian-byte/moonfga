@@ -2,6 +2,7 @@
 
 ## 0.2.0
 
+- Reject repeated extensions of the same type within a file and cyclic YAML aliases; bound fga.mod YAML depth and alias expansion.
 - Add schema 1.2 module composition, forward type extensions, fga.mod YAML parsing and host-supplied module contents APIs.
 - Preserve module/source_info metadata across JSON imports and exports; reject conflicting definitions and validate cross-file references and cycles.
 - Add native POSIX / JS fga.mod CLI loading, canonical path containment and model_file support in store tests. Wasm callers supply contents; wasm CLI refuses modular file loading.

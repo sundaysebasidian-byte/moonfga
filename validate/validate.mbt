@@ -327,29 +327,29 @@ fn validate_rewrite(
       }
       if tupleset_ok {
         for r in td.restrictions(tupleset) {
-          match model.find_type(r.type_name) {
-            None => ()
-            Some(target_type) =>
-              if !target_type.relations.contains(computed) {
-                valid = false
-                issue_at(
-                  issues,
-                  model,
-                  key,
-                  "the `" +
-                  computed +
-                  "` relation definition on type `" +
-                  td.name +
-                  "` is not valid: `" +
-                  computed +
-                  "` does not exist on `" +
-                  tupleset +
-                  "`, which is of type `" +
-                  r.type_name +
-                  "`.",
-                  computed,
-                )
-              }
+          let exists = match model.find_type(r.type_name) {
+            None => false
+            Some(target_type) => target_type.relations.contains(computed)
+          }
+          if !exists {
+            valid = false
+            issue_at(
+              issues,
+              model,
+              key,
+              "the `" +
+              computed +
+              "` relation definition on type `" +
+              td.name +
+              "` is not valid: `" +
+              computed +
+              "` does not exist on `" +
+              tupleset +
+              "`, which is of type `" +
+              r.type_name +
+              "`.",
+              computed,
+            )
           }
         }
       }

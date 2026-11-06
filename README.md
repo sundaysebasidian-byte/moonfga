@@ -248,7 +248,7 @@ moon run cmd/main -- test examples/abac/store.fga.yaml
 ```bash
 scripts/fetch-upstream.sh          # 首次运行，固定 commit
 ./scripts/conformance.sh           # 运行两个矩阵并检查 95/90 阈值
-moon run cmd/language              # DSL <-> JSON 夹具，29/29
+moon run cmd/language              # 单文件 29/29；模块完整 JSON 2/2、错误拒绝 4/4、fga.mod 9/9；06 仅 JSON 往返
 ```
 
 `./scripts/conformance.sh` 会在 `conformance-results/` 写入 `summary.txt` 和 `summary.json`
@@ -269,8 +269,9 @@ MoonFGA 是独立的 OpenFGA 兼容实现，没有复用 `moonpolicykit` 的代�
 
 ## 限制与路线图
 
-明确不支持：FGA modules、ReadChanges、持久化/分布式存储、HTTP/gRPC 服务端、分页与
-consistency preference、完整 CEL 标准库（如 `bytes`、正则捕获组等）。
+已支持 FGA modules（schema 1.2 多文件模型）。
+明确不支持：ReadChanges、持久化/分布式存储、HTTP/gRPC 服务端、分页与 consistency preference、
+完整 CEL 标准库（如 `bytes`、正则捕获组等）。
 
 后续优先级：
 

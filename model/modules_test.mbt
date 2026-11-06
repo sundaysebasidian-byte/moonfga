@@ -87,3 +87,87 @@ test "fga.mod blocks path traversal invalid schema and duplicate inputs" {
     assert_true(rejected)
   }
 }
+
+///|
+test "extensions are unique within each file but may repeat across files" {
+  let first = "module shared\ntype user\ntype document\nextend type document\n relations\n  define viewer: [user]\n"
+  let second = "extend type document\n relations\n  define editor: [user]\n"
+  let error = try {
+    ignore(
+      @model.modules_to_model("schema: '1.2'\ncontents: [a.fga]", [
+        @dsl.ModuleFile::{ name: "a.fga", contents: first + second, },
+      ]),
+    )
+    None
+  } catch {
+    @fga.FgaError(..) as err => Some(err)
+  }
+  assert_true(error is Some(_))
+  assert_true(
+    @fga.error_message(error.unwrap()).contains(
+      "'document' is already extended in file.",
+    ),
+  )
+  let model = @model.modules_to_model(
+    "schema: '1.2'\ncontents: [a.fga, b.fga]",
+    [
+      @dsl.ModuleFile::{ name: "a.fga", contents: first, },
+      @dsl.ModuleFile::{ name: "b.fga", contents: "module shared\n" + second, },
+    ],
+  )
+  let relations = model.find_type("document").unwrap().relations
+  assert_true(relations.contains("viewer"))
+  assert_true(relations.contains("editor"))
+}
+
+///|
+test "fga.mod rejects cyclic aliases and bounds alias expansion" {
+  for
+    suffix in ["loop: &a [*a]", "loop: &a {nested: [*a]}", "contents: &a [*a]"] {
+    let rejected = try {
+      ignore(@model.parse_mod("schema: '1.2'\n" + suffix))
+      false
+    } catch {
+      @fga.FgaError(..) => true
+    }
+    assert_true(rejected)
+  }
+  let mut nested = "x"
+  for _ in 0..<66 {
+    nested = "[" + nested + "]"
+  }
+  let too_deep = try {
+    ignore(@model.parse_mod("schema: '1.2'\ncontents: []\nextra: " + nested))
+    false
+  } catch {
+    @fga.FgaError(..) => true
+  }
+  assert_true(too_deep)
+  let mut source = "schema: '1.2'\ncontents: []\na0: &a0 [x]\n"
+  for i in 1..<15 {
+    source += "a" +
+      i.to_string() +
+      ": &a" +
+      i.to_string() +
+      " [*a" +
+      (i - 1).to_string() +
+      ", *a" +
+      (i - 1).to_string() +
+      "]\n"
+  }
+  let rejected = try {
+    ignore(@model.parse_mod(source))
+    false
+  } catch {
+    @fga.FgaError(..) => true
+  }
+  assert_true(rejected)
+}
+
+///|
+test "fga.mod accepts finite scalar and sequence aliases" {
+  let paths = @model.parse_mod(
+    "version: &v '1.2'\nschema: *v\nfiles: &files [a.fga]\ncontents: *files\ncopy: [*files, *files]",
+  )
+  assert_eq(paths, ["a.fga"])
+}

@@ -267,3 +267,25 @@ test "programmatic models are validated" {
     content="true",
   )
 }
+
+///|
+test "unknown tupleset type also reports the missing computed relation" {
+  let model = @dsl.merge_modules([
+    @dsl.ModuleFile::{
+      name: "employee.fga",
+      contents: "module employee\n\ntype employe\n  relations\n    define can_manage: manager or can_manage from manager\n    define manager: [employee]\n",
+    },
+  ])
+  let issues = @validate.validate_model(model)
+  assert_eq(issues.length(), 2)
+  assert_true(
+    issues.any(i => {
+      i.message.contains(
+        "`can_manage` does not exist on `manager`, which is of type `employee`.",
+      )
+    }),
+  )
+  assert_true(
+    issues.any(i => i.message.contains("`employee` is not a valid type.")),
+  )
+}
