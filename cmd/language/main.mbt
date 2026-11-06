@@ -27,6 +27,18 @@ fn main {
       }
     }
   }
+  if paths.length() == 0 {
+    try {
+      failures += @lang.run_module_dir(
+        ".upstream/language/data/transformer-module",
+      )
+      failures += @lang.run_mod_cases(
+        ".upstream/language/data/fga-mod-transformer-cases.yaml",
+      )
+    } catch {
+      _ => read_error = true
+    }
+  }
   if read_error {
     @sys.exit(2)
   } else if failures > 0 {

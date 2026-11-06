@@ -143,3 +143,158 @@ pub fn format_transform_report(report : TransformReport) -> String {
   }
   out.to_string()
 }
+
+///|
+fn module_files(
+  root : String,
+  prefix : String,
+) -> Array[@dsl.ModuleFile] raise @fga.FgaError {
+  let entries = @fs.read_dir(root + "/" + prefix).to_owned() catch {
+    _ => raise transform_error("cannot list module files")
+  }
+  entries.sort_by(fn(a, b) { a.lexical_compare(b) })
+  let files : Array[@dsl.ModuleFile] = []
+  for name in entries {
+    let relative = if prefix == "" { name } else { prefix + "/" + name }
+    if (@fs.is_dir(root + "/" + relative) catch { _ => false }) {
+      files.append(module_files(root, relative))
+    } else if name.has_suffix(".fga") {
+      files.push(@dsl.ModuleFile::{
+        name: relative,
+        contents: read_text(root + "/" + relative),
+      })
+    }
+  }
+  files
+}
+
+///|
+/// All module directories are reported, including missing upstream inputs.
+pub fn run_module_dir(root : String) -> Int32 raise @fga.FgaError {
+  let names = @fs.read_dir(root).to_owned() catch {
+    _ => raise transform_error("cannot list modules")
+  }
+  names.sort_by(fn(a, b) { a.lexical_compare(b) })
+  let mut passed = 0
+  let mut supplied = 0
+  let mut unavailable = 0
+  let mut failures = 0
+  for name in names {
+    let directory = root + "/" + name
+    if !(@fs.is_dir(directory) catch { _ => false }) {
+      continue
+    }
+    if !@fs.path_exists(directory + "/module") {
+      // The pinned complex fixture has JSON only. Exercise preservation without
+      // presenting it as a module-input transformation.
+      unavailable += 1
+      let source = read_text(directory + "/authorization-model.json")
+      let expected = @json.parse(source) catch {
+        _ => raise transform_error("invalid JSON fixture")
+      }
+      let same = @model.json_eq(
+        @model.model_to_json(@model.json_to_model(source)),
+        expected,
+      )
+      println(
+        "  UNAVAILABLE " +
+        name +
+        ": no module inputs upstream; JSON metadata roundtrip=" +
+        same.to_string(),
+      )
+      if !same {
+        failures += 1
+      }
+      continue
+    }
+    supplied += 1
+    let files = module_files(directory + "/module", "")
+    let expects_error = @fs.path_exists(directory + "/expected_errors.json")
+    let result = try {
+      let model = @dsl.merge_modules(files)
+      let issues = @validate.validate_model(model)
+      if expects_error {
+        issues.length() > 0
+      } else {
+        let expected = @json.parse(
+          read_text(directory + "/authorization-model.json"),
+        ) catch {
+          _ => raise transform_error("invalid JSON fixture")
+        }
+        @model.json_eq(@model.model_to_json(model), expected)
+      }
+    } catch {
+      @fga.FgaError(..) as err => {
+        if !expects_error {
+          println(@fga.format_error(err))
+        }
+        expects_error
+      }
+    }
+    println(
+      "  " +
+      (if result { "PASS " } else { "FAIL " }) +
+      name +
+      (if expects_error {
+        " (rejection; diagnostic-list equality not asserted)"
+      } else {
+        " (full JSON equality)"
+      }),
+    )
+    if result {
+      passed += 1
+    } else {
+      failures += 1
+    }
+  }
+  println(
+    "modules: " +
+    passed.to_string() +
+    "/" +
+    supplied.to_string() +
+    " supplied-input cases; " +
+    unavailable.to_string() +
+    " missing-input fixture(s)",
+  )
+  failures
+}
+
+///|
+pub fn run_mod_cases(path : String) -> Int32 raise @fga.FgaError {
+  let docs = @yaml.Yaml::load_from_string(read_text(path)) catch {
+    _ => raise transform_error("invalid mod fixtures")
+  }
+  let cases = match docs[0].to_json() {
+    Array(xs) => xs
+    _ => raise transform_error("invalid mod fixtures")
+  }
+  let mut passed = 0
+  for item in cases {
+    if item is Object(obj) {
+      let source = match obj.get("modFile") {
+        Some(String(s)) => s
+        _ => ""
+      }
+      let expects_error = obj.contains("expected_errors")
+      let ok = try {
+        let _ = @model.parse_mod(source)
+        !expects_error
+      } catch {
+        @fga.FgaError(..) => expects_error
+      }
+      if ok {
+        passed += 1
+      } else {
+        println("FAIL fga.mod: " + item.stringify())
+      }
+    }
+  }
+  println(
+    "fga.mod: " +
+    passed.to_string() +
+    "/" +
+    cases.length().to_string() +
+    " acceptance/rejection cases",
+  )
+  cases.length() - passed
+}

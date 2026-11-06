@@ -1,0 +1,13 @@
+name: Modular document access
+model_file: fga.mod
+tuples:
+  - user: user:anne
+    relation: viewer
+    object: document:roadmap
+tests:
+  - name: Anne can view the roadmap
+    check:
+      - user: user:anne
+        object: document:roadmap
+        assertions:
+          viewer: true

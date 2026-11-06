@@ -8,6 +8,10 @@ import {
 // Values
 pub fn format_transform_report(TransformReport) -> String
 
+pub fn run_mod_cases(String) -> Int32 raise @fga.FgaError
+
+pub fn run_module_dir(String) -> Int32 raise @fga.FgaError
+
 pub fn run_transformer_dir(String) -> TransformReport raise @fga.FgaError
 
 // Errors
