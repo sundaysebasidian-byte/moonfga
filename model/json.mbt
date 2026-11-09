@@ -63,6 +63,7 @@ fn optional_string(
 ///|
 fn base_type_from_json(name : String) -> String raise @fga.FgaError {
   match name {
+    "TYPE_NAME_ANY" => "any"
     "TYPE_NAME_BOOL" => "bool"
     "TYPE_NAME_STRING" => "string"
     "TYPE_NAME_INT" => "int"
@@ -80,6 +81,7 @@ fn base_type_from_json(name : String) -> String raise @fga.FgaError {
 ///|
 fn base_type_to_json(name : String) -> String raise @fga.FgaError {
   match name {
+    "any" => "TYPE_NAME_ANY"
     "bool" => "TYPE_NAME_BOOL"
     "string" => "TYPE_NAME_STRING"
     "int" => "TYPE_NAME_INT"
@@ -201,14 +203,15 @@ fn parse_condition_parameter(
       if items.length() == 0 {
         None
       } else {
-        let inner = as_object(items[0], "generic type")
+        if items.length() != 1 {
+          raise invalid("expected one generic parameter")
+        }
+        let inner = parse_condition_parameter(items[0])
         Some(
-          base_type_from_json(
-            as_string(
-              required(inner, "type_name", "generic type"),
-              "generic type_name",
-            ),
-          ),
+          match inner.generic_type {
+            Some(t) => inner.type_name + "<" + t + ">"
+            None => inner.type_name
+          },
         )
       }
     }
@@ -513,11 +516,7 @@ fn parameter_to_json(p : @fga.ConditionParam) -> Json raise @fga.FgaError {
       fields.push(
         (
           "generic_types",
-          Json::array([
-            Json::object(
-              Map([("type_name", Json::string(base_type_to_json(inner)))]),
-            ),
-          ]),
+          Json::array([parameter_to_json(parameter_from_type_text(inner))]),
         ),
       )
     None => ()
@@ -602,4 +601,17 @@ pub fn model_to_json_string(
   model : @fga.AuthModel,
 ) -> String raise @fga.FgaError {
   model_to_json(model).stringify(indent=2)
+}
+
+///|
+fn parameter_from_type_text(text : String) -> @fga.ConditionParam {
+  match text.find("<") {
+    Some(i) =>
+      {
+        name: "",
+        type_name: text[:i].to_owned(),
+        generic_type: Some(text[i + 1:text.length() - 1].to_owned()),
+      }
+    None => { name: "", type_name: text, generic_type: None, }
+  }
 }

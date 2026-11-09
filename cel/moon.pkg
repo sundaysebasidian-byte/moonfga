@@ -1,5 +1,10 @@
 import {
+  "moonbitlang/core/math",
   "moonbitlang/core/encoding/utf8",
   "moonbitlang/core/string",
   "sundaysebasidian-byte/moonfga/fga",
 }
+
+import {
+  "moonbitlang/core/json",
+} for "test"

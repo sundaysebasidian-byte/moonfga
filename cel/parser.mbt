@@ -1,4 +1,4 @@
-// Expression AST and parser for the CEL subset.
+// Expression AST and parser for CEL conditions.
 
 ///|
 pub(all) enum CelExpr {
@@ -155,8 +155,9 @@ fn CelParser::parse_postfix(self : CelParser) -> CelExpr raise @fga.FgaError {
     } else if self.at_symbol(".") {
       self.advance()
       let name = self.expect_ident()
-      let args = if self.at_symbol("(") { self.parse_arguments() } else { [] }
-      expr = CMethod(expr, name, args)
+      let call = self.at_symbol("(")
+      let args = if call { self.parse_arguments() } else { [] }
+      expr = CMethod(expr, if call { name } else { "@field:" + name }, args)
     } else {
       break
     }
@@ -172,6 +173,12 @@ fn CelParser::parse_unary(self : CelParser) -> CelExpr raise @fga.FgaError {
       _ => "!"
     }
     self.advance()
+    if symbol == "-" &&
+      self.peek().kind is CIntLit(i) &&
+      i == -9223372036854775807L - 1L {
+      self.advance()
+      return CLiteral(VInt(i))
+    }
     CUnary(symbol, self.parse_unary())
   } else {
     self.parse_postfix()
@@ -216,6 +223,9 @@ fn CelParser::parse_primary(self : CelParser) -> CelExpr raise @fga.FgaError {
   let token = self.peek()
   match token.kind {
     CIntLit(v) => {
+      if v == -9223372036854775807L - 1L {
+        raise cel_fail("integer literal overflow", token.line, token.column)
+      }
       self.advance()
       CLiteral(VInt(v))
     }
@@ -263,6 +273,9 @@ fn CelParser::parse_primary(self : CelParser) -> CelExpr raise @fga.FgaError {
           items.push(self.parse_expr())
           if self.at_symbol(",") {
             self.advance()
+            if self.at_symbol("]") {
+              break
+            }
           } else {
             break
           }
@@ -282,6 +295,9 @@ fn CelParser::parse_primary(self : CelParser) -> CelExpr raise @fga.FgaError {
           entries.push((key, value))
           if self.at_symbol(",") {
             self.advance()
+            if self.at_symbol("}") {
+              break
+            }
           } else {
             break
           }

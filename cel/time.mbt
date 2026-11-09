@@ -48,7 +48,10 @@ fn days_in_month(year : Int32, month : Int32) -> Int32 {
 
 ///|
 /// Parses an RFC 3339 timestamp into milliseconds since the Unix epoch.
-pub fn parse_timestamp(text : String) -> Int64 raise @fga.FgaError {
+pub fn parse_timestamp(
+  text : String,
+  context_mode~ : Bool = false,
+) -> Int64 raise @fga.FgaError {
   let invalid = @fga.fail(
     @fga.ERR_VALIDATION,
     "invalid timestamp '" + text + "'",
@@ -72,7 +75,7 @@ pub fn parse_timestamp(text : String) -> Int64 raise @fga.FgaError {
     None => raise invalid
   }
   match text.get_char(10) {
-    Some('T') | Some('t') | Some(' ') => ()
+    Some('T') => ()
     _ => raise invalid
   }
   if text.get_char(13) != Some(':') || text.get_char(16) != Some(':') {
@@ -96,7 +99,8 @@ pub fn parse_timestamp(text : String) -> Int64 raise @fga.FgaError {
     day > days_in_month(year, month) ||
     hour > 23 ||
     minute > 59 ||
-    second > 60 {
+    second > 59 ||
+    (!context_mode && year < 1) {
     raise invalid
   }
   let mut pos = 19
@@ -128,7 +132,7 @@ pub fn parse_timestamp(text : String) -> Int64 raise @fga.FgaError {
   }
   let mut offset_minutes = 0
   match text.get_char(pos) {
-    Some('Z') | Some('z') => pos = pos + 1
+    Some('Z') => pos = pos + 1
     Some('+') | Some('-') => {
       let sign = if text.get_char(pos) == Some('+') { 1 } else { -1 }
       let oh = match fixed_digits(text, pos + 1, 2) {
@@ -141,6 +145,10 @@ pub fn parse_timestamp(text : String) -> Int64 raise @fga.FgaError {
       let om = match fixed_digits(text, pos + 4, 2) {
         Some(v) => v
         None => raise invalid
+      }
+      if oh > (if context_mode { 24 } else { 23 }) ||
+        om > (if context_mode { 60 } else { 59 }) {
+        raise invalid
       }
       offset_minutes = sign * (oh * 60 + om)
       pos = pos + 6
@@ -160,7 +168,7 @@ fn duration_unit_ns(unit : String) -> Int64? {
   match unit {
     "ns" => Some(1L)
     "us" => Some(1000L)
-    "µs" => Some(1000L)
+    "µs" | "μs" => Some(1000L)
     "ms" => Some(1000000L)
     "s" => Some(1000000000L)
     "m" => Some(60000000000L)
@@ -192,66 +200,81 @@ pub fn parse_duration(text : String) -> Int64 raise @fga.FgaError {
   if pos >= text.length() {
     raise invalid
   }
-  let mut total = 0L
+  if text[pos:].to_owned() == "0" {
+    return 0L
+  }
+  let limit = if sign < 0L {
+    9223372036854775808UL
+  } else {
+    9223372036854775807UL
+  }
+  let mut total = 0UL
   while pos < text.length() {
-    let number_start = pos
-    let mut saw_digit = false
-    while true {
-      match text.get_char(pos) {
-        Some(c) =>
-          if c >= '0' && c <= '9' {
-            saw_digit = true
-            pos = pos + 1
-          } else {
-            break
-          }
-        None => break
+    let start = pos
+    while pos < text.length() && cel_is_digit(text.get_char(pos).unwrap()) {
+      pos += 1
+    }
+    let whole = if pos == start {
+      0UL
+    } else {
+      @string.parse_uint64(text[start:pos].to_owned()) catch {
+        _ => raise invalid
       }
     }
-    if !saw_digit {
+    let mut fractional_digits = ""
+    let mut digits = pos - start
+    if text.get_char(pos) == Some('.') {
+      pos += 1
+      let fraction_start = pos
+      while pos < text.length() && cel_is_digit(text.get_char(pos).unwrap()) {
+        digits += 1
+        pos += 1
+      }
+      fractional_digits = text[fraction_start:pos].to_owned()
+    }
+    if digits == 0 {
       raise invalid
     }
-    if text.get_char(pos) == Some('.') {
-      pos = pos + 1
-      let mut frac_digits = 0
-      while true {
-        match text.get_char(pos) {
-          Some(c) =>
-            if c >= '0' && c <= '9' {
-              frac_digits = frac_digits + 1
-              pos = pos + 1
-            } else {
-              break
-            }
-          None => break
-        }
-      }
-      if frac_digits == 0 {
-        raise invalid
-      }
-    }
-    let number_text = text[number_start:pos].to_owned()
-    let number = @string.parse_double(number_text) catch { _ => raise invalid }
     let unit_start = pos
     while pos < text.length() {
-      match text.get_char(pos) {
-        Some(c) =>
-          if (c >= 'a' && c <= 'z') || c >= '\u{00B5}' {
-            pos = pos + 1
-          } else {
-            break
-          }
-        None => break
+      let ch = text.get_char(pos).unwrap()
+      if ch.is_ascii_alphabetic() || ch == '\u{00b5}' || ch == '\u{03bc}' {
+        pos += 1
+      } else {
+        break
       }
     }
-    let unit = text[unit_start:pos].to_owned()
-    let factor = match duration_unit_ns(unit) {
-      Some(v) => v
+    let factor = match duration_unit_ns(text[unit_start:pos].to_owned()) {
+      Some(v) => v.reinterpret_as_uint64()
       None => raise invalid
     }
-    total = total + (number * factor.to_double()).to_int64()
+    if whole > limit / factor {
+      raise invalid
+    }
+    // Decimal long multiplication retains all fractional digits without
+    // binary floating point rounding or a wide-integer dependency.
+    let mut fractional = 0UL
+    for i = fractional_digits.length() - 1; i >= 0; i = i - 1 {
+      fractional = (
+          (fractional_digits.get_char(i).unwrap().to_int() - 48)
+          .to_int64()
+          .reinterpret_as_uint64() *
+          factor +
+          fractional
+        ) /
+        10UL
+    }
+    let amount = whole * factor
+    if fractional > limit - amount || total > limit - amount - fractional {
+      raise invalid
+    }
+    total += amount + fractional
   }
-  sign * total
+  if sign < 0L {
+    -total.reinterpret_as_int64()
+  } else {
+    total.reinterpret_as_int64()
+  }
 }
 
 ///|
@@ -261,8 +284,11 @@ pub fn format_timestamp(ms : Int64) -> String {
 }
 
 ///|
-fn parse_timestamp_value(text : String) -> @fga.CelValue raise @fga.FgaError {
-  let ms = parse_timestamp(text)
+fn parse_timestamp_value(
+  text : String,
+  context_mode~ : Bool = false,
+) -> @fga.CelValue raise @fga.FgaError {
+  let ms = parse_timestamp(text, context_mode~)
   let mut ns = 0L
   let mut scale = 100000L
   let mut pos = 23
@@ -296,4 +322,37 @@ fn parse_timestamp_value(text : String) -> @fga.CelValue raise @fga.FgaError {
     }
   }
   @fga.timestamp_value(ms, ns, offset~)
+}
+
+///|
+fn format_duration(ns : Int64) -> String {
+  let magnitude = if ns < 0L {
+    (-ns).reinterpret_as_uint64()
+  } else {
+    ns.reinterpret_as_uint64()
+  }
+  let seconds = magnitude / 1000000000UL
+  let remainder = magnitude % 1000000000UL
+  let fraction = if remainder == 0UL {
+    ""
+  } else {
+    let mut f = remainder.to_string()
+    f = Array::make(9 - f.length(), "0").join("") + f
+    while f.has_suffix("0") {
+      f = f[:f.length() - 1].to_owned()
+    }
+    "." + f
+  }
+  (if ns < 0L { "-" } else { "" }) + seconds.to_string() + fraction + "s"
+}
+
+///|
+fn checked_timestamp(
+  value : @fga.CelValue,
+) -> @fga.CelValue raise @fga.FgaError {
+  let (ms, _) = value.timestamp_parts().unwrap()
+  if ms < -62135596800000L || ms > 253402300799999L {
+    raise eval_error("timestamp out of range")
+  }
+  value
 }

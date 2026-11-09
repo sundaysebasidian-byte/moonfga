@@ -24,7 +24,11 @@ pub const ERR_VALIDATION : Int32 = 2000
 
 pub const MAX_RESOLUTION_DEPTH : Int32 = 25
 
+pub fn cel_numeric_compare(CelValue, CelValue) -> Int32?
+
 pub fn cel_value_eq(CelValue, CelValue) -> Bool
+
+pub fn cel_value_size(CelValue) -> Int32
 
 pub fn cel_value_to_display(CelValue) -> String
 
@@ -63,6 +67,8 @@ pub fn json_object_to_value_map(@json.Json) -> Map[String, CelValue] raise FgaEr
 pub fn json_to_cel_value_raw(@json.Json) -> CelValue
 
 pub fn matching_restriction_condition(Array[TypeRestriction], String) -> String? raise FgaError
+
+pub fn numeric_compare(CelValue, CelValue) -> Int32?
 
 pub fn object_id(String) -> String
 
@@ -121,6 +127,8 @@ pub(all) enum CelValue {
   VBool(Bool)
   VString(String)
   VBytes(Bytes)
+  VType(String)
+  VKeyMap(Array[(CelValue, CelValue)])
   VDuration(Int64)
   VTimestamp(Int64)
   VTimestampPrecise(Int64, Int32, Int32)

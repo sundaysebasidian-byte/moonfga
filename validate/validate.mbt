@@ -10,6 +10,14 @@ const INLINE_EXPRESSION_NAME : String = "$expression"
 
 ///|
 fn is_parameter_type(name : String) -> Bool {
+  if name.has_suffix(">") {
+    if name.find("<") is Some(i) {
+      let base = name[:i].to_owned()
+      return (base == "list" || base == "map") &&
+        is_parameter_type(name[i + 1:name.length() - 1].to_owned())
+    }
+  }
+  name == "any" ||
   name == "bool" ||
   name == "string" ||
   name == "int" ||
@@ -556,47 +564,6 @@ fn entry_rewrite(
 }
 
 ///|
-fn collect_idents(expr : @cel.CelExpr, out : Map[String, Unit]) -> Unit {
-  match expr {
-    @cel.CLiteral(_) => ()
-    @cel.CIdent(name) => out[name] = ()
-    @cel.CUnary(_, inner) => collect_idents(inner, out)
-    @cel.CBinary(_, left, right) => {
-      collect_idents(left, out)
-      collect_idents(right, out)
-    }
-    @cel.CTernary(condition, then_value, else_value) => {
-      collect_idents(condition, out)
-      collect_idents(then_value, out)
-      collect_idents(else_value, out)
-    }
-    @cel.CCall(_, args) =>
-      for arg in args {
-        collect_idents(arg, out)
-      }
-    @cel.CMethod(target, _, args) => {
-      collect_idents(target, out)
-      for arg in args {
-        collect_idents(arg, out)
-      }
-    }
-    @cel.CIndex(target, index) => {
-      collect_idents(target, out)
-      collect_idents(index, out)
-    }
-    @cel.CList(items) =>
-      for item in items {
-        collect_idents(item, out)
-      }
-    @cel.CMap(entries) =>
-      for entry in entries {
-        collect_idents(entry.0, out)
-        collect_idents(entry.1, out)
-      }
-  }
-}
-
-///|
 fn validate_condition(
   model : @fga.AuthModel,
   condition : @fga.Condition,
@@ -674,8 +641,8 @@ fn validate_condition(
       condition.name,
     )
   } else {
-    let expr = Some(@cel.compile(condition.expression)) catch {
-      @fga.FgaError(..) as err => {
+    @cel.check_condition(condition) catch {
+      err =>
         issue_at(
           issues,
           model,
@@ -686,30 +653,6 @@ fn validate_condition(
           @fga.error_message(err),
           condition.name,
         )
-        None
-      }
-    }
-    match expr {
-      Some(ast) => {
-        let idents : Map[String, Unit] = Map([])
-        collect_idents(ast, idents)
-        idents.each(fn(name, _) {
-          if !params.contains(name) {
-            issue_at(
-              issues,
-              model,
-              key,
-              "condition '" +
-              condition.name +
-              "' references undefined parameter `" +
-              name +
-              "`.",
-              name,
-            )
-          }
-        })
-      }
-      None => ()
     }
   }
   if !used {

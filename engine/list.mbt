@@ -71,6 +71,9 @@ pub fn Engine::list_objects(
     traces: None,
     list_query: true,
     match_wildcard_users: self.match_wildcard_users,
+    condition_cost_limit: self.condition_cost_limit,
+    condition_cancelled: self.condition_cancelled,
+    condition_local_timezone: self.condition_local_timezone,
   }
   engine.reverse_objects(type_name, relation, user, context)
 }
@@ -103,6 +106,9 @@ pub fn Engine::list_users(
     traces: None,
     list_query: true,
     match_wildcard_users: true,
+    condition_cost_limit: self.condition_cost_limit,
+    condition_cancelled: self.condition_cancelled,
+    condition_local_timezone: self.condition_local_timezone,
   }
   let results : Array[String] = []
   let seen : Map[String, Unit] = Map([])

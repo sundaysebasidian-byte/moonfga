@@ -339,6 +339,7 @@ fn parse_extend_type(
 
 ///|
 fn is_parameter_type(name : String) -> Bool {
+  name == "any" ||
   name == "bool" ||
   name == "string" ||
   name == "int" ||
@@ -375,16 +376,7 @@ fn parse_condition(
       let mut generic : String? = None
       if base == "list" || base == "map" {
         p.expect_kind(Less, "'<'")
-        let inner = p.expect_word("a parameter element type")
-        if !is_parameter_type(inner.text) {
-          raise @fga.fail_at(
-            @fga.ERR_VALIDATION,
-            "invalid condition parameter type '" + inner.text + "'",
-            inner.line,
-            inner.column,
-          )
-        }
-        generic = Some(inner.text)
+        generic = Some(p.parse_parameter_type())
         p.expect_kind(Greater, "'>'")
       } else if !is_parameter_type(base) {
         raise @fga.fail_at(
@@ -494,4 +486,25 @@ pub fn parse_model(source : String) -> @fga.AuthModel raise @fga.FgaError {
     }
   }
   model
+}
+
+///|
+fn Parser::parse_parameter_type(self : Parser) -> String raise @fga.FgaError {
+  let token = self.expect_word("a parameter type")
+  if token.text == "list" || token.text == "map" {
+    self.expect_kind(Less, "'<'")
+    let inner = self.parse_parameter_type()
+    self.expect_kind(Greater, "'>'")
+    token.text + "<" + inner + ">"
+  } else {
+    if !is_parameter_type(token.text) {
+      raise @fga.fail_at(
+        @fga.ERR_VALIDATION,
+        "invalid condition parameter type '" + token.text + "'",
+        token.line,
+        token.column,
+      )
+    }
+    token.text
+  }
 }

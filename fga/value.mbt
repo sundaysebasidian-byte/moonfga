@@ -47,6 +47,13 @@ pub fn cel_value_to_json(value : CelValue) -> Json {
       Json::object(out)
     }
     VIp(x) => Json::string(x)
+    VType(x) => Json::string(x)
+    VKeyMap(xs) =>
+      Json::array(
+        xs.map(x => {
+          Json::array([cel_value_to_json(x.0), cel_value_to_json(x.1)])
+        }),
+      )
     VNull => Json::null()
   }
 }
@@ -105,5 +112,18 @@ pub fn json_get_object(value : Json, key : String) -> Json? {
   match json_object_get(value, key) {
     Some(Object(_) as o) => Some(o)
     _ => None
+  }
+}
+
+///|
+/// CEL's observable cost-model size, not a serialized byte length.
+pub fn cel_value_size(value : CelValue) -> Int32 {
+  match value {
+    VString(s) => s.char_length()
+    VBytes(b) => b.length()
+    VList(xs) => xs.length()
+    VMap(xs) => xs.length()
+    VKeyMap(xs) => xs.length()
+    _ => 1
   }
 }

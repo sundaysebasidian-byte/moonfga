@@ -135,7 +135,18 @@ fn CelLexer::scan_string(
     if !triple && (c == '\n' || c == '\r') {
       raise cel_fail("newline in string literal", line, column)
     }
-    if c == '\\' && !raw {
+    if c == '\\' && raw {
+      out.push((92).to_byte())
+      self.advance()
+      let escaped = match self.peek() {
+        Some(ch) => ch
+        None => raise cel_fail("unterminated raw literal", line, column)
+      }
+      for b in @utf8.encode(escaped.to_string()[:]) {
+        out.push(b)
+      }
+      self.advance()
+    } else if c == '\\' && !raw {
       self.advance()
       let esc = match self.peek() {
         Some(c) => c
@@ -237,6 +248,33 @@ fn CelLexer::scan_number(
   line : Int32,
   column : Int32,
 ) -> CTokenKind raise @fga.FgaError {
+  if self.peek() == Some('0') &&
+    (
+      self.src.get_char(self.i + 1) == Some('x') ||
+      self.src.get_char(self.i + 1) == Some('X')
+    ) {
+    self.advance()
+    self.advance()
+    let start = self.i
+    while self.peek() is Some(c) && c.is_ascii_hexdigit() {
+      self.advance()
+    }
+    if start == self.i {
+      raise cel_fail("invalid hex literal", line, column)
+    }
+    let text = self.src[start:self.i].to_owned()
+    let u = @string.parse_uint64("0x" + text) catch {
+      _ => raise cel_fail("integer literal overflow", line, column)
+    }
+    if self.peek() == Some('u') || self.peek() == Some('U') {
+      self.advance()
+      return CUintLit(u)
+    }
+    if u > 9223372036854775808UL {
+      raise cel_fail("integer literal overflow", line, column)
+    }
+    return CIntLit(u.reinterpret_as_int64())
+  }
   let sb = StringBuilder()
   let mut is_double = false
   let mut is_uint = false
@@ -322,6 +360,9 @@ fn CelLexer::scan_number(
       _ => raise cel_fail("invalid double literal '" + text + "'", line, column)
     }
   } else {
+    if text == "9223372036854775808" {
+      return CIntLit(-9223372036854775807L - 1L)
+    }
     CIntLit(@string.parse_int64(text)) catch {
       _ =>
         raise cel_fail("invalid integer literal '" + text + "'", line, column)
@@ -395,7 +436,8 @@ fn lex_cel_tokens(source : String) -> Array[CToken] raise @fga.FgaError {
         _ => ()
       }
     }
-    if cel_is_digit(c) {
+    if cel_is_digit(c) ||
+      (c == '.' && source.get_char(lexer.i + 1) is Some(d) && cel_is_digit(d)) {
       let kind = lexer.scan_number(line, column)
       lexer.emit(kind, line, column)
       continue

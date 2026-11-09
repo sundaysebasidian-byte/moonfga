@@ -29,3 +29,13 @@ from, the following open source projects:
 
 The full Apache License 2.0 text is in the LICENSE file. The MIT license text
 for moonbit-community/yaml is reproduced in its distributed package.
+
+5. Unicode character data (https://www.unicode.org)
+   License: Unicode License V3 (third_party/UNICODE-LICENSE.txt)
+   Use: generated category, script and simple-fold tables via Go's public unicode
+        APIs. Unicode 17.0.0; no Go implementation code copied.
+
+6. IANA Time Zone Database (https://www.iana.org/time-zones)
+   License: public domain
+   Use: generated historical transitions and future-rule data from tzdb 2026f.
+        No timezone implementation code copied. See docs/timezones.md.

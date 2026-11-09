@@ -1,6 +1,16 @@
 ///|
 fn run_case(c : Json) -> Json raise @fga.FgaError {
   let model = @model.model_from_json(@fga.json_object_get(c, "model").unwrap())
+  if @fga.json_get_bool(c, "validate_model") == Some(true) &&
+    !@validate.validate_model(model).is_empty() {
+    return Json::object(
+      Map([
+        ("check", Json::string("M:invalid_authorization_model")),
+        ("list_objects", Json::string("M:invalid_authorization_model")),
+        ("list_users", Json::string("M:invalid_authorization_model")),
+      ]),
+    )
+  }
   let store = @store.MemoryStore::new()
   let _ = store.write_all(
     @fga.tuples_from_json(@fga.json_object_get(c, "tuples")),

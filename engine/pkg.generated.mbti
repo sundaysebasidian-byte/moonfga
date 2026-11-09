@@ -37,7 +37,7 @@ pub fn Engine::expand_json(Self, String, String, Array[@fga.Tuple]) -> @json.Jso
 pub fn Engine::explain_check(Self, String, String, String, Map[String, @json.Json], Array[@fga.Tuple]) -> ExplainResult raise @fga.FgaError
 pub fn Engine::list_objects(Self, String, String, String, Map[String, @json.Json], Array[@fga.Tuple]) -> Array[String] raise @fga.FgaError
 pub fn Engine::list_users(Self, String, String, Array[String], Map[String, @json.Json], Array[@fga.Tuple]) -> Array[String] raise @fga.FgaError
-pub fn Engine::new(@fga.AuthModel, &@fga.TupleReader) -> Self
+pub fn Engine::new(@fga.AuthModel, &@fga.TupleReader, condition_cost_limit? : Int32, condition_cancelled? : () -> Bool, condition_local_timezone? : String?) -> Self
 
 pub(all) struct ExplainResult {
   allowed : Bool

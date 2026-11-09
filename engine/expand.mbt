@@ -162,6 +162,9 @@ pub fn Engine::expand_json(
     traces: self.traces,
     list_query: self.list_query,
     match_wildcard_users: self.match_wildcard_users,
+    condition_cost_limit: self.condition_cost_limit,
+    condition_cancelled: self.condition_cancelled,
+    condition_local_timezone: self.condition_local_timezone,
   }
   expand_relation(engine, object, relation, 0, [])
 }

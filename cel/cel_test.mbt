@@ -19,7 +19,10 @@ test "arithmetic and logic" {
   inspect(eval_empty("(1 + 2) * 3"), content="9")
   inspect(eval_empty("7 / 2"), content="3")
   inspect(eval_empty("7 % 4"), content="3")
-  inspect(eval_empty("1.5 + 2"), content="3.5")
+  inspect(
+    eval_empty("1.5 + 2"),
+    content="error: no matching arithmetic overload",
+  )
   inspect(eval_empty("true && !false"), content="true")
   inspect(eval_empty("false || 3 > 2"), content="true")
   inspect(eval_empty("1 < 2 ? \"yes\" : \"no\""), content="\"yes\"")

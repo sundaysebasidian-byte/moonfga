@@ -3,36 +3,48 @@
 ///|
 /// Evaluates a condition expression against a request context.
 ///
-/// Every declared parameter must be present in the merged context. Extra
+/// Only supplied parameters are bound; unresolved reads raise errors that
+/// deciding logical/macro values can absorb. Extra
 /// context keys are ignored: a request context is shared by all conditions in
 /// a model, so a condition only reads the parameters it declares. Missing
 /// parameters use the validation code 2000, which is what OpenFGA returns for
 /// an unsatisfiable condition evaluation.
-pub fn eval_condition(
+pub fn eval_condition_with_limit(
   condition : @fga.Condition,
   context : Map[String, Json],
+  max_cost : Int32,
+  cancelled~ : () -> Bool = fn() { false },
+  local_timezone~ : String? = None,
 ) -> Bool raise @fga.FgaError {
+  if condition.parameters.is_empty() && !context.is_empty() {
+    raise @fga.fail(
+      @fga.ERR_VALIDATION,
+      "no parameters defined for condition context",
+    )
+  }
   let env : Map[String, @fga.CelValue] = Map([])
-  let known : Map[String, Bool] = Map([])
   for param in condition.parameters {
-    known[param.name] = true
-    let value = match context.get(param.name) {
-      Some(value) => coerce_context(param, value)
-      None =>
-        raise @fga.fail(
-          @fga.ERR_VALIDATION,
-          "missing context parameter '" +
-          param.name +
-          "' for condition '" +
-          condition.name +
-          "'",
-        )
+    match context.get(param.name) {
+      Some(value) => env[param.name] = coerce_context(param, value)
+      None => ()
     }
-    env[param.name] = value
   }
   let expression = compile(condition.expression)
-  match eval_expr(expression, env) {
-    @fga.VBool(result) => result
+  match
+    eval_expr_with_limit(expression, env, max_cost, cancelled~, local_timezone~) {
+    @fga.VBool(result) => {
+      // The pinned server reports all missing declared parameters, even when
+      // CEL itself resolves a deciding constant without accessing them.
+      for param in condition.parameters {
+        if !context.contains(param.name) {
+          raise @fga.fail(
+            @fga.ERR_VALIDATION,
+            "missing context parameter '" + param.name + "'",
+          )
+        }
+      }
+      result
+    }
     other =>
       raise @fga.fail(
         @fga.ERR_VALIDATION,
@@ -43,4 +55,12 @@ pub fn eval_condition(
         " instead of bool",
       )
   }
+}
+
+///|
+pub fn eval_condition(
+  condition : @fga.Condition,
+  context : Map[String, Json],
+) -> Bool raise @fga.FgaError {
+  eval_condition_with_limit(condition, context, 100)
 }

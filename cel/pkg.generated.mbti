@@ -9,13 +9,19 @@ import {
 // Values
 pub fn canonical_ip(String) -> String raise @fga.FgaError
 
+pub fn check_condition(@fga.Condition) -> Unit raise @fga.FgaError
+
 pub fn coerce_context(@fga.ConditionParam, @json.Json) -> @fga.CelValue raise @fga.FgaError
 
 pub fn compile(String) -> CelExpr raise @fga.FgaError
 
 pub fn eval_condition(@fga.Condition, Map[String, @json.Json]) -> Bool raise @fga.FgaError
 
+pub fn eval_condition_with_limit(@fga.Condition, Map[String, @json.Json], Int32, cancelled? : () -> Bool, local_timezone? : String?) -> Bool raise @fga.FgaError
+
 pub fn eval_expr(CelExpr, Map[String, @fga.CelValue]) -> @fga.CelValue raise @fga.FgaError
+
+pub fn eval_expr_with_limit(CelExpr, Map[String, @fga.CelValue], Int32, cancelled? : () -> Bool, local_timezone? : String?) -> @fga.CelValue raise @fga.FgaError
 
 pub fn format_timestamp(Int64) -> String
 
@@ -23,9 +29,11 @@ pub fn ip_in_cidr(String, String) -> Bool raise @fga.FgaError
 
 pub fn parse_duration(String) -> Int64 raise @fga.FgaError
 
-pub fn parse_timestamp(String) -> Int64 raise @fga.FgaError
+pub fn parse_timestamp(String, context_mode? : Bool) -> Int64 raise @fga.FgaError
 
-pub fn regex_matches(String, String) -> Bool raise @fga.FgaError
+pub fn regex_matches(String, String, cancelled? : () -> Bool) -> Bool raise @fga.FgaError
+
+pub fn validate_regex(String) -> Unit raise @fga.FgaError
 
 // Errors
 

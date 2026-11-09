@@ -24,6 +24,7 @@ fn coerce_primitive(
   value : Json,
 ) -> @fga.CelValue raise @fga.FgaError {
   match type_name {
+    "any" => dynamic_context(value)
     "bool" =>
       match value {
         True => @fga.VBool(true)
@@ -35,31 +36,18 @@ fn coerce_primitive(
         String(s) => @fga.VString(s)
         other => raise coercion_error(param_name, "a string", other)
       }
-    "int" =>
-      match value {
-        Number(d, ..) =>
-          if d == d.floor() &&
-            d >= -9223372036854775808.0 &&
-            d <= 9223372036854775807.0 {
-            @fga.VInt(d.to_int64())
-          } else {
-            raise coercion_error(param_name, "an integer", value)
-          }
-        other => raise coercion_error(param_name, "an integer", other)
+    "int" => @fga.VInt(context_integer(value))
+    "uint" => {
+      let i = context_integer(value)
+      if i < 0L {
+        raise coercion_error(param_name, "a uint", value)
       }
-    "uint" =>
-      match value {
-        Number(d, ..) =>
-          if d == d.floor() && d >= 0.0 && d <= 18446744073709549568.0 {
-            @fga.VUint(d.to_int64().reinterpret_as_uint64())
-          } else {
-            raise coercion_error(param_name, "an unsigned integer", value)
-          }
-        other => raise coercion_error(param_name, "an unsigned integer", other)
-      }
+      @fga.VUint(i.reinterpret_as_uint64())
+    }
     "double" =>
       match value {
         Number(d, ..) => @fga.VDouble(d)
+        String(s) => @fga.VDouble(context_double_text(s))
         other => raise coercion_error(param_name, "a double", other)
       }
     "duration" =>
@@ -69,7 +57,7 @@ fn coerce_primitive(
       }
     "timestamp" =>
       match value {
-        String(s) => parse_timestamp_value(s)
+        String(s) => parse_timestamp_value(s, context_mode=true)
         other => raise coercion_error(param_name, "a timestamp string", other)
       }
     "ipaddress" =>
@@ -93,7 +81,12 @@ fn coerce_value(
   value : Json,
 ) -> @fga.CelValue raise @fga.FgaError {
   match value {
-    Null => @fga.VNull
+    Null =>
+      if type_name == "any" {
+        @fga.VNull
+      } else {
+        raise coercion_error(param_name, type_name, value)
+      }
     _ =>
       if type_name == "list" {
         match value {
@@ -101,7 +94,7 @@ fn coerce_value(
             let result : Array[@fga.CelValue] = []
             for item in items {
               let element = match generic_type {
-                Some(inner) => coerce_value(param_name, inner, None, item)
+                Some(inner) => coerce_type_text(param_name, inner, item)
                 None => @fga.json_to_cel_value_raw(item)
               }
               result.push(element)
@@ -118,7 +111,7 @@ fn coerce_value(
               match entries.get(key) {
                 Some(item) =>
                   result[key] = match generic_type {
-                    Some(inner) => coerce_value(param_name, inner, None, item)
+                    Some(inner) => coerce_type_text(param_name, inner, item)
                     None => @fga.json_to_cel_value_raw(item)
                   }
                 None => ()
@@ -141,4 +134,22 @@ pub fn coerce_context(
   value : Json,
 ) -> @fga.CelValue raise @fga.FgaError {
   coerce_value(param.name, param.type_name, param.generic_type, value)
+}
+
+///|
+fn coerce_type_text(
+  name : String,
+  text : String,
+  value : Json,
+) -> @fga.CelValue raise @fga.FgaError {
+  match text.find("<") {
+    Some(i) =>
+      coerce_value(
+        name,
+        text[:i].to_owned(),
+        Some(text[i + 1:text.length() - 1].to_owned()),
+        value,
+      )
+    None => coerce_value(name, text, None, value)
+  }
 }

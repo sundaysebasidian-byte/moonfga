@@ -13,6 +13,9 @@ pub struct Engine {
   // only by a wildcard must not be reported individually.
   priv traces : Map[String, Array[String]]?
   priv list_query : Bool
+  priv condition_local_timezone : String?
+  priv condition_cost_limit : Int32
+  priv condition_cancelled : () -> Bool
   priv match_wildcard_users : Bool
 }
 
@@ -22,6 +25,9 @@ pub struct Engine {
 pub fn Engine::new(
   model : @fga.AuthModel,
   reader : &@fga.TupleReader,
+  condition_cost_limit~ : Int32 = 100,
+  condition_cancelled~ : () -> Bool = fn() { false },
+  condition_local_timezone~ : String? = None,
 ) -> Engine {
   Engine::{
     model,
@@ -29,6 +35,9 @@ pub fn Engine::new(
     traces: None,
     list_query: false,
     match_wildcard_users: true,
+    condition_cost_limit,
+    condition_local_timezone,
+    condition_cancelled,
   }
 }
 
@@ -199,6 +208,9 @@ fn infer_parameter_type(value : Json) -> @fga.ConditionParam {
 fn eval_inline_expression(
   tuple : @fga.Tuple,
   request_context : Map[String, Json],
+  max_cost : Int32,
+  cancelled : () -> Bool,
+  local_timezone : String?,
 ) -> Bool raise @fga.FgaError {
   let cond = match tuple.condition {
     Some(c) => c
@@ -263,7 +275,13 @@ fn eval_inline_expression(
     expression,
     parameters,
   }
-  @cel.eval_condition(condition, merged)
+  @cel.eval_condition_with_limit(
+    condition,
+    merged,
+    max_cost,
+    cancelled~,
+    local_timezone~,
+  )
 }
 
 ///|
@@ -272,6 +290,9 @@ fn eval_named_condition(
   tuple : @fga.Tuple,
   name : String,
   request_context : Map[String, Json],
+  max_cost : Int32,
+  cancelled : () -> Bool,
+  local_timezone : String?,
 ) -> Bool raise @fga.FgaError {
   let condition = match model.find_condition(name) {
     Some(c) => c
@@ -280,7 +301,13 @@ fn eval_named_condition(
   }
   let merged = condition_context_map(tuple)
   request_context.each(fn(k, v) { merged[k] = v })
-  @cel.eval_condition(condition, merged)
+  @cel.eval_condition_with_limit(
+    condition,
+    merged,
+    max_cost,
+    cancelled~,
+    local_timezone~,
+  )
 }
 
 ///|
@@ -295,9 +322,23 @@ fn Engine::condition_holds(
     TupleBindingSpec::Invalid => false
     TupleBindingSpec::Condition(name) =>
       if name == INLINE_EXPRESSION {
-        eval_inline_expression(tuple, context)
+        eval_inline_expression(
+          tuple,
+          context,
+          self.condition_cost_limit,
+          self.condition_cancelled,
+          self.condition_local_timezone,
+        )
       } else {
-        eval_named_condition(self.model, tuple, name, context)
+        eval_named_condition(
+          self.model,
+          tuple,
+          name,
+          context,
+          self.condition_cost_limit,
+          self.condition_cancelled,
+          self.condition_local_timezone,
+        )
       }
   }
 }
@@ -926,6 +967,9 @@ pub fn Engine::check_with(
     traces: self.traces,
     list_query: self.list_query,
     match_wildcard_users: self.match_wildcard_users,
+    condition_cost_limit: self.condition_cost_limit,
+    condition_cancelled: self.condition_cancelled,
+    condition_local_timezone: self.condition_local_timezone,
   }
   engine.check_resolved(object, relation, user, context)
 }

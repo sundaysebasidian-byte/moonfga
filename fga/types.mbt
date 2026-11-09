@@ -15,6 +15,8 @@ pub(all) enum CelValue {
   VBool(Bool)
   VString(String)
   VBytes(Bytes)
+  VType(String)
+  VKeyMap(Array[(CelValue, CelValue)])
   VDuration(Int64)
   VTimestamp(Int64)
   VTimestampPrecise(Int64, Int32, Int32)
@@ -33,6 +35,8 @@ pub fn cel_value_type_name(value : CelValue) -> String {
     VBool(_) => "bool"
     VString(_) => "string"
     VBytes(_) => "bytes"
+    VType(_) => "type"
+    VKeyMap(_) => "map"
     VDuration(_) => "duration"
     VTimestamp(_) | VTimestampPrecise(_, _, _) => "timestamp"
     VList(_) => "list"
@@ -55,28 +59,22 @@ pub fn cel_value_eq(a : CelValue, b : CelValue) -> Bool {
     (VBool(x), VBool(y)) => x == y
     (VString(x), VString(y)) => x == y
     (VBytes(x), VBytes(y)) => x == y
+    (VType(x), VType(y)) => x == y
+    (VKeyMap(xs), VKeyMap(ys)) =>
+      xs.length() == ys.length() &&
+      xs.all(x => ys.any(y => cel_value_eq(x.0, y.0) && cel_value_eq(x.1, y.1)))
     (VDuration(x), VDuration(y)) => x == y
     (VTimestamp(x), VTimestamp(y)) => x == y
     (VIp(x), VIp(y)) => x == y
     (VInt(x), VInt(y)) => x == y
     (VUint(x), VUint(y)) => x == y
     (VDouble(x), VDouble(y)) => x == y
-    (VInt(x), VDouble(y)) => x.to_double() == y
-    (VDouble(x), VInt(y)) => x == y.to_double()
-    (VUint(x), VDouble(y)) => x.to_double() == y
-    (VDouble(x), VUint(y)) => x == y.to_double()
-    (VInt(x), VUint(y)) =>
-      if x < 0L {
-        false
-      } else {
-        x.reinterpret_as_uint64() == y
-      }
-    (VUint(x), VInt(y)) =>
-      if y < 0L {
-        false
-      } else {
-        x == y.reinterpret_as_uint64()
-      }
+    (VInt(_), VDouble(_))
+    | (VDouble(_), VInt(_))
+    | (VUint(_), VDouble(_))
+    | (VDouble(_), VUint(_))
+    | (VInt(_), VUint(_))
+    | (VUint(_), VInt(_)) => cel_numeric_compare(a, b) == Some(0)
     (VList(xs), VList(ys)) =>
       if xs.length() != ys.length() {
         false
@@ -115,6 +113,8 @@ pub fn cel_value_to_display(value : CelValue) -> String {
     VBool(x) => x.to_string()
     VString(x) => "\"" + x + "\""
     VBytes(x) => x.to_string()
+    VType(x) => x
+    VKeyMap(xs) => "{" + xs.length().to_string() + " entries}"
     VDuration(x) =>
       if x % 1000000000L == 0L {
         (x / 1000000000L).to_string() + "s"
