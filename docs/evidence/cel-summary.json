@@ -1,0 +1,31 @@
+{
+  "version": "1.22.1",
+  "commit": "44054f542f64e9b9589dd26a595081b3d2cfd942",
+  "seed": 20261108,
+  "cases": 308,
+  "random_cases": 0,
+  "regression_cases": 308,
+  "comparisons": 924,
+  "mismatches": 0,
+  "families": {
+    "cel": 308
+  },
+  "by_api": {
+    "check": {
+      "compared": 308,
+      "mismatches": 0
+    },
+    "list_objects": {
+      "compared": 308,
+      "mismatches": 0
+    },
+    "list_users": {
+      "compared": 308,
+      "mismatches": 0
+    }
+  },
+  "corpus": "conformance-results/cel/corpus.json",
+  "fixed_expressions": 52,
+  "generated_expressions": 256,
+  "generator_seed": 20261108
+}

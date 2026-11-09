@@ -9,6 +9,7 @@ import random
 import socket
 import subprocess
 import tarfile
+import tempfile
 import time
 import urllib.error
 import urllib.request
@@ -37,7 +38,17 @@ def binary():
     executable = cache / f"openfga-{VERSION}-{target}"
     with tarfile.open(archive) as tar:
         member = tar.extractfile("openfga")
-        executable.write_bytes(member.read())
+        data = member.read()
+    if not executable.exists() or executable.read_bytes() != data:
+        # Never truncate an executable another oracle process may be running.
+        with tempfile.NamedTemporaryFile(dir=cache, delete=False) as staging:
+            staging.write(data)
+            staged = Path(staging.name)
+        try:
+            staged.chmod(0o755)
+            staged.replace(executable)
+        finally:
+            staged.unlink(missing_ok=True)
     executable.chmod(0o755)
     return str(executable.resolve())
 
@@ -115,26 +126,33 @@ def main():
     p.add_argument("--cases", type=int, default=1000)
     p.add_argument("--seed", type=int, default=314159)
     p.add_argument("--output", type=Path, default=Path("conformance-results/oracle"))
+    p.add_argument("--corpus", type=Path, help="Replay explicit authorization cases instead of generated cases")
     args = p.parse_args()
     if args.cases < 1:
         p.error("--cases must be positive")
     out = args.output
     out.mkdir(parents=True, exist_ok=True)
     rng = random.Random(args.seed)
-    cases = [generate(rng, i) if i % 5 == 0 else boundary_case(rng, i) for i in range(args.cases)]
-    for i in range(2):
-        c = generate(random.Random(args.seed + i), 0)
-        c["model"]["conditions"] = {"enabled": {"name": "enabled", "expression": "ok", "parameters": {"ok": {"type_name": "TYPE_NAME_BOOL"}}}}
-        doc = c["model"]["type_definitions"][2]
-        doc["relations"]["viewer"] = {"this": {}}
-        doc["metadata"]["relations"]["viewer"] = {"directly_related_user_types": [{"type": "user", "condition": "enabled"}]}
-        c.update(object="document:0", relation="viewer", user="user:0")
-        c["tuples"] = [{"object": c["object"], "relation": "viewer", "user": c["user"], "condition": {"name": "enabled", "context": {"ok": True}}}]
-        c["contextual"] = [{"object": c["object"], "relation": "viewer", "user": c["user"], "condition": {"name": "enabled", "context": {"ok": False} if i == 0 else {}}}]
-        cases.append(c)
-    fixed = json.loads(Path("examples/regressions/oracle.json").read_text())
-    fixed += json.loads(Path("examples/regressions/check-depth.json").read_text())
-    cases.extend(fixed)
+    fixed = []
+    if args.corpus:
+        cases = json.loads(args.corpus.read_text())
+        if not cases:
+            p.error("corpus must not be empty")
+    else:
+        cases = [generate(rng, i) if i % 5 == 0 else boundary_case(rng, i) for i in range(args.cases)]
+        for i in range(2):
+            c = generate(random.Random(args.seed + i), 0)
+            c["model"]["conditions"] = {"enabled": {"name": "enabled", "expression": "ok", "parameters": {"ok": {"type_name": "TYPE_NAME_BOOL"}}}}
+            doc = c["model"]["type_definitions"][2]
+            doc["relations"]["viewer"] = {"this": {}}
+            doc["metadata"]["relations"]["viewer"] = {"directly_related_user_types": [{"type": "user", "condition": "enabled"}]}
+            c.update(object="document:0", relation="viewer", user="user:0")
+            c["tuples"] = [{"object": c["object"], "relation": "viewer", "user": c["user"], "condition": {"name": "enabled", "context": {"ok": True}}}]
+            c["contextual"] = [{"object": c["object"], "relation": "viewer", "user": c["user"], "condition": {"name": "enabled", "context": {"ok": False} if i == 0 else {}}}]
+            cases.append(c)
+        fixed = json.loads(Path("examples/regressions/oracle.json").read_text())
+        fixed += json.loads(Path("examples/regressions/check-depth.json").read_text())
+        cases.extend(fixed)
     (out / "cases.json").write_text(json.dumps(cases))
     local = subprocess.run(["moon", "run", "--target", "native", "cmd/oracle", "--", str(out / "cases.json")], check=False, text=True, capture_output=True)
     if local.returncode:
@@ -195,6 +213,8 @@ def main():
     summary = {"version": VERSION, "commit": COMMIT, "seed": args.seed, "cases": len(cases), "random_cases": args.cases, "regression_cases": 2 + len(fixed), "comparisons": len(cases)*3, "mismatches": len(mismatches),
                "families": {k: sum(c.get("family", "graph") == k for c in cases[:args.cases]) for k in ["graph", "logical_errors", "unicode", "timestamp", "deep_graph"]},
                "by_api": {k: {"compared": len(cases), "mismatches": sum(m["kind"] == k for m in mismatches)} for k in ["check", "list_objects", "list_users"]}}
+    if args.corpus:
+        summary.update(corpus=str(args.corpus), random_cases=0, regression_cases=len(cases), families={"cel": len(cases)})
     for name, value in [("summary", summary), ("mismatches", mismatches), ("expected", expected), ("actual", actual), ("http-errors", HTTP_ERRORS)]:
         (out / f"{name}.json").write_text(json.dumps(value, indent=2) + "\n")
     print(json.dumps(summary, indent=2))

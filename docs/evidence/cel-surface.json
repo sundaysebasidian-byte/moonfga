@@ -1,0 +1,152 @@
+[
+  {
+    "probe": "cross_type_compare",
+    "expression": "1 < 2.0",
+    "local_check": true,
+    "official": {
+      "code": "invalid_authorization_model",
+      "message": "failed to compile expression on condition 'cel_condition' - ERROR: cel_condition:1:3: found no matching overload for '_<_' applied to '(int, double)'\n | 1 < 2.0\n | ..^"
+    }
+  },
+  {
+    "probe": "mixed_arithmetic",
+    "expression": "1 + 2.0 == 3.0",
+    "local_check": true,
+    "official": {
+      "code": "invalid_authorization_model",
+      "message": "failed to compile expression on condition 'cel_condition' - ERROR: cel_condition:1:3: found no matching overload for '_+_' applied to '(int, double)'\n | 1 + 2.0 == 3.0\n | ..^"
+    }
+  },
+  {
+    "probe": "type",
+    "expression": "type(b\"a\") == bytes",
+    "local_check": "E2000",
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "timestamp_getFullYear",
+    "expression": "timestamp(\"2026-01-02T03:04:05Z\").getFullYear() == 2026",
+    "local_check": "E2000",
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "timestamp_timezone",
+    "expression": "timestamp(\"2026-01-02T03:04:05Z\").getHours(\"America/Los_Angeles\") == 19",
+    "local_check": "E2000",
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "duration_getHours",
+    "expression": "duration(\"2h\").getHours() == 2",
+    "local_check": "E2000",
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "map_numeric_key",
+    "expression": "{1: \"a\"}[1] == \"a\"",
+    "local_check": "E2000",
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "map_macro",
+    "expression": "{\"a\": 1}.exists(k, k == \"a\")",
+    "local_check": "E2000",
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "map_three_args",
+    "expression": "[1,2].map(x, x > 1, x * 2) == [4]",
+    "local_check": "E2000",
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "regex_group",
+    "expression": "\"ab\".matches(\"(ab)+\")",
+    "local_check": false,
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "regex_count",
+    "expression": "\"aaa\".matches(\"a{3}\")",
+    "local_check": false,
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "regex_flag",
+    "expression": "\"A\".matches(\"(?i)a\")",
+    "local_check": false,
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "regex_unicode",
+    "expression": "\"中\".matches(\"\\\\p{Han}\")",
+    "local_check": false,
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "timestamp_int",
+    "expression": "timestamp(0) == timestamp(\"1970-01-01T00:00:00Z\")",
+    "local_check": "E2000",
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "int_duration",
+    "expression": "int(duration(\"2s\")) == 2",
+    "local_check": "E2000",
+    "official": {
+      "allowed": false,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "double_zero",
+    "expression": "1.0 / 0.0 > 0.0",
+    "local_check": "E2000",
+    "official": {
+      "allowed": true,
+      "resolution": ""
+    }
+  },
+  {
+    "probe": "constant_overflow",
+    "expression": "9223372036854775807 + 1 == 0",
+    "local_check": "E2000",
+    "official": "E2000"
+  }
+]
