@@ -51,6 +51,8 @@ fn timezone_offset(
     if parts.length() != 2 {
       raise eval_error("invalid timezone")
     }
+    validate_decimal(parts[0].to_owned(), true)
+    validate_decimal(parts[1].to_owned(), true)
     let h = @string.parse_int(parts[0].to_owned()) catch {
       _ => raise eval_error("invalid timezone")
     }

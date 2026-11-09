@@ -189,6 +189,8 @@ def expression_cases(seed):
         'timestamp("1677-09-21T00:12:44.045224192Z") - timestamp("1970-01-01T00:00:00.9Z") == duration("-9223372036854775808ns")',
     ]:
         yield e, {'n':0,'s':''}
+    for offset in ['0x8:00','1_0:00','8:+01','-00:30','', '24:00']:
+        yield 'timestamp("2026-01-01T00:00:00Z").getHours(s) >= 0', {'n':0,'s':offset}
     for count in list(range(15,56)) + [100,1000]:
         items = '[' + ','.join(['1']*count) + ']'
         for macro in ['all', 'exists', 'exists_one', 'map', 'filter']:

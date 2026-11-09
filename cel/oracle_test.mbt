@@ -8858,6 +8858,30 @@ test "official CEL model acceptance runtime errors and values" {
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
     (
+      "timestamp(\"2026-01-01T00:00:00Z\").getHours(s) >= 0", "{\"n\": 0, \"s\": \"0x8:00\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "timestamp(\"2026-01-01T00:00:00Z\").getHours(s) >= 0", "{\"n\": 0, \"s\": \"1_0:00\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "timestamp(\"2026-01-01T00:00:00Z\").getHours(s) >= 0", "{\"n\": 0, \"s\": \"8:+01\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "timestamp(\"2026-01-01T00:00:00Z\").getHours(s) >= 0", "{\"n\": 0, \"s\": \"-00:30\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "timestamp(\"2026-01-01T00:00:00Z\").getHours(s) >= 0", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "timestamp(\"2026-01-01T00:00:00Z\").getHours(s) >= 0", "{\"n\": 0, \"s\": \"24:00\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
       "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].all(x, x >= n)", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
