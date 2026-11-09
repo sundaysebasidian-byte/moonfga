@@ -2,9 +2,7 @@
 import json
 from pathlib import Path
 import subprocess
-import urllib.error
 import time
-import oracle_openfga as oracle
 
 PROBES = {
     'cross_type_compare': '1 < 2.0',
@@ -30,56 +28,39 @@ PROBES = {
 def main():
     out = Path('conformance-results/cel-surface')
     out.mkdir(parents=True, exist_ok=True)
-    template = json.loads(Path('conformance-results/cel/cases.json').read_text())[0]
-    cases = []
-    for name, expr in PROBES.items():
-        c = json.loads(json.dumps(template))
-        c['model']['conditions']['cel_condition']['expression'] = expr
-        c['probe'] = name
+    template = json.loads(Path('conformance-results/rework1-cel/cases.json').read_text())[0]
+    probes = [(name, expr, {'n':0,'s':''}) for name,expr in PROBES.items()]
+    probes += [
+        ('host_local_zone', 'timestamp("2026-01-01T00:00:00Z").getHours("Local") >= 0', {'n':0,'s':''}),
+        ('numeric_context_exponent_bound', 'n > 0', {'n':'1e100001','s':''}),
+        ('constant_type_macro_cost', '['+','.join(['1']*25)+'].map(x,type(x)).size() == 25', {'n':0,'s':''}),
+        ('regex_program_bound', '"a".matches('+json.dumps('('+'a'*101+'){1000}')+')', {'n':0,'s':''}),
+    ]
+    cases=[]
+    for name,expr,context in probes:
+        c=json.loads(json.dumps(template))
+        c.update(probe=name,context=context,validate_model=True)
+        c['model']['conditions']['cel_condition']['expression']=expr
         cases.append(c)
-    path = out / 'cases.json'
+    local = json.loads(json.dumps(cases[17]))
+    local['probe'] = 'configured_host_local_zone'
+    local['local_timezone'] = 'America/Los_Angeles'
+    local['model']['conditions']['cel_condition']['expression'] = 'timestamp("2026-01-01T00:00:00Z").getHours("Local") == 16'
+    cases.append(local)
+    path=out/'corpus.json'
     path.write_text(json.dumps(cases))
-    local = subprocess.run(['moon', 'run', '--target', 'native', 'cmd/oracle', '--', str(path)], text=True, capture_output=True, check=True)
-    actual = json.loads(local.stdout)
-    ports = [oracle.port() for _ in range(3)]
-    base = f'http://127.0.0.1:{ports[0]}'
-    with (out / 'server.log').open('w') as log:
-        proc = subprocess.Popen([oracle.binary(), 'run', '--datastore-engine', 'memory', '--http-addr', f'127.0.0.1:{ports[0]}', '--grpc-addr', f'127.0.0.1:{ports[1]}', '--metrics-addr', f'127.0.0.1:{ports[2]}', '--playground-enabled=false', '--profiler-enabled=false', '--log-level', 'error'], stdout=log, stderr=log)
-        results = []
-        try:
-            for _ in range(100):
-                if proc.poll() is not None:
-                    raise RuntimeError('oracle exited')
-                try:
-                    oracle.request(base, '/healthz')
-                    break
-                except urllib.error.URLError:
-                    time.sleep(.1)
-            else:
-                raise RuntimeError('readiness timeout')
-            for c, a in zip(cases, actual):
-                store = oracle.request(base, '/stores', {'name': 'cel-surface'})['id']
-                prefix = '/stores/' + store
-                row = {'probe': c['probe'], 'expression': c['model']['conditions']['cel_condition']['expression'], 'local_check': a['check']}
-                try:
-                    mid = oracle.request(base, prefix + '/authorization-models', c['model'])['authorization_model_id']
-                except RuntimeError:
-                    if oracle.HTTP_ERRORS[-1]['body'].get('code') != 'invalid_authorization_model':
-                        raise
-                    row['official'] = oracle.HTTP_ERRORS[-1]['body']
-                else:
-                    oracle.request(base, prefix + '/write', {'authorization_model_id': mid, 'writes': {'tuple_keys': c['tuples']}})
-                    row['official'] = oracle.request(base, prefix + '/check', {'authorization_model_id': mid, 'tuple_key': {k: c[k] for k in ['object', 'relation', 'user']}, 'context': c['context']})
-                results.append(row)
-        finally:
-            proc.terminate()
-            try:
-                proc.wait(timeout=10)
-            except subprocess.TimeoutExpired:
-                proc.kill()
-                proc.wait()
-    (out / 'results.json').write_text(json.dumps(results, ensure_ascii=False, indent=2) + '\n')
-    print(json.dumps(results, ensure_ascii=False, indent=2))
+    started=time.time_ns()
+    result=subprocess.run(['python3','scripts/oracle_openfga.py','--corpus',str(path),'--output',str(out)],check=False)
+    required=[out/name for name in ['summary.json','actual.json','expected.json','mismatches.json']]
+    if result.returncode not in (0,1) or any(not p.exists() or p.stat().st_mtime_ns < started for p in required):
+        raise RuntimeError('surface oracle did not complete')
+    actual=json.loads((out/'actual.json').read_text())
+    expected=json.loads((out/'expected.json').read_text())
+    if len(actual) != len(cases) or len(expected) != len(cases):
+        raise RuntimeError('surface oracle result count mismatch')
+    rows=[{'probe':c['probe'],'expression':c['model']['conditions']['cel_condition']['expression'],'context':c['context'],'local':a,'official':e,'matches':a==e} for c,a,e in zip(cases,actual,expected)]
+    (out/'results.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\n')
+    print(json.dumps({'probes':len(rows),'matched':sum(r['matches'] for r in rows),'known_differences':[r['probe'] for r in rows if not r['matches']]},indent=2))
 
 
 if __name__ == '__main__':

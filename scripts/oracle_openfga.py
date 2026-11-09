@@ -72,8 +72,10 @@ def request(base, path, data=None):
         body = json.load(e)
         HTTP_ERRORS.append({"path": path, "status": e.code, "body": body})
         # Error categories used by this generator (conditions / invalid input).
+        if body.get("code") == "invalid_authorization_model":
+            return "M:invalid_authorization_model"
         if body.get("code") == "validation_error":
-            return "E2000"
+            return "M:validation_error" if path.endswith("/authorization-models") else "E2000"
         if body.get("code") == "authorization_model_resolution_too_complex":
             return "E2002"
         raise RuntimeError((path, e.code, body)) from e
@@ -180,7 +182,17 @@ def main():
             for i, c in enumerate(cases):
                 store = request(base, "/stores", {"name": f"oracle-{i}"})["id"]
                 path = f"/stores/{store}"
-                mid = request(base, path + "/authorization-models", c["model"])["authorization_model_id"]
+                model_result = request(base, path + "/authorization-models", c["model"])
+                if isinstance(model_result, str):
+                    if not c.get("validate_model"):
+                        raise RuntimeError(f"case {i}: model rejected: {HTTP_ERRORS[-1]}")
+                    result = {k: model_result for k in ["check", "list_objects", "list_users"]}
+                    expected.append(result)
+                    for kind, value in result.items():
+                        if actual[i][kind] != value:
+                            mismatches.append({"case": i, "kind": kind, "local": actual[i][kind], "openfga": value})
+                    continue
+                mid = model_result["authorization_model_id"]
                 if c["tuples"]:
                     written = request(base, path + "/write", {"authorization_model_id": mid, "writes": {"tuple_keys": c["tuples"]}})
                     if not isinstance(written, dict):

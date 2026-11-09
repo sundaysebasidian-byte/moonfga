@@ -1,6 +1,21 @@
 ///|
 fn run_case(c : Json) -> Json raise @fga.FgaError {
   let model = @model.model_from_json(@fga.json_object_get(c, "model").unwrap())
+  let mut request_invalid = false
+  model.conditions.each((_, c) => {
+    if @utf8.encode(c.expression[:]).length() > 512 {
+      request_invalid = true
+    }
+  })
+  if @fga.json_get_bool(c, "validate_model") == Some(true) && request_invalid {
+    return Json::object(
+      Map([
+        ("check", Json::string("M:validation_error")),
+        ("list_objects", Json::string("M:validation_error")),
+        ("list_users", Json::string("M:validation_error")),
+      ]),
+    )
+  }
   if @fga.json_get_bool(c, "validate_model") == Some(true) &&
     !@validate.validate_model(model).is_empty() {
     return Json::object(
@@ -15,7 +30,11 @@ fn run_case(c : Json) -> Json raise @fga.FgaError {
   let _ = store.write_all(
     @fga.tuples_from_json(@fga.json_object_get(c, "tuples")),
   )
-  let engine = @engine.Engine::new(model, store as &@fga.TupleReader)
+  let engine = @engine.Engine::new(
+    model,
+    store as &@fga.TupleReader,
+    condition_local_timezone=@fga.json_get_string(c, "local_timezone"),
+  )
   let object = @fga.json_get_string(c, "object").unwrap()
   let user = @fga.json_get_string(c, "user").unwrap()
   let relation = @fga.json_get_string(c, "relation").unwrap()
