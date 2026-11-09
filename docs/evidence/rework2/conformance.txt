@@ -1,0 +1,17 @@
+conformance: .upstream/openfga/consolidated_1_1_tests.yaml
+tests: 138
+check: 364/364 passed (100.0%), 0 failed, 0 skipped
+list_objects: 272/272 passed (100.0%), 0 failed, 0 skipped
+list_users: 296/297 passed (99.6%), 0 failed, 1 skipped
+  skip/no_expectation: 1
+
+conformance: .upstream/openfga/abac_tests.yaml
+tests: 33
+check: 152/152 passed (100.0%), 0 failed, 0 skipped
+list_objects: 82/82 passed (100.0%), 0 failed, 0 skipped
+list_users: 97/97 passed (100.0%), 0 failed, 0 skipped
+
+totals: check 516/516, list_objects 354/354, list_users 393/394
+check        516/516  100.00%  (target 95%)
+list_objects 354/354  100.00%  (target 90%)
+list_users   393/394  99.75%  (target 90%)

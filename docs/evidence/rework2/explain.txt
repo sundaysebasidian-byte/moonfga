@@ -1,0 +1,1 @@
+Explain CLI / JS: same allowed decision, owner witness, complete status

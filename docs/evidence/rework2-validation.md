@@ -28,7 +28,7 @@ Oracle: official OpenFGA v1.22.1, commit `44054f542f64e9b9589dd26a595081b3d2cfd9
 | `moon bench --target native` | 0 |
 | `git diff --check` | 0 |
 
-All raw command logs are retained in `conformance-results/r9-validation/`; [command metadata](rework2/commands.json) records timing and exit codes.
+Committed `.txt` transcripts remove trailing line whitespace only. All raw command logs are retained in `conformance-results/r9-validation/`; [command metadata](rework2/commands.json) records timing and exit codes.
 
 - Four backend test runs: 226/226 each (wasm, wasm-gc, JS, native), including controlled FgaError for direct compilation of 10000 nested delimiters.
 - Official matrix: Check 516/516, ListObjects 354/354, ListUsers 393/394; one missing-expectation upstream skip.
@@ -71,4 +71,4 @@ Before/after oracle mismatches found during this rework are retained locally; fi
 | c425bb2 archive | 6.20 | 30.99 |
 | current repeat | 5.78 | 30.80 |
 
-These are bounded 100k-tuple benchmarks, not a guarantee over all workloads or host loads. Both logs and the initial run are retained in this evidence directory.
+These are bounded 100k-tuple benchmarks, not a guarantee over all workloads or host loads. Both logs and the initial run are retained as `bench-baseline.txt`, `bench-repeat.txt` and `bench-native.txt` in this evidence directory.

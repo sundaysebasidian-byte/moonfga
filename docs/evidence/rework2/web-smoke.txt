@@ -1,0 +1,37 @@
+ok   github: model is valid
+ok   github: DSL -> JSON -> DSL keeps the model
+ok   github: check allowed with explain
+ok   github: check denied
+ok   github: list-objects
+ok   github: list-users
+ok   github: .fga.yaml suite passes
+ok   drive: model is valid
+ok   drive: DSL -> JSON -> DSL keeps the model
+ok   drive: check allowed with explain
+ok   drive: check denied
+ok   drive: list-objects
+ok   drive: list-users
+ok   drive: .fga.yaml suite passes
+ok   abac: model is valid
+ok   abac: DSL -> JSON -> DSL keeps the model
+ok   abac: check allowed with explain
+ok   abac: check denied
+ok   abac: list-objects
+ok   abac: list-users
+ok   abac: .fga.yaml suite passes
+ok   validation errors carry line and column
+ok   syntax errors are reported as issues with a line
+ok   queries on an invalid model return an error with issues
+ok   explain keeps the decision of a plain check and reports completeness
+ok   allowed explanations are complete and carry a path
+ok   list-users filters: absent, null and valid values are accepted
+ok   list-users rejects filters of kind number
+ok   list-users rejects filters of kind object
+ok   list-users rejects filters of kind boolean
+ok   list-users rejects filters of kind mixed array
+ok   list-users rejects filters of kind array holding null
+ok   list-users rejects filters of kind blank string
+ok   tuples accept an array or a string, not an object
+ok   errors are JSON, never exceptions
+ok   tuples accept text, JSON text and arrays
+36 checks passed

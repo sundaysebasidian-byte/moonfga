@@ -1,0 +1,12 @@
+transformer: .upstream/language/data/transformer
+cases: 29/29 passed
+
+  PASS 00-simple-module (full JSON equality)
+  PASS 01-module-with-errors (diagnostic-list equality)
+  PASS 02-module-with-extends (full JSON equality)
+  PASS 03-module-with-more-errors (diagnostic-list equality)
+  PASS 04-module-with-even-more-errors (diagnostic-list equality)
+  PASS 05-module-with-relation-errors (diagnostic-list equality)
+  UNAVAILABLE 06-complex-module: no module inputs upstream; JSON metadata roundtrip=true
+modules: 6/6 supplied-input cases; 1 missing-input fixture(s)
+fga.mod: 9/9 acceptance/rejection cases

@@ -1,0 +1,7 @@
+[sundaysebasidian-byte/moonfga] bench benchmarks/query_bench_test.mbt:35 ("100k tuples, 10 groups: Check") ok
+time (mean ± σ)         range (min … max)
+   6.62 µs ± 459.45 ns     6.03 µs …   7.29 µs  in 10 ×  16092 runs
+[sundaysebasidian-byte/moonfga] bench benchmarks/query_bench_test.mbt:48 ("100k tuples, 10 groups: ListObjects") ok
+time (mean ± σ)         range (min … max)
+  31.50 ms ± 573.18 µs    30.65 ms …  32.25 ms  in 10 ×      4 runs
+Total tests: 2, passed: 2, failed: 0.
