@@ -54,6 +54,8 @@ def expressions(seed):
 
 
 def expression_cases(seed):
+    from cel_review_corpus import cases as review_cases
+    yield from review_cases()
     for count in range(1,38):
         items = '[' + ','.join(['1']*count) + ']'
         for body in ['1+1','int("1")','[1]','{"a":1}','type(1)','1+0*n']:
