@@ -438,16 +438,11 @@ fn condition_type(text : String) -> CType raise @fga.FgaError {
 ///|
 fn qualified_type(expr : CelExpr) -> String? {
   match expression_path(expr) {
-    Some(n) =>
-      if [
-          "google.protobuf.Timestamp", "google.protobuf.Duration", "google.protobuf.Empty",
-          "google.protobuf.Struct.FieldsEntry",
-        ].contains(n) {
-        Some(n)
-      } else {
-        None
-      }
-    None => None
+    Some("google.protobuf.Timestamp" as n)
+    | Some("google.protobuf.Duration" as n)
+    | Some("google.protobuf.Empty" as n)
+    | Some("google.protobuf.Struct.FieldsEntry" as n) => Some(n)
+    _ => None
   }
 }
 

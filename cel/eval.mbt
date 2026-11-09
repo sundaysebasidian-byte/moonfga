@@ -1205,7 +1205,12 @@ pub fn eval_expr_with_limit(
     local_timezone,
   }
   state.check()
-  eval_expr_state(optimize_expr(expr, env), env, state)
+  let program = if needs_program_optimization(expr) {
+    optimize_expr(expr, env)
+  } else {
+    expr
+  }
+  eval_expr_state(program, env, state)
 }
 
 ///|

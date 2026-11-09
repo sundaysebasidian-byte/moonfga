@@ -128,3 +128,45 @@ fn optimized_member(
     }
   })
 }
+
+///|
+fn needs_program_optimization(expr : CelExpr) -> Bool {
+  match expr {
+    CLiteral(_) => false
+    CIdent(name) =>
+      match global_name(name) {
+        "int"
+        | "uint"
+        | "double"
+        | "bool"
+        | "string"
+        | "bytes"
+        | "list"
+        | "map"
+        | "type"
+        | "null_type" => true
+        _ => false
+      }
+    CList(_) | CMap(_) => true
+    CObject(_, fields) => fields.any(x => needs_program_optimization(x.1))
+    CUnary(_, x) => needs_program_optimization(x)
+    CBinary(_, a, b) | CIndex(a, b) =>
+      needs_program_optimization(a) || needs_program_optimization(b)
+    CTernary(a, b, c) =>
+      needs_program_optimization(a) ||
+      needs_program_optimization(b) ||
+      needs_program_optimization(c)
+    CCall(name, args) =>
+      (
+        conversion_function(global_name(name)) &&
+        args.length() == 1 &&
+        args[0] is CLiteral(_)
+      ) ||
+      args.any(needs_program_optimization)
+    CMethod(target, _, args) =>
+      qualified_type(expr) is Some(_) ||
+      expression_path(expr) == Some("google.protobuf.NullValue.NULL_VALUE") ||
+      needs_program_optimization(target) ||
+      args.any(needs_program_optimization)
+  }
+}
