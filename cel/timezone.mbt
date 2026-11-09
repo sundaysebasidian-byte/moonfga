@@ -108,16 +108,15 @@ fn timestamp_getter(
   name : String,
   zone : String?,
 ) -> @fga.CelValue raise @fga.FgaError {
-  let (ms, _) = value.timestamp_parts().unwrap()
-  let seconds = floor_div(ms, 1000L)
-  let (utc_year, _, _, _, _, _) = civil_fields(ms)
+  let (seconds, nanos) = value.timestamp_seconds().unwrap()
+  let (utc_year, _, _, _, _, _) = civil_second_fields(seconds)
   let offset = match zone {
     Some(z) => timezone_offset(z, seconds, utc_year)
     None => 0
   }
-  let local_ms = ms + offset.to_int64() * 1000L
-  let (y, m, d, hour, minute, second) = civil_fields(local_ms)
-  let days = floor_div(local_ms, 86400000L)
+  let local_seconds = seconds + offset.to_int64()
+  let (y, m, d, hour, minute, second) = civil_second_fields(local_seconds)
+  let days = go_epoch_days(local_seconds)
   @fga.VInt(
     match name {
       "getFullYear" => y
@@ -129,15 +128,17 @@ fn timestamp_getter(
       "getHours" => hour
       "getMinutes" => minute
       "getSeconds" => second
-      "getMilliseconds" => (ms % 1000L + 1000L) % 1000L
+      "getMilliseconds" => nanos.to_int64() / 1000000L
       _ => raise eval_error("unknown timestamp getter")
     },
   )
 }
 
 ///|
-fn civil_fields(ms : Int64) -> (Int64, Int64, Int64, Int64, Int64, Int64) {
-  let days = floor_div(ms, 86400000L)
+fn civil_second_fields(
+  seconds : Int64,
+) -> (Int64, Int64, Int64, Int64, Int64, Int64) {
+  let days = go_epoch_days(seconds)
   let z = days + 719468L
   let era = floor_div(z, 146097L)
   let doe = z - era * 146097L
@@ -148,7 +149,7 @@ fn civil_fields(ms : Int64) -> (Int64, Int64, Int64, Int64, Int64, Int64) {
   let d = doy - (153L * mp + 2L) / 5L + 1L
   let m = mp + (if mp < 10L { 3L } else { -9L })
   let year = y + (if m <= 2L { 1L } else { 0L })
-  let tod = floor_div(ms, 1000L) - days * 86400L
+  let tod = ((seconds.reinterpret_as_uint64() + 9223372028741760000UL) % 86400UL).reinterpret_as_int64()
   (year, m, d, tod / 3600L, tod / 60L % 60L, tod % 60L)
 }
 
@@ -168,4 +169,10 @@ fn TZInfo::transition(self : TZInfo, index : Int32) -> (Int64, Int32) {
     offset = offset | (self.transitions[base + 8 + j].to_int() << (j * 8))
   }
   (seconds.reinterpret_as_int64(), offset)
+}
+
+///|
+fn go_epoch_days(seconds : Int64) -> Int64 {
+  ((seconds.reinterpret_as_uint64() + 9223372028741760000UL) / 86400UL).reinterpret_as_int64() -
+  106751991073400L
 }

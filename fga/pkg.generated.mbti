@@ -82,6 +82,8 @@ pub fn render_user_ref(UserRef) -> String
 
 pub fn restrictions_allow(Array[TypeRestriction], String) -> Bool
 
+pub fn timestamp_from_seconds(Int64, Int64, offset? : Int32) -> CelValue
+
 pub fn timestamp_to_rfc3339(CelValue) -> String
 
 pub fn timestamp_value(Int64, Int64, offset? : Int32) -> CelValue
@@ -130,9 +132,12 @@ pub(all) enum CelValue {
   VString(String)
   VBytes(Bytes)
   VType(String)
+  VProtoEmpty
+  VProtoFields(String, CelValue?)
   VKeyMap(Array[(CelValue, CelValue)])
   VDuration(Int64)
   VTimestamp(Int64)
+  VTimestampWide(Int64, Int32)
   VTimestampPrecise(Int64, Int32, Int32)
   VList(Array[CelValue])
   VMap(Map[String, CelValue])
@@ -141,6 +146,7 @@ pub(all) enum CelValue {
 }
 pub fn CelValue::timestamp_offset(Self) -> Int32
 pub fn CelValue::timestamp_parts(Self) -> (Int64, Int32)?
+pub fn CelValue::timestamp_seconds(Self) -> (Int64, Int32)?
 
 pub(all) struct Condition {
   name : String

@@ -1,6 +1,19 @@
 ///|
 fn run_case(c : Json) -> Json raise @fga.FgaError {
-  let model = @model.model_from_json(@fga.json_object_get(c, "model").unwrap())
+  let model = @model.model_from_json(@fga.json_object_get(c, "model").unwrap()) catch {
+    e => {
+      if @fga.json_get_bool(c, "validate_model") != Some(true) {
+        raise e
+      }
+      return Json::object(
+        Map([
+          ("check", Json::string("M:invalid_authorization_model")),
+          ("list_objects", Json::string("M:invalid_authorization_model")),
+          ("list_users", Json::string("M:invalid_authorization_model")),
+        ]),
+      )
+    }
+  }
   let mut request_invalid = false
   model.conditions.each((_, c) => {
     if @utf8.encode(c.expression[:]).length() > 512 {

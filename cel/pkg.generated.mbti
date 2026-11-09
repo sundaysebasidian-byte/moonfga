@@ -49,6 +49,7 @@ pub(all) enum CelExpr {
   CIndex(CelExpr, CelExpr)
   CList(Array[CelExpr])
   CMap(Array[(CelExpr, CelExpr)])
+  CObject(String, Array[(String, CelExpr)])
 }
 
 // Type aliases

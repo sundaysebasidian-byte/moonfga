@@ -35,6 +35,9 @@ fn common_type(a : CType, b : CType) -> CType {
 
 ///|
 fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError {
+  if expression_path(expr) == Some("google.protobuf.NullValue.NULL_VALUE") {
+    return Atom("int")
+  }
   if qualified_type(expr) is Some(_) {
     return Atom("type")
   }
@@ -152,6 +155,16 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
       }
       List(element)
     }
+    CObject(name, fields) => {
+      let schema = proto_schema(name)
+      for (field, value) in fields {
+        match schema.get(field) {
+          Some(t) => require_type(infer(value, env), t)
+          None => raise eval_error("unknown protobuf field")
+        }
+      }
+      proto_type(name)
+    }
     CMap(entries) => {
       let mut key = Dynamic
       let mut value = Dynamic
@@ -206,6 +219,10 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
               raise eval_error("has expects field selection")
             }
             match infer(target, env) {
+              Atom("google.protobuf.Struct.FieldsEntry") =>
+                if !["key", "value"].contains(field[7:].to_owned()) {
+                  raise eval_error("unknown protobuf field")
+                }
               Map(_, _) | Dynamic => ()
               _ => raise eval_error("has expects map")
             }
@@ -292,6 +309,14 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
       // A property selection has no arguments. The parser distinguishes calls.
       if name.has_prefix("@field:") {
         match t {
+          Atom("google.protobuf.Struct.FieldsEntry") =>
+            return match
+              proto_schema("google.protobuf.Struct.FieldsEntry").get(
+                name[7:].to_owned(),
+              ) {
+              Some(t) => t
+              None => raise eval_error("unknown protobuf field")
+            }
           Map(_, v) => return v
           Dynamic => return Dynamic
           _ => raise eval_error("invalid field selection")
@@ -358,6 +383,10 @@ pub fn check_condition(condition : @fga.Condition) -> Unit raise @fga.FgaError {
   }
   let env : Map[String, CType] = Map([])
   for p in condition.parameters {
+    if (p.type_name == "list" || p.type_name == "map") !=
+      (p.generic_type is Some(_)) {
+      raise eval_error("invalid generic parameter declaration")
+    }
     let scalar = condition_type
     env[p.name] = if p.type_name == "list" {
       List(scalar(p.generic_type.unwrap_or("any")))
@@ -374,7 +403,7 @@ pub fn check_condition(condition : @fga.Condition) -> Unit raise @fga.FgaError {
 }
 
 ///|
-fn condition_type(text : String) -> CType {
+fn condition_type(text : String) -> CType raise @fga.FgaError {
   if text == "any" {
     return Dynamic
   }
@@ -383,32 +412,36 @@ fn condition_type(text : String) -> CType {
       let inner = condition_type(text[i + 1:text.length() - 1].to_owned())
       if text[:i].to_owned() == "list" {
         List(inner)
-      } else {
+      } else if text[:i].to_owned() == "map" {
         Map(Atom("string"), inner)
+      } else {
+        raise eval_error("invalid generic parameter type")
       }
     }
-    None => Atom(text)
+    None =>
+      if [
+          "bool", "string", "int", "uint", "double", "duration", "timestamp", "ipaddress",
+        ].contains(text) {
+        Atom(text)
+      } else {
+        raise eval_error("invalid condition parameter type")
+      }
   }
 }
 
 ///|
 fn qualified_type(expr : CelExpr) -> String? {
-  fn path(e : CelExpr) -> String? {
-    match e {
-      CIdent(n) => Some(n)
-      CMethod(target, field, args) =>
-        if args.is_empty() && field.has_prefix("@field:") {
-          path(target).map(p => p + "." + field[7:].to_owned())
-        } else {
-          None
-        }
-      _ => None
-    }
-  }
-  match path(expr) {
-    Some("google.protobuf.Timestamp" as n)
-    | Some("google.protobuf.Duration" as n) => Some(n)
-    _ => None
+  match expression_path(expr) {
+    Some(n) =>
+      if [
+          "google.protobuf.Timestamp", "google.protobuf.Duration", "google.protobuf.Empty",
+          "google.protobuf.Struct.FieldsEntry",
+        ].contains(n) {
+        Some(n)
+      } else {
+        None
+      }
+    None => None
   }
 }
 
@@ -422,5 +455,52 @@ fn foldable_argument(expr : CelExpr) -> Bool {
     CCall("type", args) | CCall("dyn", args) =>
       args.length() == 1 && foldable_argument(args[0])
     _ => false
+  }
+}
+
+///|
+fn proto_type(name : String) -> CType raise @fga.FgaError {
+  match name {
+    "google.protobuf.Timestamp" => Atom("timestamp")
+    "google.protobuf.Duration" => Atom("duration")
+    "google.protobuf.BoolValue" => Atom("bool")
+    "google.protobuf.StringValue" => Atom("string")
+    "google.protobuf.BytesValue" => Atom("bytes")
+    "google.protobuf.Int32Value" | "google.protobuf.Int64Value" => Atom("int")
+    "google.protobuf.UInt32Value" | "google.protobuf.UInt64Value" =>
+      Atom("uint")
+    "google.protobuf.FloatValue" | "google.protobuf.DoubleValue" =>
+      Atom("double")
+    "google.protobuf.Value" | "google.protobuf.Any" => Dynamic
+    "google.protobuf.Struct" => Map(Atom("string"), Dynamic)
+    "google.protobuf.ListValue" => List(Dynamic)
+    "google.protobuf.Empty" | "google.protobuf.Struct.FieldsEntry" => Atom(name)
+    _ => raise eval_error("undeclared protobuf type")
+  }
+}
+
+///|
+fn proto_schema(name : String) -> Map[String, CType] raise @fga.FgaError {
+  let t = proto_type(name)
+  match name {
+    "google.protobuf.Timestamp" | "google.protobuf.Duration" =>
+      Map([("seconds", Atom("int")), ("nanos", Atom("int"))])
+    "google.protobuf.Empty" => Map([])
+    "google.protobuf.Struct.FieldsEntry" =>
+      Map([("key", Atom("string")), ("value", Dynamic)])
+    "google.protobuf.Any" =>
+      Map([("type_url", Atom("string")), ("value", Atom("bytes"))])
+    "google.protobuf.Struct" => Map([("fields", Map(Atom("string"), Dynamic))])
+    "google.protobuf.ListValue" => Map([("values", List(Dynamic))])
+    "google.protobuf.Value" =>
+      Map([
+        ("null_value", Atom("int")),
+        ("number_value", Atom("double")),
+        ("string_value", Atom("string")),
+        ("bool_value", Atom("bool")),
+        ("struct_value", Map(Atom("string"), Dynamic)),
+        ("list_value", List(Dynamic)),
+      ])
+    _ => Map([("value", t)])
   }
 }

@@ -94,18 +94,15 @@ fn eval_arithmetic(
     }
     _ => ()
   }
-  match (left.timestamp_parts(), right.timestamp_parts(), left, right) {
+  match (left.timestamp_seconds(), right.timestamp_seconds(), left, right) {
     (Some((a, an)), Some((b, bn)), _, _) => {
       if op == "-" {
         // The pinned implementation checks whole-second scaling before
         // adding the fractional remainder, including its overflow boundary.
-        let whole = floor_div(a, 1000L) - floor_div(b, 1000L)
-        let fraction = (
-            (a % 1000L + 1000L) % 1000L - (b % 1000L + 1000L) % 1000L
-          ) *
-          1000000L +
-          an.to_int64() -
-          bn.to_int64()
+        let whole = as_int_value(
+          eval_arithmetic("-", @fga.VInt(a), @fga.VInt(b)),
+        )
+        let fraction = an.to_int64() - bn.to_int64()
         let scaled = eval_arithmetic(
           "*",
           @fga.VInt(whole),
@@ -122,9 +119,9 @@ fn eval_arithmetic(
         raise eval_error("unsupported timestamp operator")
       }
       let direction = if op == "+" { 1L } else { -1L }
-      let result = @fga.timestamp_value(
-        a + direction * (ns / 1000000L),
-        an.to_int64() + direction * (ns % 1000000L),
+      let result = @fga.timestamp_from_seconds(
+        a + direction * (ns / 1000000000L),
+        an.to_int64() + direction * (ns % 1000000000L),
         offset=left.timestamp_offset(),
       )
       return checked_timestamp(result)
@@ -134,9 +131,9 @@ fn eval_arithmetic(
         raise eval_error("unsupported timestamp operator")
       }
       return checked_timestamp(
-        @fga.timestamp_value(
-          b + ns / 1000000L,
-          bn.to_int64() + ns % 1000000L,
+        @fga.timestamp_from_seconds(
+          b + ns / 1000000000L,
+          bn.to_int64() + ns % 1000000000L,
           offset=right.timestamp_offset(),
         ),
       )
@@ -231,9 +228,11 @@ fn compare_values(
   left : @fga.CelValue,
   right : @fga.CelValue,
 ) -> Bool raise @fga.FgaError {
-  match (left.timestamp_parts(), right.timestamp_parts()) {
+  match (left.timestamp_seconds(), right.timestamp_seconds()) {
     (Some(a), Some(b)) => {
-      let n = if a.0 < b.0 || (a.0 == b.0 && a.1 < b.1) {
+      let sa = a.0 + 62135596800L
+      let sb = b.0 + 62135596800L
+      let n = if sa < sb || (sa == sb && a.1 < b.1) {
         -1
       } else if a == b {
         0
@@ -358,6 +357,12 @@ fn eval_index(
       match @fga.cel_map_find(entries, index) {
         Some(value) => value
         None => raise eval_error("no such key")
+      }
+    @fga.VProtoFields(k, v) =>
+      match as_string_value(index) {
+        "key" => @fga.VString(k)
+        "value" => v.unwrap_or(@fga.VNull)
+        _ => raise eval_error("unknown protobuf field")
       }
     @fga.VList(items) => {
       let i = as_int_value(index)
@@ -620,7 +625,9 @@ fn eval_method(
         }
         _ => raise eval_error("unsupported ipaddress method '" + name + "'")
       }
-    @fga.VTimestamp(_) | @fga.VTimestampPrecise(_, _, _) => {
+    @fga.VTimestamp(_)
+    | @fga.VTimestampWide(_, _)
+    | @fga.VTimestampPrecise(_, _, _) => {
       if args.length() > 1 {
         raise eval_error("invalid timestamp getter arity")
       }
@@ -679,6 +686,14 @@ fn eval_call(
           raise eval_error("has expects a field selection")
         }
         match eval_expr_state(receiver, env, state) {
+          @fga.VProtoFields(k, v) =>
+            return @fga.VBool(
+              if field == "@field:key" {
+                k != ""
+              } else {
+                v is Some(_)
+              },
+            )
           @fga.VMap(entries) =>
             return @fga.VBool(entries.contains(field[7:].to_owned()))
           @fga.VKeyMap(entries) =>
@@ -729,8 +744,9 @@ fn eval_call(
       @fga.VType(
         match values[0] {
           @fga.VDuration(_) => "google.protobuf.Duration"
-          @fga.VTimestamp(_) | @fga.VTimestampPrecise(_, _, _) =>
-            "google.protobuf.Timestamp"
+          @fga.VTimestamp(_)
+          | @fga.VTimestampWide(_, _)
+          | @fga.VTimestampPrecise(_, _, _) => "google.protobuf.Timestamp"
           @fga.VIp(_) => "IPAddress"
           @fga.VNull => "null_type"
           _ => @fga.cel_value_type_name(values[0])
@@ -758,7 +774,9 @@ fn eval_call(
         raise eval_error("timestamp expects one string argument")
       }
       match values[0] {
-        @fga.VTimestamp(_) | @fga.VTimestampPrecise(_, _, _) => values[0]
+        @fga.VTimestamp(_)
+        | @fga.VTimestampWide(_, _)
+        | @fga.VTimestampPrecise(_, _, _) => values[0]
         @fga.VInt(i) => {
           if i < -62135596800L || i > 253402300799L {
             raise eval_error("timestamp out of range")
@@ -807,8 +825,10 @@ fn eval_call(
       match values[0] {
         @fga.VInt(i) => @fga.VInt(i)
         @fga.VDuration(ns) => @fga.VInt(ns)
-        @fga.VTimestamp(_) | @fga.VTimestampPrecise(_, _, _) =>
-          @fga.VInt(floor_div(values[0].timestamp_parts().unwrap().0, 1000L))
+        @fga.VTimestamp(_)
+        | @fga.VTimestampWide(_, _)
+        | @fga.VTimestampPrecise(_, _, _) =>
+          @fga.VInt(values[0].timestamp_seconds().unwrap().0)
         @fga.VUint(u) =>
           if u > 9223372036854775807UL {
             raise eval_error("integer overflow")
@@ -892,7 +912,9 @@ fn eval_call(
         raise eval_error("string expects one argument")
       }
       match values[0] {
-        @fga.VTimestamp(_) | @fga.VTimestampPrecise(_, _, _) =>
+        @fga.VTimestamp(_)
+        | @fga.VTimestampWide(_, _)
+        | @fga.VTimestampPrecise(_, _, _) =>
           @fga.VString(@fga.timestamp_to_rfc3339(values[0]))
         @fga.VBytes(b) =>
           @fga.VString(@utf8.decode(b[:], ignore_bom=true)) catch {
@@ -963,6 +985,9 @@ fn eval_expr_state(
   state : EvalState,
 ) -> @fga.CelValue raise @fga.FgaError {
   state.check()
+  if expression_path(expr) == Some("google.protobuf.NullValue.NULL_VALUE") {
+    return @fga.VInt(0L)
+  }
   if qualified_type(expr) is Some(name) {
     return @fga.VType(name)
   }
@@ -1082,6 +1107,14 @@ fn eval_expr_state(
         values.push(eval_expr_state(item, env, state))
       }
       @fga.VList(values)
+    }
+    CObject(name, fields) => {
+      state.charge(40)
+      let values : Map[String, @fga.CelValue] = Map([])
+      for (field, value) in fields {
+        values[field] = eval_expr_state(value, env, state)
+      }
+      proto_value(name, values)
     }
     CMap(entries) => {
       if !constant_expr(expr) {

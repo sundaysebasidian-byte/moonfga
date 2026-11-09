@@ -38,7 +38,7 @@ pub fn cel_value_to_json(value : CelValue) -> Json {
     VBytes(x) =>
       Json::array(x.to_array().map(b => Json::number(b.to_int().to_double())))
     VDuration(x) => Json::string(x.to_string() + "ns")
-    VTimestamp(_) | VTimestampPrecise(_, _, _) =>
+    VTimestamp(_) | VTimestampWide(_, _) | VTimestampPrecise(_, _, _) =>
       Json::string(timestamp_to_rfc3339(value))
     VList(xs) => Json::array(xs.map(fn(x) { cel_value_to_json(x) }))
     VMap(m) => {
@@ -48,6 +48,14 @@ pub fn cel_value_to_json(value : CelValue) -> Json {
     }
     VIp(x) => Json::string(x)
     VType(x) => Json::string(x)
+    VProtoEmpty => Json::object(Map([]))
+    VProtoFields(k, v) =>
+      Json::object(
+        Map([
+          ("key", Json::string(k)),
+          ("value", v.map(cel_value_to_json).unwrap_or(Json::null())),
+        ]),
+      )
     VKeyMap(xs) =>
       Json::array(
         xs.map(x => {

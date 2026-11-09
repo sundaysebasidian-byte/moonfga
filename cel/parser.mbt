@@ -12,6 +12,7 @@ pub(all) enum CelExpr {
   CIndex(CelExpr, CelExpr)
   CList(Array[CelExpr])
   CMap(Array[(CelExpr, CelExpr)])
+  CObject(String, Array[(String, CelExpr)])
 }
 
 ///|
@@ -147,6 +148,28 @@ fn CelParser::parse_postfix(self : CelParser) -> CelExpr raise @fga.FgaError {
       }
       let args = self.parse_arguments()
       expr = CCall(name, args)
+    } else if self.at_symbol("{") {
+      let name = expression_path(expr).unwrap_or("")
+      if name == "" {
+        raise cel_fail(
+          "expected message type",
+          self.peek().line,
+          self.peek().column,
+        )
+      }
+      self.advance()
+      let fields : Array[(String, CelExpr)] = []
+      while !self.at_symbol("}") {
+        let field = self.expect_ident()
+        self.expect_symbol(":")
+        fields.push((field, self.parse_expr()))
+        if !self.at_symbol(",") {
+          break
+        }
+        self.advance()
+      }
+      self.expect_symbol("}")
+      expr = CObject(name, fields)
     } else if self.at_symbol("[") {
       self.advance()
       let index = self.parse_expr()
@@ -330,4 +353,18 @@ pub fn compile(source : String) -> CelExpr raise @fga.FgaError {
     )
   }
   expr
+}
+
+///|
+fn expression_path(expr : CelExpr) -> String? {
+  match expr {
+    CIdent(n) => Some(n)
+    CMethod(target, field, args) =>
+      if args.is_empty() && field.has_prefix("@field:") {
+        expression_path(target).map(p => p + "." + field[7:].to_owned())
+      } else {
+        None
+      }
+    _ => None
+  }
 }

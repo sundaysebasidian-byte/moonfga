@@ -16,9 +16,12 @@ pub(all) enum CelValue {
   VString(String)
   VBytes(Bytes)
   VType(String)
+  VProtoEmpty
+  VProtoFields(String, CelValue?)
   VKeyMap(Array[(CelValue, CelValue)])
   VDuration(Int64)
   VTimestamp(Int64)
+  VTimestampWide(Int64, Int32)
   VTimestampPrecise(Int64, Int32, Int32)
   VList(Array[CelValue])
   VMap(Map[String, CelValue])
@@ -36,9 +39,12 @@ pub fn cel_value_type_name(value : CelValue) -> String {
     VString(_) => "string"
     VBytes(_) => "bytes"
     VType(_) => "type"
+    VProtoEmpty => "google.protobuf.Empty"
+    VProtoFields(_, _) => "google.protobuf.Struct.FieldsEntry"
     VKeyMap(_) => "map"
     VDuration(_) => "duration"
-    VTimestamp(_) | VTimestampPrecise(_, _, _) => "timestamp"
+    VTimestamp(_) | VTimestampWide(_, _) | VTimestampPrecise(_, _, _) =>
+      "timestamp"
     VList(_) => "list"
     VMap(_) => "map"
     VIp(_) => "ipaddress"
@@ -50,16 +56,23 @@ pub fn cel_value_type_name(value : CelValue) -> String {
 /// Structural equality with numeric coercion, used by CEL `==` and by the
 /// store when de-duplicating tuples.
 pub fn cel_value_eq(a : CelValue, b : CelValue) -> Bool {
-  match (a.timestamp_parts(), b.timestamp_parts()) {
+  match (a.timestamp_seconds(), b.timestamp_seconds()) {
     (Some(x), Some(y)) => return x == y
     _ => ()
   }
   match (a, b) {
-    (VNull, VNull) => true
+    (VNull, VNull) | (VProtoEmpty, VProtoEmpty) => true
     (VBool(x), VBool(y)) => x == y
     (VString(x), VString(y)) => x == y
     (VBytes(x), VBytes(y)) => x == y
     (VType(x), VType(y)) => x == y
+    (VProtoFields(k, v), VProtoFields(k2, v2)) =>
+      k == k2 &&
+      (match (v, v2) {
+        (None, None) => true
+        (Some(x), Some(y)) => cel_value_eq(x, y)
+        _ => false
+      })
     (VKeyMap(xs), VKeyMap(ys)) =>
       xs.length() == ys.length() &&
       xs.all(e => {
@@ -119,6 +132,8 @@ pub fn cel_value_to_display(value : CelValue) -> String {
     VString(x) => "\"" + x + "\""
     VBytes(x) => x.to_string()
     VType(x) => x
+    VProtoEmpty => "google.protobuf.Empty{}"
+    VProtoFields(_, _) => "google.protobuf.Struct.FieldsEntry{}"
     VKeyMap(xs) => "{" + xs.length().to_string() + " entries}"
     VDuration(x) =>
       if x % 1000000000L == 0L {
@@ -127,6 +142,7 @@ pub fn cel_value_to_display(value : CelValue) -> String {
         x.to_string() + "ns"
       }
     VTimestamp(x) => x.to_string()
+    VTimestampWide(s, ns) => s.to_string() + "s+" + ns.to_string() + "ns"
     VTimestampPrecise(x, sub, _) =>
       x.to_string() + "ms+" + sub.to_string() + "ns"
     VList(xs) => {
@@ -688,4 +704,37 @@ pub fn cel_map_find(
     }
   }
   None
+}
+
+///|
+/// Epoch seconds and normalized nanoseconds; unlike milliseconds these cover
+/// every protobuf int64 timestamp. Comparison follows Go's internal epoch.
+pub fn CelValue::timestamp_seconds(self : CelValue) -> (Int64, Int32)? {
+  match self {
+    VTimestampWide(s, ns) => Some((s, ns))
+    _ =>
+      self
+      .timestamp_parts()
+      .map(p => {
+        let seconds = p.0 / 1000L - (if p.0 % 1000L < 0L { 1L } else { 0L })
+        (seconds, ((p.0 % 1000L + 1000L) % 1000L * 1000000L).to_int() + p.1)
+      })
+  }
+}
+
+///|
+pub fn timestamp_from_seconds(
+  seconds : Int64,
+  nanos : Int64,
+  offset~ : Int32 = 0,
+) -> CelValue {
+  let carry = nanos / 1000000000L -
+    (if nanos % 1000000000L < 0L { 1L } else { 0L })
+  let s = seconds + carry
+  let ns = ((nanos % 1000000000L + 1000000000L) % 1000000000L).to_int()
+  if s >= -9223372036854775L && s <= 9223372036854774L {
+    timestamp_value(s * 1000L, ns.to_int64(), offset~)
+  } else {
+    VTimestampWide(s, ns)
+  }
 }

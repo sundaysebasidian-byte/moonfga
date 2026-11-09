@@ -8,7 +8,7 @@ fn pad_time(n : Int64, width : Int32) -> String {
 ///|
 /// Formats milliseconds since the Unix epoch as UTC RFC3339.
 fn format_timestamp_ms(ms : Int64) -> String {
-  let seconds = if ms >= 0L { ms / 1000L } else { (ms - 999L) / 1000L }
+  let seconds = ms / 1000L - (if ms % 1000L < 0L { 1L } else { 0L })
   let millis = ms - seconds * 1000L
   let days = if seconds >= 0L {
     seconds / 86400L
@@ -54,6 +54,9 @@ fn format_timestamp_ms(ms : Int64) -> String {
 /// CEL/condition JSON timestamp formatting. Preserve the input numeric timezone
 /// and nanoseconds; equality and arithmetic still compare the UTC instant.
 pub fn timestamp_to_rfc3339(value : CelValue) -> String {
+  if value is VTimestampWide(seconds, ns) {
+    return format_timestamp_wide(seconds, ns)
+  }
   let (ms, sub) = value.timestamp_parts().unwrap()
   let offset = value.timestamp_offset()
   let wall_time = ms + offset.to_int64() * 60000L
@@ -77,4 +80,37 @@ pub fn timestamp_to_rfc3339(value : CelValue) -> String {
   pad_time((minutes / 60).to_int64(), 2) +
   ":" +
   pad_time((minutes % 60).to_int64(), 2)
+}
+
+///|
+fn format_timestamp_wide(seconds : Int64, nanos : Int32) -> String {
+  let absolute = seconds.reinterpret_as_uint64() + 9223372028741760000UL
+  let days = (absolute / 86400UL).reinterpret_as_int64() - 106751991073400L
+  let z = days + 719468L
+  let era = if z >= 0L { z / 146097L } else { (z - 146096L) / 146097L }
+  let doe = z - era * 146097L
+  let yoe = (doe - doe / 1460L + doe / 36524L - doe / 146096L) / 365L
+  let doy = doe - (365L * yoe + yoe / 4L - yoe / 100L)
+  let mp = (5L * doy + 2L) / 153L
+  let d = doy - (153L * mp + 2L) / 5L + 1L
+  let m = mp + (if mp < 10L { 3L } else { -9L })
+  let y = yoe + era * 400L + (if m <= 2L { 1L } else { 0L })
+  let tod = (absolute % 86400UL).reinterpret_as_int64()
+  let mut fraction = if nanos == 0 { "" } else { pad_time(nanos.to_int64(), 9) }
+  while fraction.has_suffix("0") {
+    fraction = fraction[:fraction.length() - 1].to_owned()
+  }
+  pad_time(y, 4) +
+  "-" +
+  pad_time(m, 2) +
+  "-" +
+  pad_time(d, 2) +
+  "T" +
+  pad_time(tod / 3600L, 2) +
+  ":" +
+  pad_time(tod / 60L % 60L, 2) +
+  ":" +
+  pad_time(tod % 60L, 2) +
+  (if fraction == "" { "" } else { "." + fraction }) +
+  "Z"
 }

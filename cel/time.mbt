@@ -350,8 +350,8 @@ fn format_duration(ns : Int64) -> String {
 fn checked_timestamp(
   value : @fga.CelValue,
 ) -> @fga.CelValue raise @fga.FgaError {
-  let (ms, _) = value.timestamp_parts().unwrap()
-  if ms < -62135596800000L || ms > 253402300799999L {
+  let (seconds, _) = value.timestamp_seconds().unwrap()
+  if seconds < -62135596800L || seconds > 253402300799L {
     raise eval_error("timestamp out of range")
   }
   value
