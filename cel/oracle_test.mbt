@@ -8444,6 +8444,14 @@ test "official CEL model acceptance runtime errors and values" {
       "type(n.a[0]) == double", "{\"n\": {\"a\": [1, \"x\"]}}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_MAP\", \"generic_types\": [{\"type_name\": \"TYPE_NAME_LIST\", \"generic_types\": [{\"type_name\": \"TYPE_NAME_ANY\"}]}]}}",
     ),
     (
+      "type(timestamp(s)) == google.protobuf.Timestamp", "{\"n\": 0, \"s\": \"2026-01-01T00:00:00\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "type(n) == google.protobuf.Timestamp", "{\"n\": \"2026-01-01T00:00:00\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_TIMESTAMP\"}}",
+    ),
+    (
       "type(timestamp(s)) == google.protobuf.Timestamp", "{\"n\": 0, \"s\": \"2026-01-01t00:00:00Z\"}",
       "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),

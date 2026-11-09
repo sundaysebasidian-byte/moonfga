@@ -143,7 +143,7 @@ def expression_cases(seed):
         ({'type_name':'TYPE_NAME_MAP','generic_types':[{'type_name':'TYPE_NAME_LIST','generic_types':[{'type_name':'TYPE_NAME_ANY'}]}]}, {'a':[1,'x']}, 'type(n.a[0]) == double'),
     ]:
         yield expression, {'n':value}, {'n':kind}
-    for stamp in ['2026-01-01t00:00:00Z', '2026-01-01 00:00:00Z', '2026-01-01T00:00:60Z', '0000-01-01T00:00:00Z', '2026-01-01T00:00:00.123456789123Z', '2026-01-01T00:00:00+24:00', '2026-01-01T00:00:00+01:60', '2026-01-01T00:00:00z']:
+    for stamp in ['2026-01-01T00:00:00', '2026-01-01t00:00:00Z', '2026-01-01 00:00:00Z', '2026-01-01T00:00:60Z', '0000-01-01T00:00:00Z', '2026-01-01T00:00:00.123456789123Z', '2026-01-01T00:00:00+24:00', '2026-01-01T00:00:00+01:60', '2026-01-01T00:00:00z']:
         yield 'type(timestamp(s)) == google.protobuf.Timestamp', {'n':0,'s':stamp}
         yield 'type(n) == google.protobuf.Timestamp', {'n':stamp}, {'n':{'type_name':'TYPE_NAME_TIMESTAMP'}}
     for e in [

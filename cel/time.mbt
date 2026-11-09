@@ -153,7 +153,7 @@ pub fn parse_timestamp(
       offset_minutes = sign * (oh * 60 + om)
       pos = pos + 6
     }
-    _ => ()
+    _ => raise invalid
   }
   if pos != text.length() {
     raise invalid
