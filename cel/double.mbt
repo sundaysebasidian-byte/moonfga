@@ -9,6 +9,11 @@ fn BigNatural::bit(self : BigNatural, index : Int32) -> Int32 {
 
 ///|
 fn parse_cel_double(text : String) -> Double raise @fga.FgaError {
+  if text.has_prefix("-") || text.has_prefix("+") {
+    if text[1:].to_owned().to_lower() == "nan" {
+      raise eval_error("invalid signed NaN")
+    }
+  }
   let negative = text.has_prefix("-")
   let start = if negative || text.has_prefix("+") { 1 } else { 0 }
   let body = text[start:].to_owned()
@@ -17,6 +22,25 @@ fn parse_cel_double(text : String) -> Double raise @fga.FgaError {
       _ => raise eval_error("invalid double conversion")
     }
     return if d == 0.0 && negative { -0.0 } else { d }
+  }
+  let body = if body.contains("_") {
+    let chars = body.iter().collect()
+    for i in 0..<chars.length() {
+      if chars[i] == '_' &&
+        (
+          i == 0 ||
+          i + 1 == chars.length() ||
+          !(chars[i - 1].is_ascii_hexdigit() ||
+          (i == 2 && chars[i - 1] == 'x') ||
+          (i == 2 && chars[i - 1] == 'X')) ||
+          !chars[i + 1].is_ascii_hexdigit()
+        ) {
+        raise eval_error("invalid hexadecimal separator")
+      }
+    }
+    body.replace(old="_", new="")
+  } else {
+    body
   }
   let number = BigNatural::{ limbs: [0], }
   let chars = body.iter().collect()

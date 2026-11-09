@@ -107,6 +107,7 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
             Atom("bytes"),
             Atom("duration"),
             Atom("timestamp"),
+            Atom("null"),
           ].contains(l) {
           raise eval_error("no matching comparison overload")
         }
@@ -124,6 +125,9 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
         return Atom("duration")
       }
       require_type(l, r)
+      if l == Atom("null") && (op == "+" || op == "-") {
+        return Dynamic
+      }
       if l == Dynamic {
         return Dynamic
       }
@@ -174,7 +178,18 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
         let k = infer(entries[i].0, env)
         let v = infer(entries[i].1, env)
         if k != Dynamic &&
-          ![Atom("int"), Atom("uint"), Atom("bool"), Atom("string")].contains(k) {
+          ![
+            Atom("int"),
+            Atom("uint"),
+            Atom("bool"),
+            Atom("string"),
+            Atom("double"),
+            Atom("ipaddress"),
+            Atom("null"),
+            Atom("type"),
+            Atom("duration"),
+            Atom("timestamp"),
+          ].contains(k) {
           raise eval_error("invalid map key type")
         }
         key = if i == 0 { k } else { common_type(key, k) }
@@ -191,6 +206,11 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
           v
         }
         Map(key, v) => {
+          if [Atom("null"), Atom("type"), Atom("duration"), Atom("timestamp")].contains(
+              key,
+            ) {
+            raise eval_error("no map indexing overload for key type")
+          }
           require_type(k, key)
           v
         }

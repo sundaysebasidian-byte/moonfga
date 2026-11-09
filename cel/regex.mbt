@@ -234,6 +234,14 @@ fn RegexParser::atom(self : RegexParser) -> RegexTree raise @fga.FgaError {
       }
     '^' | '$' => RAssert(c.to_string(), (self.flags & 2) != 0)
     '*' | '+' | '?' => raise regex_error()
+    '{' => {
+      self.pos -= 1
+      if self.counted_repeat() is Some(_) {
+        raise regex_error()
+      }
+      self.pos += 1
+      RChars([([(123, 123)], false)], false, (self.flags & 1) != 0)
+    }
     '[' => {
       let neg = self.peek() == Some('^')
       if neg {
@@ -244,7 +252,9 @@ fn RegexParser::atom(self : RegexParser) -> RegexTree raise @fga.FgaError {
       while first || self.peek() != Some(']') {
         first = false
         let item = self.class_item()
-        if self.peek() == Some('-') && self.chars.get(self.pos + 1) != Some(']') {
+        if regex_single(item) is Some(_) &&
+          self.peek() == Some('-') &&
+          self.chars.get(self.pos + 1) != Some(']') {
           self.pos += 1
           let end = self.class_item()
           let a = match regex_single(item) {
@@ -371,54 +381,7 @@ fn RegexParser::sequence(self : RegexParser) -> RegexTree raise @fga.FgaError {
         self.pos += 1
         Some((0, Some(1)))
       }
-      Some('{') => {
-        let saved = self.pos
-        self.pos += 1
-        let start = self.pos
-        while self.peek() is Some(ch) && ch.is_ascii_digit() {
-          self.pos += 1
-        }
-        if self.pos == start {
-          self.pos = saved
-          None
-        } else {
-          let low = @string.parse_int(
-            String::from_array(self.chars[start:self.pos]),
-          ) catch {
-            _ => raise regex_error()
-          }
-          let high = if self.peek() == Some(',') {
-            self.pos += 1
-            let begin = self.pos
-            while self.peek() is Some(ch) && ch.is_ascii_digit() {
-              self.pos += 1
-            }
-            if begin == self.pos {
-              None
-            } else {
-              Some(
-                @string.parse_int(
-                  String::from_array(self.chars[begin:self.pos]),
-                ) catch {
-                  _ => raise regex_error()
-                },
-              )
-            }
-          } else {
-            Some(low)
-          }
-          if self.peek() != Some('}') {
-            self.pos = saved
-            None
-          } else {
-            self.pos += 1
-            if low > 1000 || (high is Some(h) && (h > 1000 || h < low)) {
-              raise regex_error()
-            }
-            Some((low, high))
-          }
-        }
-      }
+      Some('{') => self.counted_repeat()
       _ => None
     }
     match repeat {
@@ -430,10 +393,13 @@ fn RegexParser::sequence(self : RegexParser) -> RegexTree raise @fga.FgaError {
         if regex_repeat_bound(atom) > 1000 {
           raise regex_error()
         }
-        if self.peek() == Some('{') &&
-          self.chars.get(self.pos + 1) is Some(ch) &&
-          ch.is_ascii_digit() {
-          raise regex_error()
+        if self.peek() == Some('{') {
+          let saved = self.pos
+          let another = self.counted_repeat()
+          self.pos = saved
+          if another is Some(_) {
+            raise regex_error()
+          }
         }
       }
       None => ()
@@ -683,4 +649,52 @@ fn regex_min_width(tree : RegexTree) -> Int32 {
       items.fold(init=2147483647, (n, t) => n.min(regex_min_width(t)))
     _ => 0
   }
+}
+
+///|
+fn RegexParser::counted_repeat(
+  self : RegexParser,
+) -> (Int32, Int32?)? raise @fga.FgaError {
+  let saved = self.pos
+  self.pos += 1
+  let start = self.pos
+  while self.peek() is Some(c) && c.is_ascii_digit() {
+    self.pos += 1
+  }
+  let low_end = self.pos
+  let mut high_start = start
+  let mut high_end = low_end
+  let comma = self.peek() == Some(',')
+  if comma {
+    self.pos += 1
+    high_start = self.pos
+    while self.peek() is Some(c) && c.is_ascii_digit() {
+      self.pos += 1
+    }
+    high_end = self.pos
+  }
+  if start == low_end ||
+    (low_end - start > 1 && self.chars[start] == '0') ||
+    (high_end - high_start > 1 && self.chars[high_start] == '0') ||
+    self.peek() != Some('}') {
+    self.pos = saved
+    return None
+  }
+  self.pos += 1
+  let low = @string.parse_int(String::from_array(self.chars[start:low_end])) catch {
+    _ => raise regex_error()
+  }
+  let high = if comma && high_start == high_end {
+    None
+  } else {
+    Some(
+      @string.parse_int(String::from_array(self.chars[high_start:high_end])) catch {
+        _ => raise regex_error()
+      },
+    )
+  }
+  if low > 1000 || (high is Some(h) && (h > 1000 || h < low)) {
+    raise regex_error()
+  }
+  Some((low, high))
 }

@@ -699,7 +699,7 @@ pub fn cel_map_find(
     }
   }
   for (candidate, value) in entries {
-    if numeric_compare(candidate, key) == Some(0) {
+    if !(candidate is VDouble(_)) && numeric_compare(candidate, key) == Some(0) {
       return Some(value)
     }
   }

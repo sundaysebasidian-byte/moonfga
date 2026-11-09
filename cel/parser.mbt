@@ -19,6 +19,7 @@ pub(all) enum CelExpr {
 priv struct CelParser {
   tokens : Array[CToken]
   mut pos : Int32
+  mut depth : Int32
 }
 
 ///|
@@ -190,32 +191,53 @@ fn CelParser::parse_postfix(self : CelParser) -> CelExpr raise @fga.FgaError {
 
 ///|
 fn CelParser::parse_unary(self : CelParser) -> CelExpr raise @fga.FgaError {
-  if self.at_symbol("!") || self.at_symbol("-") {
-    let symbol = match self.peek().kind {
-      CSymbol(s) => s
-      _ => "!"
-    }
+  let ops : Array[String] = []
+  while self.at_symbol("!") || self.at_symbol("-") {
+    ops.push(
+      match self.peek().kind {
+        CSymbol(s) => s
+        _ => ""
+      },
+    )
     self.advance()
-    if symbol == "-" &&
-      self.peek().kind is CIntLit(i) &&
-      i == -9223372036854775807L - 1L {
-      self.advance()
-      return CLiteral(VInt(i))
+  }
+  if ops.any(x => x != ops[0]) {
+    raise cel_fail(
+      "mixed unary operators",
+      self.peek().line,
+      self.peek().column,
+    )
+  }
+  if ops.length() > 1 {
+    let symbol = ops[0]
+    let count = if ops.length() % 2 == 0 { 0 } else { 1 }
+    ops.clear()
+    for _ in 0..<count {
+      ops.push(symbol)
     }
-    let inner = self.parse_unary()
-    match (symbol, inner) {
-      ("-", CLiteral(@fga.VInt(i))) =>
-        if i == -9223372036854775807L - 1L {
-          CUnary(symbol, inner)
-        } else {
-          CLiteral(@fga.VInt(-i))
-        }
-      ("-", CLiteral(@fga.VDouble(d))) => CLiteral(@fga.VDouble(-d))
-      _ => CUnary(symbol, inner)
-    }
+  }
+  let mut inner = if ops.last() == Some("-") &&
+    self.peek().kind is CIntLit(i) &&
+    i == -9223372036854775807L - 1L {
+    self.advance()
+    ignore(ops.pop())
+    CLiteral(@fga.VInt(-9223372036854775807L - 1L))
   } else {
     self.parse_postfix()
   }
+  for i = ops.length() - 1; i >= 0; i = i - 1 {
+    inner = match (ops[i], inner) {
+      ("-", CLiteral(@fga.VInt(v))) =>
+        if v == -9223372036854775807L - 1L {
+          CUnary("-", inner)
+        } else {
+          CLiteral(@fga.VInt(-v))
+        }
+      ("-", CLiteral(@fga.VDouble(d))) => CLiteral(@fga.VDouble(-d))
+      _ => CUnary(ops[i], inner)
+    }
+  }
+  inner
 }
 
 ///|
@@ -239,10 +261,27 @@ fn CelParser::parse_binary(
 
 ///|
 fn CelParser::parse_expr(self : CelParser) -> CelExpr raise @fga.FgaError {
+  if self.depth >= 250 {
+    raise cel_fail(
+      "expression recursion limit exceeded: 250",
+      self.peek().line,
+      self.peek().column,
+    )
+  }
+  self.depth += 1
+  let result = self.parse_conditional()
+  self.depth -= 1
+  result
+}
+
+///|
+fn CelParser::parse_conditional(
+  self : CelParser,
+) -> CelExpr raise @fga.FgaError {
   let condition = self.parse_binary(1)
   if self.at_symbol("?") {
     self.advance()
-    let when_true = self.parse_expr()
+    let when_true = self.parse_binary(1)
     self.expect_symbol(":")
     let when_false = self.parse_expr()
     CTernary(condition, when_true, when_false)
@@ -356,7 +395,7 @@ fn CelParser::parse_primary(self : CelParser) -> CelExpr raise @fga.FgaError {
 /// Compiles a CEL expression into an AST.
 pub fn compile(source : String) -> CelExpr raise @fga.FgaError {
   let tokens = lex_cel_tokens(source)
-  let parser = CelParser::{ tokens, pos: 0, }
+  let parser = CelParser::{ tokens, pos: 0, depth: 0, }
   let expr = parser.parse_expr()
   if !parser.at_eof() {
     let token = parser.peek()

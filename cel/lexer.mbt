@@ -254,11 +254,7 @@ fn CelLexer::scan_number(
   line : Int32,
   column : Int32,
 ) -> CTokenKind raise @fga.FgaError {
-  if self.peek() == Some('0') &&
-    (
-      self.src.get_char(self.i + 1) == Some('x') ||
-      self.src.get_char(self.i + 1) == Some('X')
-    ) {
+  if self.peek() == Some('0') && self.src.get_char(self.i + 1) == Some('x') {
     self.advance()
     self.advance()
     let start = self.i
@@ -300,6 +296,9 @@ fn CelLexer::scan_number(
     is_double = true
     sb.write_char('.')
     self.advance()
+    if !(self.peek() is Some(c) && cel_is_digit(c)) {
+      raise cel_fail("expected fractional digits", line, column)
+    }
     while true {
       match self.peek() {
         Some(c) =>

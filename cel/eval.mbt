@@ -352,6 +352,13 @@ fn eval_index(
   target : @fga.CelValue,
   index : @fga.CelValue,
 ) -> @fga.CelValue raise @fga.FgaError {
+  if index is @fga.VIp(_) ||
+    index is @fga.VNull ||
+    index is @fga.VType(_) ||
+    index is @fga.VDuration(_) ||
+    index.timestamp_seconds() is Some(_) {
+    raise eval_error("ipaddress map index unsupported")
+  }
   match target {
     @fga.VKeyMap(entries) =>
       match @fga.cel_map_find(entries, index) {
@@ -1131,7 +1138,18 @@ fn eval_expr_state(
       for (key_expr, value_expr) in entries {
         let key = eval_expr_state(key_expr, env, state)
         match key {
-          @fga.VString(_) | @fga.VInt(_) | @fga.VUint(_) | @fga.VBool(_) => ()
+          @fga.VString(_)
+          | @fga.VInt(_)
+          | @fga.VUint(_)
+          | @fga.VBool(_)
+          | @fga.VDouble(_)
+          | @fga.VIp(_)
+          | @fga.VNull
+          | @fga.VType(_)
+          | @fga.VDuration(_)
+          | @fga.VTimestamp(_)
+          | @fga.VTimestampPrecise(_, _, _)
+          | @fga.VTimestampWide(_, _) => ()
           _ => raise eval_error("invalid map key type")
         }
         let value = eval_expr_state(value_expr, env, state)
