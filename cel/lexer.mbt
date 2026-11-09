@@ -1,4 +1,4 @@
-// Lexer for the CEL subset used by OpenFGA conditions.
+// Lexer for CEL condition expressions.
 
 ///|
 priv enum CTokenKind {
@@ -7,6 +7,7 @@ priv enum CTokenKind {
   CUintLit(UInt64)
   CDoubleLit(Double)
   CStringLit(String)
+  CBytesLit(Bytes)
   CSymbol(String)
   CEof
 }
@@ -100,46 +101,134 @@ fn CelLexer::scan_string(
   quote : Char,
   line : Int32,
   column : Int32,
-) -> String raise @fga.FgaError {
-  let sb = StringBuilder()
-  self.advance() // opening quote
-  let mut done = false
-  while !done {
+  bytes_mode : Bool,
+  raw : Bool,
+) -> CTokenKind raise @fga.FgaError {
+  let out : Array[Byte] = []
+  self.advance()
+  let triple = self.src.get_char(self.i) == Some(quote) &&
+    self.src.get_char(self.i + 1) == Some(quote)
+  if triple {
+    self.advance()
+    self.advance()
+  }
+  while true {
     let c = match self.peek() {
       Some(c) => c
       None => raise cel_fail("unterminated string literal", line, column)
     }
-    if c == quote {
+    if c == quote &&
+      (
+        !triple ||
+        (
+          self.src.get_char(self.i + 1) == Some(quote) &&
+          self.src.get_char(self.i + 2) == Some(quote)
+        )
+      ) {
       self.advance()
-      done = true
-    } else if c == '\\' {
+      if triple {
+        self.advance()
+        self.advance()
+      }
+      break
+    }
+    if !triple && (c == '\n' || c == '\r') {
+      raise cel_fail("newline in string literal", line, column)
+    }
+    if c == '\\' && !raw {
       self.advance()
       let esc = match self.peek() {
         Some(c) => c
         None => raise cel_fail("unterminated escape sequence", line, column)
       }
       self.advance()
-      match esc {
-        'n' => sb.write_char('\n')
-        't' => sb.write_char('\t')
-        'r' => sb.write_char('\r')
-        '\\' => sb.write_char('\\')
-        '"' => sb.write_char('"')
-        '\'' => sb.write_char('\'')
-        '/' => sb.write_char('/')
-        _ =>
-          raise cel_fail(
-            "unsupported escape sequence '\\" + esc.to_string() + "'",
-            line,
-            column,
-          )
+      let simple = match esc {
+        'a' => Some(7)
+        'b' => Some(8)
+        'f' => Some(12)
+        'n' => Some(10)
+        'r' => Some(13)
+        't' => Some(9)
+        'v' => Some(11)
+        '\\' => Some(92)
+        '"' => Some(34)
+        '\'' => Some(39)
+        '?' => Some(63)
+        _ => None
+      }
+      match simple {
+        Some(n) => out.push(n.to_byte())
+        None => {
+          let octal = esc >= '0' && esc <= '7'
+          let digits = if octal {
+            3
+          } else if esc == 'x' || esc == 'X' {
+            2
+          } else if !bytes_mode && esc == 'u' {
+            4
+          } else if !bytes_mode && esc == 'U' {
+            8
+          } else {
+            raise cel_fail("invalid escape sequence", line, column)
+          }
+          let base = if octal { 8 } else { 16 }
+          let mut n = 0L
+          for j in 0..<digits {
+            let ch = if octal && j == 0 {
+              esc
+            } else {
+              let ch = match self.peek() {
+                Some(ch) => ch
+                None =>
+                  raise cel_fail("incomplete escape sequence", line, column)
+              }
+              self.advance()
+              ch
+            }
+            let d = if ch >= '0' && ch <= '9' {
+              ch.to_int() - 48
+            } else if ch >= 'a' && ch <= 'f' {
+              ch.to_int() - 87
+            } else if ch >= 'A' && ch <= 'F' {
+              ch.to_int() - 55
+            } else {
+              -1
+            }
+            if d < 0 || d >= base {
+              raise cel_fail("invalid escape digit", line, column)
+            }
+            n = n * base.to_int64() + d.to_int64()
+          }
+          if esc == 'u' || esc == 'U' {
+            if n > 1114111L || (n >= 55296L && n <= 57343L) {
+              raise cel_fail("invalid Unicode escape", line, column)
+            }
+            for b in @utf8.encode(n.to_int().unsafe_to_char().to_string()[:]) {
+              out.push(b)
+            }
+          } else {
+            if n > 255L {
+              raise cel_fail("byte escape out of range", line, column)
+            }
+            out.push(n.to_int().to_byte())
+          }
+        }
       }
     } else {
-      sb.write_char(c)
+      for b in @utf8.encode(c.to_string()[:]) {
+        out.push(b)
+      }
       self.advance()
     }
   }
-  sb.to_string()
+  let bytes = Bytes::from_array(out[:])
+  if bytes_mode {
+    CBytesLit(bytes)
+  } else {
+    CStringLit(@utf8.decode(bytes[:], ignore_bom=true)) catch {
+      _ => raise cel_fail("invalid UTF-8 in string literal", line, column)
+    }
+  }
 }
 
 ///|
@@ -271,9 +360,40 @@ fn lex_cel_tokens(source : String) -> Array[CToken] raise @fga.FgaError {
       }
     }
     if c == '"' || c == '\'' {
-      let text = lexer.scan_string(c, line, column)
-      lexer.emit(CStringLit(text), line, column)
+      lexer.emit(lexer.scan_string(c, line, column, false, false), line, column)
       continue
+    }
+    if c == 'b' || c == 'B' || c == 'r' || c == 'R' {
+      let mut end = lexer.i + 1
+      let mut bytes_mode = c == 'b' || c == 'B'
+      let mut raw = c == 'r' || c == 'R'
+      match source.get_char(end) {
+        Some('r') | Some('R') =>
+          if bytes_mode {
+            raw = true
+            end = end + 1
+          }
+        Some('b') | Some('B') =>
+          if raw {
+            bytes_mode = true
+            end = end + 1
+          }
+        _ => ()
+      }
+      match source.get_char(end) {
+        Some('"') | Some('\'') as q => {
+          while lexer.i < end {
+            lexer.advance()
+          }
+          lexer.emit(
+            lexer.scan_string(q.unwrap(), line, column, bytes_mode, raw),
+            line,
+            column,
+          )
+          continue
+        }
+        _ => ()
+      }
     }
     if cel_is_digit(c) {
       let kind = lexer.scan_number(line, column)

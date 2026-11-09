@@ -35,6 +35,8 @@ pub fn cel_value_to_json(value : CelValue) -> Json {
     VDouble(x) => Json::number(x)
     VBool(x) => Json::boolean(x)
     VString(x) => Json::string(x)
+    VBytes(x) =>
+      Json::array(x.to_array().map(b => Json::number(b.to_int().to_double())))
     VDuration(x) => Json::string(x.to_string() + "ns")
     VTimestamp(_) | VTimestampPrecise(_, _, _) =>
       Json::string(timestamp_to_rfc3339(value))

@@ -227,6 +227,10 @@ fn CelParser::parse_primary(self : CelParser) -> CelExpr raise @fga.FgaError {
       self.advance()
       CLiteral(VDouble(v))
     }
+    CBytesLit(v) => {
+      self.advance()
+      CLiteral(VBytes(v))
+    }
     CStringLit(v) => {
       self.advance()
       CLiteral(VString(v))

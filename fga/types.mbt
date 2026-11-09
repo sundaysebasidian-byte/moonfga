@@ -14,6 +14,7 @@ pub(all) enum CelValue {
   VDouble(Double)
   VBool(Bool)
   VString(String)
+  VBytes(Bytes)
   VDuration(Int64)
   VTimestamp(Int64)
   VTimestampPrecise(Int64, Int32, Int32)
@@ -31,6 +32,7 @@ pub fn cel_value_type_name(value : CelValue) -> String {
     VDouble(_) => "double"
     VBool(_) => "bool"
     VString(_) => "string"
+    VBytes(_) => "bytes"
     VDuration(_) => "duration"
     VTimestamp(_) | VTimestampPrecise(_, _, _) => "timestamp"
     VList(_) => "list"
@@ -52,6 +54,7 @@ pub fn cel_value_eq(a : CelValue, b : CelValue) -> Bool {
     (VNull, VNull) => true
     (VBool(x), VBool(y)) => x == y
     (VString(x), VString(y)) => x == y
+    (VBytes(x), VBytes(y)) => x == y
     (VDuration(x), VDuration(y)) => x == y
     (VTimestamp(x), VTimestamp(y)) => x == y
     (VIp(x), VIp(y)) => x == y
@@ -111,6 +114,7 @@ pub fn cel_value_to_display(value : CelValue) -> String {
     VDouble(x) => x.to_string()
     VBool(x) => x.to_string()
     VString(x) => "\"" + x + "\""
+    VBytes(x) => x.to_string()
     VDuration(x) =>
       if x % 1000000000L == 0L {
         (x / 1000000000L).to_string() + "s"

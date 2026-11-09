@@ -1,4 +1,4 @@
-// Evaluator for the CEL subset.
+// Evaluator for CEL condition expressions.
 
 ///|
 fn eval_error(message : String) -> @fga.FgaError {
@@ -66,6 +66,44 @@ fn eval_arithmetic(
   left : @fga.CelValue,
   right : @fga.CelValue,
 ) -> @fga.CelValue raise @fga.FgaError {
+  match (left, right) {
+    (@fga.VInt(a), @fga.VInt(b)) => {
+      let max = 9223372036854775807L
+      let min = -9223372036854775807L - 1L
+      let overflow = match op {
+        "+" => (b > 0L && a > max - b) || (b < 0L && a < min - b)
+        "-" => (b < 0L && a > max + b) || (b > 0L && a < min + b)
+        "*" =>
+          if a == 0L || b == 0L {
+            false
+          } else if a > 0L {
+            if b > 0L {
+              a > max / b
+            } else {
+              b < min / a
+            }
+          } else if b > 0L {
+            a < min / b
+          } else {
+            a < max / b
+          }
+        "/" | "%" => a == min && b == -1L
+        _ => false
+      }
+      if overflow {
+        raise eval_error("integer overflow")
+      }
+    }
+    (@fga.VUint(a), @fga.VUint(b)) => {
+      let max = 18446744073709551615UL
+      if (op == "+" && a > max - b) ||
+        (op == "-" && a < b) ||
+        (op == "*" && b != 0UL && a > max / b) {
+        raise eval_error("unsigned integer overflow")
+      }
+    }
+    _ => ()
+  }
   match (left.timestamp_parts(), right.timestamp_parts(), left, right) {
     (Some((a, an)), Some((b, bn)), _, _) => {
       if op == "-" {
@@ -150,6 +188,18 @@ fn eval_arithmetic(
           }
         "%" => raise eval_error("operator '%' is not defined for double")
         _ => raise eval_error("unsupported operator '" + op + "' for double")
+      }
+    (@fga.VBytes(a), @fga.VBytes(b)) =>
+      if op == "+" {
+        @fga.VBytes(a + b)
+      } else {
+        raise eval_error("unsupported bytes operator")
+      }
+    (@fga.VList(a), @fga.VList(b)) =>
+      if op == "+" {
+        @fga.VList(a + b)
+      } else {
+        raise eval_error("unsupported list operator")
       }
     (@fga.VString(a), @fga.VString(b)) =>
       if op == "+" {
@@ -239,6 +289,7 @@ fn compare_values(
         0
       }
     (@fga.VString(a), @fga.VString(b)) => a.lexical_compare(b)
+    (@fga.VBytes(a), @fga.VBytes(b)) => a.lexical_compare(b)
     (@fga.VTimestamp(a), @fga.VTimestamp(b)) =>
       if a < b {
         -1
@@ -355,23 +406,31 @@ fn eval_predicate(
   mode : String,
 ) -> @fga.CelValue raise @fga.FgaError {
   let mut count = 0
-  let mut all_true = true
+  let mut pending : @fga.FgaError? = None
   for item in items {
     let result = as_bool_value(
       eval_expr(predicate, with_binding(env, variable, item)),
-    )
+    ) catch {
+      err => {
+        pending = Some(err)
+        continue
+      }
+    }
     if result {
       count = count + 1
-    } else {
-      all_true = false
+    }
+    if mode == "exists" && result {
+      return @fga.VBool(true)
+    }
+    if mode == "all" && !result {
+      return @fga.VBool(false)
     }
   }
-  match mode {
-    "exists" => @fga.VBool(count > 0)
-    "exists_one" => @fga.VBool(count == 1)
-    "all" => @fga.VBool(all_true)
-    _ => @fga.VBool(false)
+  match pending {
+    Some(err) => raise err
+    None => ()
   }
+  @fga.VBool(if mode == "exists_one" { count == 1 } else { mode == "all" })
 }
 
 ///|
@@ -382,6 +441,12 @@ fn eval_method(
   env : Map[String, @fga.CelValue],
 ) -> @fga.CelValue raise @fga.FgaError {
   match receiver {
+    @fga.VBytes(b) =>
+      if name == "size" && args.is_empty() {
+        @fga.VInt(b.length().to_int64())
+      } else {
+        raise eval_error("unsupported bytes method")
+      }
     @fga.VString(s) =>
       match name {
         "size" => @fga.VInt(s.char_length().to_int64())
@@ -527,11 +592,44 @@ fn eval_call(
   args : Array[CelExpr],
   env : Map[String, @fga.CelValue],
 ) -> @fga.CelValue raise @fga.FgaError {
+  if name == "has" {
+    if args.length() != 1 {
+      raise eval_error("has expects one field selection")
+    }
+    match args[0] {
+      CMethod(receiver, field, call_args) => {
+        if !call_args.is_empty() {
+          raise eval_error("has expects a field selection")
+        }
+        match eval_expr(receiver, env) {
+          @fga.VMap(entries) => return @fga.VBool(entries.contains(field))
+          _ => raise eval_error("has expects a map field")
+        }
+      }
+      _ => raise eval_error("has expects a field selection")
+    }
+  }
   let values : Array[@fga.CelValue] = []
   for arg in args {
     values.push(eval_expr(arg, env))
   }
   match name {
+    "bytes" => {
+      if values.length() != 1 {
+        raise eval_error("bytes expects one argument")
+      }
+      match values[0] {
+        @fga.VBytes(b) => @fga.VBytes(b)
+        @fga.VString(s) => @fga.VBytes(@utf8.encode(s[:]))
+        _ => raise eval_error("cannot convert value to bytes")
+      }
+    }
+    "dyn" => {
+      if values.length() != 1 {
+        raise eval_error("dyn expects one argument")
+      }
+      values[0]
+    }
     "timestamp" => {
       if values.length() != 1 {
         raise eval_error("timestamp expects one string argument")
@@ -557,6 +655,7 @@ fn eval_call(
       }
       match values[0] {
         @fga.VString(s) => @fga.VInt(s.char_length().to_int64())
+        @fga.VBytes(b) => @fga.VInt(b.length().to_int64())
         @fga.VList(items) => @fga.VInt(items.length().to_int64())
         @fga.VMap(entries) => @fga.VInt(entries.length().to_int64())
         other =>
@@ -571,8 +670,20 @@ fn eval_call(
       }
       match values[0] {
         @fga.VInt(i) => @fga.VInt(i)
-        @fga.VUint(u) => @fga.VInt(u.reinterpret_as_int64())
-        @fga.VDouble(d) => @fga.VInt(d.to_int64())
+        @fga.VUint(u) =>
+          if u > 9223372036854775807UL {
+            raise eval_error("integer overflow")
+          } else {
+            @fga.VInt(u.reinterpret_as_int64())
+          }
+        @fga.VDouble(d) =>
+          if d.is_nan() ||
+            d < -9223372036854775808.0 ||
+            d >= 9223372036854775808.0 {
+            raise eval_error("integer overflow")
+          } else {
+            @fga.VInt(d.to_int64())
+          }
         @fga.VString(s) =>
           @fga.VInt(@string.parse_int64(s)) catch {
             _ => raise eval_error("cannot convert '" + s + "' to int")
@@ -595,11 +706,22 @@ fn eval_call(
           } else {
             @fga.VUint(i.reinterpret_as_uint64())
           }
+        @fga.VString(s) =>
+          @fga.VUint(@string.parse_uint64(s)) catch {
+            _ => raise eval_error("invalid uint conversion")
+          }
         @fga.VDouble(d) =>
-          if d < 0.0 {
+          if d.is_nan() || d.is_inf() || d >= 18446744073709551616.0 || d < 0.0 {
             raise eval_error("cannot convert a negative double to uint")
           } else {
-            @fga.VUint(d.to_int64().reinterpret_as_uint64())
+            @fga.VUint(
+              if d < 9223372036854775808.0 {
+                d.to_int64().reinterpret_as_uint64()
+              } else {
+                (d - 9223372036854775808.0).to_int64().reinterpret_as_uint64() +
+                9223372036854775808UL
+              },
+            )
           }
         other =>
           raise eval_error(
@@ -613,6 +735,10 @@ fn eval_call(
       }
       match values[0] {
         @fga.VDouble(d) => @fga.VDouble(d)
+        @fga.VString(s) =>
+          @fga.VDouble(@string.parse_double(s)) catch {
+            _ => raise eval_error("invalid double conversion")
+          }
         @fga.VInt(i) => @fga.VDouble(i.to_double())
         @fga.VUint(u) => @fga.VDouble(u.to_double())
         other =>
@@ -628,6 +754,12 @@ fn eval_call(
       match values[0] {
         @fga.VTimestamp(_) | @fga.VTimestampPrecise(_, _, _) =>
           @fga.VString(@fga.timestamp_to_rfc3339(values[0]))
+        @fga.VBytes(b) =>
+          @fga.VString(@utf8.decode(b[:], ignore_bom=true)) catch {
+            _ => raise eval_error("invalid UTF-8 in bytes to string conversion")
+          }
+        @fga.VString(s) => @fga.VString(s)
+        @fga.VUint(u) => @fga.VString(u.to_string())
         other => @fga.VString(@fga.cel_value_to_display(other))
       }
     }
@@ -635,7 +767,12 @@ fn eval_call(
       if values.length() != 1 {
         raise eval_error("bool expects one argument")
       }
-      @fga.VBool(as_bool_value(values[0]))
+      match values[0] {
+        @fga.VBool(b) => @fga.VBool(b)
+        @fga.VString("true") => @fga.VBool(true)
+        @fga.VString("false") => @fga.VBool(false)
+        _ => raise eval_error("invalid bool conversion")
+      }
     }
     _ => raise eval_error("unknown function '" + name + "'")
   }
@@ -689,7 +826,12 @@ pub fn eval_expr(
         "!" => @fga.VBool(!as_bool_value(value))
         "-" =>
           match value {
-            @fga.VInt(i) => @fga.VInt(-i)
+            @fga.VInt(i) =>
+              if i == -9223372036854775807L - 1L {
+                raise eval_error("integer overflow")
+              } else {
+                @fga.VInt(-i)
+              }
             @fga.VDouble(d) => @fga.VDouble(-d)
             _ =>
               raise eval_error(
