@@ -731,6 +731,7 @@ fn eval_call(
           @fga.VDuration(_) => "google.protobuf.Duration"
           @fga.VTimestamp(_) | @fga.VTimestampPrecise(_, _, _) =>
             "google.protobuf.Timestamp"
+          @fga.VIp(_) => "IPAddress"
           @fga.VNull => "null_type"
           _ => @fga.cel_value_type_name(values[0])
         },

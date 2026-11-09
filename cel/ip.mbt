@@ -30,7 +30,9 @@ fn parse_ipv4(text : String) -> Array[Int32]? {
   }
   let bytes : Array[Int32] = []
   for part in parts {
-    if part.length() == 0 || part.length() > 3 {
+    if part.length() == 0 ||
+      part.length() > 3 ||
+      (part.length() > 1 && part.has_prefix("0")) {
       return None
     }
     let mut value = 0
@@ -131,6 +133,9 @@ fn parse_ipv6(text : String) -> Array[Int32]? {
     Some(index) => {
       let left = text[:index].to_owned()
       let right = text[index + 2:].to_owned()
+      if left.contains(".") {
+        return None
+      }
       let left_words = match ipv6_side_groups(left) {
         Some(g) => g
         None => return None
@@ -199,21 +204,77 @@ fn hex_group(value : Int32) -> String {
 ///|
 /// Returns a canonical textual form used for equality comparisons.
 pub fn canonical_ip(text : String) -> String raise @fga.FgaError {
-  match parse_ip(text) {
+  let (base, zone) = match text.find("%") {
+    Some(i) => {
+      if i + 1 == text.length() || !text[:i].to_owned().contains(":") {
+        raise @fga.fail(@fga.ERR_VALIDATION, "invalid IP zone")
+      }
+      (text[:i].to_owned(), Some(text[i + 1:].to_owned()))
+    }
+    None => (text, None)
+  }
+  match parse_ip(base) {
     None =>
       raise @fga.fail(@fga.ERR_VALIDATION, "invalid IP address '" + text + "'")
-    Some((family, bytes)) =>
-      if family == 4 {
-        bytes.map(fn(b) { b.to_string() }).join(".")
-      } else {
-        let groups : Array[String] = []
-        let mut i = 0
-        while i < 16 {
-          groups.push(hex_group(bytes[i] * 256 + bytes[i + 1]))
-          i = i + 2
+    Some((family, bytes)) => {
+      let mut mapped = family == 6
+      if mapped {
+        for i in 0..<10 {
+          if bytes[i] != 0 {
+            mapped = false
+          }
         }
-        groups.join(":")
+        mapped = mapped && bytes[10] == 255 && bytes[11] == 255
       }
+      if family == 4 {
+        return bytes.map(b => b.to_string()).join(".")
+      }
+      if mapped {
+        return [bytes[12], bytes[13], bytes[14], bytes[15]]
+          .map(b => b.to_string())
+          .join(".")
+      }
+      let groups : Array[String] = []
+      let mut best_start = 0
+      let mut best_length = 0
+      let mut i = 0
+      while i < 8 {
+        let value = bytes[i * 2] * 256 + bytes[i * 2 + 1]
+        groups.push(hex_group(value))
+        if value == 0 {
+          let start = i
+          while i + 1 < 8 &&
+                bytes[(i + 1) * 2] == 0 &&
+                bytes[(i + 1) * 2 + 1] == 0 {
+            i += 1
+            groups.push("0")
+          }
+          if i - start + 1 > best_length {
+            best_start = start
+            best_length = i - start + 1
+          }
+        }
+        i += 1
+      }
+      let result = if best_length < 2 {
+        groups.join(":")
+      } else {
+        let before : Array[String] = []
+        let after : Array[String] = []
+        for j in 0..<best_start {
+          before.push(groups[j])
+        }
+        for j in (best_start + best_length)..<8 {
+          after.push(groups[j])
+        }
+        before.join(":") + "::" + after.join(":")
+      }
+      result +
+      (match zone {
+        Some(z) => "%" + z
+        None => ""
+      })
+    }
   }
 }
 
@@ -227,13 +288,19 @@ pub fn ip_in_cidr(ip : String, cidr : String) -> Bool raise @fga.FgaError {
   }
   let network_text = cidr[:slash].to_owned()
   let prefix_text = cidr[slash + 1:].to_owned()
-  let prefix = match fixed_digits(prefix_text, 0, prefix_text.length()) {
-    Some(v) => v
-    None =>
-      raise @fga.fail(
-        @fga.ERR_VALIDATION,
-        "invalid CIDR prefix in '" + cidr + "'",
-      )
+  if prefix_text.is_empty() ||
+    (prefix_text.length() > 1 && prefix_text.has_prefix("0")) {
+    raise @fga.fail(@fga.ERR_VALIDATION, "invalid CIDR prefix")
+  }
+  let mut prefix = 0
+  for ch in prefix_text {
+    if !ch.is_ascii_digit() {
+      raise @fga.fail(@fga.ERR_VALIDATION, "invalid CIDR prefix")
+    }
+    prefix = prefix * 10 + ch.to_int() - 48
+    if prefix > 128 {
+      raise @fga.fail(@fga.ERR_VALIDATION, "invalid CIDR prefix")
+    }
   }
   let network = match parse_ip(network_text) {
     Some(v) => v
@@ -243,15 +310,19 @@ pub fn ip_in_cidr(ip : String, cidr : String) -> Bool raise @fga.FgaError {
         "invalid CIDR network '" + cidr + "'",
       )
   }
-  let address = match parse_ip(ip) {
-    Some(v) => v
-    None =>
-      raise @fga.fail(@fga.ERR_VALIDATION, "invalid IP address '" + ip + "'")
-  }
   let (network_family, network_bytes) = network
-  let (family, bytes) = address
-  let max_prefix = if family == 4 { 32 } else { 128 }
-  if family != network_family || prefix < 0 || prefix > max_prefix {
+  if prefix > (if network_family == 4 { 32 } else { 128 }) {
+    raise @fga.fail(@fga.ERR_VALIDATION, "invalid CIDR prefix")
+  }
+  let normalized = canonical_ip(ip)
+  if normalized.contains("%") {
+    return false
+  }
+  let (family, bytes) = match parse_ip(normalized) {
+    Some(v) => v
+    None => raise @fga.fail(@fga.ERR_VALIDATION, "invalid IP address")
+  }
+  if family != network_family {
     return false
   }
   let full_bytes = prefix / 8

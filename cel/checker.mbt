@@ -248,7 +248,7 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
       if t != Dynamic && !allowed.any(a => t == Atom(a)) {
         raise eval_error("no matching conversion overload")
       }
-      if foldable_argument(args[0]) {
+      if name != "ipaddress" && foldable_argument(args[0]) {
         ignore(eval_expr(expr, Map([])))
       }
       Atom(name)
@@ -419,7 +419,8 @@ fn foldable_argument(expr : CelExpr) -> Bool {
     CList(items) => items.all(foldable_argument)
     CMap(items) =>
       items.all(e => foldable_argument(e.0) && foldable_argument(e.1))
-    CCall("dyn", args) => args.length() == 1 && foldable_argument(args[0])
+    CCall("type", args) | CCall("dyn", args) =>
+      args.length() == 1 && foldable_argument(args[0])
     _ => false
   }
 }

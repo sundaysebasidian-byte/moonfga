@@ -8882,6 +8882,358 @@ test "official CEL model acceptance runtime errors and values" {
       "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
     (
+      "type(ipaddress(\"127.0.0.1\")) == IPAddress", "{\"n\": 0, \"s\": \"\"}", "M:invalid_authorization_model",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "type(ipaddress(\"127.0.0.1\")) == type(ipaddress(\"::1\"))", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(type(1)) == \"int\"", "{\"n\": 0, \"s\": \"\"}", "M:invalid_authorization_model",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(type(1))) == \"int\"", "{\"n\": 0, \"s\": \"\"}", "M:invalid_authorization_model",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(type(ipaddress(\"127.0.0.1\")))) == \"IPAddress\"", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(\"127.0.0.1\"))) == \"127.0.0.1\"", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(ipaddress(\"127.0.0.1\")) == \"127.0.0.1\"", "{\"n\": 0, \"s\": \"\"}",
+      "M:invalid_authorization_model", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(\"::ffff:127.0.0.1\") == ipaddress(\"127.0.0.1\")", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(\"::1\"))) == \"::1\"", "{\"n\": 0, \"s\": \"\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(s))) == s", "{\"n\": 0, \"s\": \"::1\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/8\")", "{\"n\": 0, \"s\": \"::1\"}", "false",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/0\")", "{\"n\": 0, \"s\": \"::1\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/129\")", "{\"n\": 0, \"s\": \"::1\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/33\")", "{\"n\": 0, \"s\": \"::1\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/\")", "{\"n\": 0, \"s\": \"::1\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/01\")", "{\"n\": 0, \"s\": \"::1\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"fe80::/10\")", "{\"n\": 0, \"s\": \"::1\"}", "false",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(\"2001:db8::1\"))) == \"2001:db8::1\"", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(s))) == s", "{\"n\": 0, \"s\": \"2001:db8::1\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/8\")", "{\"n\": 0, \"s\": \"2001:db8::1\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/0\")", "{\"n\": 0, \"s\": \"2001:db8::1\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/129\")", "{\"n\": 0, \"s\": \"2001:db8::1\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/33\")", "{\"n\": 0, \"s\": \"2001:db8::1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/\")", "{\"n\": 0, \"s\": \"2001:db8::1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/01\")", "{\"n\": 0, \"s\": \"2001:db8::1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"fe80::/10\")", "{\"n\": 0, \"s\": \"2001:db8::1\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(\"2001:0:0:1:0:0:1:1\"))) == \"2001:0:0:1:0:0:1:1\"",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(s))) == s", "{\"n\": 0, \"s\": \"2001:0:0:1:0:0:1:1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/8\")", "{\"n\": 0, \"s\": \"2001:0:0:1:0:0:1:1\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/0\")", "{\"n\": 0, \"s\": \"2001:0:0:1:0:0:1:1\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/129\")", "{\"n\": 0, \"s\": \"2001:0:0:1:0:0:1:1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/33\")", "{\"n\": 0, \"s\": \"2001:0:0:1:0:0:1:1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/\")", "{\"n\": 0, \"s\": \"2001:0:0:1:0:0:1:1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/01\")", "{\"n\": 0, \"s\": \"2001:0:0:1:0:0:1:1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"fe80::/10\")", "{\"n\": 0, \"s\": \"2001:0:0:1:0:0:1:1\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(\"127.00.0.1\"))) == \"127.00.0.1\"", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(s))) == s", "{\"n\": 0, \"s\": \"127.00.0.1\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/8\")", "{\"n\": 0, \"s\": \"127.00.0.1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/0\")", "{\"n\": 0, \"s\": \"127.00.0.1\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/129\")", "{\"n\": 0, \"s\": \"127.00.0.1\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/33\")", "{\"n\": 0, \"s\": \"127.00.0.1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/\")", "{\"n\": 0, \"s\": \"127.00.0.1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/01\")", "{\"n\": 0, \"s\": \"127.00.0.1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"fe80::/10\")", "{\"n\": 0, \"s\": \"127.00.0.1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(\"::ffff:127.0.0.1\"))) == \"::ffff:127.0.0.1\"", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(s))) == s", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/8\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/0\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/129\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/33\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/01\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"fe80::/10\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(\"fe80::1%eth0\"))) == \"fe80::1%eth0\"", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(s))) == s", "{\"n\": 0, \"s\": \"fe80::1%eth0\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/8\")", "{\"n\": 0, \"s\": \"fe80::1%eth0\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/0\")", "{\"n\": 0, \"s\": \"fe80::1%eth0\"}", "false",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/129\")", "{\"n\": 0, \"s\": \"fe80::1%eth0\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/33\")", "{\"n\": 0, \"s\": \"fe80::1%eth0\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/\")", "{\"n\": 0, \"s\": \"fe80::1%eth0\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/01\")", "{\"n\": 0, \"s\": \"fe80::1%eth0\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"fe80::/10\")", "{\"n\": 0, \"s\": \"fe80::1%eth0\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(\"fe80::1%\"))) == \"fe80::1%\"", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(s))) == s", "{\"n\": 0, \"s\": \"fe80::1%\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/8\")", "{\"n\": 0, \"s\": \"fe80::1%\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/0\")", "{\"n\": 0, \"s\": \"fe80::1%\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/129\")", "{\"n\": 0, \"s\": \"fe80::1%\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/33\")", "{\"n\": 0, \"s\": \"fe80::1%\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/\")", "{\"n\": 0, \"s\": \"fe80::1%\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/01\")", "{\"n\": 0, \"s\": \"fe80::1%\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"fe80::/10\")", "{\"n\": 0, \"s\": \"fe80::1%\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(\"::ffff:127.0.0.1%eth0\"))) == \"::ffff:127.0.0.1%eth0\"",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(s))) == s", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1%eth0\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/8\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1%eth0\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/0\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1%eth0\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/129\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1%eth0\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/33\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1%eth0\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1%eth0\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/01\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1%eth0\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"fe80::/10\")", "{\"n\": 0, \"s\": \"::ffff:127.0.0.1%eth0\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(\"bad\"))) == \"bad\"", "{\"n\": 0, \"s\": \"\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(ipaddress(s))) == s", "{\"n\": 0, \"s\": \"bad\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/8\")", "{\"n\": 0, \"s\": \"bad\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/0\")", "{\"n\": 0, \"s\": \"bad\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"::/129\")", "{\"n\": 0, \"s\": \"bad\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/33\")", "{\"n\": 0, \"s\": \"bad\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/\")", "{\"n\": 0, \"s\": \"bad\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"127.0.0.0/01\")", "{\"n\": 0, \"s\": \"bad\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "ipaddress(s).in_cidr(\"fe80::/10\")", "{\"n\": 0, \"s\": \"bad\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
       "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].all(x, x >= n)", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),

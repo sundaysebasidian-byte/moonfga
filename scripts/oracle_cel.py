@@ -191,6 +191,22 @@ def expression_cases(seed):
         yield e, {'n':0,'s':''}
     for offset in ['0x8:00','1_0:00','8:+01','-00:30','', '24:00']:
         yield 'timestamp("2026-01-01T00:00:00Z").getHours(s) >= 0', {'n':0,'s':offset}
+    for e in [
+        'type(ipaddress("127.0.0.1")) == IPAddress',
+        'type(ipaddress("127.0.0.1")) == type(ipaddress("::1"))',
+        'string(type(1)) == "int"',
+        'string(dyn(type(1))) == "int"',
+        'string(dyn(type(ipaddress("127.0.0.1")))) == "IPAddress"',
+        'string(dyn(ipaddress("127.0.0.1"))) == "127.0.0.1"',
+        'string(ipaddress("127.0.0.1")) == "127.0.0.1"',
+        'ipaddress("::ffff:127.0.0.1") == ipaddress("127.0.0.1")',
+    ]:
+        yield e, {'n':0,'s':''}
+    for address in ['::1','2001:db8::1','2001:0:0:1:0:0:1:1','127.00.0.1','::ffff:127.0.0.1','fe80::1%eth0','fe80::1%','::ffff:127.0.0.1%eth0','bad']:
+        yield f'string(dyn(ipaddress({json.dumps(address)}))) == {json.dumps(address)}', {'n':0,'s':''}
+        yield 'string(dyn(ipaddress(s))) == s', {'n':0,'s':address}
+        for network in ['127.0.0.0/8','::/0','::/129','127.0.0.0/33','127.0.0.0/','127.0.0.0/01','fe80::/10']:
+            yield f'ipaddress(s).in_cidr({json.dumps(network)})', {'n':0,'s':address}
     for count in list(range(15,56)) + [100,1000]:
         items = '[' + ','.join(['1']*count) + ']'
         for macro in ['all', 'exists', 'exists_one', 'map', 'filter']:
