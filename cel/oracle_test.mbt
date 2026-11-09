@@ -8751,6 +8751,78 @@ test "official CEL model acceptance runtime errors and values" {
     ("true", "{}", "true", "{}"),
     ("true", "{\"extra\": 1}", "E2000", "{}"),
     (
+      "\"\" < \"😀\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\" <= \"😀\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\" > \"😀\"", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\" >= \"😀\"", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\" == \"😀\"", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\" != \"😀\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"￿\" < \"𐀀\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"￿\" <= \"𐀀\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"￿\" > \"𐀀\"", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"￿\" >= \"𐀀\"", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"￿\" == \"𐀀\"", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"￿\" != \"𐀀\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"😀\" < \"😁\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"😀\" <= \"😁\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"😀\" > \"😁\"", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"😀\" >= \"😁\"", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"😀\" == \"😁\"", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"😀\" != \"😁\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"a😀\" < \"a￿\"", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"a😀\" <= \"a￿\"", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"a😀\" > \"a￿\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"a😀\" >= \"a￿\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"a😀\" == \"a￿\"", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"a😀\" != \"a￿\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
       "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].all(x, x >= n)", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),

@@ -260,7 +260,7 @@ fn compare_values(
       } else {
         0
       }
-    (@fga.VString(a), @fga.VString(b)) => a.lexical_compare(b)
+    (@fga.VString(a), @fga.VString(b)) => compare_cel_strings(a, b)
     (@fga.VBytes(a), @fga.VBytes(b)) => a.lexical_compare(b)
     (@fga.VTimestamp(a), @fga.VTimestamp(b)) =>
       if a < b {
@@ -1166,4 +1166,20 @@ pub fn eval_expr_with_limit(
     local_timezone,
   }
   eval_expr_state(expr, env, state)
+}
+
+///|
+fn compare_cel_strings(a : String, b : String) -> Int32 {
+  let lhs = a.iter()
+  let rhs = b.iter()
+  while true {
+    match (lhs.next(), rhs.next()) {
+      (None, None) => return 0
+      (None, Some(_)) => return -1
+      (Some(_), None) => return 1
+      (Some(x), Some(y)) => if x < y { return -1 } else if x > y { return 1 }
+    }
+  } nobreak {
+    0
+  }
 }

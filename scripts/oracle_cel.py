@@ -171,6 +171,9 @@ def expression_cases(seed):
             yield f'string(double(s)) == {json.dumps(candidate)}', {'n':0,'s':value}
     for context in [{}, {'extra':1}]:
         yield 'true', context, {}
+    for left,right in [('\ue000','😀'),('\uffff','𐀀'),('😀','😁'),('a😀','a\uffff')]:
+        for op in ['<','<=','>','>=','==','!=']:
+            yield f'{json.dumps(left,ensure_ascii=False)} {op} {json.dumps(right,ensure_ascii=False)}', {'n':0,'s':''}
     for count in list(range(15,56)) + [100,1000]:
         items = '[' + ','.join(['1']*count) + ']'
         for macro in ['all', 'exists', 'exists_one', 'map', 'filter']:
