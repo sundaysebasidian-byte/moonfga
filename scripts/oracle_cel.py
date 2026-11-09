@@ -54,6 +54,14 @@ def expressions(seed):
 
 
 def expression_cases(seed):
+    from cel_protobuf_corpus import expressions as protobuf_expressions
+    for e in protobuf_expressions(seed):
+        yield e, {"n": 0, "s": ""}
+    for generic in [None, [{"type_name":"TYPE_NAME_BOOL"}], [{"type_name":"TYPE_NAME_BOOL"},{"type_name":"TYPE_NAME_INT"}]]:
+        for base in ["TYPE_NAME_INT","TYPE_NAME_LIST","TYPE_NAME_MAP"]:
+            declaration = {"type_name":base}
+            if generic is not None: declaration["generic_types"] = generic
+            yield "true", {"n":0}, {"n":declaration}
     for e in expressions(seed):
         yield e, {'n': 0, 's': ''}
     fixed = [
