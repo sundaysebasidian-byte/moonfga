@@ -1455,3 +1455,21 @@ Totals: 2/2 full JSON transformations, 4/4 complete diagnostic comparisons (24/2
 The nine fga.mod cases pass acceptance/rejection checks. Official YAML intermediate JSON locations remain outside this comparison. Module errors compare complete multisets (including multiplicity), independent of file traversal order: exact messages, zero-based start/end lines and columns, files, syntax type and metadata.errorType. Module names are independently derived from the fixture source because expected_errors.json omits that field. No diagnostic is filtered or exempted. Fixture 06 has no module source files at the pinned upstream commit; this is an upstream input limitation, not a successful module transformation.
 Parse recovery resumes at the next top-level declaration; a lexical error stops parsing that file, while other files are still checked. This is a diagnostic recovery boundary for malformed inputs, not an exception to the exact fixture comparisons above.
 `python3 scripts/test-modules.py` exercises native and JS validate/transform/store-test commands and rejects parent traversal, file symlink escape and directory symlink escape.
+
+## 0.2.3 CEL increment (not full compatibility)
+
+`python3 scripts/oracle_cel.py --seed 20261108 --output conformance-results/cel`
+replays 52 fixed and 256 generated expressions through official Check/ListObjects/ListUsers:
+308 cases, 924 comparisons, zero differences. Fixed expectations are also embedded in
+`cel/compat_test.mbt`; malformed-escape tests are local parser tests. The expression corpus
+uses request parameters for error values so official constant folding does not turn runtime
+errors into model-creation failures. This gate does not test full static rejection equivalence.
+
+`python3 scripts/audit_cel_surface.py` separately records unresolved surface probes, including
+model-creation rejection. See [the full comparison](openfga-comparison.md) and
+[evidence/cel-surface.json](evidence/cel-surface.json). This audit is not a passing gate:
+RE2, temporal methods, typed maps, reflection, partial activation and the checker are incomplete.
+New evidence: [CEL summary](evidence/cel-summary.json),
+[CEL mismatches](evidence/cel-mismatches.json),
+[seed 314159](evidence/r2-seed314159-summary.json),
+[seed 271828](evidence/r2-seed271828-summary.json).

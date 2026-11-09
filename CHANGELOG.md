@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.3 (unreleased)
+
+- Add CEL bytes literals, escapes, UTF-8 conversion, concatenation, ordering, size and collection values; support raw/triple literals.
+- Check signed/unsigned arithmetic overflow and conversion boundaries; absorb deciding list quantifier values across errors; add has on map fields, dyn and basic scalar conversion overloads.
+- Add a seeded expression corpus and explicit upstream surface-gap probes; retain generated API changes. Fix oracle toolchain selection and avoid truncating an executable used by concurrent oracle runs.
+- Define the pinned condition environment and function-level comparison. Full CEL compatibility remains unfinished; this revision is not release-ready against that endpoint.
+
+
 ## 0.2.2
 
 - Add offline fixed-seed release benchmarks for Check, ListObjects and ListUsers across tuple scales, relation shapes and native/JS/wasm-gc backends, with raw samples, latency quantiles, throughput, memory and reverse-graph attribution.
