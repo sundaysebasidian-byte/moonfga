@@ -1456,7 +1456,7 @@ The nine fga.mod cases pass acceptance/rejection checks. Official YAML intermedi
 Parse recovery resumes at the next top-level declaration; a lexical error stops parsing that file, while other files are still checked. This is a diagnostic recovery boundary for malformed inputs, not an exception to the exact fixture comparisons above.
 `python3 scripts/test-modules.py` exercises native and JS validate/transform/store-test commands and rejects parent traversal, file symlink escape and directory symlink escape.
 
-## 0.2.3 CEL increment (not full compatibility)
+## Initial 0.2.3 CEL increment (superseded by Rework 1 below)
 
 `python3 scripts/oracle_cel.py --seed 20261108 --output conformance-results/cel`
 replays 52 fixed and 256 generated expressions through official Check/ListObjects/ListUsers:
@@ -1468,8 +1468,32 @@ errors into model-creation failures. This gate does not test full static rejecti
 `python3 scripts/audit_cel_surface.py` separately records unresolved surface probes, including
 model-creation rejection. See [the full comparison](openfga-comparison.md) and
 [evidence/cel-surface.json](evidence/cel-surface.json). This audit is not a passing gate:
-RE2, temporal methods, typed maps, reflection, partial activation and the checker are incomplete.
+At that increment, RE2, temporal methods, typed maps, reflection, partial activation and the checker were incomplete; the Rework 1 evidence below supersedes that inventory.
 New evidence: [CEL summary](evidence/cel-summary.json),
 [CEL mismatches](evidence/cel-mismatches.json),
 [seed 314159](evidence/r2-seed314159-summary.json),
 [seed 271828](evidence/r2-seed271828-summary.json).
+
+## Rework 1
+
+The new CEL oracle validates models before queries and distinguishes
+`M:invalid_authorization_model` from evaluation `E2000` (and model request validation
+from query errors). Both normal results and error categories are compared.
+`cel/oracle_test.mbt` embeds the first seed's official outcomes, including typed and
+nested parameter contexts. `scripts/generate_cel_regressions.py` regenerates that file.
+
+Reproduction and complete results: [rework1-validation.md](evidence/rework1-validation.md).
+The former 17 surface probes have been rechecked; a separate audit records
+the unconfigured Local host difference; the former regex bound probe now matches. Those are not merged into a zero-
+difference claim. Default-cost threshold probes, host-budget propagation, interruption
+and a nonbacktracking stress case are also tested. Windows execution remains unverified;
+shipped implementation and generated data have no new platform-specific dependency.
+
+The default protobuf registry is also included: wrappers, timestamp/duration,
+Empty, JSON well-known values, Struct.FieldsEntry and Any. The corpus includes
+864 extreme timestamp predicates generated through public Go time APIs by
+`scripts/export_protobuf_times.go`; the pinned OpenFGA binary, not Go alone, is the
+acceptance oracle. String hex/octal escapes and bytes escapes cover every value
+0..255 independently, including BOM retention and root-qualified names.
+The retained browser smoke exercises all three built-in examples, new
+protobuf/bytes/Unicode-regex Check/ListObjects/ListUsers and static model rejection.

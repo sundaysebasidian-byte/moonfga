@@ -1,0 +1,544 @@
+[
+  {
+    "probe": "cross_type_compare",
+    "expression": "1 < 2.0",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": "M:invalid_authorization_model",
+      "list_objects": "M:invalid_authorization_model",
+      "list_users": "M:invalid_authorization_model"
+    },
+    "official": {
+      "check": "M:invalid_authorization_model",
+      "list_objects": "M:invalid_authorization_model",
+      "list_users": "M:invalid_authorization_model"
+    },
+    "matches": true
+  },
+  {
+    "probe": "mixed_arithmetic",
+    "expression": "1 + 2.0 == 3.0",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": "M:invalid_authorization_model",
+      "list_objects": "M:invalid_authorization_model",
+      "list_users": "M:invalid_authorization_model"
+    },
+    "official": {
+      "check": "M:invalid_authorization_model",
+      "list_objects": "M:invalid_authorization_model",
+      "list_users": "M:invalid_authorization_model"
+    },
+    "matches": true
+  },
+  {
+    "probe": "type",
+    "expression": "type(b\"a\") == bytes",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "timestamp_getFullYear",
+    "expression": "timestamp(\"2026-01-02T03:04:05Z\").getFullYear() == 2026",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "timestamp_timezone",
+    "expression": "timestamp(\"2026-01-02T03:04:05Z\").getHours(\"America/Los_Angeles\") == 19",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "duration_getHours",
+    "expression": "duration(\"2h\").getHours() == 2",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "map_numeric_key",
+    "expression": "{1: \"a\"}[1] == \"a\"",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "map_macro",
+    "expression": "{\"a\": 1}.exists(k, k == \"a\")",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "map_three_args",
+    "expression": "[1,2].map(x, x > 1, x * 2) == [4]",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "regex_group",
+    "expression": "\"ab\".matches(\"(ab)+\")",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "regex_count",
+    "expression": "\"aaa\".matches(\"a{3}\")",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "regex_flag",
+    "expression": "\"A\".matches(\"(?i)a\")",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "regex_unicode",
+    "expression": "\"中\".matches(\"\\\\p{Han}\")",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "timestamp_int",
+    "expression": "timestamp(0) == timestamp(\"1970-01-01T00:00:00Z\")",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "int_duration",
+    "expression": "int(duration(\"2s\")) == 2",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": false,
+      "list_objects": [],
+      "list_users": []
+    },
+    "official": {
+      "check": false,
+      "list_objects": [],
+      "list_users": []
+    },
+    "matches": true
+  },
+  {
+    "probe": "double_zero",
+    "expression": "1.0 / 0.0 > 0.0",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "constant_overflow",
+    "expression": "9223372036854775807 + 1 == 0",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    },
+    "official": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    },
+    "matches": true
+  },
+  {
+    "probe": "host_local_zone",
+    "expression": "timestamp(\"2026-01-01T00:00:00Z\").getHours(\"Local\") >= 0",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": false
+  },
+  {
+    "probe": "numeric_context_exponent_bound",
+    "expression": "n > 0",
+    "context": {
+      "n": "1e100001",
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  },
+  {
+    "probe": "constant_type_macro_cost",
+    "expression": "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(x)).size() == 25",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    },
+    "official": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    },
+    "matches": true
+  },
+  {
+    "probe": "regex_program_bound",
+    "expression": "\"a\".matches(\"(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa){1000}\")",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": false,
+      "list_objects": [],
+      "list_users": []
+    },
+    "official": {
+      "check": false,
+      "list_objects": [],
+      "list_users": []
+    },
+    "matches": true
+  },
+  {
+    "probe": "configured_host_local_zone",
+    "expression": "timestamp(\"2026-01-01T00:00:00Z\").getHours(\"Local\") == 16",
+    "context": {
+      "n": 0,
+      "s": ""
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "matches": true
+  }
+]

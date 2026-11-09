@@ -1,0 +1,193 @@
+[
+  {
+    "name": "check",
+    "command": [
+      "moon",
+      "check",
+      "--deny-warn",
+      "--target",
+      "all"
+    ],
+    "exit_code": 0,
+    "seconds": 0.073
+  },
+  {
+    "name": "fmt",
+    "command": [
+      "moon",
+      "fmt",
+      "--check"
+    ],
+    "exit_code": 0,
+    "seconds": 0.31
+  },
+  {
+    "name": "info",
+    "command": [
+      "moon",
+      "info"
+    ],
+    "exit_code": 0,
+    "seconds": 0.255
+  },
+  {
+    "name": "interfaces",
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "--",
+      "*.mbti"
+    ],
+    "exit_code": 0,
+    "seconds": 0.011
+  },
+  {
+    "name": "test-all",
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "all"
+    ],
+    "exit_code": 0,
+    "seconds": 1.013
+  },
+  {
+    "name": "conformance",
+    "command": [
+      "scripts/conformance.sh"
+    ],
+    "exit_code": 0,
+    "seconds": 1.081
+  },
+  {
+    "name": "seed314159",
+    "command": [
+      "scripts/oracle-openfga.sh",
+      "--cases",
+      "1000",
+      "--seed",
+      "314159",
+      "--output",
+      "conformance-results/rework1-seed314159"
+    ],
+    "exit_code": 0,
+    "seconds": 3.759
+  },
+  {
+    "name": "seed271828",
+    "command": [
+      "scripts/oracle-openfga.sh",
+      "--cases",
+      "1000",
+      "--seed",
+      "271828",
+      "--output",
+      "conformance-results/rework1-seed271828"
+    ],
+    "exit_code": 0,
+    "seconds": 2.565
+  },
+  {
+    "name": "cel20261108",
+    "command": [
+      "python3",
+      "scripts/oracle_cel.py",
+      "--seed",
+      "20261108",
+      "--output",
+      "conformance-results/rework1-cel"
+    ],
+    "exit_code": 0,
+    "seconds": 10.993
+  },
+  {
+    "name": "cel20261109",
+    "command": [
+      "python3",
+      "scripts/oracle_cel.py",
+      "--seed",
+      "20261109",
+      "--output",
+      "conformance-results/rework1-cel-seed20261109"
+    ],
+    "exit_code": 0,
+    "seconds": 11.137
+  },
+  {
+    "name": "surface",
+    "command": [
+      "python3",
+      "scripts/audit_cel_surface.py"
+    ],
+    "exit_code": 0,
+    "seconds": 0.828
+  },
+  {
+    "name": "web-build",
+    "command": [
+      "scripts/build-web.sh"
+    ],
+    "exit_code": 0,
+    "seconds": 0.667
+  },
+  {
+    "name": "web-smoke",
+    "command": [
+      "node",
+      "web/smoke.mjs"
+    ],
+    "exit_code": 0,
+    "seconds": 0.126
+  },
+  {
+    "name": "language",
+    "command": [
+      "moon",
+      "run",
+      "cmd/language"
+    ],
+    "exit_code": 0,
+    "seconds": 0.417
+  },
+  {
+    "name": "modules",
+    "command": [
+      "python3",
+      "scripts/test-modules.py"
+    ],
+    "exit_code": 0,
+    "seconds": 5.651
+  },
+  {
+    "name": "explain",
+    "command": [
+      "node",
+      "scripts/test-explain.mjs"
+    ],
+    "exit_code": 0,
+    "seconds": 0.149
+  },
+  {
+    "name": "bench-native",
+    "command": [
+      "moon",
+      "bench",
+      "--target",
+      "native"
+    ],
+    "exit_code": 0,
+    "seconds": 14.295
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "seconds": 0.017
+  }
+]

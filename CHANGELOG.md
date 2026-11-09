@@ -8,6 +8,15 @@
 - Define the pinned condition environment and function-level comparison. Full CEL compatibility remains unfinished; this revision is not release-ready against that endpoint.
 
 
+### Rework 1
+
+- Add model-time CEL type/overload validation, Boolean output checks and model rejection comparison. Preserve pinned OpenFGA missing-declared-parameter errors after lazy binding.
+- Add typed heterogeneous map keys, map/list macros including three-argument map, type constants/reflection, recursive generic context types and strict scalar/temporal conversions. Reproduce pinned mixed-double rounding using integer-domain rounding; add big.Float-style numeric context narrowing.
+- Add all timestamp/duration getters, packed IANA 2026f data and Unicode 17.0.0 tables without runtime OS/Go dependencies. Replace backtracking regex with a code-point Thompson NFA, including groups, counts, flags, boundaries, Unicode/POSIX classes and rejection checks.
+- Add default CEL well-known protobuf constructors, scalar/JSON adaptation and independent Any wire decoding. Preserve full int64 timestamp seconds and pinned Go calendar behavior at extreme values. Distinguish Unicode string escapes from byte escapes, preserve BOM, and resolve root-qualified names.
+- Add default condition cost 100, configurable engine budget and cooperative host cancellation. Match constant container/conversion optimization and constant primitive membership, including asymmetric mixed-numeric membership behavior. Split and defer generated data initialization for wasm limits and query performance.
+- Expand two-seed model/query differential coverage and embed official outcomes on every backend. Keep Local, regex compilation bounds and host deadlines explicit; do not claim full compatibility.
+
 ## 0.2.2
 
 - Add offline fixed-seed release benchmarks for Check, ListObjects and ListUsers across tuple scales, relation shapes and native/JS/wasm-gc backends, with raw samples, latency quantiles, throughput, memory and reverse-graph attribution.
@@ -86,7 +95,7 @@ First public release, published to Mooncakes as
   conditional relationships.
 - `BatchCheck`, `ListObjects`, `ListUsers` (including userset filters),
   `Expand`, and explainable checks that return resolution paths.
-- Self-contained CEL subset covering `int`, `uint`, `double`, `bool`, `string`,
+- Initial standalone CEL evaluator covering `int`, `uint`, `double`, `bool`, `string`,
   `duration`, `timestamp`, `list`, `map`, and `ipaddress`, with operators,
   ternaries, `exists` / `exists_one` / `all` / `map` / `filter`, and common
   string, time, and network helpers.

@@ -10,7 +10,7 @@
 MoonFGA 是用 MoonBit 写的 OpenFGA 兼容授权（ReBAC）引擎：把"谁对什么对象有什么关系"存成元组，
 按模型规则推导"这个人能不能访问那个资源"。支持 OpenFGA schema 1.1 建模语言、JSON 授权模型、
 元组存储、`Check`、`BatchCheck`、`ListObjects`、`ListUsers`、`Expand`、可解释的 Check，以及用于
-条件关系的自研 CEL 求值器。库在 native、wasm-gc 和 JavaScript 三个后端都能构建和测试，
+条件关系的自研 CEL 求值器（保留已知兼容差异）。库在 native、wasm-gc 和 JavaScript 三个后端都能构建和测试，
 Playground 就是同一个引擎编译成 JS 在浏览器里跑。
 
 "OpenFGA" 是 OpenFGA 项目的商标。MoonFGA 是独立实现，未获 OpenFGA 项目背书。
@@ -99,7 +99,7 @@ request 里面，没有顶层期望值或 `errorCode`，所以按 `skip/no_expec
 | ListObjects / ListUsers | 支持 | 反向对象证明 / 用户集合展开、独立深度与条件错误传播、wildcard、userset 过滤器、contextual 合并语义 |
 | Expand | 支持 | 返回关系重写树 |
 | Explain | 支持 | 返回允许/拒绝的解析路径（`--explain`，Playground 里画成树） |
-| CEL 实现 | 部分完成，见[函数矩阵](docs/openfga-comparison.md) | `int` / `uint` / `double` / `bool` / `string` / `bytes` / `duration` / `timestamp` / `list` / `map` / `ipaddress`，运算符、三元表达式、`exists` / `exists_one` / `all` / `map` / `filter`、常用字符串/时间/网络方法 |
+| CEL 实现 | 部分完成，见[函数矩阵](docs/openfga-comparison.md) | `int` / `uint` / `double` / `bool` / `string` / `bytes` / `duration` / `timestamp` / `list` / `map` / `ipaddress`，运算符、三元表达式、`exists` / `exists_one` / `all` / `map` / `filter`、类型检查、完整 getter/命名时区、无回溯正则、转换/反射、默认 protobuf well-known 对象与 Any 解码、默认 cost；已知边界见函数矩阵 |
 | CLI | 支持 | `validate`、`transform`、`check`、`list-objects`、`list-users`、`expand`、`test` |
 | `.fga.yaml` 测试 | 支持 | `model` / `model_file`、全局与用例元组、Check / ListObjects / ListUsers 断言、`errorCode` |
 | ReadChanges | 不支持 | 内存存储没有变更日志 |
@@ -275,14 +275,16 @@ MoonFGA 是独立的 OpenFGA 兼容实现，没有复用 `moonpolicykit` 的代�
 
 已支持 FGA modules（schema 1.2 多文件模型）。
 明确不支持：ReadChanges、持久化/分布式存储、HTTP/gRPC 服务端、分页与 consistency preference、
-完整 CEL 兼容尚未完成：静态类型检查、RE2、时间 getter/时区、type、数值 map key、部分转换与 partial evaluation 仍有差异。详见[逐函数对比](docs/openfga-comparison.md)。
+条件差分两个种子各 6248 个模型，包含模型拒绝与求值错误类别，均 0 不一致；各后端固化同一组官方结果。
+
+完整 CEL 兼容尚未验收：Local 时区需宿主配置、正则资源策略保留独立边界、服务期限需宿主接入；成本模型只在明确语料上验证。详见[逐函数对比](docs/openfga-comparison.md)。
 
 后续优先级：
 
 1. 可插拔持久化存储与变更日志（ReadChanges）。
 2. 服务端 API（HTTP/gRPC）与一致性偏好。
 3. 扩展模块诊断的语法恢复覆盖。
-4. 扩展 CEL 标准库，错误定位更细。
+4. 继续验证条件成本、宿主时区与服务请求期限的等价边界。
 
 ## 许可证
 

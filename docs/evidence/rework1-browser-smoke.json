@@ -1,0 +1,44 @@
+{
+  "browser": "T3 preview 1280x800",
+  "conditions": {
+    "positive": {
+      "check": "Allowed\ndoc:1#viewer@user:1",
+      "expression": "google.protobuf.Int64Value{value:1} == 1 && b\"x\" + b\"y\" == b\"xy\" && \"中\".matches(r\"\\p{Han}\")",
+      "issues": "",
+      "objects": "1\ndoc:1",
+      "users": "1\nuser:1"
+    },
+    "staticRejection": {
+      "expression": "1 < 2.0",
+      "issues": "condition 'cel_condition' expression is invalid: no matching CEL overload",
+      "result": ""
+    }
+  },
+  "examples": [
+    {
+      "check": "Allowed\nrepo:api#reader\nrepo:api#owner\norganization:acme#member\nteam:platform#member\nteam:platform#member@user:bob",
+      "example": "GitHub",
+      "issues": "",
+      "objects": "1\nrepo:web",
+      "tests": "Passed\n1/1 tests\n4/4 assertions",
+      "users": "4\nuser:anne\nuser:bob\nuser:carol\nuser:dave"
+    },
+    {
+      "check": "Allowed\ndoc:roadmap#editor\ndoc:roadmap#parent\nfolder:q4#editor\nfolder:q4#parent\nfolder:projects#editor\ncomputed owner\nfolder:projects#owner@user:anne",
+      "example": "Drive",
+      "issues": "",
+      "objects": "2\ndoc:press-kit\ndoc:roadmap",
+      "tests": "Passed\n1/1 tests\n4/4 assertions",
+      "users": "3\nuser:anne\nuser:erin\nuser:frank"
+    },
+    {
+      "check": "Allowed\ndocument:plan#viewer@user:dana",
+      "example": "ABAC",
+      "issues": "",
+      "objects": "1\ndocument:plan",
+      "tests": "Passed\n1/1 tests\n3/3 assertions",
+      "users": "2\nuser:anne\nuser:dana"
+    }
+  ],
+  "source_head": "9d02e92fdea05823e8d8abc48f5cca68d99e6539"
+}

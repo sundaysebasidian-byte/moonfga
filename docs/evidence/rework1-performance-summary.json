@@ -1,0 +1,1204 @@
+{
+  "baseline_commit": "5a5ec462ec3ae84eb7a7c465d37f7e6d7c5071fd",
+  "source_commit": "9d02e92fdea05823e8d8abc48f5cca68d99e6539",
+  "scope": {
+    "tuples": 10000,
+    "warmups": 5,
+    "samples": 30,
+    "operations": [
+      "check_hit",
+      "objects_many",
+      "users_many"
+    ]
+  },
+  "all_scenarios": [
+    {
+      "target": "native",
+      "shape": "direct",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 0.43302292263610315,
+      "before_p95_us": 2.7920000000000003,
+      "after_p95_us": 1.209
+    },
+    {
+      "target": "native",
+      "shape": "direct",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.1824670935175623,
+      "before_p95_us": 3643.583,
+      "after_p95_us": 4308.417
+    },
+    {
+      "target": "native",
+      "shape": "direct",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.0239906377998829,
+      "before_p95_us": 1.709,
+      "after_p95_us": 1.75
+    },
+    {
+      "target": "native",
+      "shape": "fan16",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.042,
+      "before_p95_us": 1.0,
+      "after_p95_us": 1.042
+    },
+    {
+      "target": "native",
+      "shape": "fan16",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0256448724103548,
+      "before_p95_us": 1299.792,
+      "after_p95_us": 1333.125
+    },
+    {
+      "target": "native",
+      "shape": "fan16",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.1008471157724888,
+      "before_p95_us": 4.958,
+      "after_p95_us": 5.458
+    },
+    {
+      "target": "native",
+      "shape": "fan128",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0336,
+      "before_p95_us": 1.25,
+      "after_p95_us": 1.292
+    },
+    {
+      "target": "native",
+      "shape": "fan128",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 0.9970708174490193,
+      "before_p95_us": 767.791,
+      "after_p95_us": 765.542
+    },
+    {
+      "target": "native",
+      "shape": "fan128",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.9598853868194842,
+      "before_p95_us": 43.625,
+      "after_p95_us": 41.875
+    },
+    {
+      "target": "native",
+      "shape": "group2",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0,
+      "before_p95_us": 1.792,
+      "after_p95_us": 1.792
+    },
+    {
+      "target": "native",
+      "shape": "group2",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0072153703346831,
+      "before_p95_us": 13252.958,
+      "after_p95_us": 13348.583
+    },
+    {
+      "target": "native",
+      "shape": "group2",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.02880658436214,
+      "before_p95_us": 2.916,
+      "after_p95_us": 3.0
+    },
+    {
+      "target": "native",
+      "shape": "group20",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0294361035583404,
+      "before_p95_us": 8.459,
+      "after_p95_us": 8.708
+    },
+    {
+      "target": "native",
+      "shape": "group20",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0125411301564853,
+      "before_p95_us": 13156.709,
+      "after_p95_us": 13321.709
+    },
+    {
+      "target": "native",
+      "shape": "group20",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.9971525423728814,
+      "before_p95_us": 14.75,
+      "after_p95_us": 14.708
+    },
+    {
+      "target": "native",
+      "shape": "ttu2",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.016,
+      "before_p95_us": 2.625,
+      "after_p95_us": 2.6670000000000003
+    },
+    {
+      "target": "native",
+      "shape": "ttu2",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 0.9921352542559734,
+      "before_p95_us": 11501.834,
+      "after_p95_us": 11411.375
+    },
+    {
+      "target": "native",
+      "shape": "ttu2",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.0,
+      "before_p95_us": 4.167,
+      "after_p95_us": 4.167
+    },
+    {
+      "target": "native",
+      "shape": "ttu20",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0178791946308725,
+      "before_p95_us": 18.625,
+      "after_p95_us": 18.958000000000002
+    },
+    {
+      "target": "native",
+      "shape": "ttu20",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 0.9833471218924263,
+      "before_p95_us": 11509.542,
+      "after_p95_us": 11317.875
+    },
+    {
+      "target": "native",
+      "shape": "ttu20",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.9724482630426702,
+      "before_p95_us": 24.209,
+      "after_p95_us": 23.542
+    },
+    {
+      "target": "native",
+      "shape": "wildcard",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 0.9648370497427102,
+      "before_p95_us": 1.166,
+      "after_p95_us": 1.125
+    },
+    {
+      "target": "native",
+      "shape": "wildcard",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 0.9958787146502786,
+      "before_p95_us": 12000.625,
+      "after_p95_us": 11951.167
+    },
+    {
+      "target": "native",
+      "shape": "wildcard",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.25,
+      "before_p95_us": 1.0,
+      "after_p95_us": 1.25
+    },
+    {
+      "target": "native",
+      "shape": "abac",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0432968179447053,
+      "before_p95_us": 1.917,
+      "after_p95_us": 2.0
+    },
+    {
+      "target": "native",
+      "shape": "abac",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0464171764235453,
+      "before_p95_us": 4206.417,
+      "after_p95_us": 4401.667
+    },
+    {
+      "target": "native",
+      "shape": "abac",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.0960061443932412,
+      "before_p95_us": 5.208,
+      "after_p95_us": 5.708
+    },
+    {
+      "target": "native",
+      "shape": "difference",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 0.9469696969696969,
+      "before_p95_us": 1.584,
+      "after_p95_us": 1.5
+    },
+    {
+      "target": "native",
+      "shape": "difference",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0137431223645095,
+      "before_p95_us": 4938.834,
+      "after_p95_us": 5006.709
+    },
+    {
+      "target": "native",
+      "shape": "difference",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.0983529411764705,
+      "before_p95_us": 2.125,
+      "after_p95_us": 2.334
+    },
+    {
+      "target": "native",
+      "shape": "intersection",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.028,
+      "before_p95_us": 1.5,
+      "after_p95_us": 1.542
+    },
+    {
+      "target": "native",
+      "shape": "intersection",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 0.9731699908879214,
+      "before_p95_us": 3703.875,
+      "after_p95_us": 3604.5
+    },
+    {
+      "target": "native",
+      "shape": "intersection",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.0416666666666667,
+      "before_p95_us": 3.0,
+      "after_p95_us": 3.125
+    },
+    {
+      "target": "js",
+      "shape": "direct",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.4974196356408875,
+      "before_p95_us": 16.08299999999474,
+      "after_p95_us": 24.083000000004517
+    },
+    {
+      "target": "js",
+      "shape": "direct",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 0.9752673075489969,
+      "before_p95_us": 5032.125000000007,
+      "after_p95_us": 4907.667000000003
+    },
+    {
+      "target": "js",
+      "shape": "direct",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.8347350187029356,
+      "before_p95_us": 39.83300000000156,
+      "after_p95_us": 33.24999999999534
+    },
+    {
+      "target": "js",
+      "shape": "fan16",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0827382550337243,
+      "before_p95_us": 18.625000000000114,
+      "after_p95_us": 20.166000000003237
+    },
+    {
+      "target": "js",
+      "shape": "fan16",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0035322791849781,
+      "before_p95_us": 1734.2909999999988,
+      "after_p95_us": 1740.4169999999935
+    },
+    {
+      "target": "js",
+      "shape": "fan16",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.8984993782893366,
+      "before_p95_us": 58.709000000000344,
+      "after_p95_us": 52.74999999998897
+    },
+    {
+      "target": "js",
+      "shape": "fan128",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0820775889705774,
+      "before_p95_us": 21.83300000000088,
+      "after_p95_us": 23.624999999995566
+    },
+    {
+      "target": "js",
+      "shape": "fan128",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.1665733407696577,
+      "before_p95_us": 896.5000000000032,
+      "after_p95_us": 1045.833000000002
+    },
+    {
+      "target": "js",
+      "shape": "fan128",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.9095985318386117,
+      "before_p95_us": 140.58400000000404,
+      "after_p95_us": 127.87500000000307
+    },
+    {
+      "target": "js",
+      "shape": "group2",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.036960378473743,
+      "before_p95_us": 20.29200000000486,
+      "after_p95_us": 21.041999999994232
+    },
+    {
+      "target": "js",
+      "shape": "group2",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0020494468357577,
+      "before_p95_us": 21083.250000000022,
+      "after_p95_us": 21126.45900000001
+    },
+    {
+      "target": "js",
+      "shape": "group2",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.9491644303489384,
+      "before_p95_us": 32.7920000000006,
+      "after_p95_us": 31.125000000002956
+    },
+    {
+      "target": "js",
+      "shape": "group20",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.047507213312478,
+      "before_p95_us": 44.70900000000455,
+      "after_p95_us": 46.83299999999235
+    },
+    {
+      "target": "js",
+      "shape": "group20",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 0.6744770157274105,
+      "before_p95_us": 30271.416999999987,
+      "after_p95_us": 20417.374999999993
+    },
+    {
+      "target": "js",
+      "shape": "group20",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.8501617648716631,
+      "before_p95_us": 88.70900000000148,
+      "after_p95_us": 75.41700000000162
+    },
+    {
+      "target": "js",
+      "shape": "ttu2",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.002959327294089,
+      "before_p95_us": 27.709000000001538,
+      "after_p95_us": 27.79099999999346
+    },
+    {
+      "target": "js",
+      "shape": "ttu2",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 0.9814975654860824,
+      "before_p95_us": 18641.70899999999,
+      "after_p95_us": 18296.791999999983
+    },
+    {
+      "target": "js",
+      "shape": "ttu2",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.9044770985801437,
+      "before_p95_us": 52.3329999999973,
+      "after_p95_us": 47.333999999992216
+    },
+    {
+      "target": "js",
+      "shape": "ttu20",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0379002809943891,
+      "before_p95_us": 73.66700000000037,
+      "after_p95_us": 76.45900000001404
+    },
+    {
+      "target": "js",
+      "shape": "ttu20",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.1107363613879286,
+      "before_p95_us": 17875.040999999983,
+      "after_p95_us": 19854.45800000002
+    },
+    {
+      "target": "js",
+      "shape": "ttu20",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 3.527444066810816,
+      "before_p95_us": 110.04199999999997,
+      "after_p95_us": 388.1669999999957
+    },
+    {
+      "target": "js",
+      "shape": "wildcard",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.1366459627328644,
+      "before_p95_us": 20.12500000000017,
+      "after_p95_us": 22.87499999999909
+    },
+    {
+      "target": "js",
+      "shape": "wildcard",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 6.173450144539808,
+      "before_p95_us": 18914.16699999999,
+      "after_p95_us": 116765.667
+    },
+    {
+      "target": "js",
+      "shape": "wildcard",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.7979274611399452,
+      "before_p95_us": 24.124999999997954,
+      "after_p95_us": 43.3749999999975
+    },
+    {
+      "target": "js",
+      "shape": "abac",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.3780387025687744,
+      "before_p95_us": 58.08400000000091,
+      "after_p95_us": 80.04200000000594
+    },
+    {
+      "target": "js",
+      "shape": "abac",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 3.2743496917185855,
+      "before_p95_us": 6211.207999999999,
+      "after_p95_us": 20337.66700000001
+    },
+    {
+      "target": "js",
+      "shape": "abac",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.2585298723484837,
+      "before_p95_us": 84.29199999999781,
+      "after_p95_us": 106.08399999999563
+    },
+    {
+      "target": "js",
+      "shape": "difference",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 0.9083963963959619,
+      "before_p95_us": 27.750000000004604,
+      "after_p95_us": 25.207999999992126
+    },
+    {
+      "target": "js",
+      "shape": "difference",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0891293628048282,
+      "before_p95_us": 6534.0419999999995,
+      "after_p95_us": 7116.416999999984
+    },
+    {
+      "target": "js",
+      "shape": "difference",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.1224875502488367,
+      "before_p95_us": 33.33399999999642,
+      "after_p95_us": 37.41699999999071
+    },
+    {
+      "target": "js",
+      "shape": "intersection",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 0.755325686194321,
+      "before_p95_us": 29.291999999998097,
+      "after_p95_us": 22.125000000002615
+    },
+    {
+      "target": "js",
+      "shape": "intersection",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0570874213062706,
+      "before_p95_us": 5470.416999999998,
+      "after_p95_us": 5782.708999999983
+    },
+    {
+      "target": "js",
+      "shape": "intersection",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.0722483692513431,
+      "before_p95_us": 36.33299999999906,
+      "after_p95_us": 38.95800000000804
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "direct",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 0.8409090909090909,
+      "before_p95_us": 5.5,
+      "after_p95_us": 4.625
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "direct",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.2270578555570066,
+      "before_p95_us": 3828.5,
+      "after_p95_us": 4697.791
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "direct",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.9655172413793104,
+      "before_p95_us": 7.25,
+      "after_p95_us": 7.0
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "fan16",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0355688879365759,
+      "before_p95_us": 4.667000000000001,
+      "after_p95_us": 4.833
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "fan16",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0156815440289506,
+      "before_p95_us": 1658.0,
+      "after_p95_us": 1684.0
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "fan16",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.0415006640106241,
+      "before_p95_us": 21.084,
+      "after_p95_us": 21.959
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "fan128",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.016328939602597,
+      "before_p95_us": 5.083,
+      "after_p95_us": 5.166
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "fan128",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 0.9619002315311207,
+      "before_p95_us": 918.6669999999999,
+      "after_p95_us": 883.6659999999999
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "fan128",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.2953292770761196,
+      "before_p95_us": 331.833,
+      "after_p95_us": 429.833
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "group2",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0296505471231912,
+      "before_p95_us": 5.6659999999999995,
+      "after_p95_us": 5.8340000000000005
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "group2",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0359640144096862,
+      "before_p95_us": 19883.292,
+      "after_p95_us": 20598.375
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "group2",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.8690002095996646,
+      "before_p95_us": 9.542,
+      "after_p95_us": 8.292
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "group20",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0198019801980198,
+      "before_p95_us": 25.25,
+      "after_p95_us": 25.75
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "group20",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0108503916991403,
+      "before_p95_us": 19676.709,
+      "after_p95_us": 19890.209
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "group20",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.037829035186075,
+      "before_p95_us": 37.458,
+      "after_p95_us": 38.875
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "ttu2",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 0.8358260869565217,
+      "before_p95_us": 8.625,
+      "after_p95_us": 7.209
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "ttu2",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.135889388763484,
+      "before_p95_us": 15728.167000000001,
+      "after_p95_us": 17865.458000000002
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "ttu2",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.0992676255183975,
+      "before_p95_us": 11.333,
+      "after_p95_us": 12.458
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "ttu20",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0806686562921906,
+      "before_p95_us": 56.292,
+      "after_p95_us": 60.833
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "ttu20",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.0355368243953733,
+      "before_p95_us": 17831.25,
+      "after_p95_us": 18464.916
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "ttu20",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.9570059769548341,
+      "before_p95_us": 64.916,
+      "after_p95_us": 62.12500000000001
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "wildcard",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 0.7238857142857142,
+      "before_p95_us": 4.375,
+      "after_p95_us": 3.167
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "wildcard",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.1657185662362224,
+      "before_p95_us": 16920.5,
+      "after_p95_us": 19724.541
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "wildcard",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 0.7352941176470589,
+      "before_p95_us": 4.25,
+      "after_p95_us": 3.125
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "abac",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.0217142857142856,
+      "before_p95_us": 9.625,
+      "after_p95_us": 9.834
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "abac",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.1553694031868957,
+      "before_p95_us": 5306.1669999999995,
+      "after_p95_us": 6130.5830000000005
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "abac",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.274590909090909,
+      "before_p95_us": 22.0,
+      "after_p95_us": 28.041
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "difference",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 1.1061946902654867,
+      "before_p95_us": 6.667,
+      "after_p95_us": 7.375
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "difference",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 0.9629595285372454,
+      "before_p95_us": 5844.958,
+      "after_p95_us": 5628.4580000000005
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "difference",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.0233262307951105,
+      "before_p95_us": 8.917,
+      "after_p95_us": 9.125
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "intersection",
+      "operation": "check_hit",
+      "status": "completed",
+      "ratio": 0.9633338241790605,
+      "before_p95_us": 6.7909999999999995,
+      "after_p95_us": 6.542
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "intersection",
+      "operation": "objects_many",
+      "status": "completed",
+      "ratio": 1.2015513421686286,
+      "before_p95_us": 4572.041,
+      "after_p95_us": 5493.5419999999995
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "intersection",
+      "operation": "users_many",
+      "status": "completed",
+      "ratio": 1.0114942528735633,
+      "before_p95_us": 10.875,
+      "after_p95_us": 11.0
+    }
+  ],
+  "all_scenarios_median_p95_ratio": 1.0239906377998829,
+  "paired_recheck": [
+    {
+      "target": "native",
+      "shape": "wildcard",
+      "operation": "check_hit",
+      "ratio": 2.1801029159519727,
+      "before_p95_us": 1.166,
+      "after_p95_us": 2.5420000000000003
+    },
+    {
+      "target": "native",
+      "shape": "wildcard",
+      "operation": "objects_many",
+      "ratio": 0.9696878268565452,
+      "before_p95_us": 12429.0,
+      "after_p95_us": 12052.25
+    },
+    {
+      "target": "native",
+      "shape": "wildcard",
+      "operation": "users_many",
+      "ratio": 1.1857777777777778,
+      "before_p95_us": 1.125,
+      "after_p95_us": 1.334
+    },
+    {
+      "target": "native",
+      "shape": "ttu20",
+      "operation": "check_hit",
+      "ratio": 0.9655741935483872,
+      "before_p95_us": 19.375,
+      "after_p95_us": 18.708000000000002
+    },
+    {
+      "target": "native",
+      "shape": "ttu20",
+      "operation": "objects_many",
+      "ratio": 0.9238210646136508,
+      "before_p95_us": 12478.292,
+      "after_p95_us": 11527.709
+    },
+    {
+      "target": "native",
+      "shape": "ttu20",
+      "operation": "users_many",
+      "ratio": 0.9777266376263665,
+      "before_p95_us": 24.334,
+      "after_p95_us": 23.792
+    },
+    {
+      "target": "native",
+      "shape": "abac",
+      "operation": "check_hit",
+      "ratio": 1.0865936358894106,
+      "before_p95_us": 1.917,
+      "after_p95_us": 2.083
+    },
+    {
+      "target": "native",
+      "shape": "abac",
+      "operation": "objects_many",
+      "ratio": 1.020433528326148,
+      "before_p95_us": 4445.292,
+      "after_p95_us": 4536.125
+    },
+    {
+      "target": "native",
+      "shape": "abac",
+      "operation": "users_many",
+      "ratio": 1.0155096011816838,
+      "before_p95_us": 5.416,
+      "after_p95_us": 5.5
+    },
+    {
+      "target": "native",
+      "shape": "ttu2",
+      "operation": "check_hit",
+      "ratio": 0.9387001477104875,
+      "before_p95_us": 2.708,
+      "after_p95_us": 2.5420000000000003
+    },
+    {
+      "target": "native",
+      "shape": "ttu2",
+      "operation": "objects_many",
+      "ratio": 1.0057826740309093,
+      "before_p95_us": 11780.709,
+      "after_p95_us": 11848.833
+    },
+    {
+      "target": "native",
+      "shape": "ttu2",
+      "operation": "users_many",
+      "ratio": 0.9804705882352941,
+      "before_p95_us": 4.25,
+      "after_p95_us": 4.167
+    },
+    {
+      "target": "js",
+      "shape": "wildcard",
+      "operation": "check_hit",
+      "ratio": 1.261280707164698,
+      "before_p95_us": 19.458000000000197,
+      "after_p95_us": 24.542000000010944
+    },
+    {
+      "target": "js",
+      "shape": "wildcard",
+      "operation": "objects_many",
+      "ratio": 0.9124493479499028,
+      "before_p95_us": 21288.624999999996,
+      "after_p95_us": 19424.791999999998
+    },
+    {
+      "target": "js",
+      "shape": "wildcard",
+      "operation": "users_many",
+      "ratio": 1.090735867888369,
+      "before_p95_us": 22.041999999999007,
+      "after_p95_us": 24.041999999994346
+    },
+    {
+      "target": "js",
+      "shape": "ttu20",
+      "operation": "check_hit",
+      "ratio": 1.0234747195328717,
+      "before_p95_us": 78.08400000000404,
+      "after_p95_us": 79.9170000000089
+    },
+    {
+      "target": "js",
+      "shape": "ttu20",
+      "operation": "objects_many",
+      "ratio": 0.8849591969549816,
+      "before_p95_us": 21140.333999999937,
+      "after_p95_us": 18708.33300000004
+    },
+    {
+      "target": "js",
+      "shape": "ttu20",
+      "operation": "users_many",
+      "ratio": 0.9442588996764418,
+      "before_p95_us": 115.87500000000261,
+      "after_p95_us": 109.41600000001017
+    },
+    {
+      "target": "js",
+      "shape": "abac",
+      "operation": "check_hit",
+      "ratio": 1.1682851709106816,
+      "before_p95_us": 59.417000000003384,
+      "after_p95_us": 69.41600000000392
+    },
+    {
+      "target": "js",
+      "shape": "abac",
+      "operation": "objects_many",
+      "ratio": 0.852861304949236,
+      "before_p95_us": 7551.8340000000135,
+      "after_p95_us": 6440.6670000000195
+    },
+    {
+      "target": "js",
+      "shape": "abac",
+      "operation": "users_many",
+      "ratio": 1.1829968877242727,
+      "before_p95_us": 81.29100000000022,
+      "after_p95_us": 96.16699999999412
+    },
+    {
+      "target": "js",
+      "shape": "ttu2",
+      "operation": "check_hit",
+      "ratio": 1.3488418450742887,
+      "before_p95_us": 25.083000000002187,
+      "after_p95_us": 33.833000000001334
+    },
+    {
+      "target": "js",
+      "shape": "ttu2",
+      "operation": "objects_many",
+      "ratio": 0.97336261768254,
+      "before_p95_us": 20101.750000000036,
+      "after_p95_us": 19566.292000000034
+    },
+    {
+      "target": "js",
+      "shape": "ttu2",
+      "operation": "users_many",
+      "ratio": 0.9982175066314276,
+      "before_p95_us": 47.125000000001194,
+      "after_p95_us": 47.041000000007216
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "wildcard",
+      "operation": "check_hit",
+      "ratio": 0.8772922798279376,
+      "before_p95_us": 4.417,
+      "after_p95_us": 3.875
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "wildcard",
+      "operation": "objects_many",
+      "ratio": 0.9098985005139393,
+      "before_p95_us": 19994.584,
+      "after_p95_us": 18193.042
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "wildcard",
+      "operation": "users_many",
+      "ratio": 0.3684210526315789,
+      "before_p95_us": 9.5,
+      "after_p95_us": 3.5
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "ttu20",
+      "operation": "check_hit",
+      "ratio": 0.9135559921414538,
+      "before_p95_us": 63.625,
+      "after_p95_us": 58.125
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "ttu20",
+      "operation": "objects_many",
+      "ratio": 0.866070410286463,
+      "before_p95_us": 19123.541,
+      "after_p95_us": 16562.333
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "ttu20",
+      "operation": "users_many",
+      "ratio": 0.9901704831404127,
+      "before_p95_us": 63.584,
+      "after_p95_us": 62.959
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "abac",
+      "operation": "check_hit",
+      "ratio": 1.0088421052631578,
+      "before_p95_us": 9.5,
+      "after_p95_us": 9.584
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "abac",
+      "operation": "objects_many",
+      "ratio": 0.9640728731121828,
+      "before_p95_us": 5983.167,
+      "after_p95_us": 5768.209
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "abac",
+      "operation": "users_many",
+      "ratio": 1.0778002940358404,
+      "before_p95_us": 25.167,
+      "after_p95_us": 27.125
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "ttu2",
+      "operation": "check_hit",
+      "ratio": 1.0560670321713042,
+      "before_p95_us": 9.667000000000002,
+      "after_p95_us": 10.209
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "ttu2",
+      "operation": "objects_many",
+      "ratio": 0.911553822755948,
+      "before_p95_us": 17725.458,
+      "after_p95_us": 16157.708999999999
+    },
+    {
+      "target": "wasm-gc",
+      "shape": "ttu2",
+      "operation": "users_many",
+      "ratio": 1.0376743343597175,
+      "before_p95_us": 11.042,
+      "after_p95_us": 11.458
+    }
+  ],
+  "paired_median_p95_ratio": 0.9853205356878534,
+  "limitations": [
+    "Older and contemporaneous baselines are both retained.",
+    "Broad and repeated measurements contain tail outliers and short-query slowdowns; no uniform no-regression claim.",
+    "1m scale and Windows runtime were not rerun."
+  ]
+}
