@@ -8823,6 +8823,41 @@ test "official CEL model acceptance runtime errors and values" {
       "\"a😀\" != \"a￿\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
     (
+      "{1:\"a\",1u:\"b\"} == {1:\"b\",1u:\"a\"}", "{\"n\": 0, \"s\": \"\"}", "false",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "dyn({1:\"a\"}) == dyn({1u:\"a\"})", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "dyn(18446744073709551616.0) in {18446744073709551615u:1}", "{\"n\": 0, \"s\": \"\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "dyn(9007199254740992.0) in {9007199254740993:1}", "{\"n\": 0, \"s\": \"\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "timestamp(\"1970-01-01T00:00:00Z\") - timestamp(\"1677-09-21T00:12:43.145224193Z\") == duration(\"9223372036854775807ns\")",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "timestamp(\"1677-09-21T00:12:43.145224192Z\") - timestamp(\"1970-01-01T00:00:00Z\") == duration(\"-9223372036854775808ns\")",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "timestamp(\"1970-01-01T00:00:00Z\") - timestamp(\"1677-09-21T00:12:43.145224192Z\") == duration(\"0s\")",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "timestamp(\"1970-01-01T00:00:00.9Z\") - timestamp(\"1677-09-21T00:12:44.045224193Z\") == duration(\"9223372036854775807ns\")",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "timestamp(\"1677-09-21T00:12:44.045224192Z\") - timestamp(\"1970-01-01T00:00:00.9Z\") == duration(\"-9223372036854775808ns\")",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
       "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].all(x, x >= n)", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),

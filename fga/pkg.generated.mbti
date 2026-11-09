@@ -24,6 +24,8 @@ pub const ERR_VALIDATION : Int32 = 2000
 
 pub const MAX_RESOLUTION_DEPTH : Int32 = 25
 
+pub fn cel_map_find(Array[(CelValue, CelValue)], CelValue) -> CelValue?
+
 pub fn cel_numeric_compare(CelValue, CelValue) -> Int32?
 
 pub fn cel_value_eq(CelValue, CelValue) -> Bool

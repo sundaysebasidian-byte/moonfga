@@ -97,15 +97,22 @@ fn eval_arithmetic(
   match (left.timestamp_parts(), right.timestamp_parts(), left, right) {
     (Some((a, an)), Some((b, bn)), _, _) => {
       if op == "-" {
-        let scaled = eval_arithmetic("*", @fga.VInt(a - b), @fga.VInt(1000000L))
+        // The pinned implementation checks whole-second scaling before
+        // adding the fractional remainder, including its overflow boundary.
+        let whole = floor_div(a, 1000L) - floor_div(b, 1000L)
+        let fraction = (
+            (a % 1000L + 1000L) % 1000L - (b % 1000L + 1000L) % 1000L
+          ) *
+          1000000L +
+          an.to_int64() -
+          bn.to_int64()
+        let scaled = eval_arithmetic(
+          "*",
+          @fga.VInt(whole),
+          @fga.VInt(1000000000L),
+        )
         return @fga.VDuration(
-          as_int_value(
-            eval_arithmetic(
-              "+",
-              scaled,
-              @fga.VInt(an.to_int64() - bn.to_int64()),
-            ),
-          ),
+          as_int_value(eval_arithmetic("+", scaled, @fga.VInt(fraction))),
         )
       }
       raise eval_error("unsupported timestamp operator")
@@ -315,7 +322,7 @@ fn value_in(
       }
       found
     }
-    @fga.VKeyMap(entries) => entries.any(e => @fga.cel_value_eq(needle, e.0))
+    @fga.VKeyMap(entries) => @fga.cel_map_find(entries, needle) is Some(_)
     @fga.VMap(entries) =>
       match needle {
         @fga.VString(s) => entries.contains(s)
@@ -347,20 +354,11 @@ fn eval_index(
   index : @fga.CelValue,
 ) -> @fga.CelValue raise @fga.FgaError {
   match target {
-    @fga.VKeyMap(entries) => {
-      for (key, value) in entries {
-        if @fga.cel_value_type_name(key) == @fga.cel_value_type_name(index) &&
-          @fga.cel_value_eq(key, index) {
-          return value
-        }
+    @fga.VKeyMap(entries) =>
+      match @fga.cel_map_find(entries, index) {
+        Some(value) => value
+        None => raise eval_error("no such key")
       }
-      for (key, value) in entries {
-        if @fga.numeric_compare(key, index) == Some(0) {
-          return value
-        }
-      }
-      raise eval_error("no such key")
-    }
     @fga.VList(items) => {
       let i = as_int_value(index)
       if i < 0L || i >= items.length().to_int64() {

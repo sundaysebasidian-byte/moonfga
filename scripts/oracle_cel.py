@@ -174,6 +174,21 @@ def expression_cases(seed):
     for left,right in [('\ue000','😀'),('\uffff','𐀀'),('😀','😁'),('a😀','a\uffff')]:
         for op in ['<','<=','>','>=','==','!=']:
             yield f'{json.dumps(left,ensure_ascii=False)} {op} {json.dumps(right,ensure_ascii=False)}', {'n':0,'s':''}
+    for e in [
+        '{1:"a",1u:"b"} == {1:"b",1u:"a"}',
+        'dyn({1:"a"}) == dyn({1u:"a"})',
+        'dyn(18446744073709551616.0) in {18446744073709551615u:1}',
+        'dyn(9007199254740992.0) in {9007199254740993:1}',
+        'timestamp("1970-01-01T00:00:00Z") - timestamp("1677-09-21T00:12:43.145224193Z") == duration("9223372036854775807ns")',
+        'timestamp("1677-09-21T00:12:43.145224192Z") - timestamp("1970-01-01T00:00:00Z") == duration("-9223372036854775808ns")',
+        'timestamp("1970-01-01T00:00:00Z") - timestamp("1677-09-21T00:12:43.145224192Z") == duration("0s")',
+    ]:
+        yield e, {'n':0,'s':''}
+    for e in [
+        'timestamp("1970-01-01T00:00:00.9Z") - timestamp("1677-09-21T00:12:44.045224193Z") == duration("9223372036854775807ns")',
+        'timestamp("1677-09-21T00:12:44.045224192Z") - timestamp("1970-01-01T00:00:00.9Z") == duration("-9223372036854775808ns")',
+    ]:
+        yield e, {'n':0,'s':''}
     for count in list(range(15,56)) + [100,1000]:
         items = '[' + ','.join(['1']*count) + ']'
         for macro in ['all', 'exists', 'exists_one', 'map', 'filter']:

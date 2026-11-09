@@ -62,7 +62,12 @@ pub fn cel_value_eq(a : CelValue, b : CelValue) -> Bool {
     (VType(x), VType(y)) => x == y
     (VKeyMap(xs), VKeyMap(ys)) =>
       xs.length() == ys.length() &&
-      xs.all(x => ys.any(y => cel_value_eq(x.0, y.0) && cel_value_eq(x.1, y.1)))
+      xs.all(e => {
+        match cel_map_find(ys, e.0) {
+          Some(v) => cel_value_eq(e.1, v)
+          None => false
+        }
+      })
     (VDuration(x), VDuration(y)) => x == y
     (VTimestamp(x), VTimestamp(y)) => x == y
     (VIp(x), VIp(y)) => x == y
@@ -662,4 +667,25 @@ pub fn CelValue::timestamp_offset(self : CelValue) -> Int32 {
     VTimestampPrecise(_, _, offset) => offset
     _ => 0
   }
+}
+
+///|
+/// Typed keys take precedence; cross-numeric fallback must be exact, rather
+/// than using CEL's mixed-double value-equality rounding.
+pub fn cel_map_find(
+  entries : Array[(CelValue, CelValue)],
+  key : CelValue,
+) -> CelValue? {
+  for (candidate, value) in entries {
+    if cel_value_type_name(candidate) == cel_value_type_name(key) &&
+      cel_value_eq(candidate, key) {
+      return Some(value)
+    }
+  }
+  for (candidate, value) in entries {
+    if numeric_compare(candidate, key) == Some(0) {
+      return Some(value)
+    }
+  }
+  None
 }
