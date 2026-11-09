@@ -78,7 +78,7 @@ modular model validation). `model_from_json`, DSL parsing and mutable AuthModel 
 construction remain parsing/data APIs; callers must validate before installing a model.
 The oracle explicitly runs validation before queries and distinguishes rejected models
 from accepted models with evaluation errors. No unchecked constructor is described as
-an OpenFGA WriteAuthorizationModel equivalent.
+an OpenFGA WriteAuthorizationModel equivalent. Direct `cel.compile` and model checking both enforce the 250 recursive-expression boundary; ternary true arms require parentheses for nested conditionals.
 
 ## Function and type matrix
 
@@ -87,49 +87,49 @@ query APIs); **R** = `cel/oracle_test.mbt` (embedded official outcomes on every 
 **U** = `cel/cel_test.mbt`, `cel/compat_test.mbt`; **L** = `cel/limits_test.mbt` and
 `engine/condition_limits_test.mbt`; **A** = `scripts/audit_cel_surface.py` (former gaps
 and separate, deliberately failing known-boundary probes). Results and commands are
-in [rework validation](evidence/rework1-validation.md).
+in [current rework validation](evidence/rework2-validation.md); [Rework 1](evidence/rework1-validation.md) is historical.
 
 “Consistent” means the specified tested overloads, not a proof over arbitrary inputs.
 Known exceptions apply even when the ordinary overload is implemented.
 
 | Type / function / operator | Status | Behavior | Evidence |
 | --- | --- | --- | --- |
-| Static type / overload checking  | 一致（已测） | Boolean output, undeclared names, unary/binary overloads, arity, conditional types, collection indexing, macros and conversions; errors at validation time | D/R, including model rejection categories |
-| int / uint literals  | 一致（已测） | Decimal and hex, uint suffix, direct signed minimum, out-of-range rejection | D/R/U |
-| int / uint + - * / %, unary -  | 一致（已测） | Checked signed/unsigned overflow, division by zero, MIN/-1 division/remainder errors | D/R/U |
-| double + - * /  | 一致（已测） | IEEE infinity/NaN, no integer-style divide-by-zero error; modulo rejected | D/R |
-| == != < <= > >= numeric values  | 一致（已测） | Exact same-type integer/int↔uint; pinned mixed-double rounding and unordered NaN; mixed static types rejected | D/R |
-| bool, !, &&, \|\|, ?: | 一致（已测） | Short circuit, deciding-value error absorption; undeclared/missing parameter behavior as described above | D/R/U |
-| string / bytes literals  | 一致（已测） | Unicode/hex/octal/control escapes (code points in strings, octets in bytes), BOM preservation, raw/triple forms, UTF-8 validation, byte-range errors; trailing collection commas | D/R/U |
-| string / bytes == != ordering +  | 一致（已测） | Unicode string / octet bytes comparison, concatenation | D/R/U |
-| bytes(string/bytes), string(bytes)  | 一致（已测） | UTF-8 encode/decode including invalid-byte errors; constant conversion rejection at validation | D/R |
-| list / map values  | 一致（已测） | Heterogeneous collections; string/int/uint/bool map keys; distinct literal numeric key types; exact typed-key precedence and exact numeric fallback; duplicate keys overwrite as observed upstream | D/R |
-| in / index / field  | 一致（已测） | Lists and maps, numeric-key conversion, missing key and bounds errors; field syntax distinct from zero-argument calls | D/R |
-| size(x), x.size()  | 一致（已测） | Code points for strings, octets for bytes, entry/element counts | D/R/U |
-| has(field)  | 一致（已测） | Field-presence macro, static macro-form validation | D/R |
-| all / exists / exists_one  | 一致（已测） | List values and map keys; deciding result/error propagation and macro costs | D/R/U |
-| map(v,expr), map(v,predicate,expr), filter  | 一致（已测） | Lists and map keys; selected-element evaluation and result lists | D/R/U |
-| contains / startsWith / endsWith  | 一致（已测） | Receiver string overloads | D/R/U |
-| matches  | 一致（已测） | Receiver and global overloads; groups/named/noncapturing groups, alternation, counted/lazy repetition, i/m/s/U flags, boundaries, ASCII/POSIX/Unicode classes, scalar escapes, quoted literals | D/R/U; NFA stress L; program bound below |
-| int(int/uint/double/string/duration/timestamp)  | 一致（已测） | Checked casts, decimal lexical rules, duration nanoseconds, timestamp epoch seconds | D/R |
-| uint(uint/int/double/string)  | 一致（已测） | Decimal lexical rules, negative and range errors | D/R |
-| double(double/int/uint/string)  | 一致（已测） | Decimal/hex strings, exponent, NaN/Inf and malformed/overflow errors | D/R |
-| bool(bool/string)  | 一致（已测） | Pinned accepted true/false/t/f/1/0 and case spellings; invalid values error | D/R |
-| string(string/int/uint/double/bool/bytes/duration/timestamp)  | 一致（已测） | Scalar formatting, negative zero, scientific exponent spelling, precise temporal forms; unsupported dynamic conversions error | D/R/U |
-| duration(string/duration)  | 一致（已测） | Exact decimal fractional parsing, Go units, signed nanosecond bounds and identity conversion | D/R |
-| timestamp(string/int/timestamp)  | 一致（已测） | RFC3339, epoch seconds, identity; constructor/context parsing differences, signed/range errors | D/R |
-| duration +/-; timestamp +/- duration; timestamp - timestamp  | 一致（已测） | Checked duration range and timestamp endpoints | D/R/U |
-| duration getHours/getMinutes/getSeconds/getMilliseconds  | 一致（已测） | Truncation toward zero at each unit | D/R |
+| Static type / overload checking  | 所列语料通过 | Boolean output, undeclared names, unary/binary overloads, arity, conditional types, collection indexing, macros and conversions; errors at validation time | D/R, including model rejection categories |
+| int / uint literals  | 所列语料通过 | Decimal and lowercase 0x hex, uint suffix, direct signed minimum, out-of-range and uppercase 0X rejection | D/R/U |
+| int / uint + - * / %, unary -  | 所列语料通过 | Checked signed/unsigned overflow, division by zero, MIN/-1 division/remainder errors; repeated identical unary prefixes collapse by parity before evaluation | D/R/U |
+| double + - * /  | 所列语料通过 | IEEE infinity/NaN, no integer-style divide-by-zero error; modulo rejected | D/R |
+| == != < <= > >= numeric values  | 所列语料通过 | Exact same-type integer/int↔uint; pinned mixed-double rounding and unordered NaN; mixed static types rejected | D/R |
+| bool, !, &&, \|\|, ?: | 所列语料通过 | Short circuit, deciding-value error absorption; undeclared/missing parameter behavior as described above | D/R/U |
+| string / bytes literals  | 所列语料通过 | Unicode/hex/octal/control escapes (code points in strings, octets in bytes), BOM preservation, raw/triple forms, UTF-8 validation, byte-range errors; trailing collection commas | D/R/U |
+| string / bytes == != ordering +  | 所列语料通过 | Unicode string / octet bytes comparison, concatenation | D/R/U |
+| bytes(string/bytes), string(bytes)  | 所列语料通过 | UTF-8 encode/decode including invalid-byte errors; constant conversion rejection at validation | D/R |
+| list / map values  | 所列语料通过 | Heterogeneous collections; string/int/uint/double/bool/null/type/duration/timestamp/ipaddress literal map keys; distinct literal numeric key types; typed-key precedence, numeric fallback for integer-keyed maps and type-strict double-keyed lookup; duplicate keys overwrite as observed upstream | D/R |
+| in / index / field  | 所列语料通过 | Lists and maps, numeric-key conversion, missing key and bounds errors; field syntax distinct from zero-argument calls | D/R |
+| size(x), x.size()  | 所列语料通过 | Code points for strings, octets for bytes, entry/element counts | D/R/U |
+| has(field)  | 所列语料通过 | Field-presence macro, static macro-form validation | D/R |
+| all / exists / exists_one  | 所列语料通过 | List values and map keys; deciding result/error propagation and macro costs | D/R/U |
+| map(v,expr), map(v,predicate,expr), filter  | 所列语料通过 | Lists and map keys; selected-element evaluation and result lists | D/R/U |
+| contains / startsWith / endsWith  | 所列语料通过 | Receiver string overloads | D/R/U |
+| matches  | 所列语料通过 | Receiver and global overloads; groups/named/noncapturing groups, alternation, counted/lazy repetition (leading-zero counts stay literal), i/m/s/U flags, boundaries, ASCII/POSIX/Unicode classes, scalar escapes, quoted literals | D/R/U; NFA stress L; program bound below |
+| int(int/uint/double/string/duration/timestamp)  | 所列语料通过 | Checked casts, decimal lexical rules, duration nanoseconds, timestamp epoch seconds | D/R |
+| uint(uint/int/double/string)  | 所列语料通过 | Decimal lexical rules, negative and range errors | D/R |
+| double(double/int/uint/string)  | 所列语料通过 | Decimal/hex strings and valid separators, exponent, unsigned NaN/Inf and malformed/overflow errors; signed NaN rejected | D/R |
+| bool(bool/string)  | 所列语料通过 | Pinned accepted true/false/t/f/1/0 and case spellings; invalid values error | D/R |
+| string(string/int/uint/double/bool/bytes/duration/timestamp)  | 所列语料通过 | Scalar formatting, negative zero, scientific exponent spelling, precise temporal forms; unsupported dynamic conversions error | D/R/U |
+| duration(string/duration)  | 所列语料通过 | Exact decimal fractional parsing, Go units, signed nanosecond bounds and identity conversion | D/R |
+| timestamp(string/int/timestamp)  | 所列语料通过 | RFC3339, epoch seconds, identity; constructor/context parsing differences, signed/range errors | D/R |
+| duration +/-; timestamp +/- duration; timestamp - timestamp  | 所列语料通过 | Checked duration range and timestamp endpoints | D/R/U |
+| duration getHours/getMinutes/getSeconds/getMilliseconds  | 所列语料通过 | Truncation toward zero at each unit | D/R |
 | timestamp getFullYear/getMonth/getDate/getDayOfMonth/getDayOfWeek/getDayOfYear/getHours/getMinutes/getSeconds/getMilliseconds  | 一致（显式时区）；Local 需宿主配置 | UTC/default, numeric offsets and named IANA zones; historical and future DST; negative epochs and sub-milliseconds | D/R; Local exception below |
-| dyn(value), any parameter  | 一致（已测） | Erased annotation, dynamic JSON numbers as double, nested generic context types | D/R |
-| type(value), type constants  | 一致（已测） | Primitive/collection/type/null_type, google.protobuf.Duration/Timestamp/Empty and Struct.FieldsEntry; wrapper/JSON/Any names rejected as standalone type expressions | D/R |
-| protobuf Timestamp / Duration constructors  | 一致（已测） | int64 seconds/int32 nanos; normalization, full-width Go time ordering/getters/formatting; Duration saturation differs from duration(string) overflow | D/R; 864 generated extreme temporal predicates |
-| BoolValue / BytesValue / StringValue / DoubleValue / FloatValue / Int32Value / Int64Value / UInt32Value / UInt64Value  | 一致（已测） | Field types and dynamic value checks; defaults, primitive adaptation, float32 rounding, int32/uint32 narrowing errors | D/R |
-| Value / Struct / ListValue / Struct.FieldsEntry  | 一致（已测） | Null/defaults, oneof field adaptation, JSON double numbers, bytes base64, temporal strings, field presence | D/R; multi-oneof ordering caveat below |
-| Any  | 一致（已测） | Resolve supported well-known messages; independently implemented protobuf varints, fixed fields, strings, nested messages, unknown fields/groups, UTF-8 and malformed wire errors | D/R; unresolvable descriptors error |
-| Qualified root names  | 一致（已测） | `.int`, `.n`, `.google.protobuf.Timestamp`; absolute `.has` is not a registered macro | D/R |
-| ipaddress(string), in_cidr(string)  | 一致（已测） | Existing address/CIDR library and typed coercion | U and pinned ABAC matrix |
-| Typed context numeric values  | 一致（已测） | Primitive and string inputs, 64-bit binary precision decimal conversion, saturating signed narrowing, uint-through-int64, exact double narrowing | D/R, including extreme-exponent saturation |
+| dyn(value), any parameter  | 所列语料通过 | Erased annotation, dynamic JSON numbers as double, nested generic context types | D/R |
+| type(value), type constants  | 所列语料通过 | Primitive/collection/type/null_type, google.protobuf.Duration/Timestamp/Empty and Struct.FieldsEntry; wrapper/JSON/Any names rejected as standalone type expressions | D/R |
+| protobuf Timestamp / Duration constructors  | 所列语料通过 | int64 seconds/int32 nanos; normalization, full-width Go time ordering/getters/formatting; Duration saturation differs from duration(string) overflow | D/R; 864 generated extreme temporal predicates |
+| BoolValue / BytesValue / StringValue / DoubleValue / FloatValue / Int32Value / Int64Value / UInt32Value / UInt64Value  | 所列语料通过 | Field types and dynamic value checks; defaults, primitive adaptation, float32 rounding, int32/uint32 narrowing errors | D/R |
+| Value / Struct / ListValue / Struct.FieldsEntry  | 所列语料通过 | Null/defaults, oneof field adaptation, JSON double numbers, bytes base64, temporal strings, field presence | D/R; multi-oneof ordering caveat below |
+| Any  | 所列语料通过 | Resolve supported well-known messages; independently implemented protobuf varints, fixed fields, strings, nested messages, unknown fields/groups, UTF-8 and malformed wire errors | D/R; unresolvable descriptors error |
+| Qualified root names  | 所列语料通过 | `.int`, `.n`, `.google.protobuf.Timestamp`; absolute `.has` is not a registered macro | D/R |
+| ipaddress(string), in_cidr(string)  | 所列语料通过 | Existing address/CIDR library and typed coercion | U and pinned ABAC matrix |
+| Typed context numeric values  | 所列语料通过 | Primitive and string inputs, 64-bit binary precision decimal conversion, saturating signed narrowing, uint-through-int64, exact double narrowing | D/R, including extreme-exponent saturation |
 | Cost / cancellation  | 部分 / 宿主接口等价 | Portable per-condition state, default cost 100, counted string operations, macro lowering, constant program optimization, host cancellation, regex interruption checks | D/R/L; optimizer exceptions below |
 Unicode 17.0.0 and tzdb 2026f are generated data, with reproducible generators and
 licenses described in [timezones.md](timezones.md). No runtime Go/OS/Node dependency
@@ -150,7 +150,7 @@ was added. Browser, JS, native and wasm all use the same MoonBit matcher and dat
    programs that previously exposed premature budget errors. The pinned program
    optimization shapes are implemented independently: constant containers, standard
    unary conversions and primitive constant membership. Exact cost equivalence over
-   every possible program and raised budget is unproven. The Engine accepts condition_cost_limit and a
+   every possible program is unproven at BOTH the default budget 100 and raised budgets. The r8 default-budget unary-chain false rejections are fixed; this does not certify all default-budget programs. The Engine accepts condition_cost_limit and a
    condition_cancelled callback, retained through Check/list engine copies. HTTP
    request and List API wall-clock deadlines remain transport responsibilities.
    Cancellation is cooperative during expression/NFA execution, not a preemptive
@@ -164,7 +164,7 @@ was added. Browser, JS, native and wasm all use the same MoonBit matcher and dat
    timezone data are pinned to 2026f, rather than tracking an arbitrary server OS's
    later data updates. Regeneration and renewed comparison are required for updates.
 
-The former function/type blockers are implemented and covered by the pinned oracle.
+The former function/type blockers and r8 review findings have targeted pinned-oracle regressions.
 This is a tested-surface statement, not a proof of equivalence over all programs. The ordinary surface probes pass, but the unconfigured Local counterexample
 and the host/resource verification limits prevent a claim of complete compatibility.
 For multi-key map macros the oracle uses order-independent predicates; no map
@@ -189,3 +189,27 @@ D compares Boolean values, result sets and error categories: model rejection
 `M:invalid_authorization_model`, evaluation `E2000`, and other mapped request errors.
 Unknown errors fail the runner. A separate host-boundary audit is not merged into a zero-difference
 claim. The raw outputs retain both model-creation and query HTTP errors.
+
+## Rework 2 review closure
+
+Evidence and exact commands: [Rework 2 validation](evidence/rework2-validation.md).
+`scripts/r8_divergences.py` preserves the independent 25-case reproducer;
+`scripts/cel_review_corpus.py` adds 389 further expressions. Both feed D and R.
+These cover unary parity and macro costs, numeric token/conversion spellings,
+counted-repeat grammar and character-class escape/range endpoints, hashable map
+keys and indexing categories, null operators, ternary grammar and recursion limits.
+Passing these examples does not establish equality for untested spellings/functions.
+
+Map literals accept hashable scalar keys beyond protobuf/JSON map key types. The
+pinned checker rejects indexing statically null/type/duration/timestamp-keyed maps;
+IPAddress indexing fails at evaluation; double-keyed maps do not fall back to int
+keys. Size, membership and equality are tested separately. Do not infer indexing
+support from constructor acceptance.
+
+Additional known deliberate exception: `{b"a":1}.size()==1` is rejected locally
+as an invalid model. The independent r8 review observed an upstream HTTP 500 panic
+for bytes keys (unhashable underlying value). Unhashable bytes/list/map keys are
+rejected locally rather than reproducing a server crash; these are not advertised
+as compatible valid models and are excluded from the normal error-category oracle.
+Local configuration, service deadlines, generated data/resource limits and order
+observability remain as listed above. Windows execution is still unverified.

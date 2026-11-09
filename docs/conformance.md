@@ -1497,3 +1497,14 @@ acceptance oracle. String hex/octal escapes and bytes escapes cover every value
 0..255 independently, including BOM retention and root-qualified names.
 The retained browser smoke exercises all three built-in examples, new
 protobuf/bytes/Unicode-regex Check/ListObjects/ListUsers and static model rejection.
+
+## Rework 2
+
+The r8 independent review's 25 counterexamples are retained as
+`scripts/r8_divergences.py` and included in `scripts/oracle_cel.py` through
+`scripts/cel_review_corpus.py`. They are supplemented with unary/operator/macro
+cost thresholds, numeric literal/conversion spellings, RE2 repeat/class boundaries,
+hashable scalar map keys, null operator categories, ternary grammar and parser
+recursion thresholds. See [Rework 2 commands and results](evidence/rework2-validation.md).
+Direct `cel.compile` regression tests reject 10000 nested delimiters with FgaError
+on every target. This also covers calls outside model request-length validation.

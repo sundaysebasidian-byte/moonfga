@@ -29,14 +29,14 @@
 
 条件的终点是 OpenFGA v1.22.1 实际 cel-go 环境的完整行为：标准类型与函数、宏、模型编译拒绝、上下文转换、错误与 partial evaluation，以及 ipaddress 扩展。bytes 是表达式能力，官方不提供 bytes 参数枚举；默认 protobuf well-known 对象及 Any 解码在范围内，任意应用消息描述符和扩展函数库未在该环境注册。
 
-0.2.3 已补齐模型类型检查、转换与类型反射、异构 map/list 和宏、默认 protobuf well-known 对象、时间 getter/时区，以及无回溯正则。新差分同时比较模型拒绝、求值错误类别和结果，并在两个种子运行；不能以固定语料通过代替全部输入的兼容性证明。
+0.2.3 已补齐模型类型检查、转换与类型反射、异构 map/list 和宏、默认 protobuf well-known 对象、时间 getter/时区，以及无回溯正则。新差分同时比较模型拒绝、求值错误类别和结果，并在两个种子运行；不能以固定语料通过代替全部输入的兼容性证明。第二轮已补入独立审查反例与词法、正则、map 键、默认预算和解析深度边界回归。
 
 官方实测：缺少已声明参数时，即使条件为 true 也返回 E2000；动态整数与 double 比较存在 cel-go 的舍入行为。实现按这些结果对齐。Local 宿主配置、正则资源策略和服务期限的具体边界仍见 [逐函数对比](openfga-comparison.md#host-boundaries-and-remaining-verification-limits)。未配置 Local 时仍报错；服务期限与中断由宿主接入。服务端、认证、ReadChanges 和分页明确不做，consistency 由宿主 reader 快照实现；不声明完整兼容。
 
 ## 和 OpenFGA 结果一致的证据
 
 - 官方 v1.22.1 测试矩阵：Check 516/516，ListObjects 354/354，ListUsers 393/394。唯一的跳过是上游用例把期望值嵌在 request 里，没有顶层断言，如实记为 skip。
-- 和官方 v1.22.1 二进制随机差分：两个 seed 共 6570 次比较，0 不一致；另有 204 组定向用例。条件语料两个种子各 6248 个模型，结果及错误类别均 0 不一致。
+- 和官方 v1.22.1 二进制随机差分：两个 seed 共 6570 次比较，0 不一致；另有 204 组定向用例。条件语料两个种子各 6662 个模型，结果及错误类别均 0 不一致。
 - 复现：`scripts/fetch-upstream.sh` 下载固定 commit 的数据，`./scripts/conformance.sh` 跑全部矩阵。
 
 ## 与 moonpolicykit 的区别

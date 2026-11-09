@@ -17,6 +17,14 @@
 - Add default condition cost 100, configurable engine budget and cooperative host cancellation. Match constant container/conversion optimization and constant primitive membership, including asymmetric mixed-numeric membership behavior. Split and defer generated data initialization for wasm limits and query performance.
 - Expand two-seed model/query differential coverage and embed official outcomes on every backend. Keep Local, regex compilation bounds and host deadlines explicit; do not claim full compatibility.
 
+### Rework 2
+
+- Fold repeated identical unary prefixes by parity, retain single-operation costs, and regress default-budget false rejections plus operator/conversion/macro thresholds.
+- Align RE2 leading-zero count literals, shorthand-class dash handling and malformed/count-boundary grammar. Reject uppercase 0X literals, trailing-dot numeric tokens and signed NaN conversions; accept valid hexadecimal float separators.
+- Accept hashable scalar map keys including double and IPAddress, preserving the pinned constructor/indexing error distinctions and directional numeric lookup. Align null arithmetic model-vs-runtime errors.
+- Enforce a controlled 250-expression parser recursion limit on every backend, including direct compile of 10000 nested delimiters. Reject unparenthesized ternaries in true arms.
+- Preserve all 25 independent review cases and add systematic families to both seeded oracle runs and offline backend regressions. Default-budget equivalence remains bounded by explicit evidence, not a universal claim.
+
 ## 0.2.2
 
 - Add offline fixed-seed release benchmarks for Check, ListObjects and ListUsers across tuple scales, relation shapes and native/JS/wasm-gc backends, with raw samples, latency quantiles, throughput, memory and reverse-graph attribution.
