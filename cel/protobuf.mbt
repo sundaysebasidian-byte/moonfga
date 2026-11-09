@@ -247,7 +247,7 @@ fn ProtoReader::skip(
 
 ///|
 fn proto_text(bytes : Bytes) -> String raise @fga.FgaError {
-  @utf8.decode(bytes[:], ignore_bom=true) catch {
+  @utf8.decode(bytes[:]) catch {
     _ => raise eval_error("invalid protobuf UTF-8")
   }
 }
@@ -267,7 +267,9 @@ fn proto_decode(
   payload : Bytes,
   depth : Int32,
 ) -> @fga.CelValue raise @fga.FgaError {
-  if !proto_known(name) || depth > 10000 {
+  if !proto_known(name) ||
+    name == "google.protobuf.Struct.FieldsEntry" ||
+    depth > 10000 {
     raise eval_error("unknown protobuf type or recursion limit")
   }
   let reader : ProtoReader = { data: payload, pos: 0, }

@@ -48,7 +48,8 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
         @fga.VMap(_) | @fga.VKeyMap(_) => Map(Dynamic, Dynamic)
         _ => Atom(@fga.cel_value_type_name(v))
       }
-    CIdent(name) =>
+    CIdent(raw_name) => {
+      let name = global_name(raw_name)
       match env.get(name) {
         Some(t) => t
         None =>
@@ -61,6 +62,7 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
             raise eval_error("undefined parameter `" + name + "`")
           }
       }
+    }
     CUnary(op, inner) => {
       let t = infer(inner, env)
       if op == "!" {
@@ -196,7 +198,11 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
         _ => raise eval_error("not indexable")
       }
     }
-    CCall(name, args) => {
+    CCall(raw_name, args) => {
+      if raw_name == ".has" {
+        raise eval_error("undeclared function .has")
+      }
+      let name = global_name(raw_name)
       if name == "matches" {
         if args.length() != 2 {
           raise eval_error("invalid matches arity")
@@ -265,7 +271,7 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
       if t != Dynamic && !allowed.any(a => t == Atom(a)) {
         raise eval_error("no matching conversion overload")
       }
-      if name != "ipaddress" && foldable_argument(args[0]) {
+      if name != "ipaddress" && foldable_argument(args[0], env) {
         ignore(eval_expr(expr, Map([])))
       }
       Atom(name)
@@ -446,14 +452,25 @@ fn qualified_type(expr : CelExpr) -> String? {
 }
 
 ///|
-fn foldable_argument(expr : CelExpr) -> Bool {
+fn foldable_argument(expr : CelExpr, env : Map[String, CType]) -> Bool {
+  if qualified_type(expr) is Some(_) {
+    return true
+  }
   match expr {
     CLiteral(_) => true
-    CList(items) => items.all(foldable_argument)
+    CIdent(name) =>
+      !env.contains(global_name(name)) &&
+      [
+        "int", "uint", "double", "bool", "string", "bytes", "list", "map", "type",
+        "null_type",
+      ].contains(global_name(name))
+    CList(items) => items.all(x => foldable_argument(x, env))
     CMap(items) =>
-      items.all(e => foldable_argument(e.0) && foldable_argument(e.1))
-    CCall("type", args) | CCall("dyn", args) =>
-      args.length() == 1 && foldable_argument(args[0])
+      items.all(e => foldable_argument(e.0, env) && foldable_argument(e.1, env))
+    CCall(name, args) =>
+      conversion_function(global_name(name)) &&
+      args.length() == 1 &&
+      foldable_argument(args[0], env)
     _ => false
   }
 }

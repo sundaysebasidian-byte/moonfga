@@ -917,7 +917,7 @@ fn eval_call(
         | @fga.VTimestampPrecise(_, _, _) =>
           @fga.VString(@fga.timestamp_to_rfc3339(values[0]))
         @fga.VBytes(b) =>
-          @fga.VString(@utf8.decode(b[:], ignore_bom=true)) catch {
+          @fga.VString(@utf8.decode(b[:])) catch {
             _ => raise eval_error("invalid UTF-8 in bytes to string conversion")
           }
         @fga.VDuration(ns) => @fga.VString(format_duration(ns))
@@ -993,7 +993,8 @@ fn eval_expr_state(
   }
   match expr {
     CLiteral(value) => value
-    CIdent(name) => {
+    CIdent(raw_name) => {
+      let name = global_name(raw_name)
       state.charge(1)
       match env.get(name) {
         Some(value) => value
@@ -1051,7 +1052,7 @@ fn eval_expr_state(
     CBinary(op, left, right) => {
       let l = eval_expr_state(left, env, state)
       let r = eval_expr_state(right, env, state)
-      if op == "in" {
+      if op == "in" || op == "@set_in" {
         state.charge(
           if r is @fga.VList(_) {
             @fga.cel_value_size(r)
@@ -1059,7 +1060,13 @@ fn eval_expr_state(
             1
           },
         )
-        @fga.VBool(value_in(l, r))
+        @fga.VBool(
+          if op == "@set_in" {
+            optimized_member(l, r)
+          } else {
+            value_in(l, r)
+          },
+        )
       } else if op == "<" || op == "<=" || op == ">" || op == ">=" {
         state.charge(
           if l is @fga.VString(_) || l is @fga.VBytes(_) {
@@ -1086,7 +1093,7 @@ fn eval_expr_state(
       } else {
         eval_expr_state(when_false, env, state)
       }
-    CCall(name, args) => eval_call(name, args, env, state)
+    CCall(name, args) => eval_call(global_name(name), args, env, state)
     CMethod(receiver, name, args) => {
       let value = eval_expr_state(receiver, env, state)
       eval_method(value, name, args, env, state)
@@ -1197,7 +1204,8 @@ pub fn eval_expr_with_limit(
     cancelled,
     local_timezone,
   }
-  eval_expr_state(expr, env, state)
+  state.check()
+  eval_expr_state(optimize_expr(expr, env), env, state)
 }
 
 ///|

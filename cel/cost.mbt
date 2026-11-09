@@ -34,10 +34,6 @@ fn constant_expr(expr : CelExpr) -> Bool {
     CLiteral(_) => true
     CList(items) => items.all(constant_expr)
     CMap(entries) => entries.all(e => constant_expr(e.0) && constant_expr(e.1))
-    CUnary(_, inner) => constant_expr(inner)
-    CBinary(_, a, b) => constant_expr(a) && constant_expr(b)
-    CTernary(a, b, c) =>
-      constant_expr(a) && constant_expr(b) && constant_expr(c)
     _ => false
   }
 }

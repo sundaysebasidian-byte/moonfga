@@ -54,6 +54,30 @@ def expressions(seed):
 
 
 def expression_cases(seed):
+    for count in range(1,38):
+        items = '[' + ','.join(['1']*count) + ']'
+        for body in ['1+1','int("1")','[1]','{"a":1}','type(1)','1+0*n']:
+            for suffix in [f'.map(x,{body}).size()=={count}',f'.map(x,x>=0,{body}).size()=={count}']:
+                yield items+suffix, {"n":0,"s":""}
+    for e in ['dyn(9007199254740993) in [9007199254740992.0]',
+              'dyn(9007199254740993) in [9007199254740992.0,null]',
+              'dyn(9007199254740993) in [9007199254740992.0,b"x"]',
+              'dyn(9007199254740992.0) in [9007199254740993]',
+              'dyn(9007199254740993) in [dyn(9007199254740992.0)]',
+              '(1/n) in []', '0 in []', 'string(.dyn(type(1)))==""', 'string(dyn(int))==""', 'string(dyn(google.protobuf.Empty))==""', '[1,2].map(int,int+1)==[2,3]',
+              'dyn(18446744073709551615u) in [18446744073709551616.0]',
+              'dyn(18446744073709551616.0) in [18446744073709551615u]']:
+        yield e,{"n":0,"s":""}
+    for i in range(256):
+        rune = json.dumps(chr(i), ensure_ascii=True)
+        for escape in [f"\\x{i:02x}", f"\\{i:03o}"]:
+            yield f'"{escape}" == {rune}', {"n":0,"s":""}
+            yield f'size(b"{escape}") == 1', {"n":0,"s":""}
+    for e in ['.int(1)==1', '.has({"a":1}.a)', 'type(1)==.int', '.google.protobuf.Timestamp{}==timestamp(0)', '.n==0',
+              r'string(b"\xef\xbb\xbfA").size() == 2', r'size("\ufeffA") == 2', r'size("\xef\xbb\xbfA") == 4',
+              r'google.protobuf.Any{type_url:"google.protobuf.StringValue",value:b"\x0a\x04\xef\xbb\xbfA"}.size() == 2',
+              'type(google.protobuf.Any{type_url:"google.protobuf.Struct.FieldsEntry"})==int']:
+        yield e, {"n":0,"s":""}
     from cel_protobuf_corpus import expressions as protobuf_expressions
     for e in protobuf_expressions(seed):
         yield e, {"n": 0, "s": ""}

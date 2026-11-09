@@ -221,7 +221,13 @@ fn CelLexer::scan_string(
             if n > 255L {
               raise cel_fail("byte escape out of range", line, column)
             }
-            out.push(n.to_int().to_byte())
+            if bytes_mode {
+              out.push(n.to_int().to_byte())
+            } else {
+              for b in @utf8.encode(n.to_int().unsafe_to_char().to_string()[:]) {
+                out.push(b)
+              }
+            }
           }
         }
       }
@@ -236,7 +242,7 @@ fn CelLexer::scan_string(
   if bytes_mode {
     CBytesLit(bytes)
   } else {
-    CStringLit(@utf8.decode(bytes[:], ignore_bom=true)) catch {
+    CStringLit(@utf8.decode(bytes[:])) catch {
       _ => raise cel_fail("invalid UTF-8 in string literal", line, column)
     }
   }

@@ -202,7 +202,17 @@ fn CelParser::parse_unary(self : CelParser) -> CelExpr raise @fga.FgaError {
       self.advance()
       return CLiteral(VInt(i))
     }
-    CUnary(symbol, self.parse_unary())
+    let inner = self.parse_unary()
+    match (symbol, inner) {
+      ("-", CLiteral(@fga.VInt(i))) =>
+        if i == -9223372036854775807L - 1L {
+          CUnary(symbol, inner)
+        } else {
+          CLiteral(@fga.VInt(-i))
+        }
+      ("-", CLiteral(@fga.VDouble(d))) => CLiteral(@fga.VDouble(-d))
+      _ => CUnary(symbol, inner)
+    }
   } else {
     self.parse_postfix()
   }
@@ -282,6 +292,10 @@ fn CelParser::parse_primary(self : CelParser) -> CelExpr raise @fga.FgaError {
         self.advance()
         CIdent(name)
       }
+    CSymbol(".") => {
+      self.advance()
+      CIdent("." + self.expect_ident())
+    }
     CSymbol("(") => {
       self.advance()
       let inner = self.parse_expr()
@@ -358,7 +372,7 @@ pub fn compile(source : String) -> CelExpr raise @fga.FgaError {
 ///|
 fn expression_path(expr : CelExpr) -> String? {
   match expr {
-    CIdent(n) => Some(n)
+    CIdent(n) => Some(global_name(n))
     CMethod(target, field, args) =>
       if args.is_empty() && field.has_prefix("@field:") {
         expression_path(target).map(p => p + "." + field[7:].to_owned())
@@ -366,5 +380,14 @@ fn expression_path(expr : CelExpr) -> String? {
         None
       }
     _ => None
+  }
+}
+
+///|
+fn global_name(name : String) -> String {
+  if name.has_prefix(".") {
+    name[1:].to_owned()
+  } else {
+    name
   }
 }

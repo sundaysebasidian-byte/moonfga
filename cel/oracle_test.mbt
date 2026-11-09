@@ -4,6 +4,4927 @@
 test "official CEL model and evaluation outcomes 1" {
   oracle_cases([
     (
+      "[1].map(x,1+1).size()==1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1].map(x,x>=0,1+1).size()==1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1].map(x,int(\"1\")).size()==1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1].map(x,x>=0,int(\"1\")).size()==1", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1].map(x,[1]).size()==1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1].map(x,x>=0,[1]).size()==1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1].map(x,{\"a\":1}).size()==1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1].map(x,x>=0,{\"a\":1}).size()==1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1].map(x,type(1)).size()==1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1].map(x,x>=0,type(1)).size()==1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1].map(x,1+0*n).size()==1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1].map(x,x>=0,1+0*n).size()==1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1].map(x,1+1).size()==2", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1].map(x,x>=0,1+1).size()==2", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1].map(x,int(\"1\")).size()==2", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1].map(x,x>=0,int(\"1\")).size()==2", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1].map(x,[1]).size()==2", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1].map(x,x>=0,[1]).size()==2", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1].map(x,{\"a\":1}).size()==2", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1].map(x,x>=0,{\"a\":1}).size()==2", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1].map(x,type(1)).size()==2", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1].map(x,x>=0,type(1)).size()==2", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1].map(x,1+0*n).size()==2", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1].map(x,x>=0,1+0*n).size()==2", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1].map(x,1+1).size()==3", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1].map(x,x>=0,1+1).size()==3", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1].map(x,int(\"1\")).size()==3", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1].map(x,x>=0,int(\"1\")).size()==3", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1].map(x,[1]).size()==3", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1].map(x,x>=0,[1]).size()==3", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1].map(x,{\"a\":1}).size()==3", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1].map(x,x>=0,{\"a\":1}).size()==3", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1].map(x,type(1)).size()==3", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1].map(x,x>=0,type(1)).size()==3", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1].map(x,1+0*n).size()==3", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1].map(x,x>=0,1+0*n).size()==3", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1].map(x,1+1).size()==4", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1].map(x,x>=0,1+1).size()==4", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1].map(x,int(\"1\")).size()==4", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1].map(x,x>=0,int(\"1\")).size()==4", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1].map(x,[1]).size()==4", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1].map(x,x>=0,[1]).size()==4", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1].map(x,{\"a\":1}).size()==4", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1].map(x,x>=0,{\"a\":1}).size()==4", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1].map(x,type(1)).size()==4", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1].map(x,x>=0,type(1)).size()==4", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1].map(x,1+0*n).size()==4", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1].map(x,x>=0,1+0*n).size()==4", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1].map(x,1+1).size()==5", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1].map(x,x>=0,1+1).size()==5", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1].map(x,int(\"1\")).size()==5", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==5", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1].map(x,[1]).size()==5", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1].map(x,x>=0,[1]).size()==5", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1].map(x,{\"a\":1}).size()==5", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==5", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1].map(x,type(1)).size()==5", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1].map(x,x>=0,type(1)).size()==5", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1].map(x,1+0*n).size()==5", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1].map(x,x>=0,1+0*n).size()==5", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1].map(x,1+1).size()==6", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1].map(x,x>=0,1+1).size()==6", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1].map(x,int(\"1\")).size()==6", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==6", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1].map(x,[1]).size()==6", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1].map(x,x>=0,[1]).size()==6", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1].map(x,{\"a\":1}).size()==6", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==6", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1].map(x,type(1)).size()==6", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1].map(x,x>=0,type(1)).size()==6", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1].map(x,1+0*n).size()==6", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==6", "{\"n\": 0, \"s\": \"\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1].map(x,1+1).size()==7", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==7", "{\"n\": 0, \"s\": \"\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1].map(x,int(\"1\")).size()==7", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==7", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1].map(x,[1]).size()==7", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==7", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==7", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==7", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1].map(x,type(1)).size()==7", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==7", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1].map(x,1+0*n).size()==7", "{\"n\": 0, \"s\": \"\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==7", "{\"n\": 0, \"s\": \"\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1].map(x,1+1).size()==8", "{\"n\": 0, \"s\": \"\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==8", "{\"n\": 0, \"s\": \"\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==8", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==8", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1].map(x,[1]).size()==8", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==8", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==8", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==8", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1].map(x,type(1)).size()==8", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==8", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1].map(x,1+0*n).size()==8", "{\"n\": 0, \"s\": \"\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==8", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1].map(x,1+1).size()==9", "{\"n\": 0, \"s\": \"\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==9", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==9", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==9", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1].map(x,[1]).size()==9", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==9", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==9", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==9", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==9", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==9", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==9", "{\"n\": 0, \"s\": \"\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==9", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==10", "{\"n\": 0, \"s\": \"\"}", "E2000",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==10", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==10", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==10", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==10", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==10", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==10", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==10", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==10", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==10", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==10", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==10", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==11", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==11", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==11", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==11", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==11", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==11", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==11", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==11", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==11", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==11", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==11", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==11", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==12", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==12", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==12", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==12", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==12", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==12", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==12", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==12", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==12", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==12", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==12", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==12", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==13", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==13", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==13", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==13", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==13", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==13", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==13", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==13", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==13", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==13", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==13", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==13", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==14", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==14", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==14", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==14", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==14", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==14", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==14", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==14", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==14", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==14", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==14", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==14", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==15", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==15", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==15", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==15", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==15", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==15", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==15", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==15", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==15", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==15", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==15", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==15", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==16", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==16", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==16", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==16", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==16", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==16", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==16", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==16", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==16", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==16", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==16", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==16", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==17", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==17", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==17", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==17", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==17", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==17", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==17", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==17", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==17", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==17", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==17", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==17", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==18", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==18", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==18", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==18",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==18", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==18", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==18", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==18", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==18", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==18", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==18", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==18", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==19", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==19", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==19", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==19",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==19", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==19", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==19", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==19",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==19", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==19", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==19", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==19", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==20", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==20", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==20", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==20",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==20", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==20", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==20", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==20",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==20", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==20",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==20", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==20", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==21", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==21", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==21",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==21",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==21", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==21", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==21",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==21",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==21", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==21",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==21", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==21",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==22", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==22",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==22",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==22",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 2" {
+  oracle_cases([
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==22", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==22",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==22",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==22",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==22",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==22",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==22", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==22",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==23", "{\"n\": 0, \"s\": \"\"}",
+      "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==23",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==23",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==23",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==23", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==23",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==23",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==23",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==23",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==23",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==23",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==23",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==24",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==24",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==24",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==24",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==24",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==24",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==24",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==24",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==24",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==24",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==24",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==24",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==25",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==25",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==25",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==25",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==25",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==25",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==25",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==25",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==25",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==25",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==25",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==25",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==26",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==26",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==26",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==26",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==26",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==26",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==26",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==26",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==26",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==26",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==26",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==26",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==27",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==27",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==27",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==27",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==27",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==27",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==27",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==27",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==27",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==27",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==27",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==27",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==28",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==28",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==28",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==28",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==28",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==28",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==28",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==28",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==28",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==28",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==28",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==28",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==29",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==29",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==29",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==29",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==29",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==29",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==29",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==29",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==29",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==29",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==29",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==29",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==30",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==30",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==30",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==30",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==30",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==30",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==30",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==30",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==30",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==30",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==30",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==30",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==31",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==31",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==31",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==31",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==31",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==31",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==31",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==31",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==31",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==31",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==31",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==31",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==32",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==32",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==32",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==32",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==32",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==32",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==32",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==32",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==32",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==32",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==32",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==32",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==33",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==33",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==33",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==33",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==33",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==33",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==33",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==33",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==33",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==33",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==33",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==33",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==34",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==34",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==34",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==34",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==34",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==34",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==34",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==34",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==34",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==34",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==34",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==34",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==35",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==35",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==35",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==35",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==35",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==35",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==35",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==35",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==35",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==35",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==35",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==35",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==36",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==36",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==36",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==36",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==36",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==36",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==36",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==36",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==36",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==36",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==36",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==36",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+1).size()==37",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+1).size()==37",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,int(\"1\")).size()==37",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,int(\"1\")).size()==37",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,[1]).size()==37",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,[1]).size()==37",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,{\"a\":1}).size()==37",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,{\"a\":1}).size()==37",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,type(1)).size()==37",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,type(1)).size()==37",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,1+0*n).size()==37",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x,x>=0,1+0*n).size()==37",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "dyn(9007199254740993) in [9007199254740992.0]", "{\"n\": 0, \"s\": \"\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "dyn(9007199254740993) in [9007199254740992.0,null]", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "dyn(9007199254740993) in [9007199254740992.0,b\"x\"]", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "dyn(9007199254740992.0) in [9007199254740993]", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "dyn(9007199254740993) in [dyn(9007199254740992.0)]", "{\"n\": 0, \"s\": \"\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "(1/n) in []", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "0 in []", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(.dyn(type(1)))==\"\"", "{\"n\": 0, \"s\": \"\"}", "M:invalid_authorization_model",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(int))==\"\"", "{\"n\": 0, \"s\": \"\"}", "M:invalid_authorization_model",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(dyn(google.protobuf.Empty))==\"\"", "{\"n\": 0, \"s\": \"\"}", "M:invalid_authorization_model",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "[1,2].map(int,int+1)==[2,3]", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "dyn(18446744073709551615u) in [18446744073709551616.0]", "{\"n\": 0, \"s\": \"\"}",
+      "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "dyn(18446744073709551616.0) in [18446744073709551615u]", "{\"n\": 0, \"s\": \"\"}",
+      "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x00\" == \"\\u0000\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x00\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\000\" == \"\\u0000\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\000\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x01\" == \"\\u0001\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x01\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\001\" == \"\\u0001\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\001\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x02\" == \"\\u0002\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x02\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\002\" == \"\\u0002\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\002\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x03\" == \"\\u0003\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x03\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\003\" == \"\\u0003\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\003\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x04\" == \"\\u0004\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x04\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\004\" == \"\\u0004\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\004\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x05\" == \"\\u0005\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x05\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\005\" == \"\\u0005\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\005\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x06\" == \"\\u0006\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x06\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\006\" == \"\\u0006\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\006\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x07\" == \"\\u0007\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x07\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\007\" == \"\\u0007\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\007\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x08\" == \"\\b\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x08\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\010\" == \"\\b\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\010\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x09\" == \"\\t\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x09\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\011\" == \"\\t\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\011\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x0a\" == \"\\n\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x0a\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\012\" == \"\\n\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\012\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x0b\" == \"\\u000b\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x0b\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\013\" == \"\\u000b\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\013\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x0c\" == \"\\f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x0c\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\014\" == \"\\f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\014\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x0d\" == \"\\r\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x0d\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\015\" == \"\\r\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 3" {
+  oracle_cases([
+    (
+      "size(b\"\\015\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x0e\" == \"\\u000e\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x0e\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\016\" == \"\\u000e\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\016\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x0f\" == \"\\u000f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x0f\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\017\" == \"\\u000f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\017\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x10\" == \"\\u0010\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x10\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\020\" == \"\\u0010\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\020\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x11\" == \"\\u0011\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x11\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\021\" == \"\\u0011\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\021\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x12\" == \"\\u0012\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x12\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\022\" == \"\\u0012\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\022\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x13\" == \"\\u0013\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x13\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\023\" == \"\\u0013\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\023\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x14\" == \"\\u0014\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x14\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\024\" == \"\\u0014\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\024\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x15\" == \"\\u0015\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x15\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\025\" == \"\\u0015\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\025\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x16\" == \"\\u0016\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x16\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\026\" == \"\\u0016\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\026\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x17\" == \"\\u0017\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x17\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\027\" == \"\\u0017\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\027\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x18\" == \"\\u0018\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x18\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\030\" == \"\\u0018\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\030\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x19\" == \"\\u0019\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x19\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\031\" == \"\\u0019\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\031\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x1a\" == \"\\u001a\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x1a\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\032\" == \"\\u001a\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\032\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x1b\" == \"\\u001b\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x1b\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\033\" == \"\\u001b\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\033\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x1c\" == \"\\u001c\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x1c\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\034\" == \"\\u001c\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\034\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x1d\" == \"\\u001d\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x1d\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\035\" == \"\\u001d\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\035\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x1e\" == \"\\u001e\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x1e\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\036\" == \"\\u001e\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\036\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x1f\" == \"\\u001f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x1f\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\037\" == \"\\u001f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\037\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x20\" == \" \"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x20\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\040\" == \" \"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\040\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x21\" == \"!\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x21\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\041\" == \"!\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\041\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x22\" == \"\\\"\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x22\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\042\" == \"\\\"\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\042\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x23\" == \"#\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x23\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\043\" == \"#\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\043\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x24\" == \"$\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x24\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\044\" == \"$\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\044\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x25\" == \"%\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x25\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\045\" == \"%\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\045\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x26\" == \"&\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x26\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\046\" == \"&\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\046\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x27\" == \"'\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x27\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\047\" == \"'\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\047\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x28\" == \"(\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x28\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\050\" == \"(\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\050\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x29\" == \")\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x29\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\051\" == \")\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\051\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x2a\" == \"*\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x2a\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\052\" == \"*\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\052\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x2b\" == \"+\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x2b\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\053\" == \"+\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\053\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x2c\" == \",\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x2c\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\054\" == \",\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\054\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x2d\" == \"-\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x2d\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\055\" == \"-\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\055\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x2e\" == \".\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x2e\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\056\" == \".\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\056\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x2f\" == \"/\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x2f\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\057\" == \"/\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\057\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x30\" == \"0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x30\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\060\" == \"0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\060\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x31\" == \"1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x31\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\061\" == \"1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\061\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x32\" == \"2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x32\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\062\" == \"2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\062\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x33\" == \"3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x33\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\063\" == \"3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\063\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x34\" == \"4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x34\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\064\" == \"4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\064\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x35\" == \"5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x35\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\065\" == \"5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\065\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x36\" == \"6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x36\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\066\" == \"6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\066\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x37\" == \"7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x37\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\067\" == \"7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\067\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x38\" == \"8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x38\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\070\" == \"8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\070\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x39\" == \"9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x39\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\071\" == \"9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\071\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x3a\" == \":\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x3a\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\072\" == \":\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\072\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x3b\" == \";\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x3b\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\073\" == \";\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\073\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x3c\" == \"<\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x3c\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\074\" == \"<\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\074\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x3d\" == \"=\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x3d\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\075\" == \"=\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\075\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x3e\" == \">\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x3e\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\076\" == \">\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\076\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x3f\" == \"?\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x3f\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\077\" == \"?\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\077\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x40\" == \"@\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x40\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\100\" == \"@\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\100\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x41\" == \"A\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x41\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\101\" == \"A\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\101\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x42\" == \"B\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x42\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\102\" == \"B\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\102\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x43\" == \"C\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x43\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\103\" == \"C\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\103\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x44\" == \"D\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x44\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\104\" == \"D\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\104\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x45\" == \"E\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x45\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\105\" == \"E\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\105\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x46\" == \"F\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x46\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\106\" == \"F\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\106\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x47\" == \"G\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x47\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\107\" == \"G\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\107\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x48\" == \"H\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x48\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\110\" == \"H\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\110\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x49\" == \"I\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x49\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\111\" == \"I\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\111\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x4a\" == \"J\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x4a\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\112\" == \"J\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\112\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x4b\" == \"K\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x4b\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\113\" == \"K\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\113\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x4c\" == \"L\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x4c\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\114\" == \"L\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\114\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x4d\" == \"M\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x4d\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\115\" == \"M\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 4" {
+  oracle_cases([
+    (
+      "size(b\"\\115\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x4e\" == \"N\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x4e\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\116\" == \"N\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\116\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x4f\" == \"O\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x4f\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\117\" == \"O\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\117\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x50\" == \"P\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x50\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\120\" == \"P\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\120\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x51\" == \"Q\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x51\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\121\" == \"Q\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\121\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x52\" == \"R\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x52\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\122\" == \"R\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\122\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x53\" == \"S\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x53\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\123\" == \"S\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\123\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x54\" == \"T\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x54\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\124\" == \"T\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\124\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x55\" == \"U\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x55\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\125\" == \"U\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\125\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x56\" == \"V\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x56\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\126\" == \"V\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\126\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x57\" == \"W\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x57\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\127\" == \"W\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\127\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x58\" == \"X\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x58\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\130\" == \"X\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\130\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x59\" == \"Y\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x59\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\131\" == \"Y\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\131\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x5a\" == \"Z\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x5a\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\132\" == \"Z\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\132\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x5b\" == \"[\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x5b\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\133\" == \"[\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\133\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x5c\" == \"\\\\\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x5c\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\134\" == \"\\\\\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\134\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x5d\" == \"]\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x5d\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\135\" == \"]\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\135\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x5e\" == \"^\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x5e\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\136\" == \"^\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\136\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x5f\" == \"_\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x5f\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\137\" == \"_\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\137\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x60\" == \"`\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x60\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\140\" == \"`\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\140\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x61\" == \"a\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x61\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\141\" == \"a\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\141\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x62\" == \"b\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x62\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\142\" == \"b\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\142\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x63\" == \"c\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x63\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\143\" == \"c\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\143\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x64\" == \"d\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x64\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\144\" == \"d\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\144\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x65\" == \"e\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x65\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\145\" == \"e\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\145\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x66\" == \"f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x66\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\146\" == \"f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\146\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x67\" == \"g\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x67\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\147\" == \"g\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\147\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x68\" == \"h\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x68\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\150\" == \"h\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\150\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x69\" == \"i\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x69\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\151\" == \"i\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\151\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x6a\" == \"j\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x6a\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\152\" == \"j\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\152\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x6b\" == \"k\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x6b\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\153\" == \"k\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\153\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x6c\" == \"l\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x6c\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\154\" == \"l\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\154\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x6d\" == \"m\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x6d\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\155\" == \"m\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\155\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x6e\" == \"n\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x6e\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\156\" == \"n\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\156\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x6f\" == \"o\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x6f\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\157\" == \"o\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\157\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x70\" == \"p\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x70\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\160\" == \"p\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\160\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x71\" == \"q\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x71\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\161\" == \"q\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\161\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x72\" == \"r\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x72\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\162\" == \"r\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\162\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x73\" == \"s\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x73\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\163\" == \"s\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\163\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x74\" == \"t\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x74\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\164\" == \"t\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\164\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x75\" == \"u\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x75\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\165\" == \"u\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\165\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x76\" == \"v\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x76\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\166\" == \"v\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\166\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x77\" == \"w\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x77\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\167\" == \"w\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\167\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x78\" == \"x\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x78\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\170\" == \"x\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\170\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x79\" == \"y\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x79\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\171\" == \"y\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\171\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x7a\" == \"z\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x7a\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\172\" == \"z\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\172\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x7b\" == \"{\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x7b\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\173\" == \"{\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\173\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x7c\" == \"|\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x7c\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\174\" == \"|\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\174\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x7d\" == \"}\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x7d\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\175\" == \"}\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\175\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x7e\" == \"~\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x7e\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\176\" == \"~\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\176\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x7f\" == \"\\u007f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x7f\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\177\" == \"\\u007f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\177\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x80\" == \"\\u0080\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x80\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\200\" == \"\\u0080\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\200\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x81\" == \"\\u0081\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x81\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\201\" == \"\\u0081\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\201\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x82\" == \"\\u0082\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x82\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\202\" == \"\\u0082\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\202\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x83\" == \"\\u0083\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x83\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\203\" == \"\\u0083\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\203\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x84\" == \"\\u0084\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x84\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\204\" == \"\\u0084\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\204\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x85\" == \"\\u0085\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x85\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\205\" == \"\\u0085\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\205\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x86\" == \"\\u0086\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x86\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\206\" == \"\\u0086\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\206\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x87\" == \"\\u0087\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x87\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\207\" == \"\\u0087\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\207\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x88\" == \"\\u0088\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x88\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\210\" == \"\\u0088\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\210\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x89\" == \"\\u0089\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x89\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\211\" == \"\\u0089\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\211\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x8a\" == \"\\u008a\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x8a\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\212\" == \"\\u008a\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\212\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x8b\" == \"\\u008b\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x8b\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\213\" == \"\\u008b\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\213\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x8c\" == \"\\u008c\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x8c\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\214\" == \"\\u008c\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\214\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x8d\" == \"\\u008d\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x8d\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\215\" == \"\\u008d\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 5" {
+  oracle_cases([
+    (
+      "size(b\"\\215\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x8e\" == \"\\u008e\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x8e\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\216\" == \"\\u008e\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\216\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x8f\" == \"\\u008f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x8f\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\217\" == \"\\u008f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\217\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x90\" == \"\\u0090\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x90\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\220\" == \"\\u0090\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\220\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x91\" == \"\\u0091\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x91\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\221\" == \"\\u0091\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\221\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x92\" == \"\\u0092\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x92\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\222\" == \"\\u0092\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\222\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x93\" == \"\\u0093\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x93\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\223\" == \"\\u0093\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\223\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x94\" == \"\\u0094\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x94\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\224\" == \"\\u0094\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\224\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x95\" == \"\\u0095\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x95\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\225\" == \"\\u0095\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\225\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x96\" == \"\\u0096\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x96\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\226\" == \"\\u0096\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\226\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x97\" == \"\\u0097\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x97\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\227\" == \"\\u0097\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\227\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x98\" == \"\\u0098\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x98\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\230\" == \"\\u0098\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\230\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x99\" == \"\\u0099\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x99\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\231\" == \"\\u0099\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\231\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x9a\" == \"\\u009a\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x9a\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\232\" == \"\\u009a\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\232\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x9b\" == \"\\u009b\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x9b\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\233\" == \"\\u009b\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\233\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x9c\" == \"\\u009c\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x9c\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\234\" == \"\\u009c\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\234\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x9d\" == \"\\u009d\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x9d\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\235\" == \"\\u009d\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\235\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x9e\" == \"\\u009e\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x9e\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\236\" == \"\\u009e\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\236\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\x9f\" == \"\\u009f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\x9f\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\237\" == \"\\u009f\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\237\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xa0\" == \"\\u00a0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xa0\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\240\" == \"\\u00a0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\240\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xa1\" == \"\\u00a1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xa1\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\241\" == \"\\u00a1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\241\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xa2\" == \"\\u00a2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xa2\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\242\" == \"\\u00a2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\242\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xa3\" == \"\\u00a3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xa3\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\243\" == \"\\u00a3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\243\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xa4\" == \"\\u00a4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xa4\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\244\" == \"\\u00a4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\244\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xa5\" == \"\\u00a5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xa5\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\245\" == \"\\u00a5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\245\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xa6\" == \"\\u00a6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xa6\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\246\" == \"\\u00a6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\246\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xa7\" == \"\\u00a7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xa7\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\247\" == \"\\u00a7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\247\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xa8\" == \"\\u00a8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xa8\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\250\" == \"\\u00a8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\250\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xa9\" == \"\\u00a9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xa9\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\251\" == \"\\u00a9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\251\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xaa\" == \"\\u00aa\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xaa\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\252\" == \"\\u00aa\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\252\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xab\" == \"\\u00ab\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xab\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\253\" == \"\\u00ab\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\253\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xac\" == \"\\u00ac\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xac\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\254\" == \"\\u00ac\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\254\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xad\" == \"\\u00ad\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xad\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\255\" == \"\\u00ad\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\255\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xae\" == \"\\u00ae\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xae\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\256\" == \"\\u00ae\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\256\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xaf\" == \"\\u00af\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xaf\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\257\" == \"\\u00af\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\257\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xb0\" == \"\\u00b0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xb0\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\260\" == \"\\u00b0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\260\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xb1\" == \"\\u00b1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xb1\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\261\" == \"\\u00b1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\261\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xb2\" == \"\\u00b2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xb2\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\262\" == \"\\u00b2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\262\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xb3\" == \"\\u00b3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xb3\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\263\" == \"\\u00b3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\263\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xb4\" == \"\\u00b4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xb4\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\264\" == \"\\u00b4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\264\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xb5\" == \"\\u00b5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xb5\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\265\" == \"\\u00b5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\265\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xb6\" == \"\\u00b6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xb6\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\266\" == \"\\u00b6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\266\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xb7\" == \"\\u00b7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xb7\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\267\" == \"\\u00b7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\267\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xb8\" == \"\\u00b8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xb8\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\270\" == \"\\u00b8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\270\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xb9\" == \"\\u00b9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xb9\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\271\" == \"\\u00b9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\271\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xba\" == \"\\u00ba\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xba\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\272\" == \"\\u00ba\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\272\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xbb\" == \"\\u00bb\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xbb\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\273\" == \"\\u00bb\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\273\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xbc\" == \"\\u00bc\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xbc\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\274\" == \"\\u00bc\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\274\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xbd\" == \"\\u00bd\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xbd\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\275\" == \"\\u00bd\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\275\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xbe\" == \"\\u00be\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xbe\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\276\" == \"\\u00be\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\276\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xbf\" == \"\\u00bf\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xbf\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\277\" == \"\\u00bf\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\277\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xc0\" == \"\\u00c0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xc0\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\300\" == \"\\u00c0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\300\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xc1\" == \"\\u00c1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xc1\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\301\" == \"\\u00c1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\301\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xc2\" == \"\\u00c2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xc2\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\302\" == \"\\u00c2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\302\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xc3\" == \"\\u00c3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xc3\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\303\" == \"\\u00c3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\303\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xc4\" == \"\\u00c4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xc4\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\304\" == \"\\u00c4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\304\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xc5\" == \"\\u00c5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xc5\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\305\" == \"\\u00c5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\305\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xc6\" == \"\\u00c6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xc6\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\306\" == \"\\u00c6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\306\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xc7\" == \"\\u00c7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xc7\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\307\" == \"\\u00c7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\307\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xc8\" == \"\\u00c8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xc8\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\310\" == \"\\u00c8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\310\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xc9\" == \"\\u00c9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xc9\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\311\" == \"\\u00c9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\311\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xca\" == \"\\u00ca\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xca\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\312\" == \"\\u00ca\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\312\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xcb\" == \"\\u00cb\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xcb\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\313\" == \"\\u00cb\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\313\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xcc\" == \"\\u00cc\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xcc\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\314\" == \"\\u00cc\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\314\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xcd\" == \"\\u00cd\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xcd\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\315\" == \"\\u00cd\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 6" {
+  oracle_cases([
+    (
+      "size(b\"\\315\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xce\" == \"\\u00ce\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xce\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\316\" == \"\\u00ce\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\316\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xcf\" == \"\\u00cf\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xcf\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\317\" == \"\\u00cf\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\317\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xd0\" == \"\\u00d0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xd0\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\320\" == \"\\u00d0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\320\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xd1\" == \"\\u00d1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xd1\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\321\" == \"\\u00d1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\321\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xd2\" == \"\\u00d2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xd2\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\322\" == \"\\u00d2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\322\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xd3\" == \"\\u00d3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xd3\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\323\" == \"\\u00d3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\323\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xd4\" == \"\\u00d4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xd4\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\324\" == \"\\u00d4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\324\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xd5\" == \"\\u00d5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xd5\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\325\" == \"\\u00d5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\325\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xd6\" == \"\\u00d6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xd6\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\326\" == \"\\u00d6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\326\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xd7\" == \"\\u00d7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xd7\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\327\" == \"\\u00d7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\327\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xd8\" == \"\\u00d8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xd8\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\330\" == \"\\u00d8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\330\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xd9\" == \"\\u00d9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xd9\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\331\" == \"\\u00d9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\331\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xda\" == \"\\u00da\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xda\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\332\" == \"\\u00da\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\332\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xdb\" == \"\\u00db\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xdb\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\333\" == \"\\u00db\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\333\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xdc\" == \"\\u00dc\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xdc\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\334\" == \"\\u00dc\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\334\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xdd\" == \"\\u00dd\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xdd\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\335\" == \"\\u00dd\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\335\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xde\" == \"\\u00de\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xde\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\336\" == \"\\u00de\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\336\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xdf\" == \"\\u00df\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xdf\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\337\" == \"\\u00df\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\337\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xe0\" == \"\\u00e0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xe0\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\340\" == \"\\u00e0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\340\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xe1\" == \"\\u00e1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xe1\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\341\" == \"\\u00e1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\341\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xe2\" == \"\\u00e2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xe2\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\342\" == \"\\u00e2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\342\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xe3\" == \"\\u00e3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xe3\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\343\" == \"\\u00e3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\343\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xe4\" == \"\\u00e4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xe4\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\344\" == \"\\u00e4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\344\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xe5\" == \"\\u00e5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xe5\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\345\" == \"\\u00e5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\345\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xe6\" == \"\\u00e6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xe6\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\346\" == \"\\u00e6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\346\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xe7\" == \"\\u00e7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xe7\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\347\" == \"\\u00e7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\347\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xe8\" == \"\\u00e8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xe8\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\350\" == \"\\u00e8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\350\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xe9\" == \"\\u00e9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xe9\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\351\" == \"\\u00e9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\351\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xea\" == \"\\u00ea\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xea\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\352\" == \"\\u00ea\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\352\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xeb\" == \"\\u00eb\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xeb\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\353\" == \"\\u00eb\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\353\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xec\" == \"\\u00ec\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xec\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\354\" == \"\\u00ec\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\354\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xed\" == \"\\u00ed\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xed\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\355\" == \"\\u00ed\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\355\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xee\" == \"\\u00ee\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xee\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\356\" == \"\\u00ee\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\356\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xef\" == \"\\u00ef\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xef\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\357\" == \"\\u00ef\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\357\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xf0\" == \"\\u00f0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xf0\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\360\" == \"\\u00f0\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\360\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xf1\" == \"\\u00f1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xf1\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\361\" == \"\\u00f1\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\361\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xf2\" == \"\\u00f2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xf2\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\362\" == \"\\u00f2\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\362\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xf3\" == \"\\u00f3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xf3\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\363\" == \"\\u00f3\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\363\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xf4\" == \"\\u00f4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xf4\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\364\" == \"\\u00f4\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\364\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xf5\" == \"\\u00f5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xf5\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\365\" == \"\\u00f5\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\365\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xf6\" == \"\\u00f6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xf6\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\366\" == \"\\u00f6\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\366\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xf7\" == \"\\u00f7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xf7\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\367\" == \"\\u00f7\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\367\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xf8\" == \"\\u00f8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xf8\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\370\" == \"\\u00f8\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\370\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xf9\" == \"\\u00f9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xf9\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\371\" == \"\\u00f9\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\371\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xfa\" == \"\\u00fa\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xfa\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\372\" == \"\\u00fa\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\372\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xfb\" == \"\\u00fb\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xfb\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\373\" == \"\\u00fb\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\373\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xfc\" == \"\\u00fc\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xfc\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\374\" == \"\\u00fc\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\374\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xfd\" == \"\\u00fd\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xfd\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\375\" == \"\\u00fd\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\375\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xfe\" == \"\\u00fe\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xfe\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\376\" == \"\\u00fe\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\376\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\xff\" == \"\\u00ff\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\xff\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "\"\\377\" == \"\\u00ff\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(b\"\\377\") == 1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      ".int(1)==1", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      ".has({\"a\":1}.a)", "{\"n\": 0, \"s\": \"\"}", "M:invalid_authorization_model",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "type(1)==.int", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      ".google.protobuf.Timestamp{}==timestamp(0)", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      ".n==0", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "string(b\"\\xef\\xbb\\xbfA\").size() == 2", "{\"n\": 0, \"s\": \"\"}", "true",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(\"\\ufeffA\") == 2", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "size(\"\\xef\\xbb\\xbfA\") == 4", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "google.protobuf.Any{type_url:\"google.protobuf.StringValue\",value:b\"\\x0a\\x04\\xef\\xbb\\xbfA\"}.size() == 2",
+      "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "type(google.protobuf.Any{type_url:\"google.protobuf.Struct.FieldsEntry\"})==int",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
       "google.protobuf.Timestamp{seconds:-1,nanos:-1000000000}.getDate() == 31",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
@@ -183,6 +5104,12 @@ test "official CEL model and evaluation outcomes 1" {
       "google.protobuf.Timestamp{seconds:-1,nanos:1000000000}.getFullYear() == 1970",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 7" {
+  oracle_cases([
     (
       "google.protobuf.Timestamp{seconds:-1,nanos:1000000000}.getHours() == 0", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -1027,12 +5954,6 @@ test "official CEL model and evaluation outcomes 1" {
       "google.protobuf.Timestamp{seconds:-9223372036854775808,nanos:-1}.getHours() == 15",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 2" {
-  oracle_cases([
     (
       "google.protobuf.Timestamp{seconds:-9223372036854775808,nanos:-1}.getMilliseconds() == 999",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -1213,6 +6134,12 @@ test "official CEL model and evaluation outcomes 2" {
       "google.protobuf.Timestamp{seconds:-9223372036854775808,nanos:2147483647}.getDate() == 4",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 8" {
+  oracle_cases([
     (
       "google.protobuf.Timestamp{seconds:-9223372036854775808,nanos:2147483647}.getDayOfMonth() == 3",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -2057,12 +6984,6 @@ test "official CEL model and evaluation outcomes 2" {
       "google.protobuf.Timestamp{seconds:253402300800,nanos:0}.getDayOfMonth() == 0",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 3" {
-  oracle_cases([
     (
       "google.protobuf.Timestamp{seconds:253402300800,nanos:0}.getDayOfWeek() == 6",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -2243,6 +7164,12 @@ test "official CEL model and evaluation outcomes 3" {
       "google.protobuf.Timestamp{seconds:253402300800,nanos:999999999}.getMilliseconds() == 999",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 9" {
+  oracle_cases([
     (
       "google.protobuf.Timestamp{seconds:253402300800,nanos:999999999}.getMinutes() == 0",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -3087,12 +8014,6 @@ test "official CEL model and evaluation outcomes 3" {
       "int(google.protobuf.Timestamp{seconds:0,nanos:999999999}) == 0", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 4" {
-  oracle_cases([
     (
       "int(google.protobuf.Timestamp{seconds:253402300800,nanos:-1000000000}) == 253402300799",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -3273,6 +8194,12 @@ test "official CEL model and evaluation outcomes 4" {
       "string(google.protobuf.Timestamp{seconds:-9223372036854775807,nanos:1000000000}) == \"292277026596-12-04T15:30:10Z\"",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 10" {
+  oracle_cases([
     (
       "string(google.protobuf.Timestamp{seconds:-9223372036854775807,nanos:1}) == \"292277026596-12-04T15:30:09.000000001Z\"",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -4112,12 +9039,6 @@ test "official CEL model and evaluation outcomes 4" {
       "google.protobuf.Timestamp{seconds:253402300800}==google.protobuf.Timestamp{seconds:253402300800}",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 5" {
-  oracle_cases([
     (
       "google.protobuf.Timestamp{seconds:253402300800}.getFullYear() > 0", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -4298,6 +9219,12 @@ test "official CEL model and evaluation outcomes 5" {
       "type(google.protobuf.Any{type_url:\"type.googleapis.com/google.protobuf.Int32Value\", value:b\"\"}) == int",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 11" {
+  oracle_cases([
     (
       "type(google.protobuf.Any{type_url:\"type.googleapis.com/google.protobuf.Int32Value\", value:b\"\\x80\"}) == int",
       "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -5142,12 +10069,6 @@ test "official CEL model and evaluation outcomes 5" {
       "google.protobuf.Any{type_url:\"google.protobuf.Int64Value\",value:b\"\\x08\\xec\\xf4\\x80\\x96\\xe6\\xdd\\x90\\x99\\xb9\\x01\"} == -5101941836230935956",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 6" {
-  oracle_cases([
     (
       "google.protobuf.Int32Value{value:-2147483648} == -2147483648", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -5328,6 +10249,12 @@ test "official CEL model and evaluation outcomes 6" {
       "google.protobuf.Int32Value{value:0} == 0", "{\"n\": 0, \"s\": \"\"}", "true",
       "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 12" {
+  oracle_cases([
     (
       "google.protobuf.Any{type_url:\"google.protobuf.Int64Value\",value:b\"\\x08\\xfb\\xfd\\x8f\\x9d\\x99\\xab\\xeb\\x9b\\x7d\"} == 9022870978700771067",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -6127,12 +11054,6 @@ test "official CEL model and evaluation outcomes 6" {
     (
       "1u / uint(n) == 0u", "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 7" {
-  oracle_cases([
     (
       "(1 / n == 0) || true", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
@@ -6301,6 +11222,12 @@ test "official CEL model and evaluation outcomes 7" {
       "size(bytes(\"\\ta\\n\\t中aa\\n\\tZ\")) == 12", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 13" {
+  oracle_cases([
     (
       "string(bytes(\"\\ta\\n\\t中aa\\n\\tZ\")) == \"\\ta\\n\\t中aa\\n\\tZ\"",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -7079,12 +12006,6 @@ test "official CEL model and evaluation outcomes 7" {
       "string(bytes(\"😀Z\\n中\\t😀a中\\tZ中\")) == \"😀Z\\n中\\t😀a中\\tZ中\"",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 8" {
-  oracle_cases([
     (
       "size(bytes(\"\\t\\t中Z\\n\")) == 7", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
@@ -7239,6 +12160,12 @@ test "official CEL model and evaluation outcomes 8" {
     (
       "1.0 / 0.0 > 0.0", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 14" {
+  oracle_cases([
     (
       "0.0 / 0.0 == 0.0 / 0.0", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
@@ -8069,12 +12996,6 @@ test "official CEL model and evaluation outcomes 8" {
       "timestamp(\"2026-03-08T09:59:59Z\").getDayOfMonth(\"UTC\") >= -1", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 9" {
-  oracle_cases([
     (
       "timestamp(\"2026-03-08T09:59:59Z\").getDayOfMonth(\"UTC\") == 7", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -8255,6 +13176,12 @@ test "official CEL model and evaluation outcomes 9" {
       "timestamp(\"2026-03-08T09:59:59Z\").getDayOfYear(\"+05:30\") == 66", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 15" {
+  oracle_cases([
     (
       "timestamp(\"2026-03-08T09:59:59Z\").getHours(\"+05:30\") >= -1", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -9099,12 +14026,6 @@ test "official CEL model and evaluation outcomes 9" {
       "timestamp(\"2026-03-08T10:00:00Z\").getHours(\"Europe/London\") >= -1", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 10" {
-  oracle_cases([
     (
       "timestamp(\"2026-03-08T10:00:00Z\").getHours(\"Europe/London\") == 10", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -9285,6 +14206,12 @@ test "official CEL model and evaluation outcomes 10" {
       "timestamp(\"2026-03-08T10:00:00Z\").getSeconds(\"Asia/Shanghai\") == 0", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 16" {
+  oracle_cases([
     (
       "timestamp(\"2026-03-08T10:00:00Z\").getMilliseconds(\"Asia/Shanghai\") >= -1",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -10129,12 +15056,6 @@ test "official CEL model and evaluation outcomes 10" {
       "timestamp(\"2026-01-02T03:04:05+08:00\").getDayOfWeek(\"UTC\") >= -1", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 11" {
-  oracle_cases([
     (
       "timestamp(\"2026-01-02T03:04:05+08:00\").getDayOfWeek(\"UTC\") == 4", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -10315,6 +15236,12 @@ test "official CEL model and evaluation outcomes 11" {
       "timestamp(\"2026-01-02T03:04:05+08:00\").getHours(\"+05:30\") == 0", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 17" {
+  oracle_cases([
     (
       "timestamp(\"2026-01-02T03:04:05+08:00\").getMinutes(\"+05:30\") >= -1", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -11159,12 +16086,6 @@ test "official CEL model and evaluation outcomes 11" {
       "timestamp(\"1900-01-01T00:00:00Z\").getMinutes(\"Europe/London\") >= -1",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 12" {
-  oracle_cases([
     (
       "timestamp(\"1900-01-01T00:00:00Z\").getMinutes(\"Europe/London\") == 0", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -11345,6 +16266,12 @@ test "official CEL model and evaluation outcomes 12" {
       "timestamp(\"1900-01-01T00:00:00Z\").getMilliseconds(\"Asia/Shanghai\") == 0",
       "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 18" {
+  oracle_cases([
     (
       "timestamp(\"1900-01-01T00:00:00Z\").getFullYear(\"No/Such_Zone\") >= -1",
       "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -12168,12 +17095,6 @@ test "official CEL model and evaluation outcomes 12" {
       "duration(s).getHours() == n", "{\"n\": 0, \"s\": \"9223372036854775807ns\"}",
       "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 13" {
-  oracle_cases([
     (
       "duration(s).getMinutes() == n", "{\"n\": 0, \"s\": \"9223372036854775807ns\"}",
       "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -12341,6 +17262,12 @@ test "official CEL model and evaluation outcomes 13" {
     (
       "\"Κλ\".matches(s)", "{\"n\": 0, \"s\": \"(ab)+\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 19" {
+  oracle_cases([
     (
       "\"Kſ\".matches(s)", "{\"n\": 0, \"s\": \"(ab)+\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
@@ -12995,12 +17922,6 @@ test "official CEL model and evaluation outcomes 13" {
     (
       "\"aaa\".matches(s)", "{\"n\": 0, \"s\": \"\\\\x{1F600}\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 14" {
-  oracle_cases([
     (
       "\"a\\nb\".matches(s)", "{\"n\": 0, \"s\": \"\\\\x{1F600}\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
@@ -13141,6 +18062,12 @@ test "official CEL model and evaluation outcomes 14" {
     (
       "\"ab\".matches(\"[^a-z]+\")", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 20" {
+  oracle_cases([
     (
       "\"\".matches(s)", "{\"n\": 0, \"s\": \"[a-z\\\\d]+\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
@@ -13797,12 +18724,6 @@ test "official CEL model and evaluation outcomes 14" {
     (
       "type(double(s)) == double", "{\"n\": 0, \"s\": \"1\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 15" {
-  oracle_cases([
     (
       "type(bool(s)) == bool", "{\"n\": 0, \"s\": \"1\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
@@ -13938,6 +18859,12 @@ test "official CEL model and evaluation outcomes 15" {
     (
       "type(bool(s)) == bool", "{\"n\": 0, \"s\": \"Inf\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 21" {
+  oracle_cases([
     (
       "type(int(s)) == int", "{\"n\": 0, \"s\": \"+Inf\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
@@ -14615,12 +19542,6 @@ test "official CEL model and evaluation outcomes 15" {
     (
       "string(double(s)) == s", "{\"n\": 0, \"s\": \"1e6\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 16" {
-  oracle_cases([
     (
       "string(double(s)) == s", "{\"n\": 0, \"s\": \"1e10\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
@@ -14773,6 +19694,12 @@ test "official CEL model and evaluation outcomes 16" {
     (
       "\"\" < \"😀\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 22" {
+  oracle_cases([
     (
       "\"\" <= \"😀\"", "{\"n\": 0, \"s\": \"\"}", "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
@@ -15589,12 +20516,6 @@ test "official CEL model and evaluation outcomes 16" {
       "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x, x + n).size() > 0",
       "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 17" {
-  oracle_cases([
     (
       "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].filter(x, x >= n).size() > 0",
       "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -15775,6 +20696,12 @@ test "official CEL model and evaluation outcomes 17" {
       "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(x, x + n).size() > 0",
       "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 23" {
+  oracle_cases([
     (
       "[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].filter(x, x >= n).size() > 0",
       "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -16572,12 +21499,6 @@ test "official CEL model and evaluation outcomes 17" {
       "dyn(-9007199254740993) <= dyn(-9223372036854775808.0)", "{\"n\": 0, \"s\": \"\"}",
       "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 18" {
-  oracle_cases([
     (
       "dyn(-1) > dyn(18446744073709551616.0)", "{\"n\": 0, \"s\": \"\"}", "false",
       "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -16740,6 +21661,12 @@ test "official CEL model and evaluation outcomes 18" {
       "dyn(9007199254740993) > dyn(-9223372036854775808.0)", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 24" {
+  oracle_cases([
     (
       "dyn(9007199254740993) <= dyn(0.0)", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
@@ -17492,12 +22419,6 @@ test "official CEL model and evaluation outcomes 18" {
     (
       "dyn(9007199254740993) <= dyn(0.0)", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
-  ])
-}
-
-///|
-test "official CEL model and evaluation outcomes 19" {
-  oracle_cases([
     (
       "dyn(9007199254740993) != dyn(18446744073709551616.0)", "{\"n\": 0, \"s\": \"\"}",
       "true", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
@@ -17660,6 +22581,12 @@ test "official CEL model and evaluation outcomes 19" {
       "dyn(9007199254740993) <= dyn(-9007199254740992.0)", "{\"n\": 0, \"s\": \"\"}",
       "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
+  ])
+}
+
+///|
+test "official CEL model and evaluation outcomes 25" {
+  oracle_cases([
     (
       "dyn(-9007199254740993) >= dyn(0.5)", "{\"n\": 0, \"s\": \"\"}", "false", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
     ),
