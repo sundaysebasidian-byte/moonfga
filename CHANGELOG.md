@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.4
+
+- Republish the 0.2.3 contents without personal contact details in the packaged docs. No code changes.
+
 ## 0.2.3 (unreleased)
 
 - Add CEL bytes literals, escapes, UTF-8 conversion, concatenation, ordering, size and collection values; support raw/triple literals.
