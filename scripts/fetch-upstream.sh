@@ -11,7 +11,16 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="$ROOT/.upstream"
 mkdir -p "$DEST/openfga" "$DEST/language"
 
-fetch() { curl -fsSL --retry 3 -o "$2" "$1"; }
+fetch() {
+  python3 - "$1" "$2" <<'PYFETCH'
+import pathlib
+import sys
+import urllib.request
+
+with urllib.request.urlopen(sys.argv[1], timeout=60) as response:
+    pathlib.Path(sys.argv[2]).write_bytes(response.read())
+PYFETCH
+}
 
 for f in consolidated_1_1_tests.yaml abac_tests.yaml; do
   fetch "https://raw.githubusercontent.com/openfga/openfga/$OPENFGA_COMMIT/assets/tests/$f" \

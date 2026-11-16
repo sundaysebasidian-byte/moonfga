@@ -21,6 +21,9 @@ def main():
     corpus=list({json.dumps(c,sort_keys=True):c for c in cases()}.values())
     result=subprocess.run(['go','run','.'],cwd='scripts/cel-oracle',env={**os.environ,'TZ':'UTC'},input=json.dumps(corpus),text=True,capture_output=True,check=True)
     expected=json.loads(result.stdout)
+    assert len(expected)==len(corpus)
+    exclusions=[{'input':c,'official':e} for c,e in zip(corpus,expected) if e['category']=='compile']
+    (a.output/'compile-exclusions.json').write_text(json.dumps(exclusions,ensure_ascii=False,indent=2)+'\n')
     valid=[(c,e) for c,e in zip(corpus,expected) if e['category']!='compile']
     compiled_rejections=len(corpus)-len(valid)
     corpus=[c for c,e in valid]; expected=[e for c,e in valid]
@@ -29,6 +32,7 @@ def main():
         r=subprocess.run(['moon','run','--target','native','cmd/cel-cost','--',str(path)],capture_output=True,text=True,check=True)
         return json.loads(r.stdout)
     actual=local(a.output/'unlimited.json')
+    assert len(actual)==len(corpus)
     mismatches=[]
     for i,(c,e,v) in enumerate(zip(corpus,expected,actual)):
         if e['category'] != v['category'] or (e['category']=='ok' and e.get('cost') != v.get('cost')):
@@ -46,6 +50,7 @@ def main():
     limit_expected=json.loads(result.stdout)
     (a.output/'limited.json').write_text(json.dumps(limited))
     limit_actual=local(a.output/'limited.json')
+    assert len(limit_expected)==len(limited)==len(limit_actual)
     for i,(c,e,v) in enumerate(zip(limited,limit_expected,limit_actual)):
         if category(e)!=category(v):
             mismatches.append({'limited_case':i,'input':c,'official':e,'local':v})
@@ -56,7 +61,7 @@ def main():
     order_cases=[{'expression':pairs+'.exists(k,k=="k0")','context':{},'limit':100} for _ in range(64)]
     order_result=json.loads(subprocess.run(['go','run','.'],cwd='scripts/cel-oracle',env={**os.environ,'TZ':'UTC'},input=json.dumps(order_cases),text=True,capture_output=True,check=True).stdout)
     (a.output/'map-order-probe.json').write_text(json.dumps({'cases':order_cases,'results':order_result},indent=2)+'\n')
-    summary={'oracle_timezone':'UTC','programs':len(corpus),'type_invalid_overloads_excluded':compiled_rejections,'cost_comparisons':len(corpus),'limit_comparisons':len(limited),'mismatches':len(mismatches),'order_probe_observed_costs':sorted({e.get('cost') for e in order_result}),'order_probe_categories':sorted({category(e) for e in order_result})}
+    summary={'oracle_timezone':'UTC','programs':len(corpus),'compile_exclusions':compiled_rejections,'cost_comparisons':len(corpus),'limit_comparisons':len(limited),'mismatches':len(mismatches),'order_probe_observed_costs':sorted({e.get('cost') for e in order_result}),'order_probe_categories':sorted({category(e) for e in order_result})}
     (a.output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary,indent=2))
     return bool(mismatches)
 
