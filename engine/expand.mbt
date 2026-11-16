@@ -156,9 +156,9 @@ pub fn Engine::expand_json(
   relation : String,
   contextual_tuples : Array[@fga.Tuple],
 ) -> Json raise @fga.FgaError {
-  self.step()
   validate_check_object(self.model, object, relation)
   validate_contextual(self.model, contextual_tuples)
+  self.step()
   let reader = self.reader_with(contextual_tuples)
   let engine = Engine::{
     model: self.model,

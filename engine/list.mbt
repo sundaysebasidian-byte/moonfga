@@ -61,10 +61,10 @@ pub fn Engine::list_objects(
   context : Map[String, Json],
   contextual_tuples : Array[@fga.Tuple],
 ) -> Array[String] raise @fga.FgaError {
-  self.step()
   validate_object_type_relation(self.model, type_name, relation)
   validate_request_user(self.model, user)
   validate_contextual_for_list(self.model, contextual_tuples)
+  self.step()
   let reader = self.reader_with(contextual_tuples, shadow=false)
   let engine = Engine::{
     model: self.model,
@@ -98,13 +98,13 @@ pub fn Engine::list_users(
   context : Map[String, Json],
   contextual_tuples : Array[@fga.Tuple],
 ) -> Array[String] raise @fga.FgaError {
-  self.step()
   validate_list_users_object(self.model, object, relation)
   validate_contextual_for_list(self.model, contextual_tuples)
   let parsed_filters : Array[@fga.UserRef] = []
   for filter in filters {
     parsed_filters.push(parse_user_filter(self.model, filter))
   }
+  self.step()
   let reader = self.reader_with(contextual_tuples, shadow=false)
   let engine = Engine::{
     model: self.model,

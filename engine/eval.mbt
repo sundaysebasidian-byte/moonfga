@@ -962,7 +962,6 @@ pub fn Engine::check(
   relation : String,
   user : String,
 ) -> Bool raise @fga.FgaError {
-  self.step()
   self.check_with(object, relation, user, Map([]), [])
 }
 
@@ -976,10 +975,10 @@ pub fn Engine::check_with(
   context : Map[String, Json],
   contextual_tuples : Array[@fga.Tuple],
 ) -> Bool raise @fga.FgaError {
-  self.step()
   validate_check_object(self.model, object, relation)
   validate_request_user(self.model, user)
   validate_contextual(self.model, contextual_tuples)
+  self.step()
   let reader = self.reader_with(contextual_tuples)
   let engine = Engine::{
     model: self.model,
@@ -1004,7 +1003,6 @@ pub fn Engine::check_request(
   self : Engine,
   request : CheckRequest,
 ) -> Bool raise @fga.FgaError {
-  self.step()
   self.check_with(
     request.object,
     request.relation,

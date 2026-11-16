@@ -190,3 +190,58 @@ test "request deadline wins over earlier branch condition errors" {
     }
   }
 }
+
+///|
+test "request validation precedes an expired work budget" {
+  let model = model_of(
+    "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user]",
+  )
+  let store = @store.MemoryStore::new()
+  let base = @engine.Engine::new(model, store as &@fga.TupleReader)
+  let operations : Array[(@engine.Engine) -> Unit raise @fga.FgaError] = [
+    e => ignore(e.check("document:1", "missing", "user:1")),
+    e => ignore(e.check_with("document:1", "missing", "user:1", Map([]), [])),
+    e => {
+      ignore(
+        e.check_request(
+          @engine.CheckRequest::new("document:1", "missing", "user:1"),
+        ),
+      )
+    },
+    e => ignore(e.list_objects("document", "missing", "user:1", Map([]), [])),
+    e => ignore(e.list_users("document:1", "missing", ["user"], Map([]), [])),
+    e => ignore(e.expand_json("document:1", "missing", [])),
+    e => ignore(e.explain_check("document:1", "missing", "user:1", Map([]), [])),
+  ]
+  for i in 0..<operations.length() {
+    let operation = operations[i]
+    let expected = if i != 3 && i != 4 {
+      @fga.ERR_VALIDATION
+    } else {
+      @fga.ERR_RELATION_NOT_FOUND
+    }
+    for steps in [-2147483648, -1, 0, 1] {
+      let e = base.with_budget(@fga.ExecutionBudget::new(steps~))
+      let code = try {
+        operation(e)
+        0
+      } catch {
+        err => @fga.error_code(err)
+      }
+      assert_eq(code, expected)
+    }
+    let e = base.with_budget(@fga.ExecutionBudget::new(cancelled=fn() { true }))
+    let code = try {
+      operation(e)
+      0
+    } catch {
+      err => @fga.error_code(err)
+    }
+    assert_eq(code, expected)
+  }
+  let e = base.with_budget(@fga.ExecutionBudget::new(steps=0))
+  let batch = e.batch_check([
+    @engine.CheckRequest::new("document:1", "missing", "user:1"),
+  ])
+  assert_eq(batch[0].error_code, Some(@fga.ERR_VALIDATION))
+}
