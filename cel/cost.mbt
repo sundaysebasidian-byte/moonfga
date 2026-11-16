@@ -42,3 +42,18 @@ fn constant_expr(expr : CelExpr) -> Bool {
     _ => false
   }
 }
+
+///|
+fn EvalState::charge_product(
+  self : EvalState,
+  left : Int32,
+  right : Int32,
+) -> Unit raise @fga.FgaError {
+  self.check()
+  let amount = left.to_int64() * right.to_int64()
+  if amount > (self.limit - self.cost).to_int64() {
+    self.interrupted = true
+    raise eval_error("condition evaluation cost limit exceeded")
+  }
+  self.cost += amount.to_int()
+}

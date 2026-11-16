@@ -120,3 +120,17 @@ test "nested singleton list inference fits portable wasm stack" {
     ")==1"
   @cel.check_condition({ name: "nested", expression: source, parameters: [], })
 }
+
+///|
+test "large string cost multiplication cannot wrap past the limit" {
+  for (source, size) in [("s.contains(s)", 500000), ("s.matches(s)", 300000)] {
+    let env = Map([("s", @fga.VString(String::make(size, 'a')))])
+    let code = try {
+      ignore(@cel.eval_expr_with_limit(@cel.compile(source), env, 100))
+      0
+    } catch {
+      e => @fga.error_code(e)
+    }
+    assert_eq(code, 2000, msg=source)
+  }
+}

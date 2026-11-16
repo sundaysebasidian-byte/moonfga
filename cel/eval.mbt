@@ -498,8 +498,9 @@ fn eval_method(
             raise eval_error("contains expects one argument")
           }
           let substring = as_string_value(eval_expr_state(args[0], env, state))
-          state.charge(
-            (s.char_length() + 9) / 10 * ((substring.char_length() + 9) / 10),
+          state.charge_product(
+            (s.char_length() + 9) / 10,
+            (substring.char_length() + 9) / 10,
           )
           @fga.VBool(s.contains(substring))
         }
@@ -508,8 +509,9 @@ fn eval_method(
             raise eval_error("matches expects one argument")
           }
           let pattern = as_string_value(eval_expr_state(args[0], env, state))
-          state.charge(
-            (s.char_length() + 10) / 10 * ((pattern.char_length() + 3) / 4),
+          state.charge_product(
+            (s.char_length() + 10) / 10,
+            (pattern.char_length() + 3) / 4,
           )
           @fga.VBool(
             regex_matches(
@@ -751,8 +753,9 @@ fn eval_call(
       }
       let text = as_string_value(values[0])
       let pattern = as_string_value(values[1])
-      state.charge(
-        (text.char_length() + 10) / 10 * ((pattern.char_length() + 3) / 4),
+      state.charge_product(
+        (text.char_length() + 10) / 10,
+        (pattern.char_length() + 3) / 4,
       )
       @fga.VBool(
         regex_matches(

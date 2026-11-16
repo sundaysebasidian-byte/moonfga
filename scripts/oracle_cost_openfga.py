@@ -22,6 +22,7 @@ def main():
         'ipaddress(s).in_cidr("127.0.0.0/8")','ipaddress(s)==ipaddress("127.0.0.1")','string(dyn(ipaddress(s)))==s','type(ipaddress(s))==IPAddress',
     ]
     corpus=[condition_case(e,{'n':0,'s':s}) for e in expressions for s in ['','a'*20,'a'*200,'127.0.0.1']]
+    corpus += [condition_case('s.contains(s)',{'n':0,'s':'a'*500000}), condition_case('s.matches(s)',{'n':0,'s':'a'*300000})]
     path=a.output/'corpus.json';path.write_text(json.dumps(corpus))
     summaries=[]
     for limit in [100,101,199,200,1000]:

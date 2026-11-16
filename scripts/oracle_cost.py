@@ -61,7 +61,7 @@ def main():
     order_cases=[{'expression':pairs+'.exists(k,k=="k0")','context':{},'limit':100} for _ in range(64)]
     order_result=json.loads(subprocess.run(['go','run','.'],cwd='scripts/cel-oracle',env={**os.environ,'TZ':'UTC'},input=json.dumps(order_cases),text=True,capture_output=True,check=True).stdout)
     (a.output/'map-order-probe.json').write_text(json.dumps({'cases':order_cases,'results':order_result},indent=2)+'\n')
-    summary={'oracle_timezone':'UTC','programs':len(corpus),'compile_exclusions':compiled_rejections,'cost_comparisons':len(corpus),'limit_comparisons':len(limited),'mismatches':len(mismatches),'order_probe_observed_costs':sorted({e.get('cost') for e in order_result}),'order_probe_categories':sorted({category(e) for e in order_result})}
+    summary={'oracle_timezone':'UTC','programs':len(corpus),'compile_exclusions':compiled_rejections,'cost_comparisons':sum(e['category']=='ok' for e in expected),'evaluation_error_comparisons':sum(e['category']=='evaluation' for e in expected),'limit_comparisons':len(limited),'mismatches':len(mismatches),'order_probe_observed_costs':sorted({e.get('cost') for e in order_result}),'order_probe_categories':sorted({category(e) for e in order_result})}
     (a.output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary,indent=2))
     return bool(mismatches)
 
