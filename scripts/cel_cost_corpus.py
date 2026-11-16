@@ -1,6 +1,9 @@
 """Deterministic generated runtime-cost corpus; sizes straddle CEL cost boundaries."""
 import json
 
+# Result is stable at default API limit, but early map hit cost is randomized in Go.
+ORDER_SENSITIVE = {"{1:2,3:4}.exists(k,k==3)"}
+
 
 def cases():
     sizes = list(range(0, 42)) + [49,50,51,63,64,99,100,101,199,200,201,499,500,999,1000]
@@ -38,6 +41,8 @@ def cases():
     from oracle_cel import expression_cases
     for spec in expression_cases(20261108):
         expression, context = spec[:2]
+        if "".join(expression.split()) in ORDER_SENSITIVE:
+            continue
         if len(spec) > 2:
             continue  # This driver declares n:int, s:string, t:string only.
         if 'n' not in context or 's' not in context or not isinstance(context['n'],int) or not isinstance(context['s'],str):
@@ -51,3 +56,6 @@ def cases():
             yield {'expression':expr,'context':{'n':0,'s':str(ns)+'ns'},'limit':2147483647}
     yield {'expression':'s.contains(s)','context':{'n':0,'s':'a'*500000},'limit':2147483647}
     yield {'expression':'s.matches(t)','context':{'n':0,'s':'a'*300000,'t':'(?i)'*75000},'limit':2147483647}
+
+    from r9_review_corpus import cost_cases
+    yield from cost_cases()

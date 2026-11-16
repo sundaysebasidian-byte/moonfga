@@ -17,9 +17,12 @@ def category(row):
 def main():
     p=argparse.ArgumentParser()
     p.add_argument('--output',type=Path,default=Path('conformance-results/rework3-cost'))
+    p.add_argument('--corpus',type=Path)
+    p.add_argument('--oracle',type=Path,help='Prebuilt scripts/cel-oracle driver (cel-go v0.31.0)')
     a=p.parse_args(); a.output.mkdir(parents=True,exist_ok=True)
-    corpus=list({json.dumps(c,sort_keys=True):c for c in cases()}.values())
-    result=subprocess.run(['go','run','.'],cwd='scripts/cel-oracle',env={**os.environ,'TZ':'UTC'},input=json.dumps(corpus),text=True,capture_output=True,check=True)
+    corpus=json.loads(a.corpus.read_text()) if a.corpus else list({json.dumps(c,sort_keys=True):c for c in cases()}.values())
+    oracle_command=[str(a.oracle.resolve())] if a.oracle else ["go","run","."]
+    result=subprocess.run(oracle_command,cwd='scripts/cel-oracle',env={**os.environ,'TZ':'UTC'},input=json.dumps(corpus),text=True,capture_output=True,check=True)
     expected=json.loads(result.stdout)
     assert len(expected)==len(corpus)
     exclusions=[{'input':c,'official':e} for c,e in zip(corpus,expected) if e['category']=='compile']
@@ -46,7 +49,7 @@ def main():
         if e['category']!='ok': continue
         for limit in sorted({0,100,max(0,e['cost']-1),e['cost'],e['cost']+1}):
             limited.append({**c,'limit':limit})
-    result=subprocess.run(['go','run','.'],cwd='scripts/cel-oracle',env={**os.environ,'TZ':'UTC'},input=json.dumps(limited),text=True,capture_output=True,check=True)
+    result=subprocess.run(oracle_command,cwd='scripts/cel-oracle',env={**os.environ,'TZ':'UTC'},input=json.dumps(limited),text=True,capture_output=True,check=True)
     limit_expected=json.loads(result.stdout)
     (a.output/'limited.json').write_text(json.dumps(limited))
     limit_actual=local(a.output/'limited.json')
@@ -59,7 +62,8 @@ def main():
     # Demonstrate the upstream source of order-sensitive map macro costs.
     pairs='{'+','.join(f'"k{i}":{i}' for i in range(20))+'}'
     order_cases=[{'expression':pairs+'.exists(k,k=="k0")','context':{},'limit':100} for _ in range(64)]
-    order_result=json.loads(subprocess.run(['go','run','.'],cwd='scripts/cel-oracle',env={**os.environ,'TZ':'UTC'},input=json.dumps(order_cases),text=True,capture_output=True,check=True).stdout)
+    order_cases += [{'expression':'{1:2,3:4}.exists(k,k==3)','context':{},'limit':10} for _ in range(64)]
+    order_result=json.loads(subprocess.run(oracle_command,cwd='scripts/cel-oracle',env={**os.environ,'TZ':'UTC'},input=json.dumps(order_cases),text=True,capture_output=True,check=True).stdout)
     (a.output/'map-order-probe.json').write_text(json.dumps({'cases':order_cases,'results':order_result},indent=2)+'\n')
     summary={'oracle_timezone':'UTC','programs':len(corpus),'compile_exclusions':compiled_rejections,'cost_comparisons':sum(e['category']=='ok' for e in expected),'evaluation_error_comparisons':sum(e['category']=='evaluation' for e in expected),'limit_comparisons':len(limited),'mismatches':len(mismatches),'order_probe_observed_costs':sorted({e.get('cost') for e in order_result}),'order_probe_categories':sorted({category(e) for e in order_result})}
     (a.output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary,indent=2))
