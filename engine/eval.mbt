@@ -992,7 +992,12 @@ pub fn Engine::check_with(
     condition_local_timezone: self.condition_local_timezone,
     budget: self.budget,
   }
-  let result = engine.check_resolved(object, relation, user, context)
+  let result = engine.check_resolved(object, relation, user, context) catch {
+    err => {
+      engine.check_budget()
+      raise err
+    }
+  }
   engine.check_budget()
   result
 }

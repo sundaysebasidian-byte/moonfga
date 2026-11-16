@@ -77,7 +77,12 @@ pub fn Engine::list_objects(
     condition_local_timezone: self.condition_local_timezone,
     budget: self.budget,
   }
-  let result = engine.reverse_objects(type_name, relation, user, context)
+  let result = engine.reverse_objects(type_name, relation, user, context) catch {
+    err => {
+      engine.check_budget()
+      raise err
+    }
+  }
   engine.check_budget()
   result
 }
@@ -120,6 +125,7 @@ pub fn Engine::list_users(
   let seen : Map[String, Unit] = Map([])
   for filter in parsed_filters {
     let expanded = engine.expand_users(object, relation, filter, context, 0, [])
+    engine.check_budget()
     match expanded.error {
       Some(err) => raise err
       None => ()

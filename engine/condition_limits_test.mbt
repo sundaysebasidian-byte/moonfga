@@ -133,3 +133,60 @@ test "host deadline callback is sticky across requests" {
   }
   assert_eq(code, 4004)
 }
+
+///|
+test "request deadline wins over earlier branch condition errors" {
+  let model = model_of(
+    "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define first: [user with broken]\n    define second: [user with broken]\n    define viewer: first or second\ncondition broken(n: int) { 1/n==0 }",
+  )
+  let store = @store.MemoryStore::new()
+  for relation in ["first", "second"] {
+    ignore(
+      store.write({
+        object: "document:1",
+        relation,
+        user: "user:1",
+        condition: Some({
+          name: "broken",
+          context: Map([("n", @fga.VInt(0L))]),
+        }),
+      }),
+    )
+  }
+  let base = @engine.Engine::new(model, store as &@fga.TupleReader)
+  for steps in 0..<32 {
+    for api in 0..<3 {
+      let budget = @fga.ExecutionBudget::new(steps~)
+      let engine = base.with_budget(budget)
+      let code = try {
+        if api == 0 {
+          ignore(engine.check("document:1", "viewer", "user:1"))
+        } else if api == 1 {
+          ignore(
+            engine.list_objects("document", "viewer", "user:1", Map([]), []),
+          )
+        } else {
+          ignore(
+            engine.list_users("document:1", "viewer", ["user"], Map([]), []),
+          )
+        }
+        0
+      } catch {
+        e => @fga.error_code(e)
+      }
+      let exhausted = try {
+        budget.check()
+        false
+      } catch {
+        _ => true
+      }
+      if exhausted {
+        assert_eq(
+          code,
+          4004,
+          msg="api=" + api.to_string() + " steps=" + steps.to_string(),
+        )
+      }
+    }
+  }
+}
