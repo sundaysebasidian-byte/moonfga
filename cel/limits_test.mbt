@@ -123,8 +123,11 @@ test "nested singleton list inference fits portable wasm stack" {
 
 ///|
 test "large string cost multiplication cannot wrap past the limit" {
-  for (source, size) in [("s.contains(s)", 500000), ("s.matches(s)", 300000)] {
+  for (source, size) in [("s.contains(s)", 500000), ("s.matches(t)", 300000)] {
     let env = Map([("s", @fga.VString(String::make(size, 'a')))])
+    if source == "s.matches(t)" {
+      env["t"] = @fga.VString(Array::make(75000, "(?i)").join(""))
+    }
     let code = try {
       ignore(@cel.eval_expr_with_limit(@cel.compile(source), env, 100))
       0

@@ -49,5 +49,5 @@ def cases():
         ns=rng.randrange(-(1<<63),1<<63)
         for expr in ['string(duration(s))','string(duration(s)).size()','string(duration(s))==s']:
             yield {'expression':expr,'context':{'n':0,'s':str(ns)+'ns'},'limit':2147483647}
-    for expression,length in [('s.contains(s)',500000),('s.matches(s)',300000)]:
-        yield {'expression':expression,'context':{'n':0,'s':'a'*length},'limit':2147483647}
+    yield {'expression':'s.contains(s)','context':{'n':0,'s':'a'*500000},'limit':2147483647}
+    yield {'expression':'s.matches(t)','context':{'n':0,'s':'a'*300000,'t':'(?i)'*75000},'limit':2147483647}
