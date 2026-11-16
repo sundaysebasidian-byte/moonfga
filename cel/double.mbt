@@ -128,7 +128,7 @@ fn parse_cel_double(text : String) -> Double raise @fga.FgaError {
 }
 
 ///|
-fn format_cel_double(d : Double) -> String {
+fn format_cel_double(d : Double, fixed~ : Bool = false) -> String {
   if d.is_nan() {
     return "NaN"
   }
@@ -167,7 +167,7 @@ fn format_cel_double(d : Double) -> String {
     digits = digits[:digits.length() - 1].to_owned()
   }
   let sign = if negative { "-" } else { "" }
-  if exponent < -4 || exponent >= 6 {
+  if !fixed && (exponent < -4 || exponent >= 6) {
     let exp = (if exponent < 0 { -exponent } else { exponent }).to_string()
     sign +
     digits[:1].to_owned() +

@@ -10,6 +10,7 @@ fn expand_rewrite(
   depth : Int32,
   path : Array[String],
 ) -> Json raise @fga.FgaError {
+  engine.step()
   match rewrite {
     This =>
       Json::object(
@@ -109,10 +110,11 @@ fn users_json(
   engine : Engine,
   object : String,
   relation : String,
-) -> Array[Json] {
+) -> Array[Json] raise @fga.FgaError {
   let type_name = @fga.object_type(object)
   let users : Array[Json] = []
   for tuple in engine.reader.read(object, relation) {
+    engine.step()
     match tuple_binding_spec(engine.model, type_name, relation, tuple) {
       TupleBindingSpec::Invalid => ()
       _ => users.push(Json::string(tuple.user))
@@ -129,6 +131,7 @@ fn expand_relation(
   depth : Int32,
   path : Array[String],
 ) -> Json raise @fga.FgaError {
+  engine.step()
   if depth > 25 {
     return Json::object(Map([("type", Json::string("depth_limit"))]))
   }
@@ -153,6 +156,7 @@ pub fn Engine::expand_json(
   relation : String,
   contextual_tuples : Array[@fga.Tuple],
 ) -> Json raise @fga.FgaError {
+  self.step()
   validate_check_object(self.model, object, relation)
   validate_contextual(self.model, contextual_tuples)
   let reader = self.reader_with(contextual_tuples)
@@ -165,6 +169,9 @@ pub fn Engine::expand_json(
     condition_cost_limit: self.condition_cost_limit,
     condition_cancelled: self.condition_cancelled,
     condition_local_timezone: self.condition_local_timezone,
+    budget: self.budget,
   }
-  expand_relation(engine, object, relation, 0, [])
+  let result = expand_relation(engine, object, relation, 0, [])
+  engine.check_budget()
+  result
 }

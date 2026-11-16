@@ -15,6 +15,7 @@ pub fn eval_condition_with_limit(
   max_cost : Int32,
   cancelled~ : () -> Bool = fn() { false },
   local_timezone~ : String? = None,
+  budget~ : @fga.ExecutionBudget? = None,
 ) -> Bool raise @fga.FgaError {
   if condition.parameters.is_empty() && !context.is_empty() {
     raise @fga.fail(
@@ -31,7 +32,14 @@ pub fn eval_condition_with_limit(
   }
   let expression = compile(condition.expression)
   match
-    eval_expr_with_limit(expression, env, max_cost, cancelled~, local_timezone~) {
+    eval_expr_with_limit(
+      expression,
+      env,
+      max_cost,
+      cancelled~,
+      local_timezone~,
+      budget~,
+    ) {
     @fga.VBool(result) => {
       // The pinned server reports all missing declared parameters, even when
       // CEL itself resolves a deciding constant without accessing them.

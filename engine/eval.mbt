@@ -16,6 +16,7 @@ pub struct Engine {
   priv condition_local_timezone : String?
   priv condition_cost_limit : Int32
   priv condition_cancelled : () -> Bool
+  priv budget : @fga.ExecutionBudget?
   priv match_wildcard_users : Bool
 }
 
@@ -38,6 +39,7 @@ pub fn Engine::new(
     condition_cost_limit,
     condition_local_timezone,
     condition_cancelled,
+    budget: None,
   }
 }
 
@@ -211,6 +213,7 @@ fn eval_inline_expression(
   max_cost : Int32,
   cancelled : () -> Bool,
   local_timezone : String?,
+  budget : @fga.ExecutionBudget?,
 ) -> Bool raise @fga.FgaError {
   let cond = match tuple.condition {
     Some(c) => c
@@ -281,6 +284,7 @@ fn eval_inline_expression(
     max_cost,
     cancelled~,
     local_timezone~,
+    budget~,
   )
 }
 
@@ -293,6 +297,7 @@ fn eval_named_condition(
   max_cost : Int32,
   cancelled : () -> Bool,
   local_timezone : String?,
+  budget : @fga.ExecutionBudget?,
 ) -> Bool raise @fga.FgaError {
   let condition = match model.find_condition(name) {
     Some(c) => c
@@ -307,6 +312,7 @@ fn eval_named_condition(
     max_cost,
     cancelled~,
     local_timezone~,
+    budget~,
   )
 }
 
@@ -317,6 +323,7 @@ fn Engine::condition_holds(
   binding : TupleBindingSpec,
   context : Map[String, Json],
 ) -> Bool raise @fga.FgaError {
+  self.step()
   match binding {
     TupleBindingSpec::Unconditional => true
     TupleBindingSpec::Invalid => false
@@ -328,6 +335,7 @@ fn Engine::condition_holds(
           self.condition_cost_limit,
           self.condition_cancelled,
           self.condition_local_timezone,
+          self.budget,
         )
       } else {
         eval_named_condition(
@@ -338,6 +346,7 @@ fn Engine::condition_holds(
           self.condition_cost_limit,
           self.condition_cancelled,
           self.condition_local_timezone,
+          self.budget,
         )
       }
   }
@@ -353,6 +362,7 @@ fn Engine::resolve(
   depth : Int32,
   path : Array[String],
 ) -> Outcome raise @fga.FgaError {
+  self.step()
   if depth >= @fga.MAX_RESOLUTION_DEPTH {
     raise @fga.fail(
       @fga.ERR_RESOLUTION_TOO_COMPLEX,
@@ -403,6 +413,7 @@ fn Engine::resolve_rewrite(
   depth : Int32,
   path : Array[String],
 ) -> Outcome raise @fga.FgaError {
+  self.step()
   match rewrite {
     This => self.resolve_direct(object, relation, subject, context, depth, path)
     Computed(target) => {
@@ -414,6 +425,7 @@ fn Engine::resolve_rewrite(
       let mut resolved = target
       let td = self.model.find_type(@fga.object_type(object)).unwrap()
       while true {
+        self.step()
         let key = path_key(object, resolved)
         if alias_path.contains(key) {
           return OCycle
@@ -566,12 +578,14 @@ fn Engine::resolve_direct(
   depth : Int32,
   path : Array[String],
 ) -> Outcome raise @fga.FgaError {
+  self.step()
   let type_name = @fga.object_type(object)
   let tuples = self.reader.read(object, relation)
   let mut pending_error : @fga.FgaError? = None
   let mut saw_cycle = false
   let mut allowed = false
   for tuple in tuples {
+    self.step()
     let parsed_user = match @fga.parse_user_ref(tuple.user) {
       Some(r) => r
       None => continue
@@ -741,11 +755,13 @@ fn Engine::resolve_ttu(
   depth : Int32,
   path : Array[String],
 ) -> Outcome raise @fga.FgaError {
+  self.step()
   let type_name = @fga.object_type(object)
   let tuples = self.reader.read(object, tupleset)
   let mut pending_error : @fga.FgaError? = None
   let mut saw_cycle = false
   for tuple in tuples {
+    self.step()
     let binding = tuple_binding_spec(self.model, type_name, tupleset, tuple)
     match binding {
       TupleBindingSpec::Invalid => continue
@@ -842,6 +858,7 @@ fn Engine::resolve_difference(
   depth : Int32,
   path : Array[String],
 ) -> Outcome raise @fga.FgaError {
+  self.step()
   let subtract_engine = Engine::{ ..self, match_wildcard_users: true, }
   let mut base_error : @fga.FgaError? = None
   let base_outcome = self.resolve_rewrite(
@@ -931,6 +948,7 @@ fn Engine::check_resolved(
   user : String,
   context : Map[String, Json],
 ) -> Bool raise @fga.FgaError {
+  self.step()
   let path : Array[String] = []
   let outcome = self.resolve(object, relation, user, context, 0, path)
   outcome_to_bool(outcome)
@@ -944,6 +962,7 @@ pub fn Engine::check(
   relation : String,
   user : String,
 ) -> Bool raise @fga.FgaError {
+  self.step()
   self.check_with(object, relation, user, Map([]), [])
 }
 
@@ -957,6 +976,7 @@ pub fn Engine::check_with(
   context : Map[String, Json],
   contextual_tuples : Array[@fga.Tuple],
 ) -> Bool raise @fga.FgaError {
+  self.step()
   validate_check_object(self.model, object, relation)
   validate_request_user(self.model, user)
   validate_contextual(self.model, contextual_tuples)
@@ -970,8 +990,11 @@ pub fn Engine::check_with(
     condition_cost_limit: self.condition_cost_limit,
     condition_cancelled: self.condition_cancelled,
     condition_local_timezone: self.condition_local_timezone,
+    budget: self.budget,
   }
-  engine.check_resolved(object, relation, user, context)
+  let result = engine.check_resolved(object, relation, user, context)
+  engine.check_budget()
+  result
 }
 
 ///|
@@ -980,6 +1003,7 @@ pub fn Engine::check_request(
   self : Engine,
   request : CheckRequest,
 ) -> Bool raise @fga.FgaError {
+  self.step()
   self.check_with(
     request.object,
     request.relation,

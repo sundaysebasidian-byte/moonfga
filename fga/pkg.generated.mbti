@@ -6,6 +6,8 @@ import {
 }
 
 // Values
+pub const ERR_DEADLINE_EXCEEDED : Int32 = 4004
+
 pub const ERR_INVALID_TUPLE : Int32 = 2027
 
 pub const ERR_INVALID_WRITE : Int32 = 2003
@@ -160,6 +162,13 @@ pub(all) struct ConditionParam {
   type_name : String
   generic_type : String?
 }
+
+pub struct ExecutionBudget {
+  // private fields
+}
+pub fn ExecutionBudget::check(Self) -> Unit raise FgaError
+pub fn ExecutionBudget::new(steps? : Int32, cancelled? : () -> Bool) -> Self
+pub fn ExecutionBudget::step(Self) -> Unit raise FgaError
 
 pub(all) struct Span {
   line : Int32

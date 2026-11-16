@@ -4,11 +4,16 @@ priv struct EvalState {
   limit : Int32
   mut interrupted : Bool
   local_timezone : String?
+  budget : @fga.ExecutionBudget?
   cancelled : () -> Bool
 }
 
 ///|
 fn EvalState::check(self : EvalState) -> Unit raise @fga.FgaError {
+  match self.budget {
+    Some(b) => b.check()
+    None => ()
+  }
   if self.interrupted || (self.cancelled)() {
     self.interrupted = true
     raise eval_error("condition evaluation interrupted or cost limit exceeded")

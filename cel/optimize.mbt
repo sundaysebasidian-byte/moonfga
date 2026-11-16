@@ -14,7 +14,12 @@ fn conversion_function(name : String) -> Bool {
 fn optimize_expr(
   expr : CelExpr,
   env : Map[String, @fga.CelValue],
+  budget : @fga.ExecutionBudget?,
 ) -> CelExpr raise @fga.FgaError {
+  match budget {
+    Some(b) => b.step()
+    None => ()
+  }
   if qualified_type(expr) is Some(name) {
     return CLiteral(@fga.VType(name))
   }
@@ -33,15 +38,19 @@ fn optimize_expr(
         expr
       }
     CLiteral(_) => expr
-    CList(xs) => CList(xs.map(x => optimize_expr(x, env)))
+    CList(xs) => CList(xs.map(x => optimize_expr(x, env, budget)))
     CMap(xs) =>
-      CMap(xs.map(x => (optimize_expr(x.0, env), optimize_expr(x.1, env))))
+      CMap(
+        xs.map(x => {
+          (optimize_expr(x.0, env, budget), optimize_expr(x.1, env, budget))
+        }),
+      )
     CObject(name, fields) =>
-      CObject(name, fields.map(x => (x.0, optimize_expr(x.1, env))))
-    CUnary(op, x) => CUnary(op, optimize_expr(x, env))
+      CObject(name, fields.map(x => (x.0, optimize_expr(x.1, env, budget))))
+    CUnary(op, x) => CUnary(op, optimize_expr(x, env, budget))
     CBinary(op, l, r) => {
-      let left = optimize_expr(l, env)
-      let right = optimize_expr(r, env)
+      let left = optimize_expr(l, env, budget)
+      let right = optimize_expr(r, env, budget)
       if op == "in" && right is CLiteral(@fga.VList(xs)) {
         if xs.is_empty() {
           CLiteral(@fga.VBool(false))
@@ -65,13 +74,14 @@ fn optimize_expr(
     }
     CTernary(a, b, c) =>
       CTernary(
-        optimize_expr(a, env),
-        optimize_expr(b, env),
-        optimize_expr(c, env),
+        optimize_expr(a, env, budget),
+        optimize_expr(b, env, budget),
+        optimize_expr(c, env, budget),
       )
-    CCall(name, args) => CCall(name, args.map(x => optimize_expr(x, env)))
+    CCall(name, args) =>
+      CCall(name, args.map(x => optimize_expr(x, env, budget)))
     CMethod(target, name, args) => {
-      let receiver = optimize_expr(target, env)
+      let receiver = optimize_expr(target, env, budget)
       if ["all", "exists", "exists_one", "map", "filter"].contains(name) &&
         !args.is_empty() &&
         args[0] is CIdent(variable) {
@@ -79,14 +89,15 @@ fn optimize_expr(
         bound[variable] = @fga.VNull
         let optimized : Array[CelExpr] = [args[0]]
         for i in 1..<args.length() {
-          optimized.push(optimize_expr(args[i], bound))
+          optimized.push(optimize_expr(args[i], bound, budget))
         }
         CMethod(receiver, name, optimized)
       } else {
-        CMethod(receiver, name, args.map(x => optimize_expr(x, env)))
+        CMethod(receiver, name, args.map(x => optimize_expr(x, env, budget)))
       }
     }
-    CIndex(a, b) => CIndex(optimize_expr(a, env), optimize_expr(b, env))
+    CIndex(a, b) =>
+      CIndex(optimize_expr(a, env, budget), optimize_expr(b, env, budget))
   }
   let fold = match result {
     CCall(name, args) =>
@@ -106,6 +117,7 @@ fn optimize_expr(
     interrupted: false,
     cancelled: fn() { false },
     local_timezone: None,
+    budget,
   }
   CLiteral(eval_expr_state(result, Map([]), state))
 }

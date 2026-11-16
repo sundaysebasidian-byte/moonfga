@@ -45,11 +45,68 @@ test "Local timezone is an explicit portable host setting" {
     local_timezone=Some("America/Los_Angeles"),
   )
   assert_true(@fga.cel_value_eq(value, @fga.VBool(true)))
-  let absent = try {
-    ignore(@cel.eval_expr_with_limit(expr, Map([]), 100))
-    false
-  } catch {
-    _ => true
+  let utc = @cel.eval_expr_with_limit(
+    @cel.compile("timestamp('2026-01-01T00:00:00Z').getHours('Local') == 0"),
+    Map([]),
+    100,
+  )
+  assert_true(@fga.cel_value_eq(utc, @fga.VBool(true)))
+}
+
+///|
+test "request budget interrupts deciding CEL and regex paths" {
+  for source in ["true", "(1/0==0)||true", "[1,2,3].exists(x,x>0)"] {
+    let budget = @fga.ExecutionBudget::new(steps=0)
+    let code = try {
+      ignore(
+        @cel.eval_expr_with_limit(
+          @cel.compile(source),
+          Map([]),
+          100,
+          budget=Some(budget),
+        ),
+      )
+      0
+    } catch {
+      e => @fga.error_code(e)
+    }
+    assert_eq(code, @fga.ERR_DEADLINE_EXCEEDED)
   }
-  assert_true(absent)
+  let budget = @fga.ExecutionBudget::new(steps=1)
+  let code = try {
+    ignore(
+      @cel.regex_matches("a+", String::make(4096, 'a'), budget=Some(budget)),
+    )
+    0
+  } catch {
+    e => @fga.error_code(e)
+  }
+  assert_eq(code, @fga.ERR_DEADLINE_EXCEEDED)
+}
+
+///|
+test "portable work units have deterministic exact boundaries" {
+  let expr = @cel.compile("n+1")
+  let env = Map([("n", @fga.VInt(0L))])
+  let value = @cel.eval_expr_with_limit(
+    expr,
+    env,
+    100,
+    budget=Some(@fga.ExecutionBudget::new(steps=3)),
+  )
+  assert_true(@fga.cel_value_eq(value, @fga.VInt(1L)))
+  let code = try {
+    ignore(
+      @cel.eval_expr_with_limit(
+        expr,
+        env,
+        100,
+        budget=Some(@fga.ExecutionBudget::new(steps=2)),
+      ),
+    )
+    0
+  } catch {
+    e => @fga.error_code(e)
+  }
+  assert_eq(code, 4004)
 }

@@ -35,6 +35,12 @@ fn Engine::expand_users(
   path : Array[String],
 ) -> UserSet {
   let out = user_set()
+  self.step() catch {
+    err => {
+      out.error = Some(err)
+      return out
+    }
+  }
   if depth >= @fga.MAX_RESOLUTION_DEPTH {
     out.error = Some(
       @fga.fail(
@@ -85,6 +91,12 @@ fn Engine::expand_user_rewrite(
   path : Array[String],
 ) -> UserSet {
   let out = user_set()
+  self.step() catch {
+    err => {
+      out.error = Some(err)
+      return out
+    }
+  }
   match rewrite {
     Computed(target) =>
       return self.expand_users(object, target, filter, context, depth + 1, path)
@@ -94,6 +106,12 @@ fn Engine::expand_user_rewrite(
         _ => relation
       }
       for tuple in self.reader.read(object, read_relation) {
+        self.step() catch {
+          err => {
+            out.error = Some(err)
+            return out
+          }
+        }
         let binding = tuple_binding_spec(
           self.model,
           @fga.object_type(object),

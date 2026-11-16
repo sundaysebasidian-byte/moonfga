@@ -356,3 +356,11 @@ fn checked_timestamp(
   }
   value
 }
+
+///|
+// CEL string conversion uses floating-point seconds; protobuf JSON keeps nanos.
+fn format_duration_string(ns : Int64) -> String {
+  let seconds = (ns / 1000000000L).to_double() +
+    (ns % 1000000000L).to_double() / 1000000000.0
+  format_cel_double(seconds, fixed=true) + "s"
+}

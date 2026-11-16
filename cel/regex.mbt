@@ -534,7 +534,12 @@ pub fn regex_matches(
   pattern : String,
   text : String,
   cancelled~ : () -> Bool = fn() { false },
+  budget~ : @fga.ExecutionBudget? = None,
 ) -> Bool raise @fga.FgaError {
+  match budget {
+    Some(b) => b.step()
+    None => ()
+  }
   if cancelled() {
     raise eval_error("regex evaluation interrupted")
   }
@@ -548,6 +553,12 @@ pub fn regex_matches(
   let mut pending : Array[Int32] = []
   let seen = Array::make(code.length(), -1)
   for pos in 0..<=chars.length() {
+    if pos % 1024 == 0 {
+      match budget {
+        Some(b) => b.step()
+        None => ()
+      }
+    }
     if pos % 1024 == 0 && cancelled() {
       raise eval_error("regex evaluation interrupted")
     }

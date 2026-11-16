@@ -1,6 +1,6 @@
 name = "sundaysebasidian-byte/moonfga"
 
-version = "0.2.4"
+version = "0.2.5"
 
 readme = "README.md"
 

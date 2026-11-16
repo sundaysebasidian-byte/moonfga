@@ -30,11 +30,12 @@ fn Engine::reverse_rules(
   user : String,
   residual : Bool,
   edges : Array[ReverseEdge],
-) -> Unit {
+) -> Unit raise @fga.FgaError {
   let target = path_key(object, relation)
   match rewrite {
     This =>
       for tuple in self.reader.read(object, relation) {
+        self.step()
         if tuple_binding_spec(
             self.model,
             @fga.object_type(object),
@@ -77,6 +78,7 @@ fn Engine::reverse_rules(
       reverse_edge(edges, path_key(object, r), target, None, residual)
     TupleToUserset(computed, tupleset) =>
       for tuple in self.reader.read(object, tupleset) {
+        self.step()
         if is_concrete_user(tuple.user) &&
           !(tuple_binding_spec(
             self.model,
@@ -96,10 +98,12 @@ fn Engine::reverse_rules(
       }
     Union(children) =>
       for child in children {
+        self.step()
         self.reverse_rules(object, relation, child, user, residual, edges)
       }
     Intersection(children) =>
       for child in children {
+        self.step()
         self.reverse_rules(object, relation, child, user, true, edges)
       }
     Difference(base, subtract) => {
@@ -128,6 +132,7 @@ fn Engine::reverse_objects(
   let objects = self.reader.all_objects(type_name)
   inventoried[type_name] = ()
   for object in objects {
+    self.step()
     let key = path_key(object, relation)
     roots[key] = object
     scheduled[key] = ()
@@ -136,6 +141,7 @@ fn Engine::reverse_objects(
   }
   let mut cursor = 0
   while cursor < work.length() {
+    self.step()
     let (object, r) = work[cursor]
     cursor += 1
     let td = match self.model.find_type(@fga.object_type(object)) {
@@ -144,6 +150,7 @@ fn Engine::reverse_objects(
     }
     if !inventoried.contains(td.name) {
       for candidate in self.reader.all_objects(td.name) {
+        self.step()
         present[candidate] = true
       }
       inventoried[td.name] = ()
@@ -159,6 +166,7 @@ fn Engine::reverse_objects(
     let begin = edges.length()
     self.reverse_rules(object, r, rewrite, user, false, edges)
     for i in begin..<edges.length() {
+      self.step()
       let source = edges[i].source
       if source != "$subject" && !scheduled.contains(source) {
         scheduled[source] = ()
@@ -177,6 +185,7 @@ fn Engine::reverse_objects(
   let incoming : Map[String, Array[String]] = Map([])
   let outgoing : Map[String, Array[ReverseEdge]] = Map([])
   for edge in edges {
+    self.step()
     match incoming.get(edge.target) {
       Some(xs) => xs.push(edge.source)
       None => incoming[edge.target] = [edge.source]
@@ -195,9 +204,11 @@ fn Engine::reverse_objects(
   })
   let mut pos = 0
   while pos < pending.length() {
+    self.step()
     let k = pending[pos]
     pos += 1
     for source in incoming.get(k).unwrap_or([]) {
+      self.step()
       if !needed.contains(source) {
         needed[source] = ()
         pending.push(source)
@@ -214,9 +225,11 @@ fn Engine::reverse_objects(
   pos = 0
   let mut error : @fga.FgaError? = None
   while pos < agenda.length() {
+    self.step()
     let source = agenda[pos]
     pos += 1
     for edge in outgoing.get(source).unwrap_or([]) {
+      self.step()
       if !needed.contains(edge.target) {
         continue
       }
@@ -273,6 +286,7 @@ fn Engine::reverse_objects(
   // Residual checks are only for graph-discovered non-monotone candidates,
   // matching OpenFGA's RequiresFurtherEval path.
   for key, object in roots {
+    self.step()
     if facts.get(key) == Some(true) {
       if self.check_resolved(object, relation, user, context) {
         results.push(object)

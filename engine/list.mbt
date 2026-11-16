@@ -61,6 +61,7 @@ pub fn Engine::list_objects(
   context : Map[String, Json],
   contextual_tuples : Array[@fga.Tuple],
 ) -> Array[String] raise @fga.FgaError {
+  self.step()
   validate_object_type_relation(self.model, type_name, relation)
   validate_request_user(self.model, user)
   validate_contextual_for_list(self.model, contextual_tuples)
@@ -74,8 +75,11 @@ pub fn Engine::list_objects(
     condition_cost_limit: self.condition_cost_limit,
     condition_cancelled: self.condition_cancelled,
     condition_local_timezone: self.condition_local_timezone,
+    budget: self.budget,
   }
-  engine.reverse_objects(type_name, relation, user, context)
+  let result = engine.reverse_objects(type_name, relation, user, context)
+  engine.check_budget()
+  result
 }
 
 ///|
@@ -93,6 +97,7 @@ pub fn Engine::list_users(
   context : Map[String, Json],
   contextual_tuples : Array[@fga.Tuple],
 ) -> Array[String] raise @fga.FgaError {
+  self.step()
   validate_list_users_object(self.model, object, relation)
   validate_contextual_for_list(self.model, contextual_tuples)
   let parsed_filters : Array[@fga.UserRef] = []
@@ -109,6 +114,7 @@ pub fn Engine::list_users(
     condition_cost_limit: self.condition_cost_limit,
     condition_cancelled: self.condition_cancelled,
     condition_local_timezone: self.condition_local_timezone,
+    budget: self.budget,
   }
   let results : Array[String] = []
   let seen : Map[String, Unit] = Map([])
@@ -124,5 +130,6 @@ pub fn Engine::list_users(
       }
     })
   }
+  engine.check_budget()
   sorted(results)
 }

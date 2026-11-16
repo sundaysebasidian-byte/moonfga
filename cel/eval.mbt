@@ -411,7 +411,7 @@ fn eval_predicate(
       } else if mode == "all" {
         3
       } else {
-        2
+        0
       },
     )
     let result = as_bool_value(
@@ -424,6 +424,9 @@ fn eval_predicate(
       }
     }
     if result {
+      if mode == "exists_one" {
+        state.charge(2)
+      }
       count = count + 1
     }
     if mode == "exists" && result {
@@ -461,6 +464,7 @@ fn eval_method(
     state.charge(1)
   }
   if name.has_prefix("@field:") {
+    state.charge(1)
     return eval_index(receiver, @fga.VString(name[7:].to_owned()))
   }
   match receiver {
@@ -507,7 +511,14 @@ fn eval_method(
           state.charge(
             (s.char_length() + 10) / 10 * ((pattern.char_length() + 3) / 4),
           )
-          @fga.VBool(regex_matches(pattern, s, cancelled=state.cancelled))
+          @fga.VBool(
+            regex_matches(
+              pattern,
+              s,
+              cancelled=state.cancelled,
+              budget=state.budget,
+            ),
+          )
         }
         _ => raise eval_error("unsupported string method '" + name + "'")
       }
@@ -646,7 +657,7 @@ fn eval_method(
       let resolved = if zone == Some("Local") {
         match state.local_timezone {
           Some(z) => Some(z)
-          None => raise eval_error("Local timezone requires host configuration")
+          None => Some("UTC")
         }
       } else {
         zone
@@ -684,6 +695,7 @@ fn eval_call(
   state : EvalState,
 ) -> @fga.CelValue raise @fga.FgaError {
   if name == "has" {
+    state.charge(2)
     if args.length() != 1 {
       raise eval_error("has expects one field selection")
     }
@@ -719,7 +731,7 @@ fn eval_call(
   for arg in args {
     values.push(eval_expr_state(arg, env, state))
   }
-  if name != "dyn" && name != "matches" {
+  if name != "matches" {
     state.charge(
       if (name == "bytes" || name == "string") &&
         (
@@ -742,7 +754,14 @@ fn eval_call(
       state.charge(
         (text.char_length() + 10) / 10 * ((pattern.char_length() + 3) / 4),
       )
-      @fga.VBool(regex_matches(pattern, text, cancelled=state.cancelled))
+      @fga.VBool(
+        regex_matches(
+          pattern,
+          text,
+          cancelled=state.cancelled,
+          budget=state.budget,
+        ),
+      )
     }
     "type" => {
       if values.length() != 1 {
@@ -927,7 +946,7 @@ fn eval_call(
           @fga.VString(@utf8.decode(b[:])) catch {
             _ => raise eval_error("invalid UTF-8 in bytes to string conversion")
           }
-        @fga.VDuration(ns) => @fga.VString(format_duration(ns))
+        @fga.VDuration(ns) => @fga.VString(format_duration_string(ns))
         @fga.VString(s) => @fga.VString(s)
         @fga.VDouble(d) => @fga.VString(format_cel_double(d))
         @fga.VUint(u) => @fga.VString(u.to_string())
@@ -991,6 +1010,10 @@ fn eval_expr_state(
   env : Map[String, @fga.CelValue],
   state : EvalState,
 ) -> @fga.CelValue raise @fga.FgaError {
+  match state.budget {
+    Some(b) => b.step()
+    None => ()
+  }
   state.check()
   if expression_path(expr) == Some("google.protobuf.NullValue.NULL_VALUE") {
     return @fga.VInt(0L)
@@ -1061,7 +1084,9 @@ fn eval_expr_state(
       let r = eval_expr_state(right, env, state)
       if op == "in" || op == "@set_in" {
         state.charge(
-          if r is @fga.VList(_) {
+          if op == "@set_in" {
+            0
+          } else if r is @fga.VList(_) {
             @fga.cel_value_size(r)
           } else {
             1
@@ -1106,7 +1131,7 @@ fn eval_expr_state(
       eval_method(value, name, args, env, state)
     }
     CIndex(target, index) => {
-      state.charge(1)
+      state.charge(2)
       eval_index(
         eval_expr_state(target, env, state),
         eval_expr_state(index, env, state),
@@ -1214,21 +1239,39 @@ pub fn eval_expr_with_limit(
   max_cost : Int32,
   cancelled~ : () -> Bool = fn() { false },
   local_timezone~ : String? = None,
+  budget~ : @fga.ExecutionBudget? = None,
 ) -> @fga.CelValue raise @fga.FgaError {
+  eval_expr_with_cost(expr, env, max_cost, cancelled~, local_timezone~, budget~).0
+}
+
+///|
+/// Evaluates with the actual runtime cost, after the pinned program optimizations.
+/// This is not a static upper-bound estimate.
+pub fn eval_expr_with_cost(
+  expr : CelExpr,
+  env : Map[String, @fga.CelValue],
+  max_cost : Int32,
+  cancelled~ : () -> Bool = fn() { false },
+  local_timezone~ : String? = None,
+  budget~ : @fga.ExecutionBudget? = None,
+) -> (@fga.CelValue, Int32) raise @fga.FgaError {
   let state = EvalState::{
     cost: 0,
     limit: max_cost,
     interrupted: false,
     cancelled,
     local_timezone,
+    budget,
   }
   state.check()
   let program = if needs_program_optimization(expr) {
-    optimize_expr(expr, env)
+    optimize_expr(expr, env, budget)
   } else {
     expr
   }
-  eval_expr_state(program, env, state)
+  let value = eval_expr_state(program, env, state)
+  state.check()
+  (value, state.cost)
 }
 
 ///|
