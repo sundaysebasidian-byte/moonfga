@@ -118,6 +118,9 @@ fn eval_arithmetic(
       if op != "+" && op != "-" {
         raise eval_error("unsupported timestamp operator")
       }
+      if op == "-" && ns == -9223372036854775807L - 1L {
+        raise eval_error("duration negation overflow")
+      }
       let direction = if op == "+" { 1L } else { -1L }
       let result = @fga.timestamp_from_seconds(
         a + direction * (ns / 1000000000L),
@@ -463,10 +466,6 @@ fn eval_method(
     ].contains(name) {
     state.charge(1)
   }
-  if name.has_prefix("@field:") {
-    state.charge(1)
-    return eval_index(receiver, @fga.VString(name[7:].to_owned()))
-  }
   match receiver {
     @fga.VBytes(b) =>
       if name == "size" && args.is_empty() {
@@ -695,9 +694,9 @@ fn eval_call(
   args : Array[CelExpr],
   env : Map[String, @fga.CelValue],
   state : EvalState,
+  attribute_root~ : Bool = true,
 ) -> @fga.CelValue raise @fga.FgaError {
   if name == "has" {
-    state.charge(2)
     if args.length() != 1 {
       raise eval_error("has expects one field selection")
     }
@@ -706,7 +705,20 @@ fn eval_call(
         if !call_args.is_empty() || !field.has_prefix("@field:") {
           raise eval_error("has expects a field selection")
         }
-        match eval_expr_state(receiver, env, state) {
+        state.charge(
+          if attribute_expr(receiver) || !attribute_root {
+            1
+          } else {
+            2
+          },
+        )
+        match
+          eval_expr_state(
+            receiver,
+            env,
+            state,
+            attribute_root=attribute_root && !(receiver is CTernary(_, _, _)),
+          ) {
           @fga.VProtoFields(k, v) =>
             return @fga.VBool(
               if field == "@field:key" {
@@ -735,11 +747,8 @@ fn eval_call(
   }
   if name != "matches" {
     state.charge(
-      if (name == "bytes" || name == "string") &&
-        (
-          values.get(0) is Some(@fga.VString(_)) ||
-          values.get(0) is Some(@fga.VBytes(_))
-        ) {
+      if (name == "bytes" && values.get(0) is Some(@fga.VString(_))) ||
+        (name == "string" && values.get(0) is Some(@fga.VBytes(_))) {
         (@fga.cel_value_size(values[0]) + 9) / 10
       } else {
         1
@@ -866,7 +875,7 @@ fn eval_call(
           }
         @fga.VDouble(d) =>
           if d.is_nan() ||
-            d < -9223372036854775808.0 ||
+            d <= -9223372036854775808.0 ||
             d >= 9223372036854775808.0 {
             raise eval_error("integer overflow")
           } else {
@@ -1012,6 +1021,7 @@ fn eval_expr_state(
   expr : CelExpr,
   env : Map[String, @fga.CelValue],
   state : EvalState,
+  attribute_root~ : Bool = true,
 ) -> @fga.CelValue raise @fga.FgaError {
   match state.budget {
     Some(b) => b.step()
@@ -1027,20 +1037,10 @@ fn eval_expr_state(
   match expr {
     CLiteral(value) => value
     CIdent(raw_name) => {
-      let name = global_name(raw_name)
-      state.charge(1)
-      match env.get(name) {
-        Some(value) => value
-        None =>
-          if [
-              "int", "uint", "double", "bool", "string", "bytes", "list", "map",
-              "type", "null_type",
-            ].contains(name) {
-            @fga.VType(name)
-          } else {
-            raise eval_error("no such variable '" + name + "'")
-          }
+      if attribute_root {
+        state.charge(1)
       }
+      lookup_identifier(raw_name, env)
     }
     CUnary(op, inner) => {
       state.charge(1)
@@ -1124,21 +1124,51 @@ fn eval_expr_state(
     }
     CTernary(condition, when_true, when_false) =>
       if as_bool_value(eval_expr_state(condition, env, state)) {
-        eval_expr_state(when_true, env, state)
+        eval_expr_state(when_true, env, state, attribute_root~)
       } else {
-        eval_expr_state(when_false, env, state)
+        eval_expr_state(when_false, env, state, attribute_root~)
       }
-    CCall(name, args) => eval_call(global_name(name), args, env, state)
-    CMethod(receiver, name, args) => {
-      let value = eval_expr_state(receiver, env, state)
-      eval_method(value, name, args, env, state)
-    }
+    CCall(name, args) =>
+      eval_call(global_name(name), args, env, state, attribute_root~)
+    CMethod(receiver, name, args) =>
+      if name.has_prefix("@field:") {
+        state.charge(
+          if attribute_expr(receiver) || !attribute_root {
+            1
+          } else {
+            2
+          },
+        )
+        eval_index(
+          eval_expr_state(
+            receiver,
+            env,
+            state,
+            attribute_root=attribute_root && !(receiver is CTernary(_, _, _)),
+          ),
+          @fga.VString(name[7:].to_owned()),
+        )
+      } else {
+        let value = eval_expr_state(receiver, env, state)
+        eval_method(value, name, args, env, state)
+      }
     CIndex(target, index) => {
-      state.charge(2)
-      eval_index(
-        eval_expr_state(target, env, state),
-        eval_expr_state(index, env, state),
+      state.charge(
+        if attribute_expr(target) || !attribute_root {
+          1
+        } else {
+          2
+        },
       )
+      let receiver = eval_expr_state(
+        target,
+        env,
+        state,
+        attribute_root=attribute_root && !(target is CTernary(_, _, _)),
+      )
+      // Go attributes share one root charge; attribute-valued qualifiers have none.
+      let key = eval_expr_state(index, env, state, attribute_root=false)
+      eval_index(receiver, key)
     }
     CList(items) => {
       if !constant_expr(expr) {
@@ -1290,5 +1320,34 @@ fn compare_cel_strings(a : String, b : String) -> Int32 {
     }
   } nobreak {
     0
+  }
+}
+
+///|
+fn attribute_expr(expr : CelExpr) -> Bool {
+  match expr {
+    CIdent(_) | CIndex(_, _) | CTernary(_, _, _) => true
+    CMethod(_, name, _) => name.has_prefix("@field:")
+    _ => false
+  }
+}
+
+///|
+fn lookup_identifier(
+  raw_name : String,
+  env : Map[String, @fga.CelValue],
+) -> @fga.CelValue raise @fga.FgaError {
+  let name = global_name(raw_name)
+  match env.get(name) {
+    Some(value) => value
+    None =>
+      if [
+          "int", "uint", "double", "bool", "string", "bytes", "list", "map", "type",
+          "null_type",
+        ].contains(name) {
+        @fga.VType(name)
+      } else {
+        raise eval_error("no such variable '" + name + "'")
+      }
   }
 }
