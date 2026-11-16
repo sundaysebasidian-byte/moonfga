@@ -1,0 +1,652 @@
+[
+  {
+    "path": "openfga/abac_tests.yaml",
+    "sha256": "6131642249518b7fabca4695d7a70456865bef8d8bf908c4ac05c7b2c697e1a2",
+    "matches_cached": true
+  },
+  {
+    "path": "openfga/consolidated_1_1_tests.yaml",
+    "sha256": "7e06b13803d37456082abf6bbe94c6633038ac15bce6e79aa82b6dc4718045ad",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/dsl-semantic-validation-cases.yaml",
+    "sha256": "98f1aa5e37e9bb606c52415653c8109bc85a5be0e5261bee5e1259d4c42dbb94",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/dsl-syntax-validation-cases.yaml",
+    "sha256": "74da63a5ef1876719b1ea0d28e4b831d1f4e6356c5efcfe40aecfcd585b4fa5b",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/fga-mod-transformer-cases.yaml",
+    "sha256": "85e396a2720c2c0a2588016ab5e09d2b8a51613473298410999c633a8d390308",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/json-syntax-transformer-validation-cases.yaml",
+    "sha256": "94a000eb1101ffcdcf98360d1317c7c3a8d3d0f527efa499a1f5b94cf84236c2",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/json-validation-cases.yaml",
+    "sha256": "e1e67a4456648ca677225e538726cfc04b17b00f4a0f02e9589b7c43d3ea0fbc",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/object-id-validation-cases.yaml",
+    "sha256": "b285f2bf7b2ab93a23cbab6745a50d2aac43e08185f13f91d33fd7b52a55bcf5",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/stores/00-valid-model/store.fga.yaml",
+    "sha256": "1e3f5454f20bb9ef53111806d887ae807ee81bea5ce45cc3032abfe39340951e",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/stores/01-valid-model-file/model.fga",
+    "sha256": "c5c470dc4e3a6d698e76621917d669a370bd01904018de7e549fb745d06cc972",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/stores/01-valid-model-file/store.fga.yaml",
+    "sha256": "6ec31981d0ccba47d22d6b6a9b312b3cc2fe0a116935f7357c299f303a2a6418",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/stores/02-missing-model/expected_errors.json",
+    "sha256": "6f1ed0994efd164b63145a615175ba465fd4a6749064c530895112039c33ffce",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/stores/02-missing-model/store.fga.yaml",
+    "sha256": "0878d1938b90f9c2b903a03fe61552f05e96e0d52bb871ce6a504321c1cf838c",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/stores/03-additional-properties/expected_errors.json",
+    "sha256": "4c8348fa7feb07c7f6435238fd920885203a3b7a4b4ebb42e9729dfdaa6a757a",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/stores/03-additional-properties/store.fga.yaml",
+    "sha256": "a286151421dd3d6a36144c654ef93296007be14568f69acb993da679dec76d31",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/00-only-schema/authorization-model.dot",
+    "sha256": "ce77bd22cbbba767969bcfdcb2172de93a059b9bdbd8f996b4782b39f42b174a",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/00-only-schema/authorization-model.fga",
+    "sha256": "7a577087a181375b6be388390cc2ea71a3a583d98b4fe25e8126d9479f85acbd",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/00-only-schema/authorization-model.json",
+    "sha256": "3c6334fb2a033c1dee264f7b366b02e3ef5ec5b72dddc05e2ea89342b68ec674",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/01-only-type/authorization-model.dot",
+    "sha256": "7556aac8ece307204b166932789e0760ac08ca7a9f85664fefa163dec7db25cf",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/01-only-type/authorization-model.fga",
+    "sha256": "777b3f813d9f13f11f0e8e3a25b74c74604545b025bfda67342325106a096ad1",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/01-only-type/authorization-model.json",
+    "sha256": "bc637e7b70ef9f938a6861d6fc448c66a162a0f9ec571511cc423a9e41d7ea01",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/02-type-single-relation/authorization-model.dot",
+    "sha256": "10b096847281cb234ff64d4f39e80116f946189915d21db88008f9c14113638d",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/02-type-single-relation/authorization-model.fga",
+    "sha256": "af0a389e60c6d50181d54897d403f18d6a82b37446896942d404270136785bf8",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/02-type-single-relation/authorization-model.json",
+    "sha256": "43f9b4a1e359f7eedc482559f4f08154918c91991e4e1f3084c94861596ec3f1",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/03-simple-computed-userset/authorization-model.dot",
+    "sha256": "835d3e247f0c8c25243c659de6cc06d749d63a04487eed88db79fff7e733b7a0",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/03-simple-computed-userset/authorization-model.fga",
+    "sha256": "f304a0bf7c20e87c119df66a82f2e60f96aff12cfe044dd553f3553f00b9ae89",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/03-simple-computed-userset/authorization-model.json",
+    "sha256": "5d076e798a4ce361994c48d79fe2b55c8b7f9384c8b6f728e7f8d422527d811d",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/04-type-single-relation-public-userset-restrictions/authorization-model.dot",
+    "sha256": "e116d06dd8e6b274f6641d21fcfa1d2e99e2259faf41df841f1e0b4f82965f03",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/04-type-single-relation-public-userset-restrictions/authorization-model.fga",
+    "sha256": "3eeaf30d5b7cdd59dbc397b527ebeb804341eb76f32c085f941b9e8b0a0db3aa",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/04-type-single-relation-public-userset-restrictions/authorization-model.json",
+    "sha256": "323c485140ab998856b5169ac26d05775a669e4abaf3aa6524a96a4ea6dd28fb",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/05-simple-union/authorization-model.dot",
+    "sha256": "2282ce18624f3c2e64d803ae1cbd0e2229607e19f92d1556e6807ddb8739cd23",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/05-simple-union/authorization-model.fga",
+    "sha256": "de39a580296203e9af2eebf7d5829bc50dc2fae254a1d126644087b90150ce6a",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/05-simple-union/authorization-model.json",
+    "sha256": "c14fb581b3eca298cc4575653a9df79cc2c71123011bbd744fcf7983904a1cd1",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/06-simple-intersection/authorization-model.dot",
+    "sha256": "19d59a9e13b7e7bef3b17f7cc868306f235d98cbc1d36516484145f004b3cab4",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/06-simple-intersection/authorization-model.fga",
+    "sha256": "b7219c656d7359dfee4e44a6357de373af89f95195384a2fe05d7f6eb559cf1b",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/06-simple-intersection/authorization-model.json",
+    "sha256": "67a05962816e456cfdca231415d08c57953b4c4e5f6655ca772c2e9bae8453ec",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/07-simple-exclusion/authorization-model.dot",
+    "sha256": "f6abfbaa606f8e944384d11061d8d08d1f8480eb80bd9d3fce2a196ba53896fb",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/07-simple-exclusion/authorization-model.fga",
+    "sha256": "b22de20fd55acaf3cde7d1e699373ec5887b2512add9aeadcb1c4259266d23d3",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/07-simple-exclusion/authorization-model.json",
+    "sha256": "855bd3a459ccefc51c4e4b0a908e622646fe657f915f5a671a7ff73779cedbbe",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/08-tuple-to-userset/authorization-model.dot",
+    "sha256": "d376d4f88aad3ace842412d03756f953456e00ba74b4f0a13b030f255216e825",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/08-tuple-to-userset/authorization-model.fga",
+    "sha256": "6437deaa5068cd5e38e480918ac8bcebcadd229629f372cbd813c8778bf105df",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/08-tuple-to-userset/authorization-model.json",
+    "sha256": "c298035528b7645620fa66ad1dcc324a38bf73403408a1e93962f2380de42775",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/09-multiple-types/authorization-model.dot",
+    "sha256": "1666ea267493c3766b3aed7d003066128d5ef6c2d1707151ccce63129b3cea0a",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/09-multiple-types/authorization-model.fga",
+    "sha256": "5ff36ef48e607be1a99824e541c2c97cb0938abae5aa14f2d828a60599fda9c9",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/09-multiple-types/authorization-model.json",
+    "sha256": "076db1aeed3f288dc41df62ac66e9144e99f829b773f38379d5a06ab9d2ab045",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/10-multiple-types-with-one-empty-type/authorization-model.dot",
+    "sha256": "32a086c7df85af834342a3a018142a00b0367bd3d357553f242b0aa183c992b7",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/10-multiple-types-with-one-empty-type/authorization-model.fga",
+    "sha256": "45cd6770e7668e4ca7ec007f18d257f8ada808373a635b0e734cb6de3f64d485",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/10-multiple-types-with-one-empty-type/authorization-model.json",
+    "sha256": "80d7eb3a34603312000b4241426dacaee87b0d4ed3062e290bc8d1f7798cd177",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/100-ip-based-access/authorization-model.dot",
+    "sha256": "a54fd51a709c43c585a726e8d32569c8cb7fbe273741bff281af99e157bce8bb",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/100-ip-based-access/authorization-model.fga",
+    "sha256": "0d3aa2f4466c48ea43b7246bbc71c13019098cb42bd24555a26d1530e4731d34",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/100-ip-based-access/authorization-model.json",
+    "sha256": "c892e4ba37ccd2244a1be8b5075876cef86dad4390fac854a0dd8f46fab590cd",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/101-temporal-access/authorization-model.dot",
+    "sha256": "a483d8952d0da697ec3f697edf583dfe33765d0b7dd90bb3c147244811cca285",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/101-temporal-access/authorization-model.fga",
+    "sha256": "cb71a46f70b2061f597f035f6230370fa0c831674048071c71c846101f94f366",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/101-temporal-access/authorization-model.json",
+    "sha256": "33679c860307bb2cb6e45b254c8c44ddf6eaf2cf9cf4eec72147302a0a2bdca7",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/102-conditions-data-types/authorization-model.dot",
+    "sha256": "fbfbc2ffcf6775213036b37e826059225015db1321ce0328cb36ed0cbfc51090",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/102-conditions-data-types/authorization-model.fga",
+    "sha256": "6da78752b2c67316deed4670f09472d7afac67e606ca45d95965e456a600dc91",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/102-conditions-data-types/authorization-model.json",
+    "sha256": "45cef71f51a39494e8a3be7596c4378fec047bf50d9628743cf06c6c8d1581db",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/11-multiple-conditions/authorization-model.dot",
+    "sha256": "a483d8952d0da697ec3f697edf583dfe33765d0b7dd90bb3c147244811cca285",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/11-multiple-conditions/authorization-model.fga",
+    "sha256": "f85d1be322d4640cafaa551d3a69ddbaaf047b5439bd3418ad23b3b89870ae15",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/11-multiple-conditions/authorization-model.json",
+    "sha256": "59e939b77cdab0117a912b13ee4e9df41aa82d357a31dcd901734617f7f87bad",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/12-condition-with-less-than/authorization-model.dot",
+    "sha256": "a483d8952d0da697ec3f697edf583dfe33765d0b7dd90bb3c147244811cca285",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/12-condition-with-less-than/authorization-model.fga",
+    "sha256": "a1cce64f5dd389c91b2cb05eead08319d21cff070eda9685a4d217e44a5c16ee",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/12-condition-with-less-than/authorization-model.json",
+    "sha256": "0ff15e3e3742901eccb22548d27b660bcf9d298ac679f138fe2835a2f78e2c49",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/13-condition-with-brackets/authorization-model.dot",
+    "sha256": "a483d8952d0da697ec3f697edf583dfe33765d0b7dd90bb3c147244811cca285",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/13-condition-with-brackets/authorization-model.fga",
+    "sha256": "074fa5455ab053122405b38f69a3446af0610c45617e8ad8538a56586eac63c5",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/13-condition-with-brackets/authorization-model.json",
+    "sha256": "bd0df4dab7579625f34b040d0b6815911b53f7f053fc4afe89791b4f6f029bcc",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/14-mixed-operators/authorization-model.dot",
+    "sha256": "2177d4150ac7b41162dcf5f27b20497432c42a2049e2cce2557f010c0baa511d",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/14-mixed-operators/authorization-model.fga",
+    "sha256": "dd5e6c47807c0bd3bc75b9a5d01a1dab153efa3cac67716d99210fd018c216c6",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/14-mixed-operators/authorization-model.json",
+    "sha256": "2b63c2cf606031b1f02dfd6a266c6b9b43eb77301522f1908ac4959f5952529c",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/15-mixed-operators-with-direct-assignments-once-beginning-of-line/authorization-model.dot",
+    "sha256": "666b90bcbdc799933410a50a7398c8cb73d9596b1a5e207c4eabdbf8a4df3bad",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/15-mixed-operators-with-direct-assignments-once-beginning-of-line/authorization-model.fga",
+    "sha256": "f52727d4f5eaa13b34015c74fa8eccb275b52281de20afe783e79d7310d9353c",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/15-mixed-operators-with-direct-assignments-once-beginning-of-line/authorization-model.json",
+    "sha256": "39d198579ef51ef35a62e81c907d21b0867c32f0c6c741c7573e8c382f8870b5",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/90-github/authorization-model.dot",
+    "sha256": "90313aa375fbad5f9093555c05e5c1c25bcb3deae76b58e5eb361b289ba8e6df",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/90-github/authorization-model.fga",
+    "sha256": "ed061e40158231a918ca6921d02d92c4dbde66bc18818aa8bbb37bf21bf72c74",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/90-github/authorization-model.json",
+    "sha256": "08c36e0b9ce19fba00843ae9afe9a3d30d54cb38debba9d4910970a4eb0240e6",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/91-gdrive/authorization-model.dot",
+    "sha256": "7e99ae7cf49a73ffcf76ef57bb18059d55d661a236594113fc37f651019624ac",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/91-gdrive/authorization-model.fga",
+    "sha256": "dc110912376997f805ce559ca1db66a29d353dc0a6d81df0bf62fac64e9c20a3",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/91-gdrive/authorization-model.json",
+    "sha256": "44006118ff3139715bb6aa702f4274b92f1469af7cf4b05340873c64f17f86ae",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/92-expenses/authorization-model.dot",
+    "sha256": "9331ee8f0f3b89b9526b42b279acce59cb868f0523723fe3c8031c74d7c06949",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/92-expenses/authorization-model.fga",
+    "sha256": "e1bac9e57e2d949590401abe5d8b74a3e5cca3a3f17eaf9e7fb31323d7f69cad",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/92-expenses/authorization-model.json",
+    "sha256": "afd4adcc647e61e3a824872aa60d633938e4a08f3736571f015efa8d6b446c3d",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/93-slack/authorization-model.dot",
+    "sha256": "69c13cc3b5c8a2885e4293b388102851c8bbf014cd32f7405ea3d6f22adcfcbc",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/93-slack/authorization-model.fga",
+    "sha256": "61a93bdfbff6bf49357c177951a9127825a80f40ae9b5c982b6a15610790edc8",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/93-slack/authorization-model.json",
+    "sha256": "219a762d58dad0fedb78a357788d88cac01f957a4ef01d15e70df948b4c6f3b9",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/94-iot/authorization-model.dot",
+    "sha256": "5e4eb0378b69c3f3aaef6a2b8cdd34ed8b231f6452651143c25a91f976c0b5cd",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/94-iot/authorization-model.fga",
+    "sha256": "8672481dd4c3a0e85b792800c1a8f1f9923b026191958cdead03fd0a1723ffcd",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/94-iot/authorization-model.json",
+    "sha256": "76b2d23c030ad7fc492f7eaea6aead0021b0f631f522a03e64cfd558dcf0b57b",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/95-entitlements/authorization-model.dot",
+    "sha256": "2edb8f76760862b4301170a3b01cafb770f73fd8c0133818e77653c87a6e1fed",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/95-entitlements/authorization-model.fga",
+    "sha256": "b1e9ed0c13ee4054dab6514f45ebd2168b7570d4e8bfa1db5401a5e18e17c329",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/95-entitlements/authorization-model.json",
+    "sha256": "d3b87e4a5a7842c15b62c00df968cb06afe668d01780f85006d43cd39809c32e",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/96-custom-roles/authorization-model.dot",
+    "sha256": "91448e68772f08880ec39eee47dc165106ed85bed8975d0265d96fef7996f2e7",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/96-custom-roles/authorization-model.fga",
+    "sha256": "17cb2825781152809eee831f41d3680897c18bfe3e78d2af940e7dae4a728af8",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/96-custom-roles/authorization-model.json",
+    "sha256": "f10546b8de9670bb1bdc7ed39c36d505e38737cc95bb69f7a1a020b3616c7f46",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/97-advanced-entitlements/authorization-model.dot",
+    "sha256": "b13f7ed2841c3bee8ccd4658346f65b9bde6e2a7b03383c773b947ca66bf3d0e",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/97-advanced-entitlements/authorization-model.fga",
+    "sha256": "85710a182d3d193c0350b6a0636ef69cef48797712c6cd5f9d75e69bf0cd48ca",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/97-advanced-entitlements/authorization-model.json",
+    "sha256": "8977ebe1caa7a69e212f9707d2dd218f10e3078b470566907b2ba1f9caac136a",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/98-banking/authorization-model.dot",
+    "sha256": "c081bdb26c737cc4f3948699caa550e2a9ec8499afdeddbda10b1ed0fc6a1b9f",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/98-banking/authorization-model.fga",
+    "sha256": "784761b42116705d4a63d020d0ff387fe33a60947e1102a635a8c4dcd21b6751",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/98-banking/authorization-model.json",
+    "sha256": "00c44292fc4305bf63785ed26aa876cd262452229e2e485665d1643090c0a609",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/99-groups-resources-attributes/authorization-model.dot",
+    "sha256": "3b795f9d41c0853c053e77cdf7ef133454b5f4da31eaad0e778900fec7ca8f6d",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/99-groups-resources-attributes/authorization-model.fga",
+    "sha256": "2448cee15932caec4c519e5b67211f79fb957afac7300e7b9f137c1cfe310dfc",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer/99-groups-resources-attributes/authorization-model.json",
+    "sha256": "238c1ef4e676f6020be3ed610178fe14d7b43eea9134a18f5fde7c05b16f332a",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/00-simple-module/authorization-model.json",
+    "sha256": "e4230c73760403c4abe3ccede8f8dc1777d5dfa1630ad4be7bd288a86277e8da",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/00-simple-module/combined-sourceinfo.fga",
+    "sha256": "e5de6e385549ca0c1eb187f783738d4c4cacc54f7b72719cd7ab1af43161ce11",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/00-simple-module/combined.fga",
+    "sha256": "347116b0a3a83ff43c1cd1638566867e52ace8b73302806a1b7598060732196c",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/00-simple-module/expected_modules.json",
+    "sha256": "6bc342bd5d05867d3a4f46922ed0dda077719124e36f689ff7d8c94a32cb4523",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/00-simple-module/module/core.fga",
+    "sha256": "6d26553ee05e1de48df9892fbf3976b4adc09b301c6fb8fab2193d5d21ea702a",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/00-simple-module/module/org.fga",
+    "sha256": "b5c7dac02ab468358e105ef34cc8b8dbaf5930b963d7e72cad354bef9f5e00ca",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/01-module-with-errors/expected_errors.json",
+    "sha256": "9970c3c4853044b12c10b7a19fd78a98b3a178bd9e34246328e2ca7b1429076d",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/01-module-with-errors/module/core.fga",
+    "sha256": "f072be69e37e8daa41924941d84e84ea918ba1496f703d7c45f82eb5c7e74df3",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/01-module-with-errors/module/nomodule.fga",
+    "sha256": "2b784aca40e5f9556ccca1dd12645c2b5fc6da6b2938fb9c0987c4790349e4c1",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/01-module-with-errors/module/org.fga",
+    "sha256": "66aaf2597aa47514434b37ca78455e6e8fd832b15bec8c2ff5f28567164f8853",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/01-module-with-errors/module/syntax-error.fga",
+    "sha256": "3cc331e5abacb728b9e105c8b7da3a8038a2e816141bad282d319d0d9d691c7e",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/02-module-with-extends/authorization-model.json",
+    "sha256": "6522886e88e74122a23247a829e71fb8178c143af746be2eeced7d90a77b90d4",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/02-module-with-extends/combined-sourceinfo.fga",
+    "sha256": "9de89ea86dd2260a0222e4b806130c75b518a45313e6cca129cd842ee1e6791e",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/02-module-with-extends/combined.fga",
+    "sha256": "fa901a894de8090aab123e43e14a904b7b50dcc5acff9885275b52cc53ea3e99",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/02-module-with-extends/expected_modules.json",
+    "sha256": "c828a309ab153526b75d5a726f772b59466b3a487339ea9239011f2d2baabfe8",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/02-module-with-extends/module/board.fga",
+    "sha256": "908d49efc389151dfc319b30d1436c7cdb57f4d5160cab9438a1b52db305f047",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/02-module-with-extends/module/core.fga",
+    "sha256": "06a8f22f24ea5591988fe77eb68593d2a79be19ecff2732484d424ea2805f948",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/02-module-with-extends/module/org.fga",
+    "sha256": "7e20a2559df0645b8205aecd5a404cc8eca4627a1c2ab098a4722d70f67a2cb5",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/02-module-with-extends/module/otherboard.fga",
+    "sha256": "7bb5f0faf367faddb2206bba3416f0ce58b68a87d1a11ee27b92ec07551788c9",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/03-module-with-more-errors/expected_errors.json",
+    "sha256": "bb37e771acb7ec270b26a7a29a632bb3379781ff5926e4c546c53b51565664b2",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/03-module-with-more-errors/module/core.fga",
+    "sha256": "5715faf23196174d8245591517ac3b57c163ca9c559413522c573af8e33788fe",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/03-module-with-more-errors/module/org.fga",
+    "sha256": "45299b3a243cadc0d9eca832f1ae9c92503720c5af8226638ced0ec4aed1cf9f",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/04-module-with-even-more-errors/expected_errors.json",
+    "sha256": "e04292d72d024097cc65e89a783f3db58f93868f87c24e2aaa68b0fa8d8d92ca",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/04-module-with-even-more-errors/module/core.fga",
+    "sha256": "6aa618fba1cab6e208884293bf51296c1c57e26ae27ac5d6c8c2ef7cac158e17",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/05-module-with-relation-errors/expected_errors.json",
+    "sha256": "aab28c4fb2869d7cace0a8d284f13de3c5390423ec7c6af896f204bb38443488",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/05-module-with-relation-errors/module/employee.fga",
+    "sha256": "1ffc672c752e3a8e144d57b6bea95265df0ea4308dbffc3715d74f04460b5421",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/06-complex-module/authorization-model.json",
+    "sha256": "4223b6129a0ffaf9cdd4846c346c8d8f3d530a3e9ea41a2b1d258c13d76433e7",
+    "matches_cached": true
+  },
+  {
+    "path": "language/data/transformer-module/06-complex-module/expected_modules.json",
+    "sha256": "c59aeb98737253bb0732128906d1f344b47e9da839598ec9a1130dd3f376f9be",
+    "matches_cached": true
+  }
+]

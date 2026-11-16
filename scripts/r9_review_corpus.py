@@ -88,10 +88,18 @@ def api_cases():
         yield c
 
 
+    for expression in [
+        'int(-9.223372036854775808e18)<0',
+        'timestamp("0001-01-01T00:00:00Z")-duration("-9223372036854775808ns")>timestamp("0001-01-01T00:00:00Z")',
+        'timestamp("2026-01-01T00:00:00Z")-duration("-9223372036854775808ns")>timestamp("2026-01-01T00:00:00Z")',
+    ]:
+        yield condition_case(expression)
+
+
 def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,default=Path('conformance-results/r9-rework/review'));a=p.parse_args()
     a.output.mkdir(parents=True,exist_ok=True)
-    for name,values in [('cost',cost_cases()),('api',api_cases())]:
+    for name,values in [('cost',cost_cases()),('index',(c for c in cost_cases() if c['family'].startswith('index'))),('api',api_cases())]:
         rows=list(values);(a.output/f'{name}.json').write_text(json.dumps(rows,ensure_ascii=False)+'\n');print(name,len(rows))
 
 if __name__=='__main__':main()

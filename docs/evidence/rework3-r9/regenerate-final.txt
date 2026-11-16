@@ -1,0 +1,28 @@
+$ python3 scripts/generate_cost_regressions.py conformance-results/r9-rework/cost-20/run-20
+embedded 9862 pinned cost / boundary regressions
+exit=0
+
+$ python3 scripts/generate_r9_regressions.py conformance-results/r9-rework/api-final
+embedded 732 r9 model/evaluation outcomes
+exit=0
+
+$ moon fmt
+Finished. moon: ran 117 tasks, now up to date
+exit=0
+
+$ moon info
+Finished. moon: ran 26 tasks, now up to date
+exit=0
+
+$ git diff --exit-code -- *.mbti
+exit=0
+
+$ moon check --deny-warn
+Finished. moon: ran 27 tasks, now up to date
+exit=0
+
+$ moon fmt --check
+Finished. moon: ran 117 tasks, now up to date
+exit=0
+
+Regenerated fixture SHA256 unchanged: {'cel/cost_oracle_test.mbt': 'd668d68e39fabd2129955d0b0463673d69be532070bad15c23356b1a32c6cf66', 'cel/r9_oracle_test.mbt': 'a55bd3298e9fedf43c527789230193f3c54f6d0f3a721d6b4b965ac6f40ed0c2'}

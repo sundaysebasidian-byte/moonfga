@@ -21,6 +21,16 @@ offsets. Do not pass arbitrary POSIX TZ rules, TZif file paths or the alias Loca
 as a replacement zone. Unknown names produce E2000. Pinned tzdb data and updates
 are described in [timezones.md](timezones.md).
 
+Numeric offsets are a **MoonFGA host extension**, not an equivalent mapping of a
+Go/OpenFGA process's `TZ` environment variable. Signed `+05:30`, `-08:00` and
+unsigned `05:30` are accepted as fixed offsets. Go treats these TZ strings as
+invalid and falls back to UTC: at 2026-03-08T10:00:00Z its Local hour is 10,
+whereas the configured MoonFGA hours are 15, 2 and 15. Use a supported canonical
+IANA name to reproduce the server's zone. `scripts/r9_host_boundaries.py` records
+these three deliberate differences and four matching named zones. Names use
+canonical case; Go filesystem lookups on a case-insensitive OS can accept
+noncanonical spellings that this pinned, case-sensitive table rejects.
+
 ## Request deadline / deterministic work budget
 
 Create a fresh `@fga.ExecutionBudget::new(steps=10000)` per request, and bind it with
@@ -38,7 +48,12 @@ These units are deterministic for the same execution path and are **separate fro
 CEL cost**. They are not OpenFGA dispatch counts or elapsed milliseconds.
 
 Exhaustion or a true predicate raises `FgaError` **E4004** (`deadline_exceeded`).
-Failure is sticky and cannot be absorbed by a deciding union/boolean result.
+Synchronous request validation runs before the first budget step, including Check
+wrappers, list/Expand/Explain and batch items. Invalid requests retain their API
+validation error even with zero/negative steps or a true cancellation predicate.
+For valid requests, failure is sticky and cannot be absorbed by a deciding
+union/boolean result. Budget units are an implementation work counter, not an API
+promise that the same count remains unchanged across versions.
 `ExecutionBudget::check` checks only the predicate/terminal state; `step` also
 consumes one work unit. Zero/negative steps fail on the first step. Sharing a budget
 across calls intentionally shares remaining work and cancellation state.
@@ -51,7 +66,9 @@ cannot be interrupted by this synchronous library; use cancellable I/O in the ho
 ## Condition cost and error semantics
 
 `Engine::new(..., condition_cost_limit=100)` defaults to OpenFGA's per-condition
-runtime limit. `condition_cancelled` remains a per-condition callback; it and CEL's
+runtime limit. The cost-limit/report API is Int32; limits above 2147483647
+are not expressible here, although the server/Go driver accepts uint64 limits.
+`condition_cancelled` remains a per-condition callback; it and CEL's
 `cancelled` argument produce E2000. Cost-limit errors also produce E2000 and contain
 `cost limit exceeded`. Request budgets instead produce E4004 as above.
 `eval_expr_with_cost` returns `(value, actual_cost)` on successful evaluation after
@@ -80,3 +97,30 @@ reports E4004 from a request budget, including list APIs, and does not silently
 return a partial list: its Array result has no completeness marker. A host wanting
 OpenFGA's partial-list transport behavior must implement that policy explicitly.
 This is a concrete remaining API behavior difference, not a missing interrupt hook.
+
+## Tested index and conversion cost forms
+
+The r9 regression fix follows the pinned interpreter's attribute planning: one
+root charge per ordinary attribute path and one per field/index qualifier. An attribute
+used as a dynamic qualifier does not add another root read. Computed nonattribute
+subscripts still incur their expression costs. Conditional attributes have no
+separate root charge; their selector condition and selected branch computations
+are still charged. `[1,2,3][n]`, `{"a":1}[s]`, `[1,2,3][n]==1`,
+`[n,2,3][1]` and `[1,2,3][0]` cost 2, 2, 3, 13 and 2 respectively at n=0/s="a".
+The generated review corpus includes nested/conditional paths, macro-bound
+containers and unsupported string/bytes indexing checker/runtime cases.
+
+`int(double)` rejects values at or below -2^63 (and at or above +2^63);
+integer/string representations of MinInt64 remain distinct supported overloads.
+Timestamp subtraction of duration MinInt64 errors because the pinned interpreter's
+intermediate duration negation overflows, even where the mathematical timestamp
+would be representable. String-to-string and bytes-to-bytes identity conversions
+cost one; size-dependent charging applies to encoding/decoding conversions.
+
+The exact-cost corpus excludes the identified order-sensitive
+`{1:2,3:4}.exists(k,k==3)` case. In the separate 200-run pinned probe it costs 10
+or 13; limit=10 can therefore succeed or exceed cost. MoonFGA's deterministic map
+order cannot reproduce each randomized Go traversal. The ordinary API corpus can
+still test its Boolean result at the default budget 100. Separate order probes do
+not participate in the deterministic zero-mismatch count. The remaining corpus is
+finite; no cost-equivalence claim is made outside its measured inputs.

@@ -1,0 +1,37 @@
+oracle: 100/732
+oracle: 200/732
+oracle: 300/732
+oracle: 400/732
+oracle: 500/732
+oracle: 600/732
+oracle: 700/732
+{
+  "version": "1.22.1",
+  "commit": "44054f542f64e9b9589dd26a595081b3d2cfd942",
+  "timezone": "UTC",
+  "condition_cost_limit": 100,
+  "seed": 314159,
+  "cases": 732,
+  "random_cases": 0,
+  "regression_cases": 732,
+  "comparisons": 2196,
+  "mismatches": 0,
+  "families": {
+    "cel": 732
+  },
+  "by_api": {
+    "check": {
+      "compared": 732,
+      "mismatches": 0
+    },
+    "list_objects": {
+      "compared": 732,
+      "mismatches": 0
+    },
+    "list_users": {
+      "compared": 732,
+      "mismatches": 0
+    }
+  },
+  "corpus": "conformance-results/r9-rework/review-final/api.json"
+}

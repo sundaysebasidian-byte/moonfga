@@ -1,0 +1,15 @@
+{
+  "check": [
+    "deadline_exceeded",
+    "ok",
+    "resource_exhausted"
+  ],
+  "list_objects": [
+    "ok",
+    "resource_exhausted"
+  ],
+  "list_users": [
+    "ok",
+    "resource_exhausted"
+  ]
+}

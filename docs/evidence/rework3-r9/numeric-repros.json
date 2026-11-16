@@ -1,0 +1,112 @@
+[
+  {
+    "expression": "int(x)<0",
+    "context": {
+      "x": -9.223372036854776e+18
+    },
+    "official": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    },
+    "before": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "after": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    }
+  },
+  {
+    "expression": "int(x)<0",
+    "context": {
+      "x": -9.223372036854775e+18
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "before": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "after": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    }
+  },
+  {
+    "expression": "ts-d>ts",
+    "context": {
+      "ts": "0001-01-01T00:00:00Z",
+      "d": "-9223372036854775808ns"
+    },
+    "official": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    },
+    "before": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "after": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    }
+  },
+  {
+    "expression": "ts-d>ts",
+    "context": {
+      "ts": "2026-01-01T00:00:00Z",
+      "d": "-9223372036854775808ns"
+    },
+    "official": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    },
+    "before": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "after": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    }
+  }
+]

@@ -113,14 +113,14 @@ Known exceptions apply even when the ordinary overload is implemented.
 | map(v,expr), map(v,predicate,expr), filter  | 所列语料通过 | Lists and map keys; selected-element evaluation and result lists | D/R/U |
 | contains / startsWith / endsWith  | 所列语料通过 | Receiver string overloads | D/R/U |
 | matches  | 所列语料通过 | Receiver and global overloads; groups/named/noncapturing groups, alternation, counted/lazy repetition (leading-zero counts stay literal), i/m/s/U flags, boundaries, ASCII/POSIX/Unicode classes, scalar escapes, quoted literals | D/R/U; NFA stress L; program bound below |
-| int(int/uint/double/string/duration/timestamp)  | 所列语料通过 | Checked casts, decimal lexical rules, duration nanoseconds, timestamp epoch seconds | D/R |
+| int(int/uint/double/string/duration/timestamp)  | 所列语料通过 | Checked tested casts (including strict double > -2^63), decimal lexical rules, duration nanoseconds, timestamp epoch seconds | D/R |
 | uint(uint/int/double/string)  | 所列语料通过 | Decimal lexical rules, negative and range errors | D/R |
 | double(double/int/uint/string)  | 所列语料通过 | Decimal/hex strings and valid separators, exponent, unsigned NaN/Inf and malformed/overflow errors; signed NaN rejected | D/R |
 | bool(bool/string)  | 所列语料通过 | Pinned accepted true/false/t/f/1/0 and case spellings; invalid values error | D/R |
 | string(string/int/uint/double/bool/bytes/duration/timestamp)  | 所列语料通过 | Scalar formatting, negative zero, scientific exponent spelling, precise temporal forms; unsupported dynamic conversions error | D/R/U |
 | duration(string/duration)  | 所列语料通过 | Exact decimal fractional parsing, Go units, signed nanosecond bounds and identity conversion | D/R |
 | timestamp(string/int/timestamp)  | 所列语料通过 | RFC3339, epoch seconds, identity; constructor/context parsing differences, signed/range errors | D/R |
-| duration +/-; timestamp +/- duration; timestamp - timestamp  | 所列语料通过 | Checked duration range and timestamp endpoints | D/R/U |
+| duration +/-; timestamp +/- duration; timestamp - timestamp  | 所列语料通过 | Checked duration range and timestamp endpoints; timestamp subtraction rejects duration MinInt64 negation overflow | D/R/U |
 | duration getHours/getMinutes/getSeconds/getMilliseconds  | 所列语料通过 | Truncation toward zero at each unit | D/R |
 | timestamp getFullYear/getMonth/getDate/getDayOfMonth/getDayOfWeek/getDayOfYear/getHours/getMinutes/getSeconds/getMilliseconds  | 所列语料通过；Local 默认 UTC | UTC/default, numeric offsets and named IANA zones; historical and future DST; negative epochs and sub-milliseconds | D/R; 20 host-TZ probes |
 | dyn(value), any parameter  | 所列语料通过 | Erased annotation, dynamic JSON numbers as double, nested generic context types | D/R |
@@ -140,23 +140,32 @@ was added. Browser, JS, native and wasm all use the same MoonBit matcher and dat
 ## Host boundaries and remaining verification limits
 
 1. **Local and host TZ are defined.** Unconfigured Local now means UTC. Hosts can
-   configure a supported IANA zone or numeric offset; omitted getter arguments
+   configure a supported IANA zone; numeric offsets are an explicit host extension; omitted getter arguments
    always use UTC and timestamp string conversion preserves the parsed offset.
    Four server TZ settings / winter and summer / conversion probes match 20/20.
    An unset TZ on macOS may use OS localtime rather than a UTC container. Host
    configuration and exact semantics are in [runtime controls](runtime-controls.md).
+   Numeric Local settings (+05:30, -08:00 and unsigned 05:30) are not Go TZ
+   equivalents: Go falls back to UTC for those strings. This extension is retained
+   explicitly; four named-zone probes match and three offset differences are recorded.
 2. **Cost evidence and unordered maps.** The generated cel-go v0.31.0 corpus covers
-   9556 programs (9168 actual-cost comparisons and 388 evaluation-error categories)
-   and 44471 limit comparisons with no mismatches. It found and fixed
-   constant-list membership, false `exists_one` iterations, dyn, attribute/index
-   accounting, duration-string rounding and 32-bit string/regex cost overflow. 9168 successful actual-cost cases are
-   embedded offline, with exact limit and one-below-limit checks on each backend.
+   10266 programs (9862 actual-cost comparisons and 404 evaluation-error categories)
+   and 47938 limit comparisons per run, with 20/20 full runs passing. A separate
+   generated review corpus covers 609 index inputs across literal/variable/computed
+   qualifiers, nested/conditional paths, macro-bound containers and sizes 1..64
+   (three unsupported string/bytes overloads are checker exclusions). r9 fixed a
+   default-budget authorization regression caused by billing every index as 2.
+   The five reference costs are documented in runtime controls. The signed-double
+   lower boundary, minimum-duration subtraction and string/bytes identity costs
+   are also corrected. 9862 successful actual-cost cases are embedded offline.
    The separate HTTP corpus includes OpenFGA's IPAddress extension and costs at
    100/101/199/200/1000; results are in current validation evidence.
    The direct Go driver declares n:int, s:string and t:string. Type-invalid or
    OpenFGA-specific declarations are retained as compile exclusions; other typed
    contexts are covered by the existing full API corpus. Missing-declared-parameter
    cases use the API corpus because the server rejects them after partial evaluation.
+   The local limit/report API uses Int32 (maximum 2147483647); larger uint64
+   server limits are outside the supported host range.
    There is no local static estimator; the oracle's static estimate bounds are
    retained separately from actual runtime costs.
 
@@ -165,13 +174,19 @@ was added. Browser, JS, native and wasm all use the same MoonBit matcher and dat
    program 64 times upstream produces both success and cost-limit errors, with
    costs ranging from 10 to 101. Go randomizes map traversal; MoonFGA's traversal
    is deterministic. No deterministic evaluator can match each random run's exact
-   visited-key count. Ordinary cost comparisons therefore use order-independent
-   map predicates, and preserve the random-order probe separately. Map result order
+   visited-key count. r9 found that the prior ordinary corpus still contained
+   `{1:2,3:4}.exists(k,k==3)` and could fail randomly; the old 9556-program
+   "zero differences" claim was not reliably reproducible. That exact case and
+   its frozen cost are removed from ordinary cost comparisons and retained in
+   separate order probes. The 200-run probe records both costs 10/13 and both
+   limit=10 outcomes. This is an identified exclusion, not a universal statement
+   that every possible map predicate is order-independent. Map result order
    and multiple mutually exclusive protobuf Value oneof initialization likewise
    have no stable upstream order contract. Finite tests do not prove all inputs.
 3. **Request deadlines are first-class and cooperative.** `Engine::with_budget`
    accepts an ExecutionBudget shared by Check/list/Expand/Explain/batch and CEL.
-   Steps and a host cancellation/deadline predicate raise sticky E4004; per-condition
+   Synchronous validation precedes the first step. On valid requests, steps and
+   a host cancellation/deadline predicate raise sticky E4004; per-condition
    costs/callbacks retain E2000. Host clocks/I/O remain external. The pinned server
    can return partial/empty list results on timeout, whereas this library raises
    E4004 instead of presenting an incomplete Array as complete. Timing/race winners
@@ -210,6 +225,8 @@ python3 scripts/audit_cel_surface.py
 python3 scripts/oracle_host.py
 python3 scripts/oracle_cancellation.py
 python3 scripts/oracle_cost.py
+python3 scripts/r9_review_corpus.py
+python3 scripts/r9_host_boundaries.py
 python3 scripts/oracle_cost_openfga.py
 ```
 

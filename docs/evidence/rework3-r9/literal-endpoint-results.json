@@ -1,0 +1,26 @@
+[
+  {
+    "expression": "int(-9.223372036854775808e18)<0",
+    "official": {
+      "check": "M:invalid_authorization_model",
+      "list_objects": "M:invalid_authorization_model",
+      "list_users": "M:invalid_authorization_model"
+    }
+  },
+  {
+    "expression": "timestamp(\"0001-01-01T00:00:00Z\")-duration(\"-9223372036854775808ns\")>timestamp(\"0001-01-01T00:00:00Z\")",
+    "official": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    }
+  },
+  {
+    "expression": "timestamp(\"2026-01-01T00:00:00Z\")-duration(\"-9223372036854775808ns\")>timestamp(\"2026-01-01T00:00:00Z\")",
+    "official": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    }
+  }
+]

@@ -1,0 +1,181 @@
+[
+  {
+    "input": {
+      "family": "index",
+      "expression": "[1,2,3][n]",
+      "context": {
+        "n": 0,
+        "s": "a",
+        "t": "0"
+      },
+      "limit": 2147483647
+    },
+    "official": {
+      "category": "ok",
+      "cost": 2,
+      "estimate_max": 12,
+      "estimate_min": 12,
+      "value": "1",
+      "value_type": "int"
+    },
+    "before": {
+      "category": "ok",
+      "value": "1",
+      "cost": 3
+    },
+    "after": {
+      "category": "ok",
+      "value": "1",
+      "cost": 2
+    }
+  },
+  {
+    "input": {
+      "family": "index",
+      "expression": "{\"a\":1}[s]",
+      "context": {
+        "n": 0,
+        "s": "a",
+        "t": "0"
+      },
+      "limit": 2147483647
+    },
+    "official": {
+      "category": "ok",
+      "cost": 2,
+      "estimate_max": 32,
+      "estimate_min": 32,
+      "value": "1",
+      "value_type": "int"
+    },
+    "before": {
+      "category": "ok",
+      "value": "1",
+      "cost": 3
+    },
+    "after": {
+      "category": "ok",
+      "value": "1",
+      "cost": 2
+    }
+  },
+  {
+    "input": {
+      "family": "index",
+      "expression": "[1,2,3][n]==1",
+      "context": {
+        "n": 0,
+        "s": "a",
+        "t": "0"
+      },
+      "limit": 2147483647
+    },
+    "official": {
+      "category": "ok",
+      "cost": 3,
+      "estimate_max": 13,
+      "estimate_min": 13,
+      "value": "true",
+      "value_type": "bool"
+    },
+    "before": {
+      "category": "ok",
+      "value": "true",
+      "cost": 4
+    },
+    "after": {
+      "category": "ok",
+      "value": "true",
+      "cost": 3
+    }
+  },
+  {
+    "input": {
+      "family": "index",
+      "expression": "[n,2,3][1]",
+      "context": {
+        "n": 0,
+        "s": "a",
+        "t": "0"
+      },
+      "limit": 2147483647
+    },
+    "official": {
+      "category": "ok",
+      "cost": 13,
+      "estimate_max": 12,
+      "estimate_min": 12,
+      "value": "2",
+      "value_type": "int"
+    },
+    "before": {
+      "category": "ok",
+      "value": "2",
+      "cost": 13
+    },
+    "after": {
+      "category": "ok",
+      "value": "2",
+      "cost": 13
+    }
+  },
+  {
+    "input": {
+      "family": "index",
+      "expression": "[1,2,3][0]",
+      "context": {
+        "n": 0,
+        "s": "a",
+        "t": "0"
+      },
+      "limit": 2147483647
+    },
+    "official": {
+      "category": "ok",
+      "cost": 2,
+      "estimate_max": 11,
+      "estimate_min": 11,
+      "value": "1",
+      "value_type": "int"
+    },
+    "before": {
+      "category": "ok",
+      "value": "1",
+      "cost": 2
+    },
+    "after": {
+      "category": "ok",
+      "value": "1",
+      "cost": 2
+    }
+  },
+  {
+    "input": {
+      "family": "identity",
+      "expression": "string(string(1234567.0+double(n)))",
+      "context": {
+        "n": 0,
+        "s": ""
+      },
+      "limit": 2147483647
+    },
+    "official": {
+      "category": "ok",
+      "cost": 5,
+      "estimate_max": 5,
+      "estimate_min": 5,
+      "value": "1.234567e+06",
+      "value_type": "string"
+    },
+    "before": {
+      "category": "ok",
+      "value": "\"1.234567e+06\"",
+      "cost": 6
+    },
+    "after": {
+      "category": "ok",
+      "value": "\"1.234567e+06\"",
+      "cost": 5
+    }
+  }
+]

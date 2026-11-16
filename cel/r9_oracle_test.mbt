@@ -2917,5 +2917,17 @@ test "r9 official API outcomes 3" {
       "ts-d>ts", "{\"ts\": \"2026-01-01T00:00:00Z\", \"d\": \"-9223372036854775808ns\"}",
       "E2000", "{\"ts\": {\"type_name\": \"TYPE_NAME_TIMESTAMP\"}, \"d\": {\"type_name\": \"TYPE_NAME_DURATION\"}}",
     ),
+    (
+      "int(-9.223372036854775808e18)<0", "{\"n\": 0, \"s\": \"\"}", "M:invalid_authorization_model",
+      "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "timestamp(\"0001-01-01T00:00:00Z\")-duration(\"-9223372036854775808ns\")>timestamp(\"0001-01-01T00:00:00Z\")",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
+    (
+      "timestamp(\"2026-01-01T00:00:00Z\")-duration(\"-9223372036854775808ns\")>timestamp(\"2026-01-01T00:00:00Z\")",
+      "{\"n\": 0, \"s\": \"\"}", "E2000", "{\"n\": {\"type_name\": \"TYPE_NAME_INT\"}, \"s\": {\"type_name\": \"TYPE_NAME_STRING\"}}",
+    ),
   ])
 }

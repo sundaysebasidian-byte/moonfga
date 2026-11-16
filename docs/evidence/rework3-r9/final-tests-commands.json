@@ -1,0 +1,42 @@
+[
+  {
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "native"
+    ],
+    "exit": 0,
+    "seconds": 12.746
+  },
+  {
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "wasm-gc"
+    ],
+    "exit": 0,
+    "seconds": 2.898
+  },
+  {
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "js"
+    ],
+    "exit": 0,
+    "seconds": 6.163
+  },
+  {
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "wasm"
+    ],
+    "exit": 0,
+    "seconds": 8.005
+  }
+]

@@ -1,0 +1,246 @@
+[
+  {
+    "items": 13,
+    "parameter": "x",
+    "expression": "[0,0,0,0,0,0,0,0,0,0,0,0,0].all(i,[1][x]==1)",
+    "context": {
+      "x": 0
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    }
+  },
+  {
+    "items": 13,
+    "parameter": "k",
+    "expression": "[0,0,0,0,0,0,0,0,0,0,0,0,0].all(i,{\"a\":1}[k]==1)",
+    "context": {
+      "k": "a"
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    }
+  },
+  {
+    "items": 14,
+    "parameter": "x",
+    "expression": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0].all(i,[1][x]==1)",
+    "context": {
+      "x": 0
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    }
+  },
+  {
+    "items": 14,
+    "parameter": "k",
+    "expression": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0].all(i,{\"a\":1}[k]==1)",
+    "context": {
+      "k": "a"
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    }
+  },
+  {
+    "items": 15,
+    "parameter": "x",
+    "expression": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0].all(i,[1][x]==1)",
+    "context": {
+      "x": 0
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    }
+  },
+  {
+    "items": 15,
+    "parameter": "k",
+    "expression": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0].all(i,{\"a\":1}[k]==1)",
+    "context": {
+      "k": "a"
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    }
+  },
+  {
+    "items": 16,
+    "parameter": "x",
+    "expression": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0].all(i,[1][x]==1)",
+    "context": {
+      "x": 0
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    }
+  },
+  {
+    "items": 16,
+    "parameter": "k",
+    "expression": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0].all(i,{\"a\":1}[k]==1)",
+    "context": {
+      "k": "a"
+    },
+    "official": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    },
+    "local": {
+      "check": true,
+      "list_objects": [
+        "doc:1"
+      ],
+      "list_users": [
+        "user:1"
+      ]
+    }
+  },
+  {
+    "items": 17,
+    "parameter": "x",
+    "expression": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0].all(i,[1][x]==1)",
+    "context": {
+      "x": 0
+    },
+    "official": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    },
+    "local": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    }
+  },
+  {
+    "items": 17,
+    "parameter": "k",
+    "expression": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0].all(i,{\"a\":1}[k]==1)",
+    "context": {
+      "k": "a"
+    },
+    "official": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    },
+    "local": {
+      "check": "E2000",
+      "list_objects": "E2000",
+      "list_users": "E2000"
+    }
+  }
+]

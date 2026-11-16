@@ -1,0 +1,19 @@
+check viewer u1 | unbudgeted=true huge=true neg=E4004 negmin=E4004 cancelled=E4004 min_steps=39 after=true flip=E4004/true wrong=0
+check viewer u3 | unbudgeted=false huge=false neg=E4004 negmin=E4004 cancelled=E4004 min_steps=52 after=false flip=E4004/true wrong=0
+check both u1 | unbudgeted=true huge=true neg=E4004 negmin=E4004 cancelled=E4004 min_steps=39 after=true flip=E4004/true wrong=0
+check first_heavy u4 | unbudgeted=true huge=true neg=E4004 negmin=E4004 cancelled=E4004 min_steps=149 after=true flip=E4004/true wrong=0
+check first_broken u4 | unbudgeted=true huge=true neg=E4004 negmin=E4004 cancelled=E4004 min_steps=22 after=true flip=E4004/true wrong=0
+check cost_then_cheap u4 | unbudgeted=true huge=true neg=E4004 negmin=E4004 cancelled=E4004 min_steps=28 after=true flip=E4004/true wrong=0
+check rx u1 | unbudgeted=E2000 huge=E2000 neg=E4004 negmin=E4004 cancelled=E4004 min_steps=11 after=E2000 flip=E4004/true wrong=0
+check_with ctx-tuple | unbudgeted=true huge=true neg=E4004 negmin=E4004 cancelled=E4004 min_steps=31 after=true flip=E4004/true wrong=0
+check invalid relation | unbudgeted=E2000 huge=E2000 neg=E4004 negmin=E4004 cancelled=E4004 min_steps=2 after=E2000 flip=E2000/true wrong=0
+list_objects viewer u1 | unbudgeted=E2000 huge=E2000 neg=E4004 negmin=E4004 cancelled=E4004 min_steps=253 after=E2000 flip=E4004/true wrong=0
+list_objects heavy u4 | unbudgeted=E2000 huge=E2000 neg=E4004 negmin=E4004 cancelled=E4004 min_steps=145 after=E2000 flip=E4004/true wrong=0
+list_users viewer | unbudgeted=E2000 huge=E2000 neg=E4004 negmin=E4004 cancelled=E4004 min_steps=306 after=E2000 flip=E4004/true wrong=0
+list_users first_broken | unbudgeted=E2000 huge=E2000 neg=E4004 negmin=E4004 cancelled=E4004 min_steps=18 after=E2000 flip=E4004/true wrong=0
+expand viewer | unbudgeted=704 huge=704 neg=E4004 negmin=E4004 cancelled=E4004 min_steps=31 after=704 flip=E4004/true wrong=0
+explain viewer u1 | unbudgeted=true huge=true neg=E4004 negmin=E4004 cancelled=E4004 min_steps=38 after=true flip=E4004/true wrong=0
+batch 3 | unbudgeted=[true, true, true] huge=[true, true, true] neg=[E4004, E4004, E4004] negmin=[E4004, E4004, E4004] cancelled=[E4004, E4004, E4004] min_steps=197 after=[true, true, true] flip=[E4004, E4004, E4004]/true wrong=0
+batch shared: [E4004, E4004]
+cost-vs-budget: [E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, E4004*, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]
+violations=0

@@ -1,4 +1,214 @@
-# Rework 3 validation — 0.2.5
+# Rework 3 validation — 0.2.5, independent r9 closure
+
+Runtime implementation: `f0dc800` (CEL fix `90cc84f`, deterministic corpus `513ff2c`),
+branch `compat-0.2.5`; based on reviewed candidate `7510dde`, published baseline
+`88912977aaa3a81edf6c2f2717d7287f5ca4ba86`. The final evidence commit also exports the
+focused index corpus. No repository fetch, main-checkout edit, push, tag or publish.
+Toolchain: moon 0.1.20261104 (940aa18), `/tmp/moon-new`; Node v22.23.5;
+Go go1.27.1 darwin/arm64. Oracle: real local OpenFGA v1.22.1 build
+44054f542f64e9b9589dd26a595081b3d2cfd942 and cel-go v0.31.0. The Go driver was built
+offline from scripts/cel-oracle using `GOFLAGS=-mod=mod GOPROXY=off`; its hash is in
+[repeat proof](rework3-r9/repeat-proof.json). Neither required oracle disappeared.
+
+The old 7510dde "9556 programs / zero differences" claim was not reliably
+reproducible: one map-short-circuit cost was randomized, and a variable-index cost
+regression was absent from that corpus. The corrected evidence below supersedes
+that cost claim. Historical transcripts are retained after this section.
+
+## Findings, fixes and independent evidence
+
+| Review item | Resolution / measured evidence |
+| --- | --- |
+| B1 index billing changes authorization | Share one root per attribute path; charge qualifiers separately, including variable/computed indices, nested and conditional paths, macro-bound containers and field/presence forms. `[1,2,3][n]`, `{"a":1}[s]`, `[1,2,3][n]==1`, `[n,2,3][1]`, `[1,2,3][0]` now cost **2/2/3/13/2**. [Before/after cost records](rework3-r9/cost-repros.json). |
+| B1 default-budget API repro | Both original x:int / k:string conditions match OpenFGA at lengths 13/14/**15/16=true**, 17=E2000, across Check/ListObjects/ListUsers. [Exact inputs/results](rework3-r9/authorization-thresholds.json). |
+| I1 int(double) lower endpoint | Reject d <= -2^63, retaining adjacent valid double, int and decimal-string overload behavior. Typed x:double API repro now E2000 / upstream HTTP 400 instead of true. The exact constant literal form is rejected at model construction, matching the oracle. |
+| I2 timestamp - duration(MinInt64) | Reject the intermediate duration negation overflow, including year 0001 and 2026 inputs; addition and adjacent duration values remain separately tested. [Numeric before/after records](rework3-r9/numeric-repros.json). |
+| S1 flaky ordinary cost item | Remove `{1:2,3:4}.exists(k,k==3)` from ordinary costs and frozen cost 13. Keep its Boolean/default-budget API test; keep cost non-determinism in separate order probes. **20/20 complete normal cost runs pass**, with identical normal corpus input hashes. |
+| S2 string(string(double)) cost | Charge string->string and bytes->bytes identity overloads as 1, including empty and long inputs; retain size-based encoding/decoding costs. The 1234567.0+n nested string repro now costs 5, not 6. |
+| S3 validation vs exhausted budget | Run synchronous request validation before the first step, across Check wrappers, list APIs, Expand/Explain and batch items. Invalid Check retains E2000 even with steps 0/1/negative or cancelled=true; list APIs retain their own specific validation code. [Old reviewed binary behavior](rework3-r9/validation-before.txt), [new regression](rework3-r9/validation-after.txt). Sticky E4004 still wins during valid evaluation. |
+| S4 numeric Local vs process TZ | Retain fixed signed/unsigned offsets as a documented host extension. Go TZ=+05:30/-08:00/05:30 falls back to UTC (hour 10); configured local offsets produce 15/2/15. Four named zones match. [Actual server/local records](rework3-r9/host-boundaries.json). |
+
+The focused index generator has **609 inputs**: 605 successful cost comparisons,
+one dynamic-string evaluation error and three unsupported string/bytes checker
+exclusions; **3023 limit comparisons**, zero mismatches. The complete review
+corpus has 715 inputs (712 comparable plus three exclusions), **3477 limit
+comparisons**, zero mismatches. Its HTTP corpus has **732 models / 2196 comparison
+slots**, zero mismatches ([latest real API output](rework3-r9/api-final-output.txt)). Long expression model rejections occupy mirrored API
+slots, rather than being queried. 732 official outcomes are embedded in
+`cel/r9_oracle_test.mbt`; 9862 successful costs in `cel/cost_oracle_test.mbt`.
+`scripts/r9_review_corpus.py`, the generators and manual boundary tests are tracked.
+The underlying 7510dde budget probe source was verified against Git before running
+the reviewer's existing binary; its fingerprint is retained with the transcript.
+
+## Repeatability and retained map exception
+
+Each of the 20 full runs executes `scripts/oracle_cost.py` using the same prebuilt
+pinned Go driver; each compares **10266 programs** (9862 successful actual costs,
+404 evaluation-error categories), plus **47938 limit categories**. 307 compiler
+exclusions are retained separately. **Pass count: 20/20; zero ordinary mismatches
+in every run.** The unchanged default `go run` route also completes with the same
+counts and zero mismatches under offline Go settings. [All run exits/times/counts](rework3-r9/cost-20-runs.json),
+[identical input hashes](rework3-r9/repeat-proof.json), [default counts](rework3-r9/cost-summary.json).
+
+The two-key map remains a real, documented exception. In a separate 200-run
+unlimited probe it costs 10 or 13; at limit 10, success and limit errors both occur.
+The exact observed frequencies, not an assumed distribution, are in
+[order results](rework3-r9/order-summary.json). Go randomizes map traversal;
+MoonFGA's traversal is deterministic. Matching every random traversal's cost is
+not feasible. This probe does not contribute to the ordinary zero-mismatch count.
+The twenty-key probe and oneof/result-order boundaries also remain separate.
+Finite tests do not establish arbitrary-input cost equivalence or equivalence of
+static estimates; the local API reports successful actual cost only, uses Int32
+limits/reports and cannot express server uint64 limits above 2147483647.
+
+## Acceptance commands and real output
+
+All **49** local workflow/differential commands exited 0. After adding the three exact literal endpoint variants, the 732-model API differential and all four complete backend test suites passed again; [latest test output](rework3-r9/final-tests-output.txt) is retained separately. [Full pasted output](rework3-r9/acceptance-output.txt)
+and [command/exit/duration metadata](rework3-r9/commands.json) retain every command.
+Committed copies remove trailing whitespace and replace the workspace prefix with
+`$REPO`; unmodified raw outputs remain under `conformance-results/r9-rework/`.
+
+```text
+$ moon test --target native
+Total tests: 279, passed: 279, failed: 0.
+$ moon test --target wasm-gc
+Total tests: 279, passed: 279, failed: 0.
+$ moon test --target js
+Total tests: 279, passed: 279, failed: 0.
+$ moon test --target wasm
+Total tests: 279, passed: 279, failed: 0.
+
+totals: check 516/516, list_objects 354/354, list_users 393/394
+check        516/516  100.00%  (target 95%)
+list_objects 354/354  100.00%  (target 90%)
+list_users   393/394  99.75%  (target 90%)
+```
+
+| # | Command | Exit |
+| ---: | --- | ---: |
+| 0 | `moon version --all` | 0 |
+| 1 | `node --version` | 0 |
+| 2 | `moon update` | 0 |
+| 3 | `moon info` | 0 |
+| 4 | `git diff --exit-code -- '*.mbti'` | 0 |
+| 5 | `moon check --deny-warn` | 0 |
+| 6 | `moon check --deny-warn --target native` | 0 |
+| 7 | `moon check --deny-warn --target wasm-gc` | 0 |
+| 8 | `moon check --deny-warn --target js` | 0 |
+| 9 | `moon check --deny-warn --target wasm` | 0 |
+| 10 | `moon build` | 0 |
+| 11 | `moon fmt --check` | 0 |
+| 12 | `moon test --target native` | 0 |
+| 13 | `moon test --target wasm-gc` | 0 |
+| 14 | `moon test --target js` | 0 |
+| 15 | `moon test --target wasm` | 0 |
+| 16 | `scripts/build-web.sh` | 0 |
+| 17 | `node web/smoke.mjs` | 0 |
+| 18 | `moon run examples/library` | 0 |
+| 19 | `moon run cmd/main -- validate examples/basic/model.fga` | 0 |
+| 20 | `moon run cmd/main -- transform examples/basic/model.fga --to json` | 0 |
+| 21 | `moon run cmd/main -- transform examples/basic/model.fga --to dsl` | 0 |
+| 22 | `moon run cmd/main -- check --model examples/basic/model.fga --store examples/basic/tuples.fga --object document:budget --relation viewer --user user:bob --explain` | 0 |
+| 23 | `moon run cmd/main -- list-objects --model examples/basic/model.fga --store examples/basic/tuples.fga --type document --relation viewer --user user:bob` | 0 |
+| 24 | `moon run cmd/main -- list-users --model examples/basic/model.fga --store examples/basic/tuples.fga --object document:budget --relation viewer --filters user` | 0 |
+| 25 | `moon run cmd/main -- expand --model examples/basic/model.fga --store examples/basic/tuples.fga --object document:budget --relation viewer` | 0 |
+| 26 | `moon run cmd/main -- check --model examples/abac/model.fga --store examples/abac/tuples.fga --object document:plan --relation viewer --user user:dana --context '{"office":"hq","allowed":["remote"]}'` | 0 |
+| 27 | `moon run cmd/main -- test examples/basic/store.fga.yaml` | 0 |
+| 28 | `moon run cmd/main -- test examples/abac/store.fga.yaml` | 0 |
+| 29 | `scripts/conformance.sh` | 0 |
+| 30 | `moon run cmd/language` | 0 |
+| 31 | `env CONFORMANCE_TARGET=native scripts/conformance.sh` | 0 |
+| 32 | `moon run --target native cmd/language` | 0 |
+| 33 | `python3 scripts/test-modules.py` | 0 |
+| 34 | `node scripts/test-explain.mjs` | 0 |
+| 35 | `scripts/oracle-openfga.sh --cases 1000 --seed 314159 --output conformance-results/rework3-seed314159` | 0 |
+| 36 | `scripts/oracle-openfga.sh --cases 1000 --seed 271828 --output conformance-results/rework3-seed271828` | 0 |
+| 37 | `python3 scripts/oracle_cel.py --seed 20261108 --output conformance-results/rework3-cel` | 0 |
+| 38 | `python3 scripts/oracle_cel.py --seed 20261109 --output conformance-results/rework3-cel-seed20261109` | 0 |
+| 39 | `python3 scripts/r8_divergences.py` | 0 |
+| 40 | `python3 scripts/oracle_openfga.py --corpus conformance-results/r8-divergences/corpus.json --output conformance-results/rework3-directed` | 0 |
+| 41 | `python3 scripts/audit_cel_surface.py` | 0 |
+| 42 | `python3 scripts/oracle_host.py` | 0 |
+| 43 | `python3 scripts/oracle_cost_openfga.py` | 0 |
+| 44 | `git diff --check` | 0 |
+| 45 | `python3 scripts/oracle_openfga.py --corpus conformance-results/r9-rework/review-final3/api.json --output conformance-results/r9-rework/api-acceptance` | 0 |
+| 46 | `python3 scripts/r9_host_boundaries.py` | 0 |
+| 47 | `python3 scripts/r9_order_probe.py --oracle conformance-results/r9-rework/celoracle` | 0 |
+| 48 | `python3 scripts/oracle_cost.py --output conformance-results/r9-rework/cost-default` | 0 |
+
+Additional completed checks: `scripts/fetch-upstream.sh` in fresh isolated staging
+(exit 0, all **130/130** downloaded fixture hashes equal the protected pinned
+cache; [fetch output](rework3-r9/fetch.txt), [hashes](rework3-r9/upstream-hashes.json)); existing `oracle_directed.py` (**204 / 612 / 0 mismatches**); focused index
+cost script (606 comparable programs / 3023 limits / 0); cost/API fixture
+regeneration leaves fixture hashes unchanged ([final regeneration transcript](rework3-r9/regenerate-final.txt)); Python compilation and shell syntax checks pass.
+The separate `oracle_cancellation.py` was rerun (exit 0): Check observed ok,
+deadline_exceeded and resource_exhausted; list APIs observed ok and
+resource_exhausted. The direct CEL cancellation returned its expected evaluation
+error containing context canceled. [Raw deadline responses](rework3-r9/cancellation-results.json),
+[CEL cancellation](rework3-r9/cel-cancelled.json). These timing observations do
+not imply a stable race winner or matching partial-list transport policy.
+
+- Both graph seeds **314159 and 271828**: each 1095 cases / 3285 comparisons / 0 mismatches.
+- Both CEL seeds **20261108 and 20261109**: each 6662 models / 19986 slots / 0 mismatches.
+- r8 directed: 25 cases / 75 slots / 0 mismatches. Surface audit 22/22; original host-TZ 20/20.
+- Existing HTTP cost corpus: 990 models / 2970 comparisons / 0 mismatches at 100/101/199/200/1000.
+- Model/language fixtures pass; upstream module 06 still lacks source inputs. Web smoke 36/36.
+
+Every executable workflow command is represented above, including native variants
+of the newly wired Windows offline matrix/language steps. GitHub checkout/install
+and setup actions are not local runner executions: the requested pinned MoonBit
+installation was reused and `moon update` ran; Node major 22 was used. Windows
+PowerShell installation, MSVC, Windows python3 availability and actual windows-latest
+execution remain **unverified** on this macOS host. No new CI run is claimed.
+Pages build/smoke pass locally; artifact upload, configure-pages and deployment
+were not executed because this task forbids publishing. These action-level limits
+are unchanged from the workflow coverage table in the historical section below.
+
+## Interleaved A/B versus published 0.2.4
+
+Baseline A is 8891297, verified against **377 tracked Git blobs**, without editing
+the main checkout. B is the fixed runtime f0dc800. Existing native 100k-tuple
+Check/ListObjects benchmarks ran in **A B B A A B** order, all **2/2**, after oracle
+and validation work completed. Compilation is outside benchmark timing. Raw means,
+ranges and standard deviations are retained; no slow sample was discarded.
+
+| Metric (median of 3 per-run means) | 0.2.4 | Fixed 0.2.5 | Delta |
+| --- | ---: | ---: | ---: |
+| Check | 4.51 us | 4.50 us | -0.22% |
+| ListObjects | 22.57 ms | 22.77 ms | +0.89% |
+
+[All benchmark samples](rework3-r9/benchmark-samples.json) and six raw transcripts
+are retained. This short series shows a small positive ListObjects shift, not
+proof of exactly zero regression. It cannot establish production/ABAC/regex
+performance equivalence or remove host-load uncertainty.
+
+## Exact remaining boundaries and closeout
+
+I1/I2 and the indexed-authorization regression are fixed, not hidden as exceptions.
+Retained differences are: randomized map short-circuit cost/order; fixed-offset
+Local configuration as an extension rather than Go TZ mapping; canonical/pinned
+timezone data versus OS lookup/data; E4004 rather than unmarked partial lists on
+request timeout; cooperative checkpoints rather than preemption of host I/O/model
+checking/regex construction; finite NFA memory/nesting and pinned Unicode data;
+rejecting unhashable keys instead of reproducing an upstream process crash; and
+unspecified multi-oneof/trace order. Direct missing-variable/partial-activation cost
+behavior below OpenFGA's server cost floor is outside this API claim. Windows and
+Linux case-only OS timezone lookup differences were not locally validated.
+
+Closeout retains current source, shared dependencies, baseline source and all raw
+repro/20-run outputs. No task-owned oracle server is left running. No cleanup move
+or freed-space claim is made without a verified Trash destination; the prior OS
+Trash access denial is not bypassed. The fresh download staging and the initially
+created empty staging directory remain candidates/retained items. Final manifest,
+source-only backup fingerprint, Git state, process inventory and df readings are
+in `conformance-results/r9-rework/closeout/`. Old source/test copies are retained:
+no precise remote-backup/ownership proof permits removing them.
+
+The following content is the **historical 7510dde snapshot**, including the former
+cost result later shown to be flaky. It is retained for provenance and is superseded
+by this r9 section.
+
+## Historical 7510dde validation
 
 Implementation: `29529ea` on `compat-0.2.5`, based on main
 `88912977aaa3a81edf6c2f2717d7287f5ca4ba86`. Later documentation commits do not change code.
@@ -10,7 +220,7 @@ v0.10.20+65efd5b93, moonrun 0.1.20261104. Final JS/CLI/web checks used Node
 locally. OpenFGA v1.22.1 is checksum-verified by the existing oracle downloader;
 Go dependencies pin cel-go v0.31.0 in scripts/cel-oracle/go.mod and go.sum.
 
-## Exact command results
+### Exact command results
 
 All 45 final local commands exited 0. [Command metadata](rework3/commands.json)
 records each command, exit and duration. [Full real output](rework3/acceptance-output.txt)
@@ -97,7 +307,7 @@ list_objects 354/354  100.00%  (target 90%)
 list_users   393/394  99.75%  (target 90%)
 ```
 
-## Differential counts and scope
+### Differential counts and scope
 
 - Graph seeds 314159 / 271828: each 1095 cases, 3285 comparisons, zero mismatches.
 - CEL seeds 20261108 / 20261109: each 6662 models, 19986 comparison slots, zero mismatches. Rejected models occupy three mirrored slots, rather than three queries.
@@ -115,7 +325,7 @@ Large corpus bodies/expected/actual/errors remain under the corresponding ignore
 `conformance-results/rework3-*` directories; generation scripts and offline outcomes
 are committed. No finite corpus is described as a proof for all programs.
 
-## Repairs and before/after evidence
+### Repairs and before/after evidence
 
 - Local no longer raises E2000 when unconfigured; it resolves to UTC. A configured
   host zone affects explicit Local getters only. Omitted getter timezones remain UTC;
@@ -151,7 +361,7 @@ comparison. The final large-regex probe uses 75000 inline-flag groups to exercis
 same-size cost overflow with an empty compiled program. Arbitrary enormous regex
 compile/evaluation performance equivalence remains unverified.
 
-## Workflow step coverage
+### Workflow step coverage
 
 | Workflow step | Local result / limit |
 | --- | --- |
@@ -175,7 +385,7 @@ JS/wasm-gc test execution is in Linux jobs. Live Go/server differentials are man
 macOS-arm64/Linux-amd64 scripts, not existing CI jobs. No local Windows run or new
 GitHub CI run is claimed in this no-push task.
 
-## Benchmarks
+### Benchmarks
 
 A = main 8891297 source archive; B = current branch. Same pinned toolchain,
 existing 100k-tuple Check/ListObjects benchmarks, `A B B A A B` order per series.
@@ -200,7 +410,7 @@ but do not establish a universal or statistically tight "no regression" guarante
 The benchmarks contain no CEL conditions, so they do not establish ABAC/regex
 performance equivalence or production latency.
 
-## Remaining concrete boundaries
+### Remaining concrete boundaries
 
 The old unconfigured Local error and missing graph-wide interruption hook are
 resolved. Remaining boundaries are enumerated, with reasons, in
@@ -213,7 +423,7 @@ remain deliberate policies; upstream unhashable-key process crashes are rejected
 safely; Windows execution and full-input cost equivalence are not proven by this
 macOS run. No unsupported function gap is hidden behind these limits.
 
-## Closeout
+### Closeout
 
 Closeout performed no Trash moves or manual permanent deletions. Access to the native Trash was denied
 with `Operation not permitted`; per the supplied closeout rules it was not retried

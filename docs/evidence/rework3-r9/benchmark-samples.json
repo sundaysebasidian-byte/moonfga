@@ -1,0 +1,32 @@
+[
+  {
+    "sample": "A1",
+    "check_us": 4.51,
+    "list_ms": 22.57
+  },
+  {
+    "sample": "A2",
+    "check_us": 4.8,
+    "list_ms": 22.72
+  },
+  {
+    "sample": "A3",
+    "check_us": 4.49,
+    "list_ms": 22.42
+  },
+  {
+    "sample": "B1",
+    "check_us": 4.5,
+    "list_ms": 22.77
+  },
+  {
+    "sample": "B2",
+    "check_us": 4.42,
+    "list_ms": 22.85
+  },
+  {
+    "sample": "B3",
+    "check_us": 4.55,
+    "list_ms": 22.52
+  }
+]

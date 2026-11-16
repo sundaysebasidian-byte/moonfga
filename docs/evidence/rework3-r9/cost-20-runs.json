@@ -1,0 +1,907 @@
+[
+  {
+    "run": 1,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-01"
+    ],
+    "exit": 0,
+    "seconds": 22.293,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 2,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-02"
+    ],
+    "exit": 0,
+    "seconds": 22.241,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 3,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-03"
+    ],
+    "exit": 0,
+    "seconds": 22.133,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 4,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-04"
+    ],
+    "exit": 0,
+    "seconds": 22.373,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 5,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-05"
+    ],
+    "exit": 0,
+    "seconds": 22.049,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 6,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-06"
+    ],
+    "exit": 0,
+    "seconds": 22.145,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 7,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-07"
+    ],
+    "exit": 0,
+    "seconds": 22.127,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 8,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-08"
+    ],
+    "exit": 0,
+    "seconds": 25.579,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 9,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-09"
+    ],
+    "exit": 0,
+    "seconds": 22.11,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 10,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-10"
+    ],
+    "exit": 0,
+    "seconds": 23.959,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 11,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-11"
+    ],
+    "exit": 0,
+    "seconds": 23.6,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 12,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-12"
+    ],
+    "exit": 0,
+    "seconds": 22.133,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 13,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-13"
+    ],
+    "exit": 0,
+    "seconds": 23.117,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 14,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-14"
+    ],
+    "exit": 0,
+    "seconds": 23.266,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 15,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-15"
+    ],
+    "exit": 0,
+    "seconds": 21.979,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 16,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-16"
+    ],
+    "exit": 0,
+    "seconds": 21.923,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 17,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-17"
+    ],
+    "exit": 0,
+    "seconds": 22.126,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 18,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-18"
+    ],
+    "exit": 0,
+    "seconds": 22.536,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 19,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-19"
+    ],
+    "exit": 0,
+    "seconds": 21.91,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        46,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  },
+  {
+    "run": 20,
+    "command": [
+      "python3",
+      "scripts/oracle_cost.py",
+      "--oracle",
+      "conformance-results/r9-rework/celoracle",
+      "--output",
+      "conformance-results/r9-rework/cost-20/run-20"
+    ],
+    "exit": 0,
+    "seconds": 22.049,
+    "summary": {
+      "oracle_timezone": "UTC",
+      "programs": 10266,
+      "compile_exclusions": 307,
+      "cost_comparisons": 9862,
+      "evaluation_error_comparisons": 404,
+      "limit_comparisons": 47938,
+      "mismatches": 0,
+      "order_probe_observed_costs": [
+        10,
+        11,
+        16,
+        22,
+        28,
+        34,
+        40,
+        52,
+        58,
+        64,
+        70,
+        76,
+        82,
+        88,
+        94,
+        100,
+        101
+      ],
+      "order_probe_categories": [
+        "limit",
+        "ok"
+      ]
+    }
+  }
+]

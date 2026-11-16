@@ -1,0 +1,16 @@
+$ moon test --target native
+Total tests: 279, passed: 279, failed: 0.
+
+exit: 0
+$ moon test --target wasm-gc
+Total tests: 279, passed: 279, failed: 0.
+
+exit: 0
+$ moon test --target js
+Total tests: 279, passed: 279, failed: 0.
+
+exit: 0
+$ moon test --target wasm
+Total tests: 279, passed: 279, failed: 0.
+
+exit: 0

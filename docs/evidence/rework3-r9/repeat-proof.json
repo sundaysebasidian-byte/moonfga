@@ -1,0 +1,13 @@
+{
+  "runs": 20,
+  "passed": 20,
+  "input_sha256": {
+    "unlimited.json": [
+      "ae4c6527106dd7f0de441f91ce323bad3c9d509a8338dcfc9adcaed72b693f84"
+    ],
+    "limited.json": [
+      "22c5e73b8645ebdfe0e8a699b85798f2a3a3f819454e4cd2cb484ef6590782d8"
+    ]
+  },
+  "oracle_sha256": "200c0eb57d758abaaa30bd40674d469eb3e26da2ab44621f5e590fe44d74a21f"
+}

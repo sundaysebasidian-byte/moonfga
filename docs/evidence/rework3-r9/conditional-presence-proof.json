@@ -1,0 +1,48 @@
+[
+  {
+    "input": {
+      "expression": "[{\"a\":1}].all(v,has((n==0?v:v).a))",
+      "context": {
+        "n": 0,
+        "s": "a"
+      },
+      "limit": 100
+    },
+    "oracle": {
+      "category": "ok",
+      "cost": 7,
+      "estimate_max": 48,
+      "estimate_min": 44,
+      "value": "true",
+      "value_type": "bool"
+    },
+    "local": {
+      "category": "ok",
+      "value": "true",
+      "cost": 7
+    }
+  },
+  {
+    "input": {
+      "expression": "has((n==0?{\"a\":1}:{\"a\":1}).a)",
+      "context": {
+        "n": 0,
+        "s": "a"
+      },
+      "limit": 100
+    },
+    "oracle": {
+      "category": "ok",
+      "cost": 3,
+      "estimate_max": 33,
+      "estimate_min": 33,
+      "value": "true",
+      "value_type": "bool"
+    },
+    "local": {
+      "category": "ok",
+      "value": "true",
+      "cost": 3
+    }
+  }
+]
