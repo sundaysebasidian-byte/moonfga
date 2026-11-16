@@ -1,0 +1,299 @@
+[
+  {
+    "size": 0,
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects": {
+      "status": 200,
+      "body": {
+        "objects": [
+          "doc:1"
+        ]
+      }
+    },
+    "list_users": {
+      "status": 200,
+      "body": {
+        "users": [
+          {
+            "object": {
+              "type": "user",
+              "id": "1"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "size": 0,
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects": {
+      "status": 200,
+      "body": {
+        "objects": [
+          "doc:1"
+        ]
+      }
+    },
+    "list_users": {
+      "status": 200,
+      "body": {
+        "users": [
+          {
+            "object": {
+              "type": "user",
+              "id": "1"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "size": 0,
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects": {
+      "status": 200,
+      "body": {
+        "objects": [
+          "doc:1"
+        ]
+      }
+    },
+    "list_users": {
+      "status": 200,
+      "body": {
+        "users": [
+          {
+            "object": {
+              "type": "user",
+              "id": "1"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "size": 10000,
+    "check": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_objects": {
+      "status": 200,
+      "body": {
+        "objects": []
+      }
+    },
+    "list_users": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "size": 10000,
+    "check": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_objects": {
+      "status": 200,
+      "body": {
+        "objects": []
+      }
+    },
+    "list_users": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "size": 10000,
+    "check": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_objects": {
+      "status": 200,
+      "body": {
+        "objects": []
+      }
+    },
+    "list_users": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "size": 50000,
+    "check": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_objects": {
+      "status": 200,
+      "body": {
+        "objects": []
+      }
+    },
+    "list_users": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "size": 50000,
+    "check": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_objects": {
+      "status": 200,
+      "body": {
+        "objects": []
+      }
+    },
+    "list_users": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "size": 50000,
+    "check": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_objects": {
+      "status": 200,
+      "body": {
+        "objects": []
+      }
+    },
+    "list_users": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "size": 100000,
+    "check": {
+      "status": 500,
+      "body": {
+        "code": "resource_exhausted",
+        "message": "grpc: received message larger than max (1100104 vs. 616448)"
+      }
+    },
+    "list_objects": {
+      "status": 500,
+      "body": {
+        "code": "resource_exhausted",
+        "message": "grpc: received message larger than max (1100100 vs. 616448)"
+      }
+    },
+    "list_users": {
+      "status": 500,
+      "body": {
+        "code": "resource_exhausted",
+        "message": "grpc: received message larger than max (1100105 vs. 616448)"
+      }
+    }
+  },
+  {
+    "size": 100000,
+    "check": {
+      "status": 500,
+      "body": {
+        "code": "resource_exhausted",
+        "message": "grpc: received message larger than max (1100104 vs. 616448)"
+      }
+    },
+    "list_objects": {
+      "status": 500,
+      "body": {
+        "code": "resource_exhausted",
+        "message": "grpc: received message larger than max (1100100 vs. 616448)"
+      }
+    },
+    "list_users": {
+      "status": 500,
+      "body": {
+        "code": "resource_exhausted",
+        "message": "grpc: received message larger than max (1100105 vs. 616448)"
+      }
+    }
+  },
+  {
+    "size": 100000,
+    "check": {
+      "status": 500,
+      "body": {
+        "code": "resource_exhausted",
+        "message": "grpc: received message larger than max (1100104 vs. 616448)"
+      }
+    },
+    "list_objects": {
+      "status": 500,
+      "body": {
+        "code": "resource_exhausted",
+        "message": "grpc: received message larger than max (1100100 vs. 616448)"
+      }
+    },
+    "list_users": {
+      "status": 500,
+      "body": {
+        "code": "resource_exhausted",
+        "message": "grpc: received message larger than max (1100105 vs. 616448)"
+      }
+    }
+  }
+]

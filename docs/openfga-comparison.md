@@ -1,8 +1,8 @@
 # OpenFGA v1.22.1 comparison
 
 Target: `44054f542f64e9b9589dd26a595081b3d2cfd942`, cel-go v0.31.0.
-This unreleased 0.2.3 revision has known incompatibilities below. It is not a claim
-of complete CEL compatibility. A passing corpus establishes its tested inputs only.
+Version 0.2.5 targets the tested environment below. A passing finite corpus
+establishes its tested inputs, not a proof of equivalence for arbitrary programs.
 
 ## Condition endpoint
 
@@ -71,7 +71,7 @@ Two black-box findings qualify intuitive interpretations of CEL:
 | HTTP/gRPC / authentication / durable storage | Explicitly not implemented | Embedded engine; host supplies service, identity and storage |
 | Pagination | Explicitly not implemented | Complete in-memory results; host paginates |
 | Consistency preference | Host interface equivalent for reader snapshot | No replica routing; host controls reader snapshot |
-| Condition cost and cancellation | Partial / host interface equivalent | Default budget 100; Engine constructor accepts condition_cost_limit and condition_cancelled; no implicit server request deadline |
+| Condition cost and cancellation | Partial / host interface equivalent | Default condition cost 100; per-request ExecutionBudget shared across graph/CEL; E4004 deadlines, E2000 condition cost/cancellation; list timeout policy differs (below) |
 
 Model creation corresponds to `validate.validate_model` (used by CLI/Playground and
 modular model validation). `model_from_json`, DSL parsing and mutable AuthModel data
@@ -86,8 +86,10 @@ Evidence: **D** = `scripts/oracle_cel.py` (two seeds; model acceptance and all t
 query APIs); **R** = `cel/oracle_test.mbt` (embedded official outcomes on every backend);
 **U** = `cel/cel_test.mbt`, `cel/compat_test.mbt`; **L** = `cel/limits_test.mbt` and
 `engine/condition_limits_test.mbt`; **A** = `scripts/audit_cel_surface.py` (former gaps
-and separate, deliberately failing known-boundary probes). Results and commands are
-in [current rework validation](evidence/rework2-validation.md); [Rework 1](evidence/rework1-validation.md) is historical.
+and host-boundary probes). Results and commands are
+in [current rework validation](evidence/rework3-validation.md); earlier rework evidence is historical.
+**C** = `scripts/oracle_cost.py`, `scripts/oracle_cost_openfga.py` and
+`cel/cost_oracle_test.mbt` (generated actual-cost and limit regressions).
 
 “Consistent” means the specified tested overloads, not a proof over arbitrary inputs.
 Known exceptions apply even when the ordinary overload is implemented.
@@ -120,7 +122,7 @@ Known exceptions apply even when the ordinary overload is implemented.
 | timestamp(string/int/timestamp)  | 所列语料通过 | RFC3339, epoch seconds, identity; constructor/context parsing differences, signed/range errors | D/R |
 | duration +/-; timestamp +/- duration; timestamp - timestamp  | 所列语料通过 | Checked duration range and timestamp endpoints | D/R/U |
 | duration getHours/getMinutes/getSeconds/getMilliseconds  | 所列语料通过 | Truncation toward zero at each unit | D/R |
-| timestamp getFullYear/getMonth/getDate/getDayOfMonth/getDayOfWeek/getDayOfYear/getHours/getMinutes/getSeconds/getMilliseconds  | 一致（显式时区）；Local 需宿主配置 | UTC/default, numeric offsets and named IANA zones; historical and future DST; negative epochs and sub-milliseconds | D/R; Local exception below |
+| timestamp getFullYear/getMonth/getDate/getDayOfMonth/getDayOfWeek/getDayOfYear/getHours/getMinutes/getSeconds/getMilliseconds  | 所列语料通过；Local 默认 UTC | UTC/default, numeric offsets and named IANA zones; historical and future DST; negative epochs and sub-milliseconds | D/R; 20 host-TZ probes |
 | dyn(value), any parameter  | 所列语料通过 | Erased annotation, dynamic JSON numbers as double, nested generic context types | D/R |
 | type(value), type constants  | 所列语料通过 | Primitive/collection/type/null_type, google.protobuf.Duration/Timestamp/Empty and Struct.FieldsEntry; wrapper/JSON/Any names rejected as standalone type expressions | D/R |
 | protobuf Timestamp / Duration constructors  | 所列语料通过 | int64 seconds/int32 nanos; normalization, full-width Go time ordering/getters/formatting; Duration saturation differs from duration(string) overflow | D/R; 864 generated extreme temporal predicates |
@@ -130,49 +132,71 @@ Known exceptions apply even when the ordinary overload is implemented.
 | Qualified root names  | 所列语料通过 | `.int`, `.n`, `.google.protobuf.Timestamp`; absolute `.has` is not a registered macro | D/R |
 | ipaddress(string), in_cidr(string)  | 所列语料通过 | Existing address/CIDR library and typed coercion | U and pinned ABAC matrix |
 | Typed context numeric values  | 所列语料通过 | Primitive and string inputs, 64-bit binary precision decimal conversion, saturating signed narrowing, uint-through-int64, exact double narrowing | D/R, including extreme-exponent saturation |
-| Cost / cancellation  | 部分 / 宿主接口等价 | Portable per-condition state, default cost 100, counted string operations, macro lowering, constant program optimization, host cancellation, regex interruption checks | D/R/L; optimizer exceptions below |
+| Cost / cancellation | 所列成本语料通过；宿主接口等价 | Per-condition cost 100; request work/deadline budget; optimized runtime cost reporting, macro/string/container costs and interruption checkpoints | C/D/R/L; concrete order/timeout policies below |
 Unicode 17.0.0 and tzdb 2026f are generated data, with reproducible generators and
 licenses described in [timezones.md](timezones.md). No runtime Go/OS/Node dependency
 was added. Browser, JS, native and wasm all use the same MoonBit matcher and data.
 
 ## Host boundaries and remaining verification limits
 
-1. **Unconfigured Local differs from the server.** The final audit has one difference:
-   the default embedded engine returns E2000 for `getHours("Local")`, while the
-   server uses its OS-configured local zone. This is now a host interface: set
-   `Engine::new(..., condition_local_timezone=Some("America/Los_Angeles"))`, or the
-   CEL evaluation API's `local_timezone`. The configured Local probe matches the
-   official server's hour 16 at 2026-01-01T00:00:00Z. There is no universal default
-   Local across server, browser and wasm environments; it must be supplied by the
-   host. The missing-host-setting difference is not hidden in a zero-difference claim.
-2. **Costs and service deadlines.** Default-budget macro/string thresholds are
-   differential-tested, including 444 additional constant-conversion/container map
-   programs that previously exposed premature budget errors. The pinned program
-   optimization shapes are implemented independently: constant containers, standard
-   unary conversions and primitive constant membership. Exact cost equivalence over
-   every possible program is unproven at BOTH the default budget 100 and raised budgets. The r8 default-budget unary-chain false rejections are fixed; this does not certify all default-budget programs. The Engine accepts condition_cost_limit and a
-   condition_cancelled callback, retained through Check/list engine copies. HTTP
-   request and List API wall-clock deadlines remain transport responsibilities.
-   Cancellation is cooperative during expression/NFA execution, not a preemptive
-   interrupt during arbitrary host work or model parsing.
-3. **Compilation/data resource limits.** Regex model validation now parses syntax
-   separately from NFA construction; the former 100000-instruction rejection
-   counterexample is resolved. Runtime NFA compilation is bounded at 3355443
-   instructions and nesting at 1000; this is an implementation memory policy, not
-   an unsupported syntax list. Default-cost corpus and the former bound probe match;
-   arbitrary raised-budget/large-program memory equivalence is unproven. Named
-   timezone data are pinned to 2026f, rather than tracking an arbitrary server OS's
-   later data updates. Regeneration and renewed comparison are required for updates.
+1. **Local and host TZ are defined.** Unconfigured Local now means UTC. Hosts can
+   configure a supported IANA zone or numeric offset; omitted getter arguments
+   always use UTC and timestamp string conversion preserves the parsed offset.
+   Four server TZ settings / winter and summer / conversion probes match 20/20.
+   An unset TZ on macOS may use OS localtime rather than a UTC container. Host
+   configuration and exact semantics are in [runtime controls](runtime-controls.md).
+2. **Cost evidence and unordered maps.** The generated cel-go v0.31.0 corpus covers
+   9556 programs (9168 actual-cost comparisons and 388 evaluation-error categories)
+   and 44471 limit comparisons with no mismatches. It found and fixed
+   constant-list membership, false `exists_one` iterations, dyn, attribute/index
+   accounting, duration-string rounding and 32-bit string/regex cost overflow. 9168 successful actual-cost cases are
+   embedded offline, with exact limit and one-below-limit checks on each backend.
+   The separate HTTP corpus includes OpenFGA's IPAddress extension and costs at
+   100/101/199/200/1000; results are in current validation evidence.
+   The direct Go driver declares n:int, s:string and t:string. Type-invalid or
+   OpenFGA-specific declarations are retained as compile exclusions; other typed
+   contexts are covered by the existing full API corpus. Missing-declared-parameter
+   cases use the API corpus because the server rejects them after partial evaluation.
+   There is no local static estimator; the oracle's static estimate bounds are
+   retained separately from actual runtime costs.
 
-The former function/type blockers and r8 review findings have targeted pinned-oracle regressions.
-This is a tested-surface statement, not a proof of equivalence over all programs. The ordinary surface probes pass, but the unconfigured Local counterexample
-and the host/resource verification limits prevent a claim of complete compatibility.
-For multi-key map macros the oracle uses order-independent predicates; no map
-iteration-order guarantee or trace-order equivalence is claimed. Initializing several
-mutually exclusive protobuf Value oneof fields likewise has no stable field-order
-contract upstream; the differential uses a single active oneof field. Windows runtime
-execution remains unverified locally. The browser-rendered Playground smoke passes
-its three examples, new CEL condition queries and static-rejection check.
+   A concrete irreducible difference remains for order-sensitive map short circuit:
+   `{"k0":0,...,"k19":19}.exists(k,k=="k0")` at cost 100. Repeating the identical
+   program 64 times upstream produces both success and cost-limit errors, with
+   costs ranging from 10 to 101. Go randomizes map traversal; MoonFGA's traversal
+   is deterministic. No deterministic evaluator can match each random run's exact
+   visited-key count. Ordinary cost comparisons therefore use order-independent
+   map predicates, and preserve the random-order probe separately. Map result order
+   and multiple mutually exclusive protobuf Value oneof initialization likewise
+   have no stable upstream order contract. Finite tests do not prove all inputs.
+3. **Request deadlines are first-class and cooperative.** `Engine::with_budget`
+   accepts an ExecutionBudget shared by Check/list/Expand/Explain/batch and CEL.
+   Steps and a host cancellation/deadline predicate raise sticky E4004; per-condition
+   costs/callbacks retain E2000. Host clocks/I/O remain external. The pinned server
+   can return partial/empty list results on timeout, whereas this library raises
+   E4004 instead of presenting an incomplete Array as complete. Timing/race winners
+   and preemption of arbitrary host calls cannot be made equivalent in a synchronous
+   embedded API. See [probe results and semantics](runtime-controls.md).
+4. **Compilation/data resource policy.** Runtime NFA compilation remains bounded
+   at 3355443 instructions and nesting at 1000 to bound memory; arbitrary
+   raised-budget regex programs can hit this explicit resource error before Go.
+   Model parsing/type checking and regex construction are not preemptible.
+   Unicode 17.0.0 and tzdb 2026f are pinned data, so arbitrary newer server data
+   require regeneration and renewed comparison. The former 100000-instruction
+   rejection is fixed; this larger finite memory policy is retained deliberately.
+5. **Upstream crashes are not reproduced.** Unhashable bytes/list/map keys are
+   rejected locally as invalid models. The prior independent r8 review observed
+   HTTP 500/panic for `{b"a":1}.size()==1`; reproducing a process crash would make an
+   embedded authorization library unsafe. This deliberate difference remains
+   excluded from normal valid-model comparisons.
+6. **Windows coverage is explicit.** The existing windows-latest job runs native
+   tests, the default build, native and wasm-gc checks, formatting and generated-interface checks.
+   Build is the default wasm-gc target. It now also runs pinned offline Check/ListObjects/ListUsers and language fixtures
+   on native, including generated cost/budget tests. No Go/server oracle is needed.
+   JS/wasm-gc execution remains Linux CI jobs. Live server differentials are manual
+   macOS-arm64/Linux-amd64 scripts, not existing CI jobs. Windows
+   runtime has not been run locally or newly on GitHub in this no-push task.
+
 
 ## Reproduce
 
@@ -183,12 +207,15 @@ scripts/oracle-openfga.sh --cases 1000 --seed 271828 --output conformance-result
 python3 scripts/oracle_cel.py --seed 20261108 --output conformance-results/rework1-cel
 python3 scripts/oracle_cel.py --seed 20261109 --output conformance-results/rework1-cel-seed20261109
 python3 scripts/audit_cel_surface.py
+python3 scripts/oracle_host.py
+python3 scripts/oracle_cancellation.py
+python3 scripts/oracle_cost.py
+python3 scripts/oracle_cost_openfga.py
 ```
 
 D compares Boolean values, result sets and error categories: model rejection
 `M:invalid_authorization_model`, evaluation `E2000`, and other mapped request errors.
-Unknown errors fail the runner. A separate host-boundary audit is not merged into a zero-difference
-claim. The raw outputs retain both model-creation and query HTTP errors.
+Unknown errors fail the runner. The separate host audit retains timezone and timeout responses. The raw outputs retain both model-creation and query HTTP errors.
 
 ## Rework 2 review closure
 
@@ -206,10 +233,4 @@ IPAddress indexing fails at evaluation; double-keyed maps do not fall back to in
 keys. Size, membership and equality are tested separately. Do not infer indexing
 support from constructor acceptance.
 
-Additional known deliberate exception: `{b"a":1}.size()==1` is rejected locally
-as an invalid model. The independent r8 review observed an upstream HTTP 500 panic
-for bytes keys (unhashable underlying value). Unhashable bytes/list/map keys are
-rejected locally rather than reproducing a server crash; these are not advertised
-as compatible valid models and are excluded from the normal error-category oracle.
-Local configuration, service deadlines, generated data/resource limits and order
-observability remain as listed above. Windows execution is still unverified.
+Rework 3 adds the runtime controls and generated cost evidence described above.

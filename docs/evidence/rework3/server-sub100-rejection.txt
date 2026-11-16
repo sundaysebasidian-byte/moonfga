@@ -1,0 +1,13 @@
+panic: maxConditionsEvaluationCosts less than 100 can cause API compatibility problems with Conditions
+
+goroutine 1 [running]:
+github.com/openfga/openfga/cmd/run.run(0x78a40fddc308?, {0x78a40fd082a0?, 0x4?, 0x103e7f196?})
+	github.com/openfga/openfga/cmd/run/run.go:427 +0xcc
+github.com/spf13/cobra.(*Command).execute(0x78a40fddc308, {0x78a40fd081c0, 0xe, 0xe})
+	github.com/spf13/cobra@v1.10.2/command.go:1019 +0x810
+github.com/spf13/cobra.(*Command).ExecuteC(0x78a40fddc008)
+	github.com/spf13/cobra@v1.10.2/command.go:1148 +0x340
+github.com/spf13/cobra.(*Command).Execute(0x78a40fddc008?)
+	github.com/spf13/cobra@v1.10.2/command.go:1071 +0x1c
+main.main()
+	github.com/openfga/openfga/cmd/openfga/main.go:28 +0xec

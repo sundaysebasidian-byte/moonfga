@@ -1,0 +1,32 @@
+{
+  "oracle_timezone": "UTC",
+  "programs": 9556,
+  "compile_exclusions": 304,
+  "cost_comparisons": 9168,
+  "evaluation_error_comparisons": 388,
+  "limit_comparisons": 44471,
+  "mismatches": 0,
+  "order_probe_observed_costs": [
+    10,
+    16,
+    22,
+    28,
+    34,
+    40,
+    46,
+    52,
+    58,
+    64,
+    70,
+    76,
+    82,
+    88,
+    94,
+    100,
+    101
+  ],
+  "order_probe_categories": [
+    "limit",
+    "ok"
+  ]
+}

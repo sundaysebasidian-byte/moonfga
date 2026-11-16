@@ -6,9 +6,10 @@ library, Node package or platform process is needed by the shipped engine.
 `cel/timezones_generated.mbt` contains 598 names and 343 distinct TZif transition
 tables from the local IANA tzdb **2026f**. Historical transitions and POSIX future
 M-rule tails are included; future daylight transitions are computed per year.
-`Local` is deliberately not guessed. Set `condition_local_timezone` on Engine
-(or `local_timezone` on the CEL evaluation API) to the intended named host zone.
-Without that setting Local errors; unknown names also error.
+`Local` defaults to UTC, matching the UTC-container / empty-TZ oracle. Set
+`condition_local_timezone` on Engine (or `local_timezone` on the CEL API) to
+reproduce another server zone. Omitted getter arguments always use UTC; unknown
+zone names error. See [runtime controls](runtime-controls.md) for exact semantics.
 `docs/evidence/timezone-input-hashes.json` fingerprints every input TZif file.
 
 `cel/unicode_generated.mbt` contains Unicode **17.0.0** categories, scripts and

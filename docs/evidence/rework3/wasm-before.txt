@@ -1,0 +1,21 @@
+Error: failed to execute a MoonBit test
+
+Caused by:
+    RangeError: Maximum call stack size exceeded
+        at @sundaysebasidian-byte/moonfga/cel.infer (wasm://wasm/01787cda:wasm-function[274]:0x105de5)
+        at @sundaysebasidian-byte/moonfga/cel.infer (wasm://wasm/01787cda:wasm-function[274]:0x103a20)
+        at @sundaysebasidian-byte/moonfga/cel.infer (wasm://wasm/01787cda:wasm-function[274]:0x103a20)
+        at @sundaysebasidian-byte/moonfga/cel.infer (wasm://wasm/01787cda:wasm-function[274]:0x103a20)
+        at @sundaysebasidian-byte/moonfga/cel.infer (wasm://wasm/01787cda:wasm-function[274]:0x103a20)
+        at @sundaysebasidian-byte/moonfga/cel.infer (wasm://wasm/01787cda:wasm-function[274]:0x103a20)
+        at @sundaysebasidian-byte/moonfga/cel.infer (wasm://wasm/01787cda:wasm-function[274]:0x103a20)
+        at @sundaysebasidian-byte/moonfga/cel.infer (wasm://wasm/01787cda:wasm-function[274]:0x103a20)
+        at @sundaysebasidian-byte/moonfga/cel.infer (wasm://wasm/01787cda:wasm-function[274]:0x103a20)
+        at @sundaysebasidian-byte/moonfga/cel.infer (wasm://wasm/01787cda:wasm-function[274]:0x103a20)
+Error: failed to run test for target Wasm
+
+Caused by:
+    Failed to run the test: $REPO/_build/wasm/debug/test/cel/cel.blackbox_test.wasm
+    The test executable exited with exit status: 1
+    Active test at executable exit:
+      - $REPO/cel/oracle_test.mbt:1002 "official CEL model and evaluation outcomes 2"

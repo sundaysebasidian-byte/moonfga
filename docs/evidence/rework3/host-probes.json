@@ -1,0 +1,482 @@
+[
+  {
+    "TZ": "",
+    "expression": "timestamp(\"2026-01-01T00:00:00Z\").getHours(\"Local\") == 0",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "",
+    "expression": "timestamp(\"2026-01-01T00:00:00Z\").getHours() == 0",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "",
+    "expression": "timestamp(\"2026-07-01T00:00:00Z\").getHours(\"Local\") == 0",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "",
+    "expression": "timestamp(\"2026-07-01T00:00:00Z\").getHours() == 0",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "",
+    "expression": "string(timestamp(\"2026-01-01T00:00:00+08:00\")) == \"2026-01-01T00:00:00+08:00\"",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "UTC",
+    "expression": "timestamp(\"2026-01-01T00:00:00Z\").getHours(\"Local\") == 0",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "UTC",
+    "expression": "timestamp(\"2026-01-01T00:00:00Z\").getHours() == 0",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "UTC",
+    "expression": "timestamp(\"2026-07-01T00:00:00Z\").getHours(\"Local\") == 0",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "UTC",
+    "expression": "timestamp(\"2026-07-01T00:00:00Z\").getHours() == 0",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "UTC",
+    "expression": "string(timestamp(\"2026-01-01T00:00:00+08:00\")) == \"2026-01-01T00:00:00+08:00\"",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "America/Los_Angeles",
+    "expression": "timestamp(\"2026-01-01T00:00:00Z\").getHours(\"Local\") == 16",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "America/Los_Angeles",
+    "expression": "timestamp(\"2026-01-01T00:00:00Z\").getHours() == 0",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "America/Los_Angeles",
+    "expression": "timestamp(\"2026-07-01T00:00:00Z\").getHours(\"Local\") == 17",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "America/Los_Angeles",
+    "expression": "timestamp(\"2026-07-01T00:00:00Z\").getHours() == 0",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "America/Los_Angeles",
+    "expression": "string(timestamp(\"2026-01-01T00:00:00+08:00\")) == \"2026-01-01T00:00:00+08:00\"",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "Asia/Kolkata",
+    "expression": "timestamp(\"2026-01-01T00:00:00Z\").getHours(\"Local\") == 5",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "Asia/Kolkata",
+    "expression": "timestamp(\"2026-01-01T00:00:00Z\").getHours() == 0",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "Asia/Kolkata",
+    "expression": "timestamp(\"2026-07-01T00:00:00Z\").getHours(\"Local\") == 5",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "Asia/Kolkata",
+    "expression": "timestamp(\"2026-07-01T00:00:00Z\").getHours() == 0",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  },
+  {
+    "TZ": "Asia/Kolkata",
+    "expression": "string(timestamp(\"2026-01-01T00:00:00+08:00\")) == \"2026-01-01T00:00:00+08:00\"",
+    "check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "list_objects_1ns": {
+      "status": 500,
+      "body": {
+        "code": "deadline_exceeded",
+        "message": "Request Deadline Exceeded"
+      }
+    },
+    "list_users_1ns": {
+      "status": 200,
+      "body": {
+        "users": []
+      }
+    }
+  }
+]

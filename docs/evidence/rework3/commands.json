@@ -1,0 +1,550 @@
+[
+  {
+    "index": 0,
+    "command": [
+      "moon",
+      "version",
+      "--all"
+    ],
+    "exit": 0,
+    "seconds": 0.069
+  },
+  {
+    "index": 1,
+    "command": [
+      "node",
+      "--version"
+    ],
+    "exit": 0,
+    "seconds": 0.058
+  },
+  {
+    "index": 2,
+    "command": [
+      "moon",
+      "update"
+    ],
+    "exit": 0,
+    "seconds": 5.793
+  },
+  {
+    "index": 3,
+    "command": [
+      "moon",
+      "info"
+    ],
+    "exit": 0,
+    "seconds": 0.364
+  },
+  {
+    "index": 4,
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "--",
+      "*.mbti"
+    ],
+    "exit": 0,
+    "seconds": 0.012
+  },
+  {
+    "index": 5,
+    "command": [
+      "moon",
+      "check",
+      "--deny-warn"
+    ],
+    "exit": 0,
+    "seconds": 0.295
+  },
+  {
+    "index": 6,
+    "command": [
+      "moon",
+      "check",
+      "--deny-warn",
+      "--target",
+      "native"
+    ],
+    "exit": 0,
+    "seconds": 0.042
+  },
+  {
+    "index": 7,
+    "command": [
+      "moon",
+      "check",
+      "--deny-warn",
+      "--target",
+      "wasm-gc"
+    ],
+    "exit": 0,
+    "seconds": 0.156
+  },
+  {
+    "index": 8,
+    "command": [
+      "moon",
+      "check",
+      "--deny-warn",
+      "--target",
+      "js"
+    ],
+    "exit": 0,
+    "seconds": 0.148
+  },
+  {
+    "index": 9,
+    "command": [
+      "moon",
+      "check",
+      "--deny-warn",
+      "--target",
+      "wasm"
+    ],
+    "exit": 0,
+    "seconds": 0.04
+  },
+  {
+    "index": 10,
+    "command": [
+      "moon",
+      "build"
+    ],
+    "exit": 0,
+    "seconds": 0.431
+  },
+  {
+    "index": 11,
+    "command": [
+      "moon",
+      "fmt",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 0.39
+  },
+  {
+    "index": 12,
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "native"
+    ],
+    "exit": 0,
+    "seconds": 10.609
+  },
+  {
+    "index": 13,
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "wasm-gc"
+    ],
+    "exit": 0,
+    "seconds": 2.949
+  },
+  {
+    "index": 14,
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "js"
+    ],
+    "exit": 0,
+    "seconds": 5.4
+  },
+  {
+    "index": 15,
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "wasm"
+    ],
+    "exit": 0,
+    "seconds": 7.415
+  },
+  {
+    "index": 16,
+    "command": [
+      "scripts/build-web.sh"
+    ],
+    "exit": 0,
+    "seconds": 0.099
+  },
+  {
+    "index": 17,
+    "command": [
+      "node",
+      "web/smoke.mjs"
+    ],
+    "exit": 0,
+    "seconds": 0.141
+  },
+  {
+    "index": 18,
+    "command": [
+      "moon",
+      "run",
+      "examples/library"
+    ],
+    "exit": 0,
+    "seconds": 0.046
+  },
+  {
+    "index": 19,
+    "command": [
+      "moon",
+      "run",
+      "cmd/main",
+      "--",
+      "validate",
+      "examples/basic/model.fga"
+    ],
+    "exit": 0,
+    "seconds": 0.046
+  },
+  {
+    "index": 20,
+    "command": [
+      "moon",
+      "run",
+      "cmd/main",
+      "--",
+      "transform",
+      "examples/basic/model.fga",
+      "--to",
+      "json"
+    ],
+    "exit": 0,
+    "seconds": 0.043
+  },
+  {
+    "index": 21,
+    "command": [
+      "moon",
+      "run",
+      "cmd/main",
+      "--",
+      "transform",
+      "examples/basic/model.fga",
+      "--to",
+      "dsl"
+    ],
+    "exit": 0,
+    "seconds": 0.043
+  },
+  {
+    "index": 22,
+    "command": [
+      "moon",
+      "run",
+      "cmd/main",
+      "--",
+      "check",
+      "--model",
+      "examples/basic/model.fga",
+      "--store",
+      "examples/basic/tuples.fga",
+      "--object",
+      "document:budget",
+      "--relation",
+      "viewer",
+      "--user",
+      "user:bob",
+      "--explain"
+    ],
+    "exit": 0,
+    "seconds": 0.046
+  },
+  {
+    "index": 23,
+    "command": [
+      "moon",
+      "run",
+      "cmd/main",
+      "--",
+      "list-objects",
+      "--model",
+      "examples/basic/model.fga",
+      "--store",
+      "examples/basic/tuples.fga",
+      "--type",
+      "document",
+      "--relation",
+      "viewer",
+      "--user",
+      "user:bob"
+    ],
+    "exit": 0,
+    "seconds": 0.048
+  },
+  {
+    "index": 24,
+    "command": [
+      "moon",
+      "run",
+      "cmd/main",
+      "--",
+      "list-users",
+      "--model",
+      "examples/basic/model.fga",
+      "--store",
+      "examples/basic/tuples.fga",
+      "--object",
+      "document:budget",
+      "--relation",
+      "viewer",
+      "--filters",
+      "user"
+    ],
+    "exit": 0,
+    "seconds": 0.044
+  },
+  {
+    "index": 25,
+    "command": [
+      "moon",
+      "run",
+      "cmd/main",
+      "--",
+      "expand",
+      "--model",
+      "examples/basic/model.fga",
+      "--store",
+      "examples/basic/tuples.fga",
+      "--object",
+      "document:budget",
+      "--relation",
+      "viewer"
+    ],
+    "exit": 0,
+    "seconds": 0.044
+  },
+  {
+    "index": 26,
+    "command": [
+      "moon",
+      "run",
+      "cmd/main",
+      "--",
+      "check",
+      "--model",
+      "examples/abac/model.fga",
+      "--store",
+      "examples/abac/tuples.fga",
+      "--object",
+      "document:plan",
+      "--relation",
+      "viewer",
+      "--user",
+      "user:dana",
+      "--context",
+      "{\"office\":\"hq\",\"allowed\":[\"remote\"]}"
+    ],
+    "exit": 0,
+    "seconds": 0.046
+  },
+  {
+    "index": 27,
+    "command": [
+      "moon",
+      "run",
+      "cmd/main",
+      "--",
+      "test",
+      "examples/basic/store.fga.yaml"
+    ],
+    "exit": 0,
+    "seconds": 0.048
+  },
+  {
+    "index": 28,
+    "command": [
+      "moon",
+      "run",
+      "cmd/main",
+      "--",
+      "test",
+      "examples/abac/store.fga.yaml"
+    ],
+    "exit": 0,
+    "seconds": 0.049
+  },
+  {
+    "index": 29,
+    "command": [
+      "scripts/conformance.sh"
+    ],
+    "exit": 0,
+    "seconds": 0.519
+  },
+  {
+    "index": 30,
+    "command": [
+      "moon",
+      "run",
+      "cmd/language"
+    ],
+    "exit": 0,
+    "seconds": 0.11
+  },
+  {
+    "index": 31,
+    "command": [
+      "env",
+      "CONFORMANCE_TARGET=native",
+      "scripts/conformance.sh"
+    ],
+    "exit": 0,
+    "seconds": 0.258
+  },
+  {
+    "index": 32,
+    "command": [
+      "moon",
+      "run",
+      "--target",
+      "native",
+      "cmd/language"
+    ],
+    "exit": 0,
+    "seconds": 0.06
+  },
+  {
+    "index": 33,
+    "command": [
+      "python3",
+      "scripts/test-modules.py"
+    ],
+    "exit": 0,
+    "seconds": 4.224
+  },
+  {
+    "index": 34,
+    "command": [
+      "node",
+      "scripts/test-explain.mjs"
+    ],
+    "exit": 0,
+    "seconds": 0.157
+  },
+  {
+    "index": 35,
+    "command": [
+      "scripts/oracle-openfga.sh",
+      "--cases",
+      "1000",
+      "--seed",
+      "314159",
+      "--output",
+      "conformance-results/rework3-seed314159"
+    ],
+    "exit": 0,
+    "seconds": 2.586
+  },
+  {
+    "index": 36,
+    "command": [
+      "scripts/oracle-openfga.sh",
+      "--cases",
+      "1000",
+      "--seed",
+      "271828",
+      "--output",
+      "conformance-results/rework3-seed271828"
+    ],
+    "exit": 0,
+    "seconds": 2.557
+  },
+  {
+    "index": 37,
+    "command": [
+      "python3",
+      "scripts/oracle_cel.py",
+      "--seed",
+      "20261108",
+      "--output",
+      "conformance-results/rework3-cel"
+    ],
+    "exit": 0,
+    "seconds": 12.966
+  },
+  {
+    "index": 38,
+    "command": [
+      "python3",
+      "scripts/oracle_cel.py",
+      "--seed",
+      "20261109",
+      "--output",
+      "conformance-results/rework3-cel-seed20261109"
+    ],
+    "exit": 0,
+    "seconds": 12.609
+  },
+  {
+    "index": 39,
+    "command": [
+      "python3",
+      "scripts/r8_divergences.py"
+    ],
+    "exit": 0,
+    "seconds": 0.028
+  },
+  {
+    "index": 40,
+    "command": [
+      "python3",
+      "scripts/oracle_openfga.py",
+      "--corpus",
+      "conformance-results/r8-divergences/corpus.json",
+      "--output",
+      "conformance-results/rework3-directed"
+    ],
+    "exit": 0,
+    "seconds": 0.829
+  },
+  {
+    "index": 41,
+    "command": [
+      "python3",
+      "scripts/audit_cel_surface.py"
+    ],
+    "exit": 0,
+    "seconds": 0.488
+  },
+  {
+    "index": 42,
+    "command": [
+      "python3",
+      "scripts/oracle_host.py"
+    ],
+    "exit": 0,
+    "seconds": 1.362
+  },
+  {
+    "index": 43,
+    "command": [
+      "python3",
+      "scripts/oracle_cost_openfga.py"
+    ],
+    "exit": 0,
+    "seconds": 5.359
+  },
+  {
+    "index": 44,
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 0.017
+  }
+]

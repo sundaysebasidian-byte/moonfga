@@ -1,0 +1,12 @@
+{
+  "models": 990,
+  "comparisons": 2970,
+  "mismatches": 0,
+  "limits": [
+    100,
+    101,
+    199,
+    200,
+    1000
+  ]
+}

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.5 (unreleased)
+
+- Default explicit Local timestamp getters to UTC, retain host timezone configuration, and document omitted getter/conversion behavior with pinned winter/summer server probes.
+- Add shared cooperative ExecutionBudget controls across graph queries and CEL, sticky E4004 request deadlines/work exhaustion, and actual CEL runtime cost reporting. Keep condition cost/callback failures as E2000; request deadlines take priority over earlier branch errors.
+- Correct optimized constant membership, exists_one false-iteration costs, dyn and attribute/index accounting, floating-second duration string rounding, and wide string/regex cost multiplication to prevent budget bypass.
+- Add 9556 generated program comparisons, 44471 cost-limit comparisons, 9168 embedded offline cost regressions, and separate randomized-map/deadline probes; retain concrete order, partial-list, resource/data and crash-policy boundaries.
+- Wire Windows native offline conformance/language fixtures into CI; do not claim a Windows run from this local macOS validation. Full results and limits: docs/evidence/rework3-validation.md.
+
 ## 0.2.4
 
 - Republish the 0.2.3 contents without personal contact details in the packaged docs. No code changes.

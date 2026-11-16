@@ -1,0 +1,2 @@
+[sundaysebasidian-byte/moonfga] test cel/limits_test.mbt:125 ("large string cost multiplication cannot wrap past the limit") failed: cel/limits_test.mbt:130:5-130:36@sundaysebasidian-byte/moonfga FAILED: s.contains(s)
+Total tests: 1, passed: 0, failed: 1.
