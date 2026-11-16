@@ -1,0 +1,9 @@
+pkgtype(kind: "executable")
+
+import {
+  "moonbitlang/core/env",
+  "moonbitlang/core/json",
+  "moonbitlang/x/fs",
+  "sundaysebasidian-byte/moonfga/fga",
+  "sundaysebasidian-byte/moonfga/cel",
+}

@@ -47,6 +47,10 @@ fn run_case(c : Json) -> Json raise @fga.FgaError {
     model,
     store as &@fga.TupleReader,
     condition_local_timezone=@fga.json_get_string(c, "local_timezone"),
+    condition_cost_limit=match @fga.json_object_get(c, "condition_cost_limit") {
+      Some(Number(x, ..)) => x.to_int()
+      _ => 100
+    },
   )
   let object = @fga.json_get_string(c, "object").unwrap()
   let user = @fga.json_get_string(c, "user").unwrap()

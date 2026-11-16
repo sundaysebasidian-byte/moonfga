@@ -28,7 +28,8 @@ PROBES = {
 def main():
     out = Path('conformance-results/cel-surface')
     out.mkdir(parents=True, exist_ok=True)
-    template = json.loads(Path('conformance-results/rework1-cel/cases.json').read_text())[0]
+    from oracle_host import condition_case
+    template = condition_case('true', {'n':0,'s':''})
     probes = [(name, expr, {'n':0,'s':''}) for name,expr in PROBES.items()]
     probes += [
         ('host_local_zone', 'timestamp("2026-01-01T00:00:00Z").getHours("Local") >= 0', {'n':0,'s':''}),
@@ -50,7 +51,7 @@ def main():
     path=out/'corpus.json'
     path.write_text(json.dumps(cases))
     started=time.time_ns()
-    result=subprocess.run(['python3','scripts/oracle_openfga.py','--corpus',str(path),'--output',str(out)],check=False)
+    result=subprocess.run(['python3','scripts/oracle_openfga.py','--timezone','America/Los_Angeles','--corpus',str(path),'--output',str(out)],check=False)
     required=[out/name for name in ['summary.json','actual.json','expected.json','mismatches.json']]
     if result.returncode not in (0,1) or any(not p.exists() or p.stat().st_mtime_ns < started for p in required):
         raise RuntimeError('surface oracle did not complete')

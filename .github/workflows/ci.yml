@@ -68,6 +68,18 @@ jobs:
           moon info
           git diff --exit-code -- "*.mbti"
 
+      - name: Fetch pinned offline fixtures (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: scripts/fetch-upstream.sh
+
+      - name: Offline conformance and language fixtures (Windows native)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          CONFORMANCE_TARGET=native scripts/conformance.sh
+          moon run --target native cmd/language
+
   extra-targets:
     name: test (${{ matrix.target }})
     runs-on: ubuntu-latest

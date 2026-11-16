@@ -3,6 +3,7 @@ from oracle_cases import boundary_case
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import platform
 import random
@@ -129,7 +130,11 @@ def main():
     p.add_argument("--seed", type=int, default=314159)
     p.add_argument("--output", type=Path, default=Path("conformance-results/oracle"))
     p.add_argument("--corpus", type=Path, help="Replay explicit authorization cases instead of generated cases")
+    p.add_argument("--condition-cost-limit", type=int, default=100)
+    p.add_argument("--timezone", default="UTC", help="Pinned server TZ; use oracle_host.py for host-zone probes")
     args = p.parse_args()
+    if not 0 <= args.condition_cost_limit <= 2147483647:
+        p.error("condition-cost-limit must be in 0..2147483647")
     if args.cases < 1:
         p.error("--cases must be positive")
     out = args.output
@@ -155,6 +160,8 @@ def main():
         fixed = json.loads(Path("examples/regressions/oracle.json").read_text())
         fixed += json.loads(Path("examples/regressions/check-depth.json").read_text())
         cases.extend(fixed)
+    for c in cases:
+        c["condition_cost_limit"] = args.condition_cost_limit
     (out / "cases.json").write_text(json.dumps(cases))
     local = subprocess.run(["moon", "run", "--target", "native", "cmd/oracle", "--", str(out / "cases.json")], check=False, text=True, capture_output=True)
     if local.returncode:
@@ -165,7 +172,7 @@ def main():
     ports = [port() for _ in range(3)]
     base = f"http://127.0.0.1:{ports[0]}"
     with (out / "server.log").open("w") as log:
-        proc = subprocess.Popen([binary(), "run", "--datastore-engine", "memory", "--http-addr", f"127.0.0.1:{ports[0]}", "--grpc-addr", f"127.0.0.1:{ports[1]}", "--metrics-addr", f"127.0.0.1:{ports[2]}", "--playground-enabled=false", "--profiler-enabled=false", "--log-level", "error"], stdout=log, stderr=log)
+        proc = subprocess.Popen([binary(), "run", "--datastore-engine", "memory", "--http-addr", f"127.0.0.1:{ports[0]}", "--grpc-addr", f"127.0.0.1:{ports[1]}", "--metrics-addr", f"127.0.0.1:{ports[2]}", "--playground-enabled=false", "--profiler-enabled=false", "--log-level", "error", "--max-condition-evaluation-cost", str(args.condition_cost_limit)], env={**os.environ,"TZ":args.timezone}, stdout=log, stderr=log)
         mismatches = []
         expected = []
         try:
@@ -222,7 +229,7 @@ def main():
             except subprocess.TimeoutExpired:
                 proc.kill()
                 proc.wait()
-    summary = {"version": VERSION, "commit": COMMIT, "seed": args.seed, "cases": len(cases), "random_cases": args.cases, "regression_cases": 2 + len(fixed), "comparisons": len(cases)*3, "mismatches": len(mismatches),
+    summary = {"version": VERSION, "commit": COMMIT, "timezone":args.timezone,"condition_cost_limit":args.condition_cost_limit, "seed": args.seed, "cases": len(cases), "random_cases": args.cases, "regression_cases": 2 + len(fixed), "comparisons": len(cases)*3, "mismatches": len(mismatches),
                "families": {k: sum(c.get("family", "graph") == k for c in cases[:args.cases]) for k in ["graph", "logical_errors", "unicode", "timestamp", "deep_graph"]},
                "by_api": {k: {"compared": len(cases), "mismatches": sum(m["kind"] == k for m in mismatches)} for k in ["check", "list_objects", "list_users"]}}
     if args.corpus:

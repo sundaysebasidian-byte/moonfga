@@ -20,9 +20,9 @@ fi
 
 mkdir -p conformance-results
 set +e
-moon run cmd/conformance "$@" 2>&1 | tee conformance-results/summary.txt
+moon run --target "${CONFORMANCE_TARGET:-wasm-gc}" cmd/conformance "$@" 2>&1 | tee conformance-results/summary.txt
 runner_status=${PIPESTATUS[0]}
-moon run cmd/conformance -- --json "$@" > conformance-results/summary.json 2>/dev/null
+moon run --target "${CONFORMANCE_TARGET:-wasm-gc}" cmd/conformance -- --json "$@" > conformance-results/summary.json 2>/dev/null
 set -e
 
 totals_line="$(grep '^totals:' conformance-results/summary.txt | tail -n 1 || true)"
