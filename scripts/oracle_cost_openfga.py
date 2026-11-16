@@ -24,7 +24,7 @@ def main():
     corpus=[condition_case(e,{'n':0,'s':s}) for e in expressions for s in ['','a'*20,'a'*200,'127.0.0.1']]
     path=a.output/'corpus.json';path.write_text(json.dumps(corpus))
     summaries=[]
-    for limit in [0,1,2,3,4,10,99,100,101,1000]:
+    for limit in [100,101,199,200,1000]:
         out=a.output/f'limit-{limit}'
         subprocess.run(['python3','scripts/oracle_openfga.py','--condition-cost-limit',str(limit),'--corpus',str(path),'--output',str(out)],check=True)
         summaries.append(json.loads((out/'summary.json').read_text()))

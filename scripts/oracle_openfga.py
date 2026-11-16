@@ -133,8 +133,8 @@ def main():
     p.add_argument("--condition-cost-limit", type=int, default=100)
     p.add_argument("--timezone", default="UTC", help="Pinned server TZ; use oracle_host.py for host-zone probes")
     args = p.parse_args()
-    if not 0 <= args.condition_cost_limit <= 2147483647:
-        p.error("condition-cost-limit must be in 0..2147483647")
+    if not 100 <= args.condition_cost_limit <= 2147483647:
+        p.error("OpenFGA v1.22.1 requires condition-cost-limit in 100..2147483647")
     if args.cases < 1:
         p.error("--cases must be positive")
     out = args.output

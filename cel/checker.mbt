@@ -154,6 +154,20 @@ fn infer(expr : CelExpr, env : Map[String, CType]) -> CType raise @fga.FgaError 
       common_type(a, b)
     }
     CList(items) => {
+      // Peel singleton nesting without retaining a large infer frame per level.
+      let mut inner = expr
+      let mut depth = 0
+      while inner is CList(xs) && xs.length() == 1 {
+        inner = xs[0]
+        depth += 1
+      }
+      if depth > 0 {
+        let mut element = infer(inner, env)
+        for _ in 0..<depth {
+          element = List(element)
+        }
+        return element
+      }
       let mut element = Dynamic
       for i in 0..<items.length() {
         let t = infer(items[i], env)

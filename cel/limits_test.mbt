@@ -110,3 +110,13 @@ test "portable work units have deterministic exact boundaries" {
   }
   assert_eq(code, 4004)
 }
+
+///|
+test "nested singleton list inference fits portable wasm stack" {
+  let source = "size(" +
+    String::make(248, '[') +
+    "1" +
+    String::make(248, ']') +
+    ")==1"
+  @cel.check_condition({ name: "nested", expression: source, parameters: [], })
+}
