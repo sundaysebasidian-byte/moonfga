@@ -77,12 +77,8 @@ pub fn Engine::list_objects(
     condition_local_timezone: self.condition_local_timezone,
     budget: self.budget,
   }
-  let result = engine.reverse_objects(type_name, relation, user, context) catch {
-    err => {
-      engine.check_budget()
-      raise err
-    }
-  }
+  errdefer engine.check_budget()
+  let result = engine.reverse_objects(type_name, relation, user, context)
   engine.check_budget()
   result
 }
