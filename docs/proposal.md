@@ -18,7 +18,7 @@
 | Check（深度 25、循环检测、通配符、并交差、TTU）、BatchCheck、ListObjects、ListUsers、Expand、解析路径 Explain | 已支持 | Check 516/516，ListObjects 354/354，ListUsers 393/394 |
 | 条件（ABAC）：自研 CEL 实现 | 所列语料通过，保留已知差异 | 模型期类型检查、bytes、转换、类型反射、异构容器/宏、默认 protobuf well-known 对象、时间/时区、无回溯正则、默认 cost 与宿主中断；逐函数证据见对比文档 |
 | CLI（validate / transform / check / list-objects / list-users / expand / test）、`.fga.yaml` 测试运行器 | 已支持 | 浏览器 Playground 使用同一引擎 |
-| CEL 完整兼容 | 不声明全输入等价 | 0.2.5 的 Local 默认 UTC，可配置宿主时区；已有请求级协作预算与期限回调。仍保留随机 map 遍历成本、超时列表策略、有限内存策略和上游崩溃差异；不声明全输入等价 |
+| CEL 完整兼容 | 不声明全输入等价 | 0.2.6 的 Local 默认 UTC（含数值偏移配置），可配置宿主时区；已有请求级协作预算与期限回调。仍保留随机 map 遍历成本、超时列表策略、有限内存策略；上游 cel-go 对 bytes 键 map 字面量的 panic 不复现，已向上游反馈；不声明全输入等价 |
 | FGA Modules（`module` / `extend type` / `fga.mod`） | 已支持 | schema 1.2；宿主传入文件内容并合并，保留 module / source_info；CLI 安全文件读取限 native（POSIX）/ JS；0.2.1 完整比较官方 24 条诊断（含 0-based 行列、文件和错误类型）；官方成功转换 2/2、完整诊断 4/4、fga.mod 9/9；06 因上游缺少模块源文件仅 JSON 往返 |
 | ReadChanges | 明确不支持 | 内存存储没有变更日志；只服务于同步服务端数据的场景 |
 | 持久化、HTTP / gRPC 服务端 | 明确不支持 | 属于产品定位：只做可嵌入的引擎，存储由宿主通过 `TupleReader` 提供 |
@@ -42,6 +42,11 @@
 - Windows CI 已有 native 测试、native/wasm-gc 检查，新增 native 离线 conformance 与语言夹具；本任务没有 Windows 本地或新云端运行，不用配置文件冒充执行证据。详见[本轮验收](evidence/rework3-validation.md)。
 - 复现：`scripts/fetch-upstream.sh` 下载固定 commit 的数据，`./scripts/conformance.sh` 跑全部矩阵。
 
+## 生态贡献
+
+- 下游示例：[moonfga-docshare](https://github.com/sundaysebasidian-byte/moonfga-docshare)（[mooncakes](https://mooncakes.io/docs/sundaysebasidian-byte/moonfga-docshare)），通过 mooncakes 依赖已发布的 `moonfga@0.2.5`，实现文档共享场景的授权核心：文件夹继承、群组、带过期时间的 CEL 条件授权，附命令行与 native/js/wasm-gc 测试，CI 通过。它由 MoonFGA 作者编写，是示例，不代表第三方采用。
+- 上游反馈：差分测试发现 cel-go 对 `{b"a":1}.size()==1` 类型检查通过后 panic，OpenFGA v1.22.1 写入含该条件的模型会返回 HTTP 500。已提交最小复现：[google/cel-go#5](https://github.com/google/cel-go/issues/5)。
+- 目前没有第三方使用记录。
 ## 与 moonpolicykit 的区别
 
 mooncakes 上的 `jhshuai/moonpolicykit` 只提供通用 ReBAC 原语，不兼容 OpenFGA 的建模语言、API 语义和官方测试。MoonFGA 独立实现，不含其代码，以 OpenFGA 官方测试定义兼容性。
