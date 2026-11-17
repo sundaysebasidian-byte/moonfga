@@ -1,7 +1,7 @@
 # OpenFGA v1.22.1 comparison
 
 Target: `44054f542f64e9b9589dd26a595081b3d2cfd942`, cel-go v0.31.0.
-Version 0.2.5 targets the tested environment below. A passing finite corpus
+Version 0.2.6 targets the tested environment below. A passing finite corpus
 establishes its tested inputs, not a proof of equivalence for arbitrary programs.
 
 ## Condition endpoint

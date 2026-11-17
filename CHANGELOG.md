@@ -1,13 +1,17 @@
 # Changelog
 
-## Unreleased
+## 0.2.6
+
+### Behavior change
+
+- A `Local` timezone host setting given as a decimal numeric offset (`+05:30`, `-08:00`, `05:30`) now falls back to UTC by default, matching OpenFGA v1.22.1 / cel-go; the previous fixed-offset behavior is available only through the explicit, default-off `allow_numeric_local_timezone` / `condition_allow_numeric_local_timezone` option.
 
 - Restrict numeric Local fallback to two decimal components, and handle one leading `:` with Go-style named-zone lookup/fallback; nonnumeric colon strings retain E2000. Add Engine default-off regressions for Check, ListObjects and ListUsers, verified by mutating the default.
 
 - Match Go/OpenFGA UTC fallback for decimal colon-form numeric Local settings (`+05:30`, `-08:00`, `05:30`) by default; colon-free forms such as `+5`, `-8`, `+05`, `+0530` remain E2000. Retain fixed numeric Local offsets only with the explicit, default-off `allow_numeric_local_timezone` CEL / `condition_allow_numeric_local_timezone` Engine option; preserve oracle-supported direct getter offsets and named zones.
 - Add native/JS/wasm-gc regressions and a focused timestamp oracle differential; the three former Local offset deviations are now matched comparisons. See docs/evidence/numeric-local-timezone.md.
 
-## 0.2.5 (unreleased)
+## 0.2.5
 
 ### Independent r9 review rework
 
@@ -27,7 +31,7 @@
 
 - Republish the 0.2.3 contents without personal contact details in the packaged docs. No code changes.
 
-## 0.2.3 (unreleased)
+## 0.2.3
 
 - Add CEL bytes literals, escapes, UTF-8 conversion, concatenation, ordering, size and collection values; support raw/triple literals.
 - Check signed/unsigned arithmetic overflow and conversion boundaries; absorb deciding list quantifier values across errors; add has on map fields, dyn and basic scalar conversion overloads.
