@@ -1,5 +1,10 @@
 # Numeric Local timezone compatibility
 
+The 92e1949 results below are historical. The r10 rework narrows numeric fallback
+to decimal colon forms, fixes leading-colon TZ lookup and adds Engine-default
+mutation tests. See [rework commands and current counts](numeric-local-timezone-rework1.md).
+Colon-free numeric settings such as `+5` and `+0530` remain E2000, unlike Go.
+
 Branch `eco-r3`, baseline `543bda293319177f64ae8ce811c7796c5e12e8b5`
 (MoonFGA 0.2.5). No version bump, push, tag or publish. Tools: moon
 0.1.20261104 (940aa18), Go go1.27.1 darwin/arm64, Node v24.18.0.

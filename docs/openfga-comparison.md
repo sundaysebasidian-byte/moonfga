@@ -148,13 +148,17 @@ was added. Browser, JS, native and wasm all use the same MoonBit matcher and dat
    An unset TZ on macOS may use OS localtime rather than a UTC container. Host
    configuration and exact semantics are in [runtime controls](runtime-controls.md).
    Numeric Local settings (`+05:30`, `-08:00` and unsigned `05:30`) now default
-   to UTC, matching Go's invalid-TZ fallback. Fixed-offset Local behavior requires
+   to UTC, matching Go's invalid-TZ fallback. This fallback is limited to decimal
+   colon-form offsets; colon-free settings such as `+5` and `+0530` remain E2000.
+   One leading `:` uses Go-style zone lookup (`:Asia/Kolkata` loads Kolkata;
+   `::UTC`, `:+05:30` and `:` fall back to UTC). Fixed-offset Local behavior requires
    `allow_numeric_local_timezone=true` in CEL or
    `condition_allow_numeric_local_timezone=true` on Engine (default **false**).
    The three formerly recorded differences are now matched comparisons; four
    named zones also match. The focused timestamp differential has 520 direct
    value/error-category comparisons and 6873 HTTP comparison slots, zero
-   differences. [Commands, counts and limits](evidence/numeric-local-timezone.md).
+   differences. [Initial commands and limits](evidence/numeric-local-timezone.md);
+   [r10 rework and current host coverage](evidence/numeric-local-timezone-rework1.md).
 2. **Cost evidence and unordered maps.** The generated cel-go v0.31.0 corpus covers
    10266 programs (9862 actual-cost comparisons and 404 evaluation-error categories)
    and 47938 limit comparisons per run, with 20/20 full runs passing. A separate

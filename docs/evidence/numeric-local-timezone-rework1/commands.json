@@ -1,0 +1,134 @@
+[
+  {
+    "command": [
+      "moon",
+      "fmt"
+    ],
+    "exit": 0,
+    "seconds": 0.074,
+    "output": "Finished. moon: ran 4 tasks, now up to date\n"
+  },
+  {
+    "command": [
+      "moon",
+      "fmt",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 1.334,
+    "output": "Finished. moon: ran 118 tasks, now up to date\n"
+  },
+  {
+    "command": [
+      "moon",
+      "check",
+      "--target",
+      "native",
+      "--deny-warn"
+    ],
+    "exit": 0,
+    "seconds": 0.276,
+    "output": "Finished. moon: ran 2 tasks, now up to date\n"
+  },
+  {
+    "command": [
+      "moon",
+      "check",
+      "--target",
+      "js",
+      "--deny-warn"
+    ],
+    "exit": 0,
+    "seconds": 0.98,
+    "output": "Finished. moon: ran 8 tasks, now up to date\n"
+  },
+  {
+    "command": [
+      "moon",
+      "check",
+      "--target",
+      "wasm-gc",
+      "--deny-warn"
+    ],
+    "exit": 0,
+    "seconds": 0.796,
+    "output": "Finished. moon: ran 8 tasks, now up to date\n"
+  },
+  {
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "native"
+    ],
+    "exit": 0,
+    "seconds": 35.22,
+    "output": "Blocking waiting for file lock $REPO/_build/.moon-lock ...\nTotal tests: 289, passed: 289, failed: 0.\n"
+  },
+  {
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "js"
+    ],
+    "exit": 0,
+    "seconds": 32.78,
+    "output": "Total tests: 289, passed: 289, failed: 0.\n"
+  },
+  {
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "wasm-gc"
+    ],
+    "exit": 0,
+    "seconds": 12.644,
+    "output": "Total tests: 289, passed: 289, failed: 0.\n"
+  },
+  {
+    "command": [
+      "moon",
+      "info"
+    ],
+    "exit": 0,
+    "seconds": 0.765,
+    "output": "Finished. moon: ran 5 tasks, now up to date\n"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "--",
+      "*.mbti"
+    ],
+    "exit": 0,
+    "seconds": 0.061,
+    "output": ""
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 0.027,
+    "output": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-m",
+      "py_compile",
+      "scripts/r9_host_boundaries.py",
+      "scripts/oracle_timestamp.py",
+      "scripts/oracle_host.py"
+    ],
+    "exit": 0,
+    "seconds": 0.114,
+    "output": ""
+  }
+]

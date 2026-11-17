@@ -1,0 +1,40 @@
+./CHANGELOG.md:5:- Restrict numeric Local fallback to two decimal components, and handle one leading `:` with Go-style named-zone lookup/fallback; nonnumeric colon strings retain E2000. Add Engine default-off regressions for Check, ListObjects and ListUsers, verified by mutating the default.
+./CHANGELOG.md:7:- Match Go/OpenFGA UTC fallback for decimal colon-form numeric Local settings (`+05:30`, `-08:00`, `05:30`) by default; colon-free forms such as `+5`, `-8`, `+05`, `+0530` remain E2000. Retain fixed numeric Local offsets only with the explicit, default-off `allow_numeric_local_timezone` CEL / `condition_allow_numeric_local_timezone` Engine option; preserve oracle-supported direct getter offsets and named zones.
+./CHANGELOG.md:8:- Add native/JS/wasm-gc regressions and a focused timestamp oracle differential; the three former Local offset deviations are now matched comparisons. See docs/evidence/numeric-local-timezone.md.
+./CHANGELOG.md:18:- Document signed/unsigned numeric Local offsets as a host extension distinct from Go TZ. Add tracked generated review, index, host and order probes, plus official outcomes on every backend.
+./docs/runtime-controls.md:20:only decimal colon-form numeric Local settings fall back to UTC by default
+./docs/runtime-controls.md:33:A numeric **Local configuration** has different semantics from a direct getter
+./docs/runtime-controls.md:42:`Engine::new(..., condition_local_timezone=Some("+05:30"), condition_allow_numeric_local_timezone=true)`.
+./docs/runtime-controls.md:44:and `eval_condition_with_limit` is `allow_numeric_local_timezone=true`.
+./docs/runtime-controls.md:61:[Focused timestamp evidence](evidence/numeric-local-timezone.md) distinguishes
+./scripts/r9_host_boundaries.py:1:"""Pinned Go TZ fallback, opt-in Local offsets and synchronous validation."""
+./scripts/r9_host_boundaries.py:41:                rows.append({'TZ':zone,'server_Local_hour':go_hour,'default_MoonFGA_Local_hour':go_hour,'opt_in_MoonFGA_Local_hour':local_hour,'offset_extension':go_hour!=local_hour,'server_check':check,'server_invalid_relation':invalid})
+./scripts/r9_host_boundaries.py:57:        enabled['allow_numeric_local_timezone']=True
+./scripts/r9_host_boundaries.py:66:    summary={'named_zones_matched':4,'numeric_Local_fallbacks_matched':3,'colon_prefixed_Local_checks_matched':11,'server_checks_matched':len(rows),'default_local_api_assertions':len(actual)*3,'opt_in_api_assertions':len(extension_actual)*3,'server_validation_errors':len(rows),'mismatches':0}
+./docs/proposal.md:36:独立 r9 审查发现并修复了变量下标多计费导致的默认预算授权回归、两个数值边界及同类型转换成本。原 9556 程序语料含随机 map 顺序项，旧“零差异”数字不能稳定复现，已由本轮证据替代。Go 随机 map 成本和列表超时策略仍保留明确差异；Local 冒号形式数值偏移配置默认按 Go 回退 UTC，固定偏移扩展仅在显式 opt-in 时启用，无冒号数值形式仍为 E2000。详见 [Local 运行时边界](runtime-controls.md#local-timezone)；不声明所有输入成本等价。
+./docs/openfga-comparison.md:125:| timestamp getFullYear/getMonth/getDate/getDayOfMonth/getDayOfWeek/getDayOfYear/getHours/getMinutes/getSeconds/getMilliseconds  | 所列语料通过；Local 默认 UTC | UTC/default, CEL numeric offsets and named IANA zones; historical and future DST; negative epochs and sub-milliseconds | D/R; 20 host-TZ probes |
+./docs/openfga-comparison.md:150:   Numeric Local settings (`+05:30`, `-08:00` and unsigned `05:30`) now default
+./docs/openfga-comparison.md:154:   `::UTC`, `:+05:30` and `:` fall back to UTC). Fixed-offset Local behavior requires
+./docs/openfga-comparison.md:155:   `allow_numeric_local_timezone=true` in CEL or
+./docs/openfga-comparison.md:156:   `condition_allow_numeric_local_timezone=true` on Engine (default **false**).
+./docs/openfga-comparison.md:160:   differences. [Initial commands and limits](evidence/numeric-local-timezone.md);
+./docs/openfga-comparison.md:161:   [r10 rework and current host coverage](evidence/numeric-local-timezone-rework1.md).
+./docs/evidence/rework1-validation.md:60:| Time | Implemented getters, named/fixed-offset zones, checked arithmetic, parsing/formatting and full protobuf int64 timestamp seconds. Local requires explicit host configuration. |
+./docs/evidence/numeric-local-timezone.md:1:# Numeric Local timezone compatibility
+./docs/evidence/numeric-local-timezone.md:5:mutation tests. See [rework commands and current counts](numeric-local-timezone-rework1.md).
+./docs/evidence/numeric-local-timezone.md:15:[Machine-readable counts and input/binary hashes](numeric-local-timezone/summary.json).
+./docs/evidence/numeric-local-timezone.md:30:requires `allow_numeric_local_timezone=true` on the CEL evaluation APIs or
+./docs/evidence/numeric-local-timezone.md:31:`condition_allow_numeric_local_timezone=true` on `Engine::new`, both default off.
+./docs/evidence/numeric-local-timezone.md:41:[Exact direct oracle probe, including error text](numeric-local-timezone/direct-probe.json).
+./docs/evidence/numeric-local-timezone.md:57:# 92 tests, 91 passed, 1 failed (the numeric Local default regression)
+./docs/evidence/numeric-local-timezone.md:77:is retained in [before-test.txt](numeric-local-timezone/before-test.txt).
+./docs/evidence/numeric-local-timezone.md:78:[Final test output](numeric-local-timezone/tests.txt) and
+./docs/evidence/numeric-local-timezone.md:79:[format/check/info command exits](numeric-local-timezone/validation-commands.json)
+./docs/evidence/numeric-local-timezone.md:92:  **3 former numeric Local deviations + 4 named zones**. It additionally checks
+./docs/evidence/numeric-local-timezone.md:95:  the extra list assertions are local. [Records](numeric-local-timezone/host-results.json).
+./docs/evidence/numeric-local-timezone.md:120:[closeout.json](numeric-local-timezone/closeout.json); a Trash recovery location
+./docs/evidence/rework3-validation.md:3:The historical S4 numeric Local extension below is superseded by
+./docs/evidence/rework3-validation.md:4:[numeric Local timezone compatibility](numeric-local-timezone.md): default UTC
+./docs/evidence/rework3-validation.md:5:fallback now matches the oracle; fixed Local offsets require explicit opt-in.
+./docs/evidence/rework3-validation.md:33:| S4 numeric Local vs process TZ | Historical result, superseded: fixed signed/unsigned colon-form offsets are now an explicit opt-in extension, default off. Go TZ=+05:30/-08:00/05:30 falls back to UTC (hour 10); configured local offsets produce 15/2/15. Four named zones match. [Actual server/local records](rework3-r9/host-boundaries.json). |
+./docs/evidence/rework3-validation.md:192:Numeric colon-form Local settings now match Go's default UTC fallback; the fixed

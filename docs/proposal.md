@@ -33,7 +33,7 @@
 
 官方实测：缺少已声明参数时，即使条件为 true 也返回 E2000；动态整数与 double 比较存在 cel-go 的舍入行为。实现按这些结果对齐。Local 宿主配置、正则资源策略和服务期限的具体边界仍见 [逐函数对比](openfga-comparison.md#host-boundaries-and-remaining-verification-limits)。0.2.5 未配置 Local 时按 UTC，省略 getter 时区参数也按 UTC；宿主时区探测 20/20。ExecutionBudget 覆盖图遍历与 CEL，耗尽/期限触发 E4004，条件 cost/取消为 E2000；列表超时不返回看似完整的部分结果。服务端、认证、ReadChanges 和分页明确不做，consistency 由宿主 reader 快照实现；不声明完整兼容。
 
-独立 r9 审查发现并修复了变量下标多计费导致的默认预算授权回归、两个数值边界及同类型转换成本。原 9556 程序语料含随机 map 顺序项，旧“零差异”数字不能稳定复现，已由本轮证据替代。Go 随机 map 成本、Local 数值偏移扩展和列表超时策略仍保留明确差异；不声明所有输入成本等价。
+独立 r9 审查发现并修复了变量下标多计费导致的默认预算授权回归、两个数值边界及同类型转换成本。原 9556 程序语料含随机 map 顺序项，旧“零差异”数字不能稳定复现，已由本轮证据替代。Go 随机 map 成本和列表超时策略仍保留明确差异；Local 冒号形式数值偏移配置默认按 Go 回退 UTC，固定偏移扩展仅在显式 opt-in 时启用，无冒号数值形式仍为 E2000。详见 [Local 运行时边界](runtime-controls.md#local-timezone)；不声明所有输入成本等价。
 
 ## 和 OpenFGA 结果一致的证据
 

@@ -1,0 +1,12 @@
+{
+  "mutation": "Engine::new condition_allow_numeric_local_timezone default false -> true",
+  "command": [
+    "moon",
+    "test",
+    "--target",
+    "native"
+  ],
+  "exit": 2,
+  "restored": true,
+  "restored_sha256": "773edc4c4747d5be1d0865d59af743d188e2e3d9fcb56de0314f60d85f0f6d4b"
+}

@@ -301,3 +301,84 @@ test "numeric Local opt in survives named inline contextual list and budget copi
     }
   }
 }
+
+///|
+fn numeric_local_engine(allow : Bool?) -> @engine.Engine {
+  let model = model_of(
+    "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user with enabled]\ncondition enabled() { timestamp('2026-03-08T10:00:00Z').getHours('Local') == 15 }",
+  )
+  let store = @store.MemoryStore::new()
+  ignore(
+    store.write({
+      object: "document:1",
+      relation: "viewer",
+      user: "user:1",
+      condition: Some({ name: "enabled", context: Map([]), }),
+    }),
+  )
+  match allow {
+    None =>
+      @engine.Engine::new(
+        model,
+        store as &@fga.TupleReader,
+        condition_local_timezone=Some("+05:30"),
+      )
+    Some(flag) =>
+      @engine.Engine::new(
+        model,
+        store as &@fga.TupleReader,
+        condition_local_timezone=Some("+05:30"),
+        condition_allow_numeric_local_timezone=flag,
+      )
+  }
+}
+
+///|
+test "Engine Check numeric Local defaults off and honours explicit opt in" {
+  for allow in [None, Some(false), Some(true)] {
+    assert_eq(
+      numeric_local_engine(allow).check("document:1", "viewer", "user:1"),
+      allow == Some(true),
+    )
+  }
+}
+
+///|
+test "Engine ListObjects numeric Local defaults off and honours explicit opt in" {
+  for allow in [None, Some(false), Some(true)] {
+    assert_eq(
+      numeric_local_engine(allow).list_objects(
+        "document",
+        "viewer",
+        "user:1",
+        Map([]),
+        [],
+      ),
+      if allow == Some(true) {
+        ["document:1"]
+      } else {
+        []
+      },
+    )
+  }
+}
+
+///|
+test "Engine ListUsers numeric Local defaults off and honours explicit opt in" {
+  for allow in [None, Some(false), Some(true)] {
+    assert_eq(
+      numeric_local_engine(allow).list_users(
+        "document:1",
+        "viewer",
+        ["user"],
+        Map([]),
+        [],
+      ),
+      if allow == Some(true) {
+        ["user:1"]
+      } else {
+        []
+      },
+    )
+  }
+}

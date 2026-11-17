@@ -17,9 +17,11 @@ conversion against OpenFGA v1.22.1 with `TZ=""`, `UTC`, `America/Los_Angeles` an
 `Asia/Kolkata`: 20/20 matching Check decisions. An unset TZ on a non-UTC OS can
 resolve to that OS's localtime, so hosts must resolve their desired server TZ and
 supply it explicitly. Accepted settings are supported IANA names and UTC;
-numeric Local settings fall back to UTC by default, as Go's process TZ loader
-does. Do not pass arbitrary POSIX TZ rules, TZif file paths or the alias Local as
-a replacement zone. Unknown names produce E2000. Pinned tzdb data and updates
+only decimal colon-form numeric Local settings fall back to UTC by default
+(e.g. `+05:30`, `-08:00`, `05:30`). Colon-free forms `+5`, `-8`, `+05` and
+`+0530` remain E2000, although Go falls back to UTC for them. Do not pass
+arbitrary POSIX TZ rules, TZif file paths or the alias Local as a replacement
+zone. Unknown unprefixed names produce E2000. Pinned tzdb data and updates
 are described in [timezones.md](timezones.md).
 
 Direct CEL getter arguments support numeric offsets in both the pinned oracle
@@ -31,8 +33,12 @@ This behavior does not depend on the Local configuration or its opt-in flag.
 A numeric **Local configuration** has different semantics from a direct getter
 argument. Go/OpenFGA's process `TZ=+05:30`, `-08:00` or `05:30` falls back to UTC:
 at `2026-03-08T10:00:00Z`, Local hour is 10. MoonFGA now defaults to the same
-fallback for colon-containing Local configurations. To retain the former fixed
-offset extension, explicitly set
+fallback only for two nonempty decimal components separated by one colon,
+with an optional sign on each component (the CEL parser accepts `8:+01`).
+Other unprefixed colon strings, such as `Foo:Bar`, `0x8:00` or `+05:30:15`,
+produce E2000; merely containing a colon does not select UTC. Out-of-range
+numeric components fall back to UTC by default and produce E2000 with opt-in.
+To retain the fixed offset extension, explicitly set
 `Engine::new(..., condition_local_timezone=Some("+05:30"), condition_allow_numeric_local_timezone=true)`.
 The equivalent optional flag on `eval_expr_with_limit`, `eval_expr_with_cost`
 and `eval_condition_with_limit` is `allow_numeric_local_timezone=true`.
@@ -40,8 +46,16 @@ Both flags default to **false**. With opt-in, the three Local hours are 15, 2 an
 15; malformed offset settings still produce E2000. The flag is preserved across
 contextual, list, inline-condition and budget-bound engine evaluations.
 
-`scripts/r9_host_boundaries.py` now compares the three default UTC fallbacks and
-four named zones, and separately asserts the opt-in extension. Names use
+A single leading `:` selects Go-style TZ lookup: `:Asia/Kolkata` and `:UTC`
+load the corresponding zone; an empty or unknown stripped name falls back to
+UTC. Exactly one colon is stripped, so `::UTC`, `:+05:30` and `:` resolve to
+UTC. This notation has the same behavior with the numeric opt-in on or off;
+`:+05:30` does not request the fixed numeric offset extension. OS TZif paths
+remain outside the supported host contract.
+
+`scripts/r9_host_boundaries.py` compares the three numeric default UTC fallbacks,
+four named zones and eleven leading-colon forms, and separately asserts the
+opt-in behavior. Names use
 canonical case; Go filesystem lookups on a case-insensitive OS can accept
 noncanonical spellings that this pinned, case-sensitive table rejects.
 [Focused timestamp evidence](evidence/numeric-local-timezone.md) distinguishes

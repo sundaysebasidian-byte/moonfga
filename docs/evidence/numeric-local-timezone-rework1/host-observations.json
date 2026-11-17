@@ -1,0 +1,20 @@
+[
+{"TZ": "+05:30", "default_local_check": true, "opt_in_hour": 15, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 10},
+{"TZ": "-08:00", "default_local_check": true, "opt_in_hour": 2, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 10},
+{"TZ": "05:30", "default_local_check": true, "opt_in_hour": 15, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 10},
+{"TZ": "EST", "default_local_check": true, "opt_in_hour": 5, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 5},
+{"TZ": "Etc/GMT+12", "default_local_check": true, "opt_in_hour": 22, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 22},
+{"TZ": "America/Los_Angeles", "default_local_check": true, "opt_in_hour": 3, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 3},
+{"TZ": "Asia/Kolkata", "default_local_check": true, "opt_in_hour": 15, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 15},
+{"TZ": ":Asia/Kolkata", "default_local_check": true, "opt_in_hour": 15, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 15},
+{"TZ": ":UTC", "default_local_check": true, "opt_in_hour": 10, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 10},
+{"TZ": "::UTC", "default_local_check": true, "opt_in_hour": 10, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 10},
+{"TZ": ":+05:30", "default_local_check": true, "opt_in_hour": 10, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 10},
+{"TZ": ":", "default_local_check": true, "opt_in_hour": 10, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 10},
+{"TZ": ":America/Los_Angeles", "default_local_check": true, "opt_in_hour": 3, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 3},
+{"TZ": ":Etc/GMT-5", "default_local_check": true, "opt_in_hour": 15, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 15},
+{"TZ": "::Asia/Kolkata", "default_local_check": true, "opt_in_hour": 10, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 10},
+{"TZ": ":05:30", "default_local_check": true, "opt_in_hour": 10, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 10},
+{"TZ": ":Invalid/Zone", "default_local_check": true, "opt_in_hour": 10, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 10},
+{"TZ": ":::UTC", "default_local_check": true, "opt_in_hour": 10, "opt_in_local_check": true, "oracle_check_allowed": true, "oracle_hour": 10}
+]

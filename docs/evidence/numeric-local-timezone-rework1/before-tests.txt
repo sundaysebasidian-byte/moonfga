@@ -1,0 +1,10 @@
+Warning: [0024]
+     ╭─[ $REPO/engine/condition_limits_test.mbt:306:64 ]
+     │
+ 306 │ fn numeric_local_engine(allow : Bool?) -> @engine.Engine raise @fga.FgaError {
+     │                                                                ──────┬──────
+     │                                                                      ╰──────── Warning (unused_error_type): The error type of this function is never used.
+─────╯
+[sundaysebasidian-byte/moonfga] test cel/timezone_compat_test.mbt:86 ("Local strips one leading colon using pinned Go TZ lookup semantics") failed: cel/timezone_compat_test.mbt:101:7-101:71@sundaysebasidian-byte/moonfga FAILED: :Asia/Kolkata
+[sundaysebasidian-byte/moonfga] test cel/timezone_compat_test.mbt:107 ("non numeric colon Local settings retain E2000 instead of silent UTC") failed: cel/timezone_compat_test.mbt:120:5-120:36@sundaysebasidian-byte/moonfga FAILED: Foo:Bar
+Total tests: 232, passed: 230, failed: 2.

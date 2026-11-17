@@ -38,6 +38,45 @@ fn rule_instant(
 }
 
 ///|
+fn resolve_local_timezone(name : String, allow_numeric : Bool) -> String {
+  if name.has_prefix(":") {
+    // Go strips exactly one leading colon, then loads a zone or falls back to UTC.
+    // This TZ notation does not opt into CEL's numeric offset parser.
+    let chars = name.iter().collect()
+    let zone = String::from_array(chars[1:])
+    return if zone == "" || zone == "UTC" || timezone_index(zone) is Some(_) {
+      zone
+    } else {
+      "UTC"
+    }
+  }
+  if allow_numeric {
+    return name
+  }
+  let parts = name.split(":").collect()
+  if parts.length() != 2 {
+    return name
+  }
+  for part in parts {
+    let chars = part.iter().collect()
+    let start = if chars.get(0) == Some('+') || chars.get(0) == Some('-') {
+      1
+    } else {
+      0
+    }
+    if chars.length() == start {
+      return name
+    }
+    for i in start..<chars.length() {
+      if !chars[i].is_ascii_digit() {
+        return name
+      }
+    }
+  }
+  "UTC"
+}
+
+///|
 fn timezone_offset(
   name : String,
   seconds : Int64,

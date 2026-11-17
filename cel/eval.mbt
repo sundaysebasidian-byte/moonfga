@@ -658,15 +658,7 @@ fn eval_method(
       let resolved = if zone == Some("Local") {
         match state.local_timezone {
           Some(z) =>
-            // Go's process TZ loader falls back to UTC for numeric offsets;
-            // explicit CEL getter offsets still use the CEL offset parser.
-            Some(
-              if z.contains(":") && !state.allow_numeric_local_timezone {
-                "UTC"
-              } else {
-                z
-              },
-            )
+            Some(resolve_local_timezone(z, state.allow_numeric_local_timezone))
           None => Some("UTC")
         }
       } else {

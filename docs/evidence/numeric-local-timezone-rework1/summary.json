@@ -1,0 +1,112 @@
+{
+  "baseline": "92e1949a4134b110d0dcbeb62a41a8710bb6080d",
+  "branch": "eco-r3",
+  "tests": {
+    "native": {
+      "total": 289,
+      "passed": 289,
+      "failed": 0
+    },
+    "js": {
+      "total": 289,
+      "passed": 289,
+      "failed": 0
+    },
+    "wasm-gc": {
+      "total": 289,
+      "passed": 289,
+      "failed": 0
+    }
+  },
+  "focused_before": {
+    "total": 232,
+    "passed": 230,
+    "failed": 2
+  },
+  "focused_after": {
+    "total": 232,
+    "passed": 232,
+    "failed": 0
+  },
+  "mutation": {
+    "mutation": "Engine::new condition_allow_numeric_local_timezone default false -> true",
+    "command": [
+      "moon",
+      "test",
+      "--target",
+      "native"
+    ],
+    "exit": 2,
+    "restored": true,
+    "restored_sha256": "773edc4c4747d5be1d0865d59af743d188e2e3d9fcb56de0314f60d85f0f6d4b"
+  },
+  "mutated_tests": {
+    "total": 289,
+    "passed": 286,
+    "failed": 3
+  },
+  "timestamp": {
+    "direct_comparisons": 520,
+    "direct_successes": 280,
+    "direct_evaluation_errors": 240,
+    "direct_mismatches": 0,
+    "http": {
+      "version": "1.22.1",
+      "commit": "44054f542f64e9b9589dd26a595081b3d2cfd942",
+      "timezone": "UTC",
+      "condition_cost_limit": 100,
+      "seed": 314159,
+      "cases": 2291,
+      "random_cases": 0,
+      "regression_cases": 2291,
+      "comparisons": 6873,
+      "mismatches": 0,
+      "families": {
+        "cel": 2291
+      },
+      "by_api": {
+        "check": {
+          "compared": 2291,
+          "mismatches": 0
+        },
+        "list_objects": {
+          "compared": 2291,
+          "mismatches": 0
+        },
+        "list_users": {
+          "compared": 2291,
+          "mismatches": 0
+        }
+      },
+      "corpus": "conformance-results/offset-rework1/timestamp/http-corpus.json"
+    }
+  },
+  "r9_host": {
+    "named_zones_matched": 4,
+    "numeric_Local_fallbacks_matched": 3,
+    "colon_prefixed_Local_checks_matched": 11,
+    "server_checks_matched": 18,
+    "default_local_api_assertions": 54,
+    "opt_in_api_assertions": 54,
+    "server_validation_errors": 18,
+    "mismatches": 0
+  },
+  "original_host": {
+    "timezone_checks": 20,
+    "local_checks_matched": 20,
+    "list_objects_deadline_categories": [
+      "deadline_exceeded"
+    ],
+    "list_users_deadline_categories": [
+      "ok"
+    ]
+  },
+  "sha256": {
+    ".upstream/oracle/openfga_1.22.1_darwin_arm64.tar.gz": "4d64ccd3ead676e3b13154bb32372421f3cd4735eda0211f5d0b7d244c689b90",
+    "conformance-results/offset-rework1/timestamp/celoracle": "f3b061fdb86dcd333eaa9548fa83b0e5660dcefb741b9f2c61b35700cd04a20d",
+    "conformance-results/offset-rework1/timestamp/direct.json": "fe59a137f5a7c2b60e87cf736765e4844d61f28455c13f26d3bc2c5b7845cd6a",
+    "conformance-results/offset-rework1/timestamp/http-corpus.json": "0def8da11774fe6bfe7821262f66d7893fa756a93b7932ef63d7357d595df523",
+    "conformance-results/offset-rework1/host/cases.json": "c5e88d01377c98f3f36d28f83c6295efd575c839497a69d42ec0cc2f5cc3f19a",
+    "conformance-results/offset-rework1/host/opt-in-cases.json": "3fa17e7da68b35b6c3cd3d39b3290866a047b28f441636f0b6f5437c852e798b"
+  }
+}

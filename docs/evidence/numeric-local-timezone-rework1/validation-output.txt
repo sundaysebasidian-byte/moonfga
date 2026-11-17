@@ -1,0 +1,45 @@
+$ moon fmt
+Finished. moon: ran 4 tasks, now up to date
+exit: 0
+
+$ moon fmt --check
+Finished. moon: ran 118 tasks, now up to date
+exit: 0
+
+$ moon check --target native --deny-warn
+Finished. moon: ran 2 tasks, now up to date
+exit: 0
+
+$ moon check --target js --deny-warn
+Finished. moon: ran 8 tasks, now up to date
+exit: 0
+
+$ moon check --target wasm-gc --deny-warn
+Finished. moon: ran 8 tasks, now up to date
+exit: 0
+
+$ moon test --target native
+Blocking waiting for file lock $REPO/_build/.moon-lock ...
+Total tests: 289, passed: 289, failed: 0.
+exit: 0
+
+$ moon test --target js
+Total tests: 289, passed: 289, failed: 0.
+exit: 0
+
+$ moon test --target wasm-gc
+Total tests: 289, passed: 289, failed: 0.
+exit: 0
+
+$ moon info
+Finished. moon: ran 5 tasks, now up to date
+exit: 0
+
+$ git diff --exit-code -- *.mbti
+exit: 0
+
+$ git diff --check
+exit: 0
+
+$ python3 -m py_compile scripts/r9_host_boundaries.py scripts/oracle_timestamp.py scripts/oracle_host.py
+exit: 0

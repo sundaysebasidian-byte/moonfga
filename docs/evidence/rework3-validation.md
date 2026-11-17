@@ -2,7 +2,9 @@
 
 The historical S4 numeric Local extension below is superseded by
 [numeric Local timezone compatibility](numeric-local-timezone.md): default UTC
-fallback now matches the oracle; fixed Local offsets require explicit opt-in.
+fallback for decimal colon-form settings now matches the oracle; fixed Local
+offsets require explicit opt-in. Colon-free numeric settings remain E2000;
+[r10 rework](numeric-local-timezone-rework1.md) records the exact contract.
 
 Runtime implementation: `f0dc800` (CEL fix `90cc84f`, deterministic corpus `513ff2c`),
 branch `compat-0.2.5`; based on reviewed candidate `7510dde`, published baseline
@@ -30,7 +32,7 @@ that cost claim. Historical transcripts are retained after this section.
 | S1 flaky ordinary cost item | Remove `{1:2,3:4}.exists(k,k==3)` from ordinary costs and frozen cost 13. Keep its Boolean/default-budget API test; keep cost non-determinism in separate order probes. **20/20 complete normal cost runs pass**, with identical normal corpus input hashes. |
 | S2 string(string(double)) cost | Charge string->string and bytes->bytes identity overloads as 1, including empty and long inputs; retain size-based encoding/decoding costs. The 1234567.0+n nested string repro now costs 5, not 6. |
 | S3 validation vs exhausted budget | Run synchronous request validation before the first step, across Check wrappers, list APIs, Expand/Explain and batch items. Invalid Check retains E2000 even with steps 0/1/negative or cancelled=true; list APIs retain their own specific validation code. [Old reviewed binary behavior](rework3-r9/validation-before.txt), [new regression](rework3-r9/validation-after.txt). Sticky E4004 still wins during valid evaluation. |
-| S4 numeric Local vs process TZ | Retain fixed signed/unsigned offsets as a documented host extension. Go TZ=+05:30/-08:00/05:30 falls back to UTC (hour 10); configured local offsets produce 15/2/15. Four named zones match. [Actual server/local records](rework3-r9/host-boundaries.json). |
+| S4 numeric Local vs process TZ | Historical result, superseded: fixed signed/unsigned colon-form offsets are now an explicit opt-in extension, default off. Go TZ=+05:30/-08:00/05:30 falls back to UTC (hour 10); configured local offsets produce 15/2/15. Four named zones match. [Actual server/local records](rework3-r9/host-boundaries.json). |
 
 The focused index generator has **609 inputs**: 605 successful cost comparisons,
 one dynamic-string evaluation error and three unsupported string/bytes checker
@@ -189,8 +191,11 @@ performance equivalence or remove host-load uncertainty.
 ## Exact remaining boundaries and closeout
 
 I1/I2 and the indexed-authorization regression are fixed, not hidden as exceptions.
-Retained differences are: randomized map short-circuit cost/order; fixed-offset
-Local configuration as an extension rather than Go TZ mapping; canonical/pinned
+Numeric colon-form Local settings now match Go's default UTC fallback; the fixed
+offset extension requires explicit opt-in. Colon-free numeric settings remain
+E2000; exact accepted forms and leading-colon semantics are in
+[runtime controls](../runtime-controls.md#local-timezone).
+Retained differences are: randomized map short-circuit cost/order; canonical/pinned
 timezone data versus OS lookup/data; E4004 rather than unmarked partial lists on
 request timeout; cooperative checkpoints rather than preemption of host I/O/model
 checking/regex construction; finite NFA memory/nesting and pinned Unicode data;

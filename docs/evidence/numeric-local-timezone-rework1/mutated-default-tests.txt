@@ -1,0 +1,10 @@
+[sundaysebasidian-byte/moonfga] test engine/condition_limits_test.mbt:337 ("Engine Check numeric Local defaults off and honours explicit opt in") failed: engine/condition_limits_test.mbt:339:5-342:6@sundaysebasidian-byte/moonfga FAILED: `true != false`
+diff:
+-true +false
+[sundaysebasidian-byte/moonfga] test engine/condition_limits_test.mbt:347 ("Engine ListObjects numeric Local defaults off and honours explicit opt in") failed: engine/condition_limits_test.mbt:349:5-362:6@sundaysebasidian-byte/moonfga FAILED: `["document:1"] != []`
+diff:
+-["document:1"] +[]
+[sundaysebasidian-byte/moonfga] test engine/condition_limits_test.mbt:367 ("Engine ListUsers numeric Local defaults off and honours explicit opt in") failed: engine/condition_limits_test.mbt:369:5-382:6@sundaysebasidian-byte/moonfga FAILED: `["user:1"] != []`
+diff:
+-["user:1"] +[]
+Total tests: 289, passed: 286, failed: 3.

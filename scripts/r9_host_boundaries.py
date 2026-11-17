@@ -15,7 +15,11 @@ def main():
     parser.add_argument('--output',type=Path,default=Path('conformance-results/r9-rework/host'))
     out=parser.parse_args().output;out.mkdir(parents=True,exist_ok=True)
     rows=[];cases=[]
-    for zone,go_hour,local_hour in [('+05:30',10,15),('-08:00',10,2),('05:30',10,15),('EST',5,5),('Etc/GMT+12',22,22),('America/Los_Angeles',3,3),('Asia/Kolkata',15,15)]:
+    for zone,go_hour,local_hour in [('+05:30',10,15),('-08:00',10,2),('05:30',10,15),('EST',5,5),('Etc/GMT+12',22,22),('America/Los_Angeles',3,3),('Asia/Kolkata',15,15),
+            (':Asia/Kolkata',15,15),(':UTC',10,10),('::UTC',10,10),
+            (':+05:30',10,10),(':',10,10),(':America/Los_Angeles',3,3),
+            (':Etc/GMT-5',15,15),('::Asia/Kolkata',10,10),(':05:30',10,10),
+            (':Invalid/Zone',10,10),(':::UTC',10,10)]:
         ports=[oracle.port() for _ in range(3)];base=f'http://127.0.0.1:{ports[0]}'
         c=condition_case(f'timestamp("2026-03-08T10:00:00Z").getHours("Local")=={go_hour}')
         with (out/f'server-{len(rows)}.log').open('w') as log:
@@ -37,8 +41,10 @@ def main():
                 rows.append({'TZ':zone,'server_Local_hour':go_hour,'default_MoonFGA_Local_hour':go_hour,'opt_in_MoonFGA_Local_hour':local_hour,'offset_extension':go_hour!=local_hour,'server_check':check,'server_invalid_relation':invalid})
             finally:proc.terminate();proc.wait(timeout=10)
         c['local_timezone']=zone;cases.append(c)
+    (out/'server-results.json').write_text(json.dumps(rows,indent=2)+'\n')
     corpus=out/'cases.json';corpus.write_text(json.dumps(cases))
     actual=json.loads(subprocess.run(['moon','run','--target','native','cmd/oracle','--',str(corpus)],text=True,capture_output=True,check=True).stdout)
+    (out/'local-results.json').write_text(json.dumps(actual,indent=2)+'\n')
     assert len(actual)==len(rows)
     for row,result in zip(rows,actual):
         assert result['check'] is True,(row,result)
@@ -47,18 +53,17 @@ def main():
         row['local_check']=result['check']
     extension_cases=[]
     for c,row in zip(cases,rows):
-        if row['offset_extension']:
-            enabled=json.loads(json.dumps(c))
-            enabled['allow_numeric_local_timezone']=True
-            enabled['model']['conditions']['cel_condition']['expression']=f'timestamp("2026-03-08T10:00:00Z").getHours("Local")=={row["opt_in_MoonFGA_Local_hour"]}'
-            extension_cases.append(enabled)
+        enabled=json.loads(json.dumps(c))
+        enabled['allow_numeric_local_timezone']=True
+        enabled['model']['conditions']['cel_condition']['expression']=f'timestamp("2026-03-08T10:00:00Z").getHours("Local")=={row["opt_in_MoonFGA_Local_hour"]}'
+        extension_cases.append(enabled)
     extension_corpus=out/'opt-in-cases.json';extension_corpus.write_text(json.dumps(extension_cases))
     extension_actual=json.loads(subprocess.run(['moon','run','--target','native','cmd/oracle','--',str(extension_corpus)],text=True,capture_output=True,check=True).stdout)
-    assert len(extension_actual)==3
+    assert len(extension_actual)==len(rows)
     assert all(r['check'] is True and r['list_objects']==['doc:1'] and r['list_users']==['user:1'] for r in extension_actual),extension_actual
     (out/'opt-in-results.json').write_text(json.dumps(extension_actual,indent=2)+'\n')
     (out/'results.json').write_text(json.dumps(rows,indent=2)+'\n')
-    summary={'named_zones_matched':4,'numeric_Local_fallbacks_matched':3,'default_local_api_assertions':21,'opt_in_api_assertions':9,'server_validation_errors':7,'mismatches':0}
+    summary={'named_zones_matched':4,'numeric_Local_fallbacks_matched':3,'colon_prefixed_Local_checks_matched':11,'server_checks_matched':len(rows),'default_local_api_assertions':len(actual)*3,'opt_in_api_assertions':len(extension_actual)*3,'server_validation_errors':len(rows),'mismatches':0}
     (out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     print(json.dumps(summary,indent=2))
 

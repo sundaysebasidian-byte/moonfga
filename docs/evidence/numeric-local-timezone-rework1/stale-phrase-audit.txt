@@ -1,0 +1,4 @@
+./docs/runtime-controls.md:20:only decimal colon-form numeric Local settings fall back to UTC by default
+./docs/evidence/rework3-validation.md:368:run is retained locally as cost-final3.txt. It is not counted as a completed regex
+./docs/evidence/rework2-validation.md:63:Before/after oracle mismatches found during this rework are retained locally; final summaries above are from completed clean runs. No full-CEL-equivalence claim is made.
+./docs/evidence/numeric-local-timezone.md:77:is retained in [before-test.txt](numeric-local-timezone/before-test.txt).
