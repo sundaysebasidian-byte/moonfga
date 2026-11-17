@@ -16,20 +16,36 @@ retains the timestamp's parsed offset; setting Local does not change conversion.
 conversion against OpenFGA v1.22.1 with `TZ=""`, `UTC`, `America/Los_Angeles` and
 `Asia/Kolkata`: 20/20 matching Check decisions. An unset TZ on a non-UTC OS can
 resolve to that OS's localtime, so hosts must resolve their desired server TZ and
-supply it explicitly. Accepted settings are supported IANA names, UTC or numeric
-offsets. Do not pass arbitrary POSIX TZ rules, TZif file paths or the alias Local
-as a replacement zone. Unknown names produce E2000. Pinned tzdb data and updates
+supply it explicitly. Accepted settings are supported IANA names and UTC;
+numeric Local settings fall back to UTC by default, as Go's process TZ loader
+does. Do not pass arbitrary POSIX TZ rules, TZif file paths or the alias Local as
+a replacement zone. Unknown names produce E2000. Pinned tzdb data and updates
 are described in [timezones.md](timezones.md).
 
-Numeric offsets are a **MoonFGA host extension**, not an equivalent mapping of a
-Go/OpenFGA process's `TZ` environment variable. Signed `+05:30`, `-08:00` and
-unsigned `05:30` are accepted as fixed offsets. Go treats these TZ strings as
-invalid and falls back to UTC: at 2026-03-08T10:00:00Z its Local hour is 10,
-whereas the configured MoonFGA hours are 15, 2 and 15. Use a supported canonical
-IANA name to reproduce the server's zone. `scripts/r9_host_boundaries.py` records
-these three deliberate differences and four matching named zones. Names use
+Direct CEL getter arguments support numeric offsets in both the pinned oracle
+and MoonFGA: `getHours("+05:30")`, `getHours("-08:00")`, `getHours("05:30")`,
+`getHours("5:30")` and `getHours("8:+01")` are valid. Invalid hour/minute ranges,
+malformed decimal components and unknown zones produce condition errors (E2000).
+This behavior does not depend on the Local configuration or its opt-in flag.
+
+A numeric **Local configuration** has different semantics from a direct getter
+argument. Go/OpenFGA's process `TZ=+05:30`, `-08:00` or `05:30` falls back to UTC:
+at `2026-03-08T10:00:00Z`, Local hour is 10. MoonFGA now defaults to the same
+fallback for colon-containing Local configurations. To retain the former fixed
+offset extension, explicitly set
+`Engine::new(..., condition_local_timezone=Some("+05:30"), condition_allow_numeric_local_timezone=true)`.
+The equivalent optional flag on `eval_expr_with_limit`, `eval_expr_with_cost`
+and `eval_condition_with_limit` is `allow_numeric_local_timezone=true`.
+Both flags default to **false**. With opt-in, the three Local hours are 15, 2 and
+15; malformed offset settings still produce E2000. The flag is preserved across
+contextual, list, inline-condition and budget-bound engine evaluations.
+
+`scripts/r9_host_boundaries.py` now compares the three default UTC fallbacks and
+four named zones, and separately asserts the opt-in extension. Names use
 canonical case; Go filesystem lookups on a case-insensitive OS can accept
 noncanonical spellings that this pinned, case-sensitive table rejects.
+[Focused timestamp evidence](evidence/numeric-local-timezone.md) distinguishes
+exact getter values, runtime error categories and host process TZ behavior.
 
 ## Request deadline / deterministic work budget
 

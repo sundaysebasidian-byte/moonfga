@@ -1,0 +1,12 @@
+$ moon test --target native
+Total tests: 283, passed: 283, failed: 0.
+exit: 0
+
+$ moon test --target js
+Total tests: 283, passed: 283, failed: 0.
+exit: 0
+
+$ moon test --target wasm-gc
+Blocking waiting for file lock $REPO/_build/.moon-lock ...
+Total tests: 283, passed: 283, failed: 0.
+exit: 0

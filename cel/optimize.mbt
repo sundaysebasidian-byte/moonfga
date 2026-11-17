@@ -117,6 +117,7 @@ fn optimize_expr(
     interrupted: false,
     cancelled: fn() { false },
     local_timezone: None,
+    allow_numeric_local_timezone: false,
     budget,
   }
   CLiteral(eval_expr_state(result, Map([]), state))

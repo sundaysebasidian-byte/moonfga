@@ -15,6 +15,7 @@ pub fn eval_condition_with_limit(
   max_cost : Int32,
   cancelled~ : () -> Bool = fn() { false },
   local_timezone~ : String? = None,
+  allow_numeric_local_timezone~ : Bool = false,
   budget~ : @fga.ExecutionBudget? = None,
 ) -> Bool raise @fga.FgaError {
   if condition.parameters.is_empty() && !context.is_empty() {
@@ -38,6 +39,7 @@ pub fn eval_condition_with_limit(
       max_cost,
       cancelled~,
       local_timezone~,
+      allow_numeric_local_timezone~,
       budget~,
     ) {
     @fga.VBool(result) => {

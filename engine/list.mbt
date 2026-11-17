@@ -75,6 +75,7 @@ pub fn Engine::list_objects(
     condition_cost_limit: self.condition_cost_limit,
     condition_cancelled: self.condition_cancelled,
     condition_local_timezone: self.condition_local_timezone,
+    condition_allow_numeric_local_timezone: self.condition_allow_numeric_local_timezone,
     budget: self.budget,
   }
   errdefer engine.check_budget()
@@ -115,6 +116,7 @@ pub fn Engine::list_users(
     condition_cost_limit: self.condition_cost_limit,
     condition_cancelled: self.condition_cancelled,
     condition_local_timezone: self.condition_local_timezone,
+    condition_allow_numeric_local_timezone: self.condition_allow_numeric_local_timezone,
     budget: self.budget,
   }
   let results : Array[String] = []

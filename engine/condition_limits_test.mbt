@@ -245,3 +245,59 @@ test "request validation precedes an expired work budget" {
   ])
   assert_eq(batch[0].error_code, Some(@fga.ERR_VALIDATION))
 }
+
+///|
+test "numeric Local opt in survives named inline contextual list and budget copies" {
+  for inline in [false, true] {
+    let condition_name = if inline { "$expression" } else { "enabled" }
+    let expression = "timestamp('2026-03-08T10:00:00Z').getHours('Local') == 15"
+    let model = model_of(
+      "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user with " +
+      condition_name +
+      "]" +
+      (if inline { "" } else { "\ncondition enabled() { " + expression + " }" }),
+    )
+    let store = @store.MemoryStore::new()
+    let tuple : @fga.Tuple = {
+      object: "document:1",
+      relation: "viewer",
+      user: "user:1",
+      condition: Some({
+        name: condition_name,
+        context: if inline {
+          Map([("expression", @fga.VString(expression))])
+        } else {
+          Map([])
+        },
+      }),
+    }
+    for allow in [false, true] {
+      let engine = @engine.Engine::new(
+        model,
+        store as &@fga.TupleReader,
+        condition_local_timezone=Some("+05:30"),
+        condition_allow_numeric_local_timezone=allow,
+      ).with_budget(@fga.ExecutionBudget::new(steps=10000))
+      assert_eq(
+        engine.check_with("document:1", "viewer", "user:1", Map([]), [tuple]),
+        allow,
+      )
+      assert_eq(
+        engine.list_objects("document", "viewer", "user:1", Map([]), [tuple]),
+        if allow {
+          ["document:1"]
+        } else {
+          []
+        },
+      )
+      assert_eq(
+        engine.list_users("document:1", "viewer", ["user"], Map([]), [tuple]),
+        if allow {
+          ["user:1"]
+        } else {
+          []
+        },
+      )
+    }
+  }
+}

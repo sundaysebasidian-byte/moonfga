@@ -4,6 +4,7 @@ priv struct EvalState {
   limit : Int32
   mut interrupted : Bool
   local_timezone : String?
+  allow_numeric_local_timezone : Bool
   budget : @fga.ExecutionBudget?
   cancelled : () -> Bool
 }

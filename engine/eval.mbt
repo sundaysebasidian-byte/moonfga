@@ -14,6 +14,7 @@ pub struct Engine {
   priv traces : Map[String, Array[String]]?
   priv list_query : Bool
   priv condition_local_timezone : String?
+  priv condition_allow_numeric_local_timezone : Bool
   priv condition_cost_limit : Int32
   priv condition_cancelled : () -> Bool
   priv budget : @fga.ExecutionBudget?
@@ -29,6 +30,7 @@ pub fn Engine::new(
   condition_cost_limit~ : Int32 = 100,
   condition_cancelled~ : () -> Bool = fn() { false },
   condition_local_timezone~ : String? = None,
+  condition_allow_numeric_local_timezone~ : Bool = false,
 ) -> Engine {
   Engine::{
     model,
@@ -38,6 +40,7 @@ pub fn Engine::new(
     match_wildcard_users: true,
     condition_cost_limit,
     condition_local_timezone,
+    condition_allow_numeric_local_timezone,
     condition_cancelled,
     budget: None,
   }
@@ -213,6 +216,7 @@ fn eval_inline_expression(
   max_cost : Int32,
   cancelled : () -> Bool,
   local_timezone : String?,
+  allow_numeric_local_timezone : Bool,
   budget : @fga.ExecutionBudget?,
 ) -> Bool raise @fga.FgaError {
   let cond = match tuple.condition {
@@ -284,6 +288,7 @@ fn eval_inline_expression(
     max_cost,
     cancelled~,
     local_timezone~,
+    allow_numeric_local_timezone~,
     budget~,
   )
 }
@@ -297,6 +302,7 @@ fn eval_named_condition(
   max_cost : Int32,
   cancelled : () -> Bool,
   local_timezone : String?,
+  allow_numeric_local_timezone : Bool,
   budget : @fga.ExecutionBudget?,
 ) -> Bool raise @fga.FgaError {
   let condition = match model.find_condition(name) {
@@ -312,6 +318,7 @@ fn eval_named_condition(
     max_cost,
     cancelled~,
     local_timezone~,
+    allow_numeric_local_timezone~,
     budget~,
   )
 }
@@ -335,6 +342,7 @@ fn Engine::condition_holds(
           self.condition_cost_limit,
           self.condition_cancelled,
           self.condition_local_timezone,
+          self.condition_allow_numeric_local_timezone,
           self.budget,
         )
       } else {
@@ -346,6 +354,7 @@ fn Engine::condition_holds(
           self.condition_cost_limit,
           self.condition_cancelled,
           self.condition_local_timezone,
+          self.condition_allow_numeric_local_timezone,
           self.budget,
         )
       }
@@ -989,6 +998,7 @@ pub fn Engine::check_with(
     condition_cost_limit: self.condition_cost_limit,
     condition_cancelled: self.condition_cancelled,
     condition_local_timezone: self.condition_local_timezone,
+    condition_allow_numeric_local_timezone: self.condition_allow_numeric_local_timezone,
     budget: self.budget,
   }
   errdefer engine.check_budget()

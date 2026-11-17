@@ -1,0 +1,29 @@
+$ moon fmt
+Finished. moon: ran 118 tasks, now up to date
+exit: 0
+
+$ moon fmt --check
+Finished. moon: ran 118 tasks, now up to date
+exit: 0
+
+$ moon check --target native
+Finished. moon: no work to do
+exit: 0
+
+$ moon check --target js
+Finished. moon: no work to do
+exit: 0
+
+$ moon check --target wasm-gc
+Finished. moon: no work to do
+exit: 0
+
+$ moon info
+Finished. moon: no work to do
+exit: 0
+
+$ git diff --check
+exit: 0
+
+$ python3 -m py_compile scripts/oracle_cel.py scripts/oracle_timestamp.py scripts/r9_host_boundaries.py
+exit: 0

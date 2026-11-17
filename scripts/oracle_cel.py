@@ -53,7 +53,25 @@ def expressions(seed):
     return fixed
 
 
+TIMESTAMP_GETTERS = ['getFullYear', 'getMonth', 'getDate', 'getDayOfMonth',
+                     'getDayOfWeek', 'getDayOfYear', 'getHours', 'getMinutes',
+                     'getSeconds', 'getMilliseconds']
+
+
+def timestamp_offset_cases():
+    # Both literal and context arguments, including cel-go's unusual signed minute.
+    for zone in ['+05:30', '-08:00', '05:30', '5:30', '+5:30', '-00:30',
+                 '00:00', '+23:59', '-23:59', '24:00', '+24:00', '-24:00',
+                 '00:60', '8:+01', '8:-01', '0x8:00', '1_0:00', '+05:30:00',
+                 ':30', '5:', '+0530', 'Z', '', 'UTC', 'Local', 'America/Los_Angeles']:
+        for method in TIMESTAMP_GETTERS:
+            for arg in ['s', json.dumps(zone)]:
+                yield (f'timestamp("2026-03-08T10:00:00.123456789Z").{method}({arg}) >= -1',
+                       {'n': 0, 's': zone})
+
+
 def expression_cases(seed):
+    yield from timestamp_offset_cases()
     from cel_review_corpus import cases as review_cases
     yield from review_cases()
     for count in range(1,38):

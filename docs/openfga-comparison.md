@@ -122,7 +122,7 @@ Known exceptions apply even when the ordinary overload is implemented.
 | timestamp(string/int/timestamp)  | 所列语料通过 | RFC3339, epoch seconds, identity; constructor/context parsing differences, signed/range errors | D/R |
 | duration +/-; timestamp +/- duration; timestamp - timestamp  | 所列语料通过 | Checked duration range and timestamp endpoints; timestamp subtraction rejects duration MinInt64 negation overflow | D/R/U |
 | duration getHours/getMinutes/getSeconds/getMilliseconds  | 所列语料通过 | Truncation toward zero at each unit | D/R |
-| timestamp getFullYear/getMonth/getDate/getDayOfMonth/getDayOfWeek/getDayOfYear/getHours/getMinutes/getSeconds/getMilliseconds  | 所列语料通过；Local 默认 UTC | UTC/default, numeric offsets and named IANA zones; historical and future DST; negative epochs and sub-milliseconds | D/R; 20 host-TZ probes |
+| timestamp getFullYear/getMonth/getDate/getDayOfMonth/getDayOfWeek/getDayOfYear/getHours/getMinutes/getSeconds/getMilliseconds  | 所列语料通过；Local 默认 UTC | UTC/default, CEL numeric offsets and named IANA zones; historical and future DST; negative epochs and sub-milliseconds | D/R; 20 host-TZ probes |
 | dyn(value), any parameter  | 所列语料通过 | Erased annotation, dynamic JSON numbers as double, nested generic context types | D/R |
 | type(value), type constants  | 所列语料通过 | Primitive/collection/type/null_type, google.protobuf.Duration/Timestamp/Empty and Struct.FieldsEntry; wrapper/JSON/Any names rejected as standalone type expressions | D/R |
 | protobuf Timestamp / Duration constructors  | 所列语料通过 | int64 seconds/int32 nanos; normalization, full-width Go time ordering/getters/formatting; Duration saturation differs from duration(string) overflow | D/R; 864 generated extreme temporal predicates |
@@ -140,14 +140,21 @@ was added. Browser, JS, native and wasm all use the same MoonBit matcher and dat
 ## Host boundaries and remaining verification limits
 
 1. **Local and host TZ are defined.** Unconfigured Local now means UTC. Hosts can
-   configure a supported IANA zone; numeric offsets are an explicit host extension; omitted getter arguments
-   always use UTC and timestamp string conversion preserves the parsed offset.
+   configure a supported IANA zone; omitted getter arguments always use UTC and
+   timestamp string conversion preserves the parsed offset. Direct getter numeric
+   offsets are supported by the pinned CEL oracle, including unsigned `05:30`,
+   one-digit hours and `8:+01`; these remain enabled.
    Four server TZ settings / winter and summer / conversion probes match 20/20.
    An unset TZ on macOS may use OS localtime rather than a UTC container. Host
    configuration and exact semantics are in [runtime controls](runtime-controls.md).
-   Numeric Local settings (+05:30, -08:00 and unsigned 05:30) are not Go TZ
-   equivalents: Go falls back to UTC for those strings. This extension is retained
-   explicitly; four named-zone probes match and three offset differences are recorded.
+   Numeric Local settings (`+05:30`, `-08:00` and unsigned `05:30`) now default
+   to UTC, matching Go's invalid-TZ fallback. Fixed-offset Local behavior requires
+   `allow_numeric_local_timezone=true` in CEL or
+   `condition_allow_numeric_local_timezone=true` on Engine (default **false**).
+   The three formerly recorded differences are now matched comparisons; four
+   named zones also match. The focused timestamp differential has 520 direct
+   value/error-category comparisons and 6873 HTTP comparison slots, zero
+   differences. [Commands, counts and limits](evidence/numeric-local-timezone.md).
 2. **Cost evidence and unordered maps.** The generated cel-go v0.31.0 corpus covers
    10266 programs (9862 actual-cost comparisons and 404 evaluation-error categories)
    and 47938 limit comparisons per run, with 20/20 full runs passing. A separate

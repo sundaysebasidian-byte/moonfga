@@ -1,0 +1,91 @@
+{
+  "baseline": "543bda293319177f64ae8ce811c7796c5e12e8b5",
+  "branch": "eco-r3",
+  "toolchain": {
+    "moon": "0.1.20261104 (940aa18)",
+    "go": "go1.27.1 darwin/arm64",
+    "node": "v24.18.0",
+    "cel_go": "v0.31.0",
+    "openfga": "v1.22.1",
+    "openfga_commit": "44054f542f64e9b9589dd26a595081b3d2cfd942"
+  },
+  "tests": {
+    "native": {
+      "total": 283,
+      "passed": 283,
+      "failed": 0
+    },
+    "js": {
+      "total": 283,
+      "passed": 283,
+      "failed": 0
+    },
+    "wasm-gc": {
+      "total": 283,
+      "passed": 283,
+      "failed": 0
+    }
+  },
+  "timestamp": {
+    "direct_comparisons": 520,
+    "direct_successes": 280,
+    "direct_evaluation_errors": 240,
+    "direct_mismatches": 0,
+    "http": {
+      "version": "1.22.1",
+      "commit": "44054f542f64e9b9589dd26a595081b3d2cfd942",
+      "timezone": "UTC",
+      "condition_cost_limit": 100,
+      "seed": 314159,
+      "cases": 2291,
+      "random_cases": 0,
+      "regression_cases": 2291,
+      "comparisons": 6873,
+      "mismatches": 0,
+      "families": {
+        "cel": 2291
+      },
+      "by_api": {
+        "check": {
+          "compared": 2291,
+          "mismatches": 0
+        },
+        "list_objects": {
+          "compared": 2291,
+          "mismatches": 0
+        },
+        "list_users": {
+          "compared": 2291,
+          "mismatches": 0
+        }
+      },
+      "corpus": "conformance-results/offset-compat/timestamp/http-corpus.json"
+    }
+  },
+  "host": {
+    "named_zones_matched": 4,
+    "numeric_Local_fallbacks_matched": 3,
+    "default_local_api_assertions": 21,
+    "opt_in_api_assertions": 9,
+    "server_validation_errors": 7,
+    "mismatches": 0
+  },
+  "original_host": {
+    "timezone_checks": 20,
+    "local_checks_matched": 20,
+    "list_objects_deadline_categories": [
+      "deadline_exceeded"
+    ],
+    "list_users_deadline_categories": [
+      "ok"
+    ]
+  },
+  "sha256": {
+    ".upstream/oracle/openfga_1.22.1_darwin_arm64.tar.gz": "4d64ccd3ead676e3b13154bb32372421f3cd4735eda0211f5d0b7d244c689b90",
+    "conformance-results/offset-compat/timestamp/celoracle": "0f291cd0cb04fa653e1fe1f141d0f361a3f11a8ae6cf0634f0a8f89032628181",
+    "conformance-results/offset-compat/timestamp/http-corpus.json": "0def8da11774fe6bfe7821262f66d7893fa756a93b7932ef63d7357d595df523",
+    "conformance-results/offset-compat/timestamp/direct.json": "fe59a137f5a7c2b60e87cf736765e4844d61f28455c13f26d3bc2c5b7845cd6a",
+    "scripts/cel-oracle/go.mod": "bdae82f225db7d87ac8c771e6900b0f8c433aa5d72cf3dd6c7c988b8d2531d90",
+    "scripts/cel-oracle/go.sum": "ad4b4904e0118ba376bfc7b8793730d838e541a71da13020e3d988f2bcd5ef67"
+  }
+}

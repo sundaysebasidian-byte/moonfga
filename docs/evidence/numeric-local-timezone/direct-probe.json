@@ -1,0 +1,224 @@
+[
+  {
+    "zone": "+05:30",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "15",
+    "value_type": "int"
+  },
+  {
+    "zone": "-08:00",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "2",
+    "value_type": "int"
+  },
+  {
+    "zone": "05:30",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "15",
+    "value_type": "int"
+  },
+  {
+    "zone": "5:30",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "15",
+    "value_type": "int"
+  },
+  {
+    "zone": "+5:30",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "15",
+    "value_type": "int"
+  },
+  {
+    "zone": "-00:30",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "9",
+    "value_type": "int"
+  },
+  {
+    "zone": "00:00",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "10",
+    "value_type": "int"
+  },
+  {
+    "zone": "+23:59",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "9",
+    "value_type": "int"
+  },
+  {
+    "zone": "-23:59",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "10",
+    "value_type": "int"
+  },
+  {
+    "zone": "24:00",
+    "category": "evaluation",
+    "cost": 2,
+    "error": "timezone offset hours out of range [-23, 23]: 24:00",
+    "estimate_max": 3,
+    "estimate_min": 3
+  },
+  {
+    "zone": "+24:00",
+    "category": "evaluation",
+    "cost": 2,
+    "error": "timezone offset hours out of range [-23, 23]: +24:00",
+    "estimate_max": 3,
+    "estimate_min": 3
+  },
+  {
+    "zone": "-24:00",
+    "category": "evaluation",
+    "cost": 2,
+    "error": "timezone offset hours out of range [-23, 23]: -24:00",
+    "estimate_max": 3,
+    "estimate_min": 3
+  },
+  {
+    "zone": "00:60",
+    "category": "evaluation",
+    "cost": 2,
+    "error": "timezone offset minutes out of range [0, 59]: 00:60",
+    "estimate_max": 3,
+    "estimate_min": 3
+  },
+  {
+    "zone": "8:+01",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "18",
+    "value_type": "int"
+  },
+  {
+    "zone": "8:-01",
+    "category": "evaluation",
+    "cost": 2,
+    "error": "timezone offset minutes out of range [0, 59]: 8:-01",
+    "estimate_max": 3,
+    "estimate_min": 3
+  },
+  {
+    "zone": "0x8:00",
+    "category": "evaluation",
+    "cost": 2,
+    "error": "strconv.Atoi: parsing \"0x8\": invalid syntax",
+    "estimate_max": 3,
+    "estimate_min": 3
+  },
+  {
+    "zone": "1_0:00",
+    "category": "evaluation",
+    "cost": 2,
+    "error": "strconv.Atoi: parsing \"1_0\": invalid syntax",
+    "estimate_max": 3,
+    "estimate_min": 3
+  },
+  {
+    "zone": "+05:30:00",
+    "category": "evaluation",
+    "cost": 2,
+    "error": "strconv.Atoi: parsing \"30:00\": invalid syntax",
+    "estimate_max": 3,
+    "estimate_min": 3
+  },
+  {
+    "zone": ":30",
+    "category": "evaluation",
+    "cost": 2,
+    "error": "strconv.Atoi: parsing \"\": invalid syntax",
+    "estimate_max": 3,
+    "estimate_min": 3
+  },
+  {
+    "zone": "5:",
+    "category": "evaluation",
+    "cost": 2,
+    "error": "strconv.Atoi: parsing \"\": invalid syntax",
+    "estimate_max": 3,
+    "estimate_min": 3
+  },
+  {
+    "zone": "+0530",
+    "category": "evaluation",
+    "cost": 2,
+    "error": "unknown time zone +0530",
+    "estimate_max": 3,
+    "estimate_min": 3
+  },
+  {
+    "zone": "Z",
+    "category": "evaluation",
+    "cost": 2,
+    "error": "unknown time zone Z",
+    "estimate_max": 3,
+    "estimate_min": 3
+  },
+  {
+    "zone": "",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "10",
+    "value_type": "int"
+  },
+  {
+    "zone": "UTC",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "10",
+    "value_type": "int"
+  },
+  {
+    "zone": "Local",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "10",
+    "value_type": "int"
+  },
+  {
+    "zone": "America/Los_Angeles",
+    "category": "ok",
+    "cost": 2,
+    "estimate_max": 3,
+    "estimate_min": 3,
+    "value": "3",
+    "value_type": "int"
+  }
+]

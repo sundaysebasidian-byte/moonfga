@@ -55,7 +55,7 @@ test "r9 signed conversion and duration negation boundaries" {
 }
 
 ///|
-test "r9 fixed Local offsets are an explicit host extension" {
+test "fixed Local offsets require an explicit host opt in" {
   let expr = @cel.compile("timestamp('2026-03-08T10:00:00Z').getHours('Local')")
   for (zone, hour) in [("+05:30", 15L), ("05:30", 15L), ("-08:00", 2L)] {
     let value = @cel.eval_expr_with_limit(
@@ -63,7 +63,22 @@ test "r9 fixed Local offsets are an explicit host extension" {
       Map([]),
       100,
       local_timezone=Some(zone),
+      allow_numeric_local_timezone=true,
     )
     assert_true(@fga.cel_value_eq(value, @fga.VInt(hour)))
+  }
+}
+
+///|
+test "numeric Local timezone defaults to the pinned Go TZ fallback" {
+  let expr = @cel.compile("timestamp('2026-03-08T10:00:00Z').getHours('Local')")
+  for zone in ["+05:30", "05:30", "-08:00"] {
+    let value = @cel.eval_expr_with_limit(
+      expr,
+      Map([]),
+      100,
+      local_timezone=Some(zone),
+    )
+    assert_true(@fga.cel_value_eq(value, @fga.VInt(10L)))
   }
 }

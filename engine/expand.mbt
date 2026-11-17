@@ -169,6 +169,7 @@ pub fn Engine::expand_json(
     condition_cost_limit: self.condition_cost_limit,
     condition_cancelled: self.condition_cancelled,
     condition_local_timezone: self.condition_local_timezone,
+    condition_allow_numeric_local_timezone: self.condition_allow_numeric_local_timezone,
     budget: self.budget,
   }
   let result = expand_relation(engine, object, relation, 0, [])

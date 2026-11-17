@@ -1,5 +1,9 @@
 # Rework 3 validation — 0.2.5, independent r9 closure
 
+The historical S4 numeric Local extension below is superseded by
+[numeric Local timezone compatibility](numeric-local-timezone.md): default UTC
+fallback now matches the oracle; fixed Local offsets require explicit opt-in.
+
 Runtime implementation: `f0dc800` (CEL fix `90cc84f`, deterministic corpus `513ff2c`),
 branch `compat-0.2.5`; based on reviewed candidate `7510dde`, published baseline
 `88912977aaa3a81edf6c2f2717d7287f5ca4ba86`. The final evidence commit also exports the

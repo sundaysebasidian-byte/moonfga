@@ -1,0 +1,2 @@
+[sundaysebasidian-byte/moonfga] test cel/r9_boundaries_test.mbt:72 ("numeric Local timezone defaults to the pinned Go TZ fallback") failed: cel/r9_boundaries_test.mbt:81:5-81:58@sundaysebasidian-byte/moonfga FAILED: `false` is not true
+Total tests: 92, passed: 91, failed: 1.

@@ -47,6 +47,10 @@ fn run_case(c : Json) -> Json raise @fga.FgaError {
     model,
     store as &@fga.TupleReader,
     condition_local_timezone=@fga.json_get_string(c, "local_timezone"),
+    condition_allow_numeric_local_timezone=@fga.json_get_bool(
+        c, "allow_numeric_local_timezone",
+      ) ==
+      Some(true),
     condition_cost_limit=match @fga.json_object_get(c, "condition_cost_limit") {
       Some(Number(x, ..)) => x.to_int()
       _ => 100

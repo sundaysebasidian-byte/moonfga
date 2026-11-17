@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Match Go/OpenFGA numeric Local timezone fallback to UTC by default. Retain fixed numeric Local offsets only with the explicit, default-off `allow_numeric_local_timezone` CEL / `condition_allow_numeric_local_timezone` Engine option; preserve oracle-supported direct getter offsets and named zones.
+- Add native/JS/wasm-gc regressions and a focused timestamp oracle differential; the three former Local offset deviations are now matched comparisons. See docs/evidence/numeric-local-timezone.md.
+
 ## 0.2.5 (unreleased)
 
 ### Independent r9 review rework

@@ -1,0 +1,78 @@
+[
+  {
+    "command": [
+      "moon",
+      "fmt"
+    ],
+    "exit": 0,
+    "seconds": 0.441
+  },
+  {
+    "command": [
+      "moon",
+      "fmt",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 1.252
+  },
+  {
+    "command": [
+      "moon",
+      "check",
+      "--target",
+      "native"
+    ],
+    "exit": 0,
+    "seconds": 0.083
+  },
+  {
+    "command": [
+      "moon",
+      "check",
+      "--target",
+      "js"
+    ],
+    "exit": 0,
+    "seconds": 0.065
+  },
+  {
+    "command": [
+      "moon",
+      "check",
+      "--target",
+      "wasm-gc"
+    ],
+    "exit": 0,
+    "seconds": 0.057
+  },
+  {
+    "command": [
+      "moon",
+      "info"
+    ],
+    "exit": 0,
+    "seconds": 0.072
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 0.04
+  },
+  {
+    "command": [
+      "python3",
+      "-m",
+      "py_compile",
+      "scripts/oracle_cel.py",
+      "scripts/oracle_timestamp.py",
+      "scripts/r9_host_boundaries.py"
+    ],
+    "exit": 0,
+    "seconds": 0.065
+  }
+]

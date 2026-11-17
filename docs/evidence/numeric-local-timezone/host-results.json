@@ -1,0 +1,156 @@
+[
+  {
+    "TZ": "+05:30",
+    "server_Local_hour": 10,
+    "default_MoonFGA_Local_hour": 10,
+    "opt_in_MoonFGA_Local_hour": 15,
+    "offset_extension": true,
+    "server_check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "server_invalid_relation": {
+      "status": 400,
+      "body": {
+        "code": "validation_error",
+        "message": "invalid relation: relation 'doc#missing' not found"
+      }
+    },
+    "local_check": true
+  },
+  {
+    "TZ": "-08:00",
+    "server_Local_hour": 10,
+    "default_MoonFGA_Local_hour": 10,
+    "opt_in_MoonFGA_Local_hour": 2,
+    "offset_extension": true,
+    "server_check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "server_invalid_relation": {
+      "status": 400,
+      "body": {
+        "code": "validation_error",
+        "message": "invalid relation: relation 'doc#missing' not found"
+      }
+    },
+    "local_check": true
+  },
+  {
+    "TZ": "05:30",
+    "server_Local_hour": 10,
+    "default_MoonFGA_Local_hour": 10,
+    "opt_in_MoonFGA_Local_hour": 15,
+    "offset_extension": true,
+    "server_check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "server_invalid_relation": {
+      "status": 400,
+      "body": {
+        "code": "validation_error",
+        "message": "invalid relation: relation 'doc#missing' not found"
+      }
+    },
+    "local_check": true
+  },
+  {
+    "TZ": "EST",
+    "server_Local_hour": 5,
+    "default_MoonFGA_Local_hour": 5,
+    "opt_in_MoonFGA_Local_hour": 5,
+    "offset_extension": false,
+    "server_check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "server_invalid_relation": {
+      "status": 400,
+      "body": {
+        "code": "validation_error",
+        "message": "invalid relation: relation 'doc#missing' not found"
+      }
+    },
+    "local_check": true
+  },
+  {
+    "TZ": "Etc/GMT+12",
+    "server_Local_hour": 22,
+    "default_MoonFGA_Local_hour": 22,
+    "opt_in_MoonFGA_Local_hour": 22,
+    "offset_extension": false,
+    "server_check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "server_invalid_relation": {
+      "status": 400,
+      "body": {
+        "code": "validation_error",
+        "message": "invalid relation: relation 'doc#missing' not found"
+      }
+    },
+    "local_check": true
+  },
+  {
+    "TZ": "America/Los_Angeles",
+    "server_Local_hour": 3,
+    "default_MoonFGA_Local_hour": 3,
+    "opt_in_MoonFGA_Local_hour": 3,
+    "offset_extension": false,
+    "server_check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "server_invalid_relation": {
+      "status": 400,
+      "body": {
+        "code": "validation_error",
+        "message": "invalid relation: relation 'doc#missing' not found"
+      }
+    },
+    "local_check": true
+  },
+  {
+    "TZ": "Asia/Kolkata",
+    "server_Local_hour": 15,
+    "default_MoonFGA_Local_hour": 15,
+    "opt_in_MoonFGA_Local_hour": 15,
+    "offset_extension": false,
+    "server_check": {
+      "status": 200,
+      "body": {
+        "allowed": true,
+        "resolution": ""
+      }
+    },
+    "server_invalid_relation": {
+      "status": 400,
+      "body": {
+        "code": "validation_error",
+        "message": "invalid relation: relation 'doc#missing' not found"
+      }
+    },
+    "local_check": true
+  }
+]

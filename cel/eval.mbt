@@ -657,7 +657,16 @@ fn eval_method(
       }
       let resolved = if zone == Some("Local") {
         match state.local_timezone {
-          Some(z) => Some(z)
+          Some(z) =>
+            // Go's process TZ loader falls back to UTC for numeric offsets;
+            // explicit CEL getter offsets still use the CEL offset parser.
+            Some(
+              if z.contains(":") && !state.allow_numeric_local_timezone {
+                "UTC"
+              } else {
+                z
+              },
+            )
           None => Some("UTC")
         }
       } else {
@@ -1272,9 +1281,18 @@ pub fn eval_expr_with_limit(
   max_cost : Int32,
   cancelled~ : () -> Bool = fn() { false },
   local_timezone~ : String? = None,
+  allow_numeric_local_timezone~ : Bool = false,
   budget~ : @fga.ExecutionBudget? = None,
 ) -> @fga.CelValue raise @fga.FgaError {
-  eval_expr_with_cost(expr, env, max_cost, cancelled~, local_timezone~, budget~).0
+  eval_expr_with_cost(
+    expr,
+    env,
+    max_cost,
+    cancelled~,
+    local_timezone~,
+    allow_numeric_local_timezone~,
+    budget~,
+  ).0
 }
 
 ///|
@@ -1286,6 +1304,7 @@ pub fn eval_expr_with_cost(
   max_cost : Int32,
   cancelled~ : () -> Bool = fn() { false },
   local_timezone~ : String? = None,
+  allow_numeric_local_timezone~ : Bool = false,
   budget~ : @fga.ExecutionBudget? = None,
 ) -> (@fga.CelValue, Int32) raise @fga.FgaError {
   let state = EvalState::{
@@ -1294,6 +1313,7 @@ pub fn eval_expr_with_cost(
     interrupted: false,
     cancelled,
     local_timezone,
+    allow_numeric_local_timezone,
     budget,
   }
   state.check()
