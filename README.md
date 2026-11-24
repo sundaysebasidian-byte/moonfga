@@ -20,7 +20,7 @@ Playground 就是同一个引擎编译成 JS 在浏览器里跑。
 
 ## 评审入口
 
-汇总数字都能跳到原始证据。注意：ListUsers 是 393/394，有 **1 条断言被跳过**，没有失败，也不计入通过。
+下表汇总既有验证记录。ListUsers 是 393/394，有 **1 条断言被跳过**，没有失败，也不计入通过。
 
 | 要看什么 | 汇总 | 原始证据与复现 |
 | --- | --- | --- |
@@ -28,9 +28,9 @@ Playground 就是同一个引擎编译成 JS 在浏览器里跑。
 | 唯一的 skip | `simple_computeduserset_indirect_ref`（list_users，`consolidated_1_1_tests.yaml`）：期望值嵌在 request 里，没有顶层 `expectation` 或 `errorCode`，记为 `skip/no_expectation` | [`docs/conformance.md` 的 Failure categories](docs/conformance.md#failure-categories)；逐断言表编号 57 |
 | 随机差分 | seed 314159、271828 各 1095 组（1000 随机＋95 定向），共 6570 次比较，0 不一致；定向脚本 204 组 / 612 次比较，0 不一致 | [`docs/evidence/oracle-summary.json`](docs/evidence/oracle-summary.json)、[`oracle-seed271828-summary.json`](docs/evidence/oracle-seed271828-summary.json)、[`directed-summary.json`](docs/evidence/directed-summary.json)；命令见 [同版本差分](docs/conformance.md#同版本差分与定向回归) |
 | 性能条件 | 单机 macOS release：1 万 / 10 万 / 100 万元组，11 种形状；Check / ListObjects / ListUsers，多/少结果，native / JS / wasm-gc，含未完成记录；无跨请求缓存 | [方法与限制](docs/performance.md)、[完整实测](docs/evidence/performance/final-20261106/results.md)；`./scripts/bench-scale.sh docs/evidence/performance/my-run --timeout 60` |
-| 安装包调用 | `moonfga@0.1.1` 在全新模块中构造模型和元组后 Check，输出 `anne can view roadmap: true` | 见下表“版本对应” |
+| 历史安装包调用 | `moonfga@0.1.1` 在全新模块中构造模型和元组后 Check，输出 `anne can view roadmap: true` | 见下文“历史复现” |
 
-本轮 native release 的 ListObjects p95：1 万元组 0.736–13.706 ms；
+已记录的 native release 实测中，ListObjects p95：1 万元组 0.736–13.706 ms；
 百万直接关系多/少结果 563.387 / 371.945 ms。百万 group/TTU/wildcard 的 ListObjects
 整组采样未在 60 秒预算内完成；不是单次查询超时结论。完整后端数据与内存边界见上表。
 
@@ -38,13 +38,16 @@ Playground 就是同一个引擎编译成 JS 在浏览器里跑。
 
 | 面 | 对应 | 说明 |
 | --- | --- | --- |
-| 发布源码 | tag `v0.1.1` | mooncakes 0.1.1 的打包内容与该 tag 指向的提交一致 |
-| mooncakes | `sundaysebasidian-byte/moonfga@0.1.1` | 包内容固定，不随 main 变化 |
-| Pages | 最近一次推送到 main 的构建 | [`pages.yml`](.github/workflows/pages.yml) 每次 push 到 main 都会重新构建，可能领先于 0.1.1 |
+| 默认分支 | `main`，模块版本 `0.2.6` | 持续维护的源码，不等于已发布包 |
+| Git 标签 | [`v0.2.6`](https://github.com/sundaysebasidian-byte/moonfga/tree/v0.2.6)（[`7774450`](https://github.com/sundaysebasidian-byte/moonfga/commit/7774450bdd775d3bbb850891f2cee46b4a89e892)） | 固定的源码快照 |
+| Mooncakes | [`sundaysebasidian-byte/moonfga@0.2.6`](https://mooncakes.io/docs/sundaysebasidian-byte/moonfga@0.2.6/) | 已发布，安装命令见下文 |
+| Pages | `main` 的独立构建 | [`pages.yml`](.github/workflows/pages.yml) 记录部署，不能用它判定包版本 |
 
-当前本地源码版本为 0.1.1（未发布、未打 tag）；本节的发布包与 Pages 信息不代表本地 0.1.1 已上线。
+测试与性能数字以各自链接中的记录为准，不是对 Mooncakes `0.2.6` 安装包的重新验收。
 
-定位发布提交：`git rev-list -n 1 v0.1.1`。下面三条命令分别复现三个面：
+### 历史复现：`0.1.1`
+
+下列源码测试和安装示例针对 `0.1.1`。请从 `v0.1.1` 标签取示例，不要用 `main` 的示例替换。
 
 ```bash
 # 源码测试
@@ -56,7 +59,7 @@ moon new consumer && cd consumer
 moon add sundaysebasidian-byte/moonfga@0.1.1
 moon run cmd/main
 
-# 线上引擎：打开 Pages；对应的构建见 Actions 中 Pages 工作流的运行记录
+# Pages 独立于上述历史复现：查看工作流的运行记录
 gh run list --workflow pages.yml --limit 1
 ```
 
@@ -133,7 +136,7 @@ python3 -m http.server -d web/dist  # 然后访问 http://localhost:8000
 在已有 MoonBit 模块中安装：
 
 ```bash
-moon add sundaysebasidian-byte/moonfga@0.1.1
+moon add sundaysebasidian-byte/moonfga@0.2.6
 ```
 
 从源码构建：
